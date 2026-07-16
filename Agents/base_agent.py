@@ -1,20 +1,3 @@
-"""Generic agent engine.
-
-This module purposefully does NOT define StockAgent, ChatAgent, or any
-other concrete agent. Concrete agents live in higher-level packages and
-inherit from :class:`BaseAgent`, which implements the full, reusable
-pipeline:
-
-    User -> Message -> Planner -> Memory -> Tool Registry -> Provider -> Response
-
-Architecture Notes:
-    ``Providers.BaseProvider.health_check()`` returns a plain ``bool`` (not
-    a rich result object) -- richer diagnostics are available separately
-    via ``provider.last_health_check`` if ever needed. ``BaseAgent.health_check()``
-    mirrors that and returns ``bool`` too, to stay consistent with the
-    (finished) ``Providers`` layer rather than inventing a different shape.
-"""
-
 from __future__ import annotations
 
 import threading

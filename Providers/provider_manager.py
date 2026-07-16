@@ -137,4 +137,10 @@ class ProviderManager:
         with self._registry_lock:
             return name in self._providers
 
+    @classmethod
+    def reset(cls) -> None:
+        """Reset the singleton. Intended for tests only."""
+        with cls._instance_lock:
+            cls._instance = None
+
 provider_manager: ProviderManager = ProviderManager()

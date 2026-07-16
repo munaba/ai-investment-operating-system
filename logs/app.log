@@ -2,3 +2,445 @@
 2026-07-16 16:42:30 | WARNING  | Services.backtest_service | backtest_service:158 | BacktestService.execute failed: history must not be empty | details={'history': []}
 2026-07-16 16:42:30 | WARNING  | Services.notification_service | notification_service:146 | NotificationService.execute failed: Invalid channel: 'carrier_pigeon'. Supported channels: ['discord', 'telegram'] | details={'channel': 'carrier_pigeon'}
 2026-07-16 16:42:30 | WARNING  | Services.notification_service | notification_service:146 | NotificationService.execute failed: Discord webhook returned unexpected status code: 500 | details={'status_code': 500, 'body': 'ok'}
+2026-07-16 16:55:06 | WARNING  | Services.news_service | news_service:123 | NewsService.execute failed: max_news must be a positive integer, got -1 | details={'max_news': -1}
+2026-07-16 16:55:06 | WARNING  | Services.backtest_service | backtest_service:158 | BacktestService.execute failed: history must not be empty | details={'history': []}
+2026-07-16 16:55:06 | WARNING  | Services.notification_service | notification_service:146 | NotificationService.execute failed: Invalid channel: 'carrier_pigeon'. Supported channels: ['discord', 'telegram'] | details={'channel': 'carrier_pigeon'}
+2026-07-16 16:55:06 | WARNING  | Services.notification_service | notification_service:146 | NotificationService.execute failed: Discord webhook returned unexpected status code: 500 | details={'status_code': 500, 'body': 'ok'}
+2026-07-16 17:02:03 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'mock_provider_ok_e2e' registered (mock_provider_ok_e2e)
+2026-07-16 17:02:03 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'mock_provider_failing_e2e' registered (mock_provider_failing_e2e)
+2026-07-16 17:02:03 | DEBUG    | Agents.executor | executor:50 | Executing tool 'dummy_lookup_ok_e2e'
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_full_pipeline_e2e' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_full_pipeline_e2e' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 17:02:03 | DEBUG    | Agents.executor | executor:50 | Executing tool 'dummy_lookup_ok_e2e'
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_full_pipeline_e2e' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_full_pipeline_e2e' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_full_pipeline_e2e' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_missing_e2e' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_missing_e2e' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_missing_e2e' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_tool_missing_e2e' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_tool_missing_e2e' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_tool_missing_e2e' state: AgentState.CALLING_TOOL -> AgentState.ERROR
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_tool_missing_e2e' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_service_fail_e2e' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_service_fail_e2e' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 17:02:03 | DEBUG    | Agents.executor | executor:50 | Executing tool 'dummy_lookup_failing_e2e'
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_service_fail_e2e' state: AgentState.CALLING_TOOL -> AgentState.ERROR
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_service_fail_e2e' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 17:02:03 | DEBUG    | Agents.executor | executor:50 | Executing tool 'broken_tool_direct_e2e'
+2026-07-16 17:02:03 | DEBUG    | Providers.provider_manager | provider_manager:98 | Provider 'mock_provider_ok_e2e' unregistered
+2026-07-16 17:02:03 | DEBUG    | Providers.provider_manager | provider_manager:98 | Provider 'mock_provider_failing_e2e' unregistered
+2026-07-16 17:02:03 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'mock_provider_ok_e2e' registered (mock_provider_ok_e2e)
+2026-07-16 17:02:03 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'mock_provider_failing_e2e' registered (mock_provider_failing_e2e)
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_fail_e2e' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_fail_e2e' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 17:02:03 | DEBUG    | Agents.executor | executor:50 | Executing tool 'dummy_lookup_ok_e2e'
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_fail_e2e' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_fail_e2e' state: AgentState.WAITING_PROVIDER -> AgentState.ERROR
+2026-07-16 17:02:03 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_fail_e2e' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 18:37:53 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_1' registered (fake_provider)
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:37:53 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_2' registered (fake_provider)
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:37:53 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_3' registered (fake_provider)
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:37:53 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_4' registered (fake_provider)
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 18:37:53 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_5' registered (fake_provider)
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:37:53 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_6' registered (fake_provider)
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:37:53 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_7' registered (fake_provider)
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.ERROR
+2026-07-16 18:37:53 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_8a' registered (fake_provider)
+2026-07-16 18:37:53 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_8b' registered (fake_provider)
+2026-07-16 18:37:53 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_9' registered (fake_provider)
+2026-07-16 18:37:53 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_10' registered (fake_provider)
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:37:53 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:37:53 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:22 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_1' registered (fake_provider)
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:22 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_2' registered (fake_provider)
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:22 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_3' registered (fake_provider)
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:22 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_4' registered (fake_provider)
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 18:44:22 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_5' registered (fake_provider)
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:22 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_6' registered (fake_provider)
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:22 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_7' registered (fake_provider)
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.ERROR
+2026-07-16 18:44:22 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_8a' registered (fake_provider)
+2026-07-16 18:44:22 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_8b' registered (fake_provider)
+2026-07-16 18:44:22 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_9' registered (fake_provider)
+2026-07-16 18:44:22 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_10' registered (fake_provider)
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:22 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:22 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:55 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_1' registered (fake_provider)
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:55 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_2' registered (fake_provider)
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:55 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_3' registered (fake_provider)
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:55 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_4' registered (fake_provider)
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 18:44:55 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_5' registered (fake_provider)
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:55 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_6' registered (fake_provider)
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:44:55 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_7' registered (fake_provider)
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.ERROR
+2026-07-16 18:44:55 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_8a' registered (fake_provider)
+2026-07-16 18:44:55 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_8b' registered (fake_provider)
+2026-07-16 18:44:55 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_9' registered (fake_provider)
+2026-07-16 18:44:55 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_10' registered (fake_provider)
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:44:55 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:44:55 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:45:09 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_1' registered (fake_provider)
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:45:09 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_2' registered (fake_provider)
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:45:09 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_3' registered (fake_provider)
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:45:09 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_4' registered (fake_provider)
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 18:45:09 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_5' registered (fake_provider)
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:45:09 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_6' registered (fake_provider)
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:45:09 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_7' registered (fake_provider)
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.ERROR
+2026-07-16 18:45:09 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_8a' registered (fake_provider)
+2026-07-16 18:45:09 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_8b' registered (fake_provider)
+2026-07-16 18:45:09 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_9' registered (fake_provider)
+2026-07-16 18:45:09 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_10' registered (fake_provider)
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:45:09 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:45:09 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:47:56 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_1' registered (fake_provider)
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:47:56 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_2' registered (fake_provider)
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:47:56 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_3' registered (fake_provider)
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:47:56 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_4' registered (fake_provider)
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 18:47:56 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_5' registered (fake_provider)
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:47:56 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_6' registered (fake_provider)
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:47:56 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_7' registered (fake_provider)
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.ERROR
+2026-07-16 18:47:56 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_8a' registered (fake_provider)
+2026-07-16 18:47:56 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_8b' registered (fake_provider)
+2026-07-16 18:47:56 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_9' registered (fake_provider)
+2026-07-16 18:47:56 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'fake_provider_10' registered (fake_provider)
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'stock_data'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'chart'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'news'
+2026-07-16 18:47:56 | DEBUG    | Agents.executor | executor:50 | Executing tool 'backtest'
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:47:56 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'StockAgent' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:50:14 | WARNING  | Services.news_service | news_service:123 | NewsService.execute failed: max_news must be a positive integer, got -1 | details={'max_news': -1}
+2026-07-16 18:50:14 | WARNING  | Services.backtest_service | backtest_service:158 | BacktestService.execute failed: history must not be empty | details={'history': []}
+2026-07-16 18:50:14 | WARNING  | Services.notification_service | notification_service:146 | NotificationService.execute failed: Invalid channel: 'carrier_pigeon'. Supported channels: ['discord', 'telegram'] | details={'channel': 'carrier_pigeon'}
+2026-07-16 18:50:14 | WARNING  | Services.notification_service | notification_service:146 | NotificationService.execute failed: Discord webhook returned unexpected status code: 500 | details={'status_code': 500, 'body': 'ok'}
+2026-07-16 18:50:30 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'mock_provider_ok_e2e' registered (mock_provider_ok_e2e)
+2026-07-16 18:50:30 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'mock_provider_failing_e2e' registered (mock_provider_failing_e2e)
+2026-07-16 18:50:30 | DEBUG    | Agents.executor | executor:50 | Executing tool 'dummy_lookup_ok_e2e'
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_full_pipeline_e2e' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_full_pipeline_e2e' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:50:30 | DEBUG    | Agents.executor | executor:50 | Executing tool 'dummy_lookup_ok_e2e'
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_full_pipeline_e2e' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_full_pipeline_e2e' state: AgentState.WAITING_PROVIDER -> AgentState.RESPONDING
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_full_pipeline_e2e' state: AgentState.RESPONDING -> AgentState.IDLE
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_missing_e2e' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_missing_e2e' state: AgentState.THINKING -> AgentState.ERROR
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_missing_e2e' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_tool_missing_e2e' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_tool_missing_e2e' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_tool_missing_e2e' state: AgentState.CALLING_TOOL -> AgentState.ERROR
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_tool_missing_e2e' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_service_fail_e2e' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_service_fail_e2e' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:50:30 | DEBUG    | Agents.executor | executor:50 | Executing tool 'dummy_lookup_failing_e2e'
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_service_fail_e2e' state: AgentState.CALLING_TOOL -> AgentState.ERROR
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_service_fail_e2e' state: AgentState.ERROR -> AgentState.IDLE
+2026-07-16 18:50:30 | DEBUG    | Agents.executor | executor:50 | Executing tool 'broken_tool_direct_e2e'
+2026-07-16 18:50:30 | DEBUG    | Providers.provider_manager | provider_manager:98 | Provider 'mock_provider_ok_e2e' unregistered
+2026-07-16 18:50:30 | DEBUG    | Providers.provider_manager | provider_manager:98 | Provider 'mock_provider_failing_e2e' unregistered
+2026-07-16 18:50:30 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'mock_provider_ok_e2e' registered (mock_provider_ok_e2e)
+2026-07-16 18:50:30 | DEBUG    | Providers.provider_manager | provider_manager:82 | Provider 'mock_provider_failing_e2e' registered (mock_provider_failing_e2e)
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_fail_e2e' state: AgentState.IDLE -> AgentState.THINKING
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_fail_e2e' state: AgentState.THINKING -> AgentState.CALLING_TOOL
+2026-07-16 18:50:30 | DEBUG    | Agents.executor | executor:50 | Executing tool 'dummy_lookup_ok_e2e'
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_fail_e2e' state: AgentState.CALLING_TOOL -> AgentState.WAITING_PROVIDER
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_fail_e2e' state: AgentState.WAITING_PROVIDER -> AgentState.ERROR
+2026-07-16 18:50:30 | DEBUG    | Agents.base_agent | base_agent:77 | Agent 'agent_provider_fail_e2e' state: AgentState.ERROR -> AgentState.IDLE

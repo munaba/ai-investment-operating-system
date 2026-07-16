@@ -1,15 +1,4 @@
-"""Google Gemini implementation of :class:`Providers.base_provider.BaseProvider`.
 
-Uses the official ``google-genai`` SDK (``from google import genai``). The
-SDK itself is imported lazily inside :meth:`GeminiProvider.connect` so that
-importing this module — or the ``Providers`` package as a whole — never
-requires ``google-genai`` to be installed unless a caller actually connects
-a :class:`GeminiProvider`.
-
-The API key is read from ``Core.config`` (``GEMINI_API_KEY``) and the model
-name is read from ``Core.config`` (``GEMINI_MODEL``) — neither is ever
-hardcoded.
-"""
 
 from __future__ import annotations
 
@@ -24,11 +13,10 @@ from .response import ProviderResponse, Usage
 
 logger = get_logger(__name__)
 
-# TODO:
 _ROLE_MAP: Dict[MessageRole, str] = {
     MessageRole.USER: "user",
     MessageRole.ASSISTANT: "model",
-    MessageRole.TOOL: "user",  # TODO: 
+    MessageRole.TOOL: "user",   
 }
 
 
