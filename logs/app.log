@@ -1,0 +1,4 @@
+2026-07-16 16:42:30 | WARNING  | Services.news_service | news_service:123 | NewsService.execute failed: max_news must be a positive integer, got -1 | details={'max_news': -1}
+2026-07-16 16:42:30 | WARNING  | Services.backtest_service | backtest_service:158 | BacktestService.execute failed: history must not be empty | details={'history': []}
+2026-07-16 16:42:30 | WARNING  | Services.notification_service | notification_service:146 | NotificationService.execute failed: Invalid channel: 'carrier_pigeon'. Supported channels: ['discord', 'telegram'] | details={'channel': 'carrier_pigeon'}
+2026-07-16 16:42:30 | WARNING  | Services.notification_service | notification_service:146 | NotificationService.execute failed: Discord webhook returned unexpected status code: 500 | details={'status_code': 500, 'body': 'ok'}
