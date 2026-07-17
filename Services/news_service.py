@@ -4,15 +4,13 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 from Core.exceptions import AgentError
 from Core.logger import get_logger
+from Core.request_defaults import DEFAULT_MAX_NEWS, DEFAULT_TICKER
 from Services.base_service import BaseService
 from Services.service_context import ServiceContext
 from Services.service_result import ServiceResult
+from Services.metadata_keys import MetadataKeys
 
 logger = get_logger(__name__)
-
-DEFAULT_TICKER: str = "BBCA.JK"
-
-DEFAULT_MAX_NEWS: int = 10
 
 
 class NewsServiceError(AgentError):
@@ -111,9 +109,9 @@ class NewsService(BaseService):
             elapsed_ms = (time.monotonic() - started_at) * 1000
             return ServiceResult.ok(
                 data={
-                    "ticker": ticker,
-                    "news": news_items,
-                    "total_news": len(news_items),
+                    MetadataKeys.TICKER: ticker,
+                    MetadataKeys.NEWS: news_items,
+                    MetadataKeys.TOTAL_NEWS: len(news_items),
                 },
                 message=f"Fetched {len(news_items)} news item(s) for '{ticker}'.",
                 execution_time_ms=elapsed_ms,
@@ -138,7 +136,7 @@ class NewsService(BaseService):
             NewsServiceError: If ``ticker`` is present but not a
                 non-empty string.
         """
-        ticker = context.get_metadata("ticker", DEFAULT_TICKER)
+        ticker = context.get_metadata(MetadataKeys.TICKER, DEFAULT_TICKER)
         if not isinstance(ticker, str) or not ticker.strip():
             raise NewsServiceError(
                 "ticker must be a non-empty string", details={"ticker": ticker}
@@ -153,7 +151,7 @@ class NewsService(BaseService):
             NewsServiceError: If ``max_news`` cannot be interpreted as a
                 positive integer.
         """
-        raw_value = context.get_metadata("max_news", DEFAULT_MAX_NEWS)
+        raw_value = context.get_metadata(MetadataKeys.MAX_NEWS, DEFAULT_MAX_NEWS)
         try:
             max_news = int(raw_value)
         except (TypeError, ValueError) as exc:
@@ -200,7 +198,7 @@ class NewsService(BaseService):
         """Normalize one raw ``yfinance`` news entry into a stable shape.
 
         Handles both the legacy flat payload and the newer payload nested
-        under a ``"content"`` key (see module Architecture Notes).
+        under a ``"content"`` key.
 
         Args:
             raw_item: A single raw news entry as returned by ``yfinance``.

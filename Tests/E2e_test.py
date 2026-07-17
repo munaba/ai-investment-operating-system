@@ -1,36 +1,4 @@
-"""End-to-end test for the AI Agent Framework's full pipeline.
 
-Scope (Phase 7 -- End-to-End Test. NOT a unit test, NO bot, NO API):
-
-    User -> Message -> Planner -> Executor -> Tool -> Service -> ServiceResult
-                                -> Provider -> ProviderResponse -> Agent -> final text
-
-This file does not modify, wrap, or subclass any existing framework
-class's *behaviour* -- it only:
-    - Registers real instances into the real, unmodified
-      ``Providers.ProviderManager`` and ``Agents.ToolRegistry`` singletons.
-    - Implements ``MockProvider`` as a concrete ``Providers.BaseProvider``
-      (the same extension point ``GeminiProvider`` uses).
-    - Implements ``DummyService`` as a concrete ``Services.BaseService``
-      (the same extension point ``StockService``/``NewsService``/etc use).
-    - Implements ``DummyAgent`` as a concrete ``Agents.BaseAgent``
-      (the same extension point every real agent must use -- ``BaseAgent``
-      is abstract and cannot be instantiated directly).
-    - Uses ``Planner``'s existing, documented ``tool_trigger_strategy``
-      constructor parameter to force specific tool-selection outcomes for
-      negative tests -- this parameter already exists in the framework
-      (see ``Agents.planner.ToolTriggerStrategy``); no new abstraction is
-      introduced.
-
-No internet access, no API key, and no real Gemini call is ever made --
-every provider used here is ``MockProvider``/``FailingMockProvider``.
-
-Run directly:
-    python tests/e2e_test.py
-
-Also collectible by pytest (functions are named ``test_*``):
-    pytest tests/e2e_test.py
-"""
 
 from __future__ import annotations
 
@@ -38,7 +6,7 @@ import sys
 import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Iterator
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
@@ -63,11 +31,6 @@ from Services.service_context import ServiceContext  # noqa: E402
 from Services.service_result import ServiceResult  # noqa: E402
 
 
-# =========================================================================
-# Test doubles -- all built on the framework's EXISTING extension points
-# (BaseProvider / BaseService / BaseAgent / Planner.tool_trigger_strategy).
-# No new abstraction, no new registry, no new adapter.
-# =========================================================================
 
 
 class MockProvider(BaseProvider):
@@ -104,7 +67,7 @@ class MockProvider(BaseProvider):
             usage=Usage(input_tokens=len(messages), output_tokens=1, total_tokens=len(messages) + 1),
         )
 
-    def stream(self, messages: List[Message], **kwargs: Any):
+    def stream(self, messages: List[Message], **kwargs: Any) -> Iterator[str]:
         raise NotImplementedError("MockProvider does not implement streaming.")
 
     def count_tokens(self, messages: List[Message]) -> int:
@@ -229,11 +192,6 @@ class DummyAgent(BaseAgent):
         self.state_transitions.append((old_state, new_state))
 
 
-# =========================================================================
-# Minimal test harness (no external test framework required to run this)
-# =========================================================================
-
-
 @dataclass
 class CheckResult:
     name: str
@@ -291,11 +249,6 @@ def make_context(**metadata: Any) -> ServiceContext:
         user_input="e2e test run",
         metadata=metadata,
     )
-
-
-# =========================================================================
-# Section A -- setup: register real objects into the real singletons
-# =========================================================================
 
 PROVIDER_OK_NAME = "mock_provider_ok_e2e"
 PROVIDER_FAILING_NAME = "mock_provider_failing_e2e"
@@ -370,11 +323,6 @@ def setup_fixtures() -> Fixtures:
         tool_failing=tool_failing,
         tool_broken=tool_broken,
     )
-
-
-# =========================================================================
-# Section B -- positive path: unit-level, then full pipeline through DummyAgent
-# =========================================================================
 
 
 def test_unit_level_positive(fx: Fixtures) -> None:

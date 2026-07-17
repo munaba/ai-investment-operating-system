@@ -3,7 +3,6 @@ from pathlib import Path
 import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-import sys
 import traceback
 from typing import Any, Iterator, List, Optional
 import pandas as pd
@@ -15,16 +14,19 @@ from Agents.executor import Executor
 from Agents.tool_registry import ToolRegistry
 from Agents.base_agent import AgentStateError
 from Agents.stock_agent import StockAgent, StockAgentError
+from Core.analysis_pipeline import AnalysisPipeline
+from Core.tool_context_builder import ToolContextBuilder
 from Services.stock_service import StockService
+from Services.technical_indicator_service import TechnicalIndicatorService
+from Services.moving_average_service import MovingAverageService
+from Services.technical_score_service import TechnicalScoreService
+from Services.fundamental_service import FundamentalService
+from Services.pattern_service import PatternService
 from Services.chart_service import ChartService
 from Services.news_service import NewsService
 from Services.backtest_service import BacktestService
-
-
-# ----------------------------------------------------------------------
-# Fakes / test doubles
-# ----------------------------------------------------------------------
-
+from Services.risk_management_service import RiskManagementService
+from Services.scoring_service import ScoringService
 
 class FakeProvider(BaseProvider):
     """Minimal BaseProvider implementation that echoes a fixed analysis."""
@@ -68,7 +70,12 @@ class FakeYFinanceTicker:
         self.symbol = symbol
         self._empty_history = empty_history
         self._raise_on_history = raise_on_history
-        self.info = {"longName": f"{symbol} Test Company"}
+        self.info = {
+                "longName": f"{symbol} Test Company",
+                "trailingPE": 12.5,
+                "returnOnEquity": 0.18,
+                "dividendYield": 0.035,
+        }
         self.news = [
             {
                 "title": f"{symbol} posts strong quarterly earnings",
@@ -154,11 +161,6 @@ class FakeFigure:
 def fake_make_subplots(**kwargs: Any) -> FakeFigure:
     return FakeFigure()
 
-
-# ----------------------------------------------------------------------
-# Test harness
-# ----------------------------------------------------------------------
-
 _PASS = 0
 _FAIL = 0
 _FAILURES: List[str] = []
@@ -207,27 +209,29 @@ def build_agent(
     memory = ConversationMemory()
     executor = Executor(tool_registry=tool_registry)
 
-    stock_service = StockService(yfinance_module=yfinance_module)
-    chart_service = ChartService(go_module=FakeGo(), make_subplots_func=fake_make_subplots)
-    news_service = NewsService(yfinance_module=yfinance_module)
-    backtest_service = BacktestService()
+    analysis_pipeline = AnalysisPipeline(
+        stock_service=StockService(yfinance_module=yfinance_module),
+        technical_indicator_service=TechnicalIndicatorService(),
+        moving_average_service=MovingAverageService(),
+        technical_score_service=TechnicalScoreService(),
+        fundamental_service=FundamentalService(),
+        pattern_service=PatternService(),
+        chart_service=ChartService(go_module=FakeGo(), make_subplots_func=fake_make_subplots),
+        news_service=NewsService(yfinance_module=yfinance_module),
+        backtest_service=BacktestService(),
+        risk_management_service=RiskManagementService(),
+        scoring_service=ScoringService(),
+    )
+    tool_context_builder = ToolContextBuilder()
 
     return StockAgent(
         planner=planner,
         memory=memory,
         executor=executor,
-        tool_registry=tool_registry,
-        stock_service=stock_service,
-        chart_service=chart_service,
-        news_service=news_service,
-        backtest_service=backtest_service,
+        analysis_pipeline=analysis_pipeline,
+        tool_context_builder=tool_context_builder,
         default_provider_name=provider_name,
     )
-
-
-# ----------------------------------------------------------------------
-# Scenarios
-# ----------------------------------------------------------------------
 
 
 def scenario_success_full_pipeline() -> None:
@@ -243,9 +247,12 @@ def scenario_success_full_pipeline() -> None:
     check(len(agent._memory.history()) == 2, "memory holds exactly [user, assistant] after one turn")
     check(provider.last_messages is not None and len(provider.last_messages) >= 2, "provider received conversation + tool context")
     tool_message = provider.last_messages[-1]
+    print("\n================ TOOL MESSAGE ================\n")
+    print(tool_message.content)
+    print("\n==============================================\n")
     check(tool_message.role == MessageRole.TOOL, "last message sent to provider is a TOOL message")
     check("BBCA.JK" in tool_message.content, "combined tool context mentions the normalized ticker")
-    check("[Stock Data]" in tool_message.content, "combined tool context includes stock data section")
+    check("[Stock]" in tool_message.content, "combined tool context includes stock section")
     check("[Chart]" in tool_message.content, "combined tool context includes chart section")
     check("[News]" in tool_message.content, "combined tool context includes news section")
     check("[Backtest]" in tool_message.content, "combined tool context includes backtest section")
@@ -318,10 +325,11 @@ def scenario_stock_data_failure_degrades_gracefully() -> None:
     check(reply == "Limited analysis due to missing data.", "pipeline still returns a final analysis when stock data is missing")
     check(agent.state is AgentState.IDLE, "agent state returns to IDLE even when stock data failed (business failure, not exception)")
     tool_message = provider.last_messages[-1]
-    check("[Stock Data] FAILED" in tool_message.content, "combined context reports the stock data failure")
-    check("[Chart] Not generated" in tool_message.content, "chart is skipped (not attempted) when there is no history")
-    check("[Backtest] Not run" in tool_message.content, "backtest is skipped (not attempted) when there is no history")
-    check("[News]" in tool_message.content and "FAILED" not in tool_message.content.split("[News]")[1].split("[Backtest]")[0], "news is still fetched independently of the stock data failure")
+    check("[Stock]\nFAILED" in tool_message.content, "combined context reports the stock failure")
+    check("[Chart]\nFAILED" in tool_message.content, "chart section reports failure when there is no history to work with")
+    check("[Backtest]\nFAILED" in tool_message.content, "backtest section reports failure when there is no history to work with")
+    news_section = tool_message.content.split("[News]", 1)[1].split("\n\n", 1)[0]
+    check("[News]" in tool_message.content and "FAILED" not in news_section, "news is still fetched independently of the stock data failure")
 
 
 def scenario_stock_service_raises_network_error() -> None:
@@ -335,7 +343,7 @@ def scenario_stock_service_raises_network_error() -> None:
 
     check(reply == "Analysis with degraded data.", "pipeline survives a raised exception inside StockService (caught internally, reported as failed ServiceResult)")
     tool_message = provider.last_messages[-1]
-    check("[Stock Data] FAILED" in tool_message.content, "network failure surfaces as a reported failure, not a crash")
+    check("[Stock]\nFAILED" in tool_message.content, "network failure surfaces as a reported failure, not a crash")
 
 
 def scenario_provider_failure_propagates() -> None:
@@ -354,16 +362,27 @@ def scenario_provider_failure_propagates() -> None:
 
 def scenario_idempotent_tool_registration() -> None:
     print("\n[Scenario 8] Constructing a second StockAgent against the SAME (unreset) ToolRegistry does not raise ToolAlreadyRegisteredError")
-    # Deliberately bypass build_agent's ToolRegistry.reset() here: this
-    # scenario specifically checks the _register_tools() exists-check
-    # guard, which only matters when the singleton registry is *not*
-    # reset between constructions (i.e. two StockAgents sharing one
-    # process, the realistic production concern).
+    
     ToolRegistry.reset()
     tool_registry = ToolRegistry()
     provider_manager = ProviderManager()
     provider_manager.register("fake_provider_8a", FakeProvider())
     provider_manager.register("fake_provider_8b", FakeProvider())
+
+    def _analysis_pipeline() -> AnalysisPipeline:
+        return AnalysisPipeline(
+            stock_service=StockService(yfinance_module=FakeYFinanceModule()),
+            technical_indicator_service=TechnicalIndicatorService(),
+            moving_average_service=MovingAverageService(),
+            technical_score_service=TechnicalScoreService(),
+            fundamental_service=FundamentalService(),
+            pattern_service=PatternService(),
+            chart_service=ChartService(go_module=FakeGo(), make_subplots_func=fake_make_subplots),
+            news_service=NewsService(yfinance_module=FakeYFinanceModule()),
+            backtest_service=BacktestService(),
+            risk_management_service=RiskManagementService(),
+            scoring_service=ScoringService(),
+        )
 
     raised = False
     try:
@@ -371,22 +390,16 @@ def scenario_idempotent_tool_registration() -> None:
             planner=Planner(provider_manager=provider_manager, tool_registry=tool_registry),
             memory=ConversationMemory(),
             executor=Executor(tool_registry=tool_registry),
-            tool_registry=tool_registry,
-            stock_service=StockService(yfinance_module=FakeYFinanceModule()),
-            chart_service=ChartService(go_module=FakeGo(), make_subplots_func=fake_make_subplots),
-            news_service=NewsService(yfinance_module=FakeYFinanceModule()),
-            backtest_service=BacktestService(),
+            analysis_pipeline=_analysis_pipeline(),
+            tool_context_builder=ToolContextBuilder(),
             default_provider_name="fake_provider_8a",
         )
         StockAgent(
             planner=Planner(provider_manager=provider_manager, tool_registry=tool_registry),
             memory=ConversationMemory(),
             executor=Executor(tool_registry=tool_registry),
-            tool_registry=tool_registry,
-            stock_service=StockService(yfinance_module=FakeYFinanceModule()),
-            chart_service=ChartService(go_module=FakeGo(), make_subplots_func=fake_make_subplots),
-            news_service=NewsService(yfinance_module=FakeYFinanceModule()),
-            backtest_service=BacktestService(),
+            analysis_pipeline=_analysis_pipeline(),
+            tool_context_builder=ToolContextBuilder(),
             default_provider_name="fake_provider_8b",
         )
     except Exception as exc:  # noqa: BLE001
@@ -410,11 +423,6 @@ def scenario_run_accepts_message_directly() -> None:
 
     reply = agent.run(Message(role=MessageRole.USER, content="Analisa BBCA"))
     check(reply == "Direct run() analysis.", "run() works directly with a Message, matching BaseAgent.run()'s signature")
-
-
-# ----------------------------------------------------------------------
-# Entry point
-# ----------------------------------------------------------------------
 
 
 def main() -> int:

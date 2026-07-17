@@ -10,6 +10,7 @@ from Core.logger import get_logger
 from Services.base_service import BaseService
 from Services.service_context import ServiceContext
 from Services.service_result import ServiceResult
+from Services.metadata_keys import MetadataKeys
 
 logger = get_logger(__name__)
 
@@ -118,26 +119,26 @@ class NotificationService(BaseService):
         try:
             channel = self._resolve_channel(context)
             message = self._resolve_message(context)
-            title = self._resolve_optional_str(context, "title")
-            image_path = self._resolve_optional_str(context, "image_path")
+            title = self._resolve_optional_str(context, MetadataKeys.TITLE)
+            image_path = self._resolve_optional_str(context, MetadataKeys.IMAGE_PATH)
 
             http_client = self._get_http_client()
 
             if channel == DISCORD_CHANNEL:
-                webhook_url = self._require_credential(context, "webhook_url", channel)
+                webhook_url = self._require_credential(context, MetadataKeys.WEBHOOK_URL, channel)
                 status, response = self._send_discord(
                     http_client, webhook_url, message, title, image_path
                 )
             else:  # channel == TELEGRAM_CHANNEL (validated by _resolve_channel)
-                bot_token = self._require_credential(context, "telegram_bot_token", channel)
-                chat_id = self._require_credential(context, "telegram_chat_id", channel)
+                bot_token = self._require_credential(context, MetadataKeys.TELEGRAM_BOT_TOKEN, channel)
+                chat_id = self._require_credential(context, MetadataKeys.TELEGRAM_CHAT_ID, channel)
                 status, response = self._send_telegram(
                     http_client, bot_token, chat_id, message, title, image_path
                 )
 
             elapsed_ms = (time.monotonic() - started_at) * 1000
             return ServiceResult.ok(
-                data={"channel": channel, "status": status, "response": response},
+                data={MetadataKeys.CHANNEL: channel, "status": status, "response": response},
                 message=f"Notification sent via {channel}.",
                 execution_time_ms=elapsed_ms,
             )
@@ -161,7 +162,7 @@ class NotificationService(BaseService):
             NotificationServiceError: If ``channel`` is missing, not a
                 string, or not one of :data:`SUPPORTED_CHANNELS`.
         """
-        channel = context.get_metadata("channel")
+        channel = context.get_metadata(MetadataKeys.CHANNEL)
         if not isinstance(channel, str) or not channel.strip():
             raise NotificationServiceError(
                 "channel must be a non-empty string", details={"channel": channel}
@@ -183,7 +184,7 @@ class NotificationService(BaseService):
             NotificationServiceError: If ``message`` is missing, not a
                 string, or empty.
         """
-        message = context.get_metadata("message")
+        message = context.get_metadata(MetadataKeys.MESSAGE)
         if not isinstance(message, str) or not message.strip():
             raise NotificationServiceError(
                 "message must be a non-empty string", details={"message": message}
