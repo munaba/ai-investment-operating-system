@@ -6,6 +6,7 @@ from Core.logger import get_logger
 from Services.base_service import BaseService
 from Services.service_context import ServiceContext
 from Services.service_result import ServiceResult
+from Services.metadata_keys import MetadataKeys
 
 logger = get_logger(__name__)
 
@@ -196,17 +197,17 @@ class ChartService(BaseService):
             failed ``ServiceResult`` describing what went wrong.
         """
         started_at = time.monotonic()
-        ticker = context.get_metadata("ticker", "")
-        raw_history = context.get_metadata("history")
-        requested_indicators = context.get_metadata("indicators", list(_DEFAULT_INDICATORS))
-        image_path = context.get_metadata("image_path")
+        ticker = context.get_metadata(MetadataKeys.TICKER, "")
+        raw_history = context.get_metadata(MetadataKeys.HISTORY)
+        requested_indicators = context.get_metadata(MetadataKeys.INDICATORS, list(_DEFAULT_INDICATORS))
+        image_path = context.get_metadata(MetadataKeys.IMAGE_PATH)
 
         unknown = sorted(set(requested_indicators) - set(SUPPORTED_INDICATORS))
         if unknown:
             return ServiceResult.fail(
                 error=ValueError(f"Unknown indicator(s): {unknown}"),
                 message=f"Unknown indicator(s) requested: {unknown}. Supported: {list(SUPPORTED_INDICATORS)}.",
-                metadata={"ticker": ticker, "requested_indicators": requested_indicators},
+                metadata={MetadataKeys.TICKER: ticker, "requested_indicators": requested_indicators},
                 execution_time_ms=self._elapsed_ms(started_at),
             )
 
@@ -215,7 +216,7 @@ class ChartService(BaseService):
             return ServiceResult.fail(
                 error=ValueError("No OHLC data supplied"),
                 message="ChartService requires non-empty OHLC data in context.metadata['history'].",
-                metadata={"ticker": ticker},
+                metadata={MetadataKeys.TICKER: ticker},
                 execution_time_ms=self._elapsed_ms(started_at),
             )
 
@@ -224,7 +225,7 @@ class ChartService(BaseService):
             return ServiceResult.fail(
                 error=ValueError(f"Missing required column(s): {missing_columns}"),
                 message=f"Supplied OHLC data is missing required column(s): {missing_columns}.",
-                metadata={"ticker": ticker, "columns_present": list(df.columns)},
+                metadata={MetadataKeys.TICKER: ticker, "columns_present": list(df.columns)},
                 execution_time_ms=self._elapsed_ms(started_at),
             )
 
@@ -234,7 +235,7 @@ class ChartService(BaseService):
             return ServiceResult.fail(
                 error=exc,
                 message="plotly is not installed. Install it with 'pip install plotly kaleido'.",
-                metadata={"ticker": ticker},
+                metadata={MetadataKeys.TICKER: ticker},
                 execution_time_ms=self._elapsed_ms(started_at),
             )
 
@@ -244,7 +245,7 @@ class ChartService(BaseService):
             return ServiceResult.fail(
                 error=exc,
                 message=f"Failed to build chart: {exc}",
-                metadata={"ticker": ticker},
+                metadata={MetadataKeys.TICKER: ticker},
                 execution_time_ms=self._elapsed_ms(started_at),
             )
 
@@ -257,16 +258,16 @@ class ChartService(BaseService):
                 logger.warning(f"Could not save chart image to '{image_path}': {exc}")
 
         chart_metadata: Dict[str, Any] = {
-            "ticker": ticker,
+            MetadataKeys.TICKER: ticker,
             "rows": len(df),
             "indicators_included": [i for i in requested_indicators if i not in skipped],
             "indicators_skipped": skipped,
         }
 
         return ServiceResult.ok(
-            data={"figure": fig, "image_path": saved_image_path, "metadata": chart_metadata},
+            data={MetadataKeys.FIGURE: fig, MetadataKeys.IMAGE_PATH: saved_image_path, MetadataKeys.CHART_METADATA: chart_metadata},
             message=f"Chart built for '{ticker or 'unlabeled ticker'}' with {len(df)} row(s) of data.",
-            metadata={"ticker": ticker, "image_saved": saved_image_path is not None},
+            metadata={MetadataKeys.TICKER: ticker, "image_saved": saved_image_path is not None},
             execution_time_ms=self._elapsed_ms(started_at),
         )
 

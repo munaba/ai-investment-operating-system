@@ -6,6 +6,7 @@ from Core.logger import get_logger
 from Services.base_service import BaseService
 from Services.service_context import ServiceContext
 from Services.service_result import ServiceResult
+from Services.metadata_keys import MetadataKeys
 
 logger = get_logger(__name__)
 
@@ -118,7 +119,7 @@ class BacktestService(BaseService):
             initial_capital = self._resolve_initial_capital(context)
             fast_period, slow_period = self._resolve_periods(context)
 
-            dataframe = self._to_dataframe(pandas_module, context.get_metadata("history"))
+            dataframe = self._to_dataframe(pandas_module, context.get_metadata(MetadataKeys.HISTORY))
             fast_ma, slow_ma = self._compute_moving_averages(
                 dataframe["close"], strategy, fast_period, slow_period
             )
@@ -143,12 +144,12 @@ class BacktestService(BaseService):
             elapsed_ms = (time.monotonic() - started_at) * 1000
             return ServiceResult.ok(
                 data={
-                    "strategy": strategy,
-                    "total_return": total_return,
-                    "final_capital": final_capital,
-                    "total_trade": total_trade,
-                    "win_rate": win_rate,
-                    "trade_history": trade_history,
+                    MetadataKeys.STRATEGY: strategy,
+                    MetadataKeys.TOTAL_RETURN: total_return,
+                    MetadataKeys.FINAL_CAPITAL: final_capital,
+                    MetadataKeys.TOTAL_TRADE: total_trade,
+                    MetadataKeys.WIN_RATE: win_rate,
+                    MetadataKeys.TRADE_HISTORY: trade_history,
                 },
                 message=f"Backtest completed using '{strategy}' strategy ({total_trade} trade(s)).",
                 execution_time_ms=elapsed_ms,
@@ -173,7 +174,7 @@ class BacktestService(BaseService):
             BacktestServiceError: If ``strategy`` is not a string or not
                 one of :data:`SUPPORTED_STRATEGIES`.
         """
-        strategy = context.get_metadata("strategy", DEFAULT_STRATEGY)
+        strategy = context.get_metadata(MetadataKeys.STRATEGY, DEFAULT_STRATEGY)
         if not isinstance(strategy, str) or not strategy.strip():
             raise BacktestServiceError(
                 "strategy must be a non-empty string", details={"strategy": strategy}
@@ -195,7 +196,7 @@ class BacktestService(BaseService):
             BacktestServiceError: If ``initial_capital`` cannot be
                 interpreted as a positive number.
         """
-        raw_value = context.get_metadata("initial_capital", DEFAULT_INITIAL_CAPITAL)
+        raw_value = context.get_metadata(MetadataKeys.INITIAL_CAPITAL, DEFAULT_INITIAL_CAPITAL)
         try:
             capital = float(raw_value)
         except (TypeError, ValueError) as exc:
@@ -219,8 +220,8 @@ class BacktestService(BaseService):
                 integer, or ``fast_period`` is not strictly less than
                 ``slow_period``.
         """
-        raw_fast = context.get_metadata("fast_period", DEFAULT_FAST_PERIOD)
-        raw_slow = context.get_metadata("slow_period", DEFAULT_SLOW_PERIOD)
+        raw_fast = context.get_metadata(MetadataKeys.FAST_PERIOD, DEFAULT_FAST_PERIOD)
+        raw_slow = context.get_metadata(MetadataKeys.SLOW_PERIOD, DEFAULT_SLOW_PERIOD)
         try:
             fast_period = int(raw_fast)
             slow_period = int(raw_slow)

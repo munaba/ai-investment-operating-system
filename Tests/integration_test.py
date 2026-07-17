@@ -1,39 +1,4 @@
-"""Integration test for the AI Agent Framework Service Layer.
 
-Scope (per project validation phase -- NOT unit tests, NOT end-to-end,
-NO bot, NO API):
-
-    StockService -> ChartService
-                 -> BacktestService
-    NewsService          (standalone)
-    NotificationService  (standalone, mocked HTTP client -- never sends
-                           a real request)
-
-What this file checks:
-    - Every service can be instantiated.
-    - health_check() works for every service.
-    - StockService produces OHLCV history.
-    - ChartService consumes that same history.
-    - BacktestService consumes that same history.
-    - NewsService fetches news independently.
-    - NotificationService sends a notification using a mocked HTTP client.
-    - Every ServiceResult.success path above is actually True.
-    - At least one ServiceResult.fail path is exercised per service.
-    - No unexpected exception ever leaks out of execute()/health_check().
-
-This file does not modify, wrap, or subclass any existing framework
-class. All non-network dependencies (yfinance, plotly, requests) are
-substituted using the dependency-injection constructor parameters the
-services already expose for testing (``yfinance_module``, ``go_module``/
-``make_subplots_func``, ``http_client``) -- no new abstraction is
-introduced.
-
-Run directly:
-    python tests/integration_test.py
-
-Also collectible by pytest (functions are named ``test_*``):
-    pytest tests/integration_test.py
-"""
 
 from __future__ import annotations
 
@@ -43,8 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-# Make the project root (parent of this tests/ folder) importable, no
-# matter what directory this script is invoked from.
+#
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
@@ -59,10 +23,6 @@ from Services.news_service import NewsService  # noqa: E402
 from Services.backtest_service import BacktestService  # noqa: E402
 from Services.notification_service import NotificationService  # noqa: E402
 
-
-# =========================================================================
-# Test doubles (dependency-injection seams already exposed by the services)
-# =========================================================================
 
 
 class _FakeYFTicker:

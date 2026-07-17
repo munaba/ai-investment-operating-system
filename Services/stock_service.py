@@ -1,18 +1,24 @@
 from __future__ import annotations
 
 import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from Core.logger import get_logger
+from Core.request_defaults import DEFAULT_INTERVAL, DEFAULT_PERIOD, DEFAULT_TICKER
 from Services.base_service import BaseService
 from Services.service_context import ServiceContext
 from Services.service_result import ServiceResult
+from Services.metadata_keys import MetadataKeys
 
 logger = get_logger(__name__)
 
-_DEFAULT_TICKER: str = "BBCA.JK"
-_DEFAULT_PERIOD: str = "6mo"
-_DEFAULT_INTERVAL: str = "1d"
+# Best-effort candidate key names for extracting valuation/profitability
+# metrics from yfinance's ``Ticker.info`` dict. Tried in order; the first
+# key present in ``info`` wins. Key names are not guaranteed by yfinance
+# across versions/tickers, hence the fallback list per metric.
+_PER_INFO_KEYS: Tuple[str, ...] = ("trailingPE", "forwardPE")
+_ROE_INFO_KEYS: Tuple[str, ...] = ("returnOnEquity",)
+_DIVIDEND_YIELD_INFO_KEYS: Tuple[str, ...] = ("dividendYield", "trailingAnnualDividendYield")
 
 
 class StockService(BaseService):
@@ -67,6 +73,48 @@ class StockService(BaseService):
         """Compute elapsed milliseconds since ``started_at`` (a ``time.monotonic()`` reading)."""
         return (time.monotonic() - started_at) * 1000
 
+    @staticmethod
+    def _extract_latest_close(history_records: List[Dict[str, Any]]) -> Optional[Any]:
+        """Best-effort extraction of the latest closing price already present in ``history_records``.
+
+        Does not fetch any new data -- only reads the ``"Close"`` field of
+        the last record already produced in this call.
+
+        Args:
+            history_records: OHLCV records as already built in ``execute()``
+                (e.g. via ``history.reset_index().to_dict(orient="records")``).
+
+        Returns:
+            The ``"Close"`` value of the last record, or ``None`` if
+            ``history_records`` is empty or the last record has no
+            ``"Close"`` field.
+        """
+        if not history_records:
+            return None
+        return history_records[-1].get("Close")
+
+    @staticmethod
+    def _extract_info_metric(info: Optional[Dict[str, Any]], keys: Tuple[str, ...]) -> Optional[Any]:
+        """Best-effort extraction of the first available metric from ``info``.
+
+        Args:
+            info: The already-fetched yfinance ``info`` dict (may be
+                ``None``).
+            keys: Candidate key names to try, in priority order.
+
+        Returns:
+            The first non-``None`` value found under any of ``keys``, or
+            ``None`` if ``info`` is ``None``/empty or none of ``keys`` are
+            present. Never raises.
+        """
+        if not info:
+            return None
+        for key in keys:
+            value = info.get(key)
+            if value is not None:
+                return value
+        return None
+
     def execute(self, context: ServiceContext) -> ServiceResult:
         """Fetch OHLCV history and company info for the requested ticker.
 
@@ -83,14 +131,22 @@ class StockService(BaseService):
 
         Returns:
             A successful ``ServiceResult`` with
-            ``data={"ticker", "history", "info"}`` on success, or a failed
-            ``ServiceResult`` describing what went wrong.
+            ``data={"ticker", "history", "info", "harga", "per", "roe",
+            "dividend_yield"}`` on success, or a failed ``ServiceResult``
+            describing what went wrong. ``harga`` is derived from the
+            already-fetched history; ``per``/``roe``/``dividend_yield`` are
+            best-effort extractions from the already-fetched ``info`` and
+            are ``None`` when unavailable.
         """
         started_at = time.monotonic()
-        ticker_symbol = context.get_metadata("ticker", _DEFAULT_TICKER)
-        period = context.get_metadata("period", _DEFAULT_PERIOD)
-        interval = context.get_metadata("interval", _DEFAULT_INTERVAL)
-        request_metadata = {"ticker": ticker_symbol, "period": period, "interval": interval}
+        ticker_symbol = context.get_metadata(MetadataKeys.TICKER, DEFAULT_TICKER)
+        period = context.get_metadata(MetadataKeys.PERIOD, DEFAULT_PERIOD)
+        interval = context.get_metadata(MetadataKeys.INTERVAL, DEFAULT_INTERVAL)
+        request_metadata = {
+            MetadataKeys.TICKER: ticker_symbol,
+            MetadataKeys.PERIOD: period,
+            MetadataKeys.INTERVAL: interval,
+        }
 
         try:
             yfinance_module = self._resolve_yfinance()
@@ -133,8 +189,21 @@ class StockService(BaseService):
             logger.warning(f"Could not fetch company info for '{ticker_symbol}': {exc}")
             info = None
 
+        harga = self._extract_latest_close(history_records)
+        per = self._extract_info_metric(info, _PER_INFO_KEYS)
+        roe = self._extract_info_metric(info, _ROE_INFO_KEYS)
+        dividend_yield = self._extract_info_metric(info, _DIVIDEND_YIELD_INFO_KEYS)
+
         return ServiceResult.ok(
-            data={"ticker": ticker_symbol, "history": history_records, "info": info},
+            data={
+                MetadataKeys.TICKER: ticker_symbol,
+                MetadataKeys.HISTORY: history_records,
+                MetadataKeys.INFO: info,
+                MetadataKeys.PRICE: harga,
+                MetadataKeys.PER: per,
+                MetadataKeys.ROE: roe,
+                MetadataKeys.DIVIDEND_YIELD: dividend_yield,
+            },
             message=f"Fetched {len(history_records)} row(s) of history for '{ticker_symbol}'.",
             metadata=request_metadata,
             execution_time_ms=self._elapsed_ms(started_at),
@@ -152,7 +221,7 @@ class StockService(BaseService):
         """
         try:
             yfinance_module = self._resolve_yfinance()
-            ticker = yfinance_module.Ticker(_DEFAULT_TICKER)
+            ticker = yfinance_module.Ticker(DEFAULT_TICKER)
             history = ticker.history(period="1d", interval="1d")
             return history is not None and not history.empty
         except Exception as exc:  # noqa: BLE001
