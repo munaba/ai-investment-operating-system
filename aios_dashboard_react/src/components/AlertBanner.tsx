@@ -43,8 +43,8 @@ export default function AlertBanner() {
 
   return (
     <div className="alert-banner-container" style={{ padding: '0 24px' }}>
-      {alerts.map((alert, i) => (
-        <div key={i} className={`${alertClass(alert.severity)} m-3`} role="alert">
+      {alerts.map((alert) => (
+        <div key={`${alert.type}-${alert.relatedId}`} className={`${alertClass(alert.severity)} m-3`} role="alert">
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
             <span style={{ marginTop: 2 }}>
               <Icon
