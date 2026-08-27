@@ -230,15 +230,62 @@ dd { color: var(--white); font-family: var(--font-mono); font-size: 0.88rem; mar
 }
 .tab-btn { position: relative; }
 
-/* Sliding active-nav underline — same language as Phase3's tab-underline.
-   Uses framer-motion layoutId so the bar glides between links on route change. */
-.nav-link { position: relative; }
+/* ---- Navbar (matches Black Terminal tokens: thin edge, lime active) ----
+   Layered signal on the active link: lime TEXT (.nav-link.active) sits ABOVE
+   the sliding layoutId underline (.nav-underline) — two cues, same accent. */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 24px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--edge);
+}
+.navbar-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  text-decoration: none;
+}
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--gray);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: color .15s ease, background-color .15s ease;
+}
+.nav-link:hover { color: var(--white); background: rgba(212,255,63,.05); }
+.nav-link.active { color: var(--lime); }
 .nav-underline {
   position: absolute;
   left: 12px; right: 12px; bottom: -2px;
   height: 2px;
   background: var(--lime);
   border-radius: 2px;
+}
+.ro-plate {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-dim);
+  border: 1px solid var(--edge);
+  border-radius: 999px;
+  padding: 3px 10px;
 }
 
 /* ---- Spinner ---- */
