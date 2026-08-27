@@ -230,6 +230,17 @@ dd { color: var(--white); font-family: var(--font-mono); font-size: 0.88rem; mar
 }
 .tab-btn { position: relative; }
 
+/* Sliding active-nav underline — same language as Phase3's tab-underline.
+   Uses framer-motion layoutId so the bar glides between links on route change. */
+.nav-link { position: relative; }
+.nav-underline {
+  position: absolute;
+  left: 12px; right: 12px; bottom: -2px;
+  height: 2px;
+  background: var(--lime);
+  border-radius: 2px;
+}
+
 /* ---- Spinner ---- */
 .spinner {
   width: 18px; height: 18px;

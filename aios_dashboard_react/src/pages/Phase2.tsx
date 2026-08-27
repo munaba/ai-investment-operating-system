@@ -5,6 +5,7 @@ import { getPhase2Feedback, getPhase2Review, getPhase2Windows, submitDecision } 
 import { usePolling } from '../hooks/usePolling';
 import Icon from '../components/Icon';
 import { PageReveal, EASE_OUT } from '../motion/Motion';
+import { useReducedMotionSafe } from '../hooks/useReducedMotionSafe';
 import { formatDateTime, parseJsonList, downloadCsv, downloadMarkdown } from '../lib/format';
 
 function statusBadgeClass(status: string): string {
@@ -36,7 +37,19 @@ function decisionBadgeClass(decision: string): string {
 
 const VALID_DECISIONS = ['PENDING', 'CONTINUE', 'SIMPLIFY', 'AUTHORIZE_FUTURE_INVESTIGATION'];
 
+// Mirrors GateStrip.evidencePct — keeps the evidence-bar scale consistent across the app.
+const evidencePct = (status: string | null | undefined): number => {
+  switch (status) {
+    case 'COMPLETE_EVIDENCE': return 100;
+    case 'PARTIAL_EVIDENCE': return 60;
+    case 'INSUFFICIENT_DATA': return 30;
+    case 'NOT_VERIFIABLE': return 15;
+    default: return 0;
+  }
+};
+
 export default function Phase2() {
+  const prefersReduced = useReducedMotionSafe();
   const windowsPoll = usePolling<ObservationWindow[]>(() => getPhase2Windows(), 30_000, { immediate: true });
   const windows = windowsPoll.data ?? [];
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -181,22 +194,27 @@ export default function Phase2() {
                       <th>Status</th><th>Created At</th><th>Closed At</th><th>Note</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <motion.tbody initial="hidden" animate="show" variants={{ hidden: {}, show: { transition: { staggerChildren: prefersReduced ? 0 : 0.04 } } }}>
                     {windows.map((w) => (
-                      <tr key={w.windowId} style={{ cursor: 'pointer' }}
+                      <motion.tr key={w.windowId} style={{ cursor: 'pointer' }}
                           className={(selected?.windowId === w.windowId) ? 'table-primary' : ''}
-                          onClick={() => setSelectedId(w.windowId)}>
+                          onClick={() => setSelectedId(w.windowId)}
+                          whileHover={{ backgroundColor: 'rgba(212,255,63,.04)' }}
+                          transition={{ duration: 0.15 }}>
                         <td>{w.windowId}</td>
                         <td>{formatDateTime(w.startAt)}</td>
                         <td>{formatDateTime(w.endAt)}</td>
                         <td>{w.timezone}</td>
-                        <td><span className={`badge ${statusBadgeClass(w.status)}`}>{w.status}</span></td>
+                        <td><AnimatePresence mode="wait"><motion.span key={w.status} className={`badge ${statusBadgeClass(w.status)}`}
+                          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
+                          {w.status}
+                        </motion.span></AnimatePresence></td>
                         <td>{formatDateTime(w.createdAt)}</td>
                         <td>{formatDateTime(w.closedAt)}</td>
                         <td>{w.note ?? ''}</td>
-                      </tr>
+                      </motion.tr>
                     ))}
-                  </tbody>
+                  </motion.tbody>
                 </table>
               </div>
             ) : (
@@ -229,17 +247,32 @@ export default function Phase2() {
             <div className="card-body">
               {review ? (
                 <>
-                  <div className="mb-3"><strong>Overall Evidence Status:</strong> <span className={`badge ${evidenceBadgeClass(review.evidenceStatus)} ms-2`}>{review.evidenceStatus}</span></div>
-                  <div className="mb-3"><strong>Human Decision:</strong> <span className={`badge ${decisionBadgeClass(review.humanDecision)} ms-2`}>{review.humanDecision}</span></div>
+                  <div className="mb-3"><strong>Overall Evidence Status:</strong> <AnimatePresence mode="wait"><motion.span key={review.evidenceStatus} className={`badge ${evidenceBadgeClass(review.evidenceStatus)} ms-2`}
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
+                    {review.evidenceStatus}
+                  </motion.span></AnimatePresence></div>
+                  <div className="mb-3"><strong>Human Decision:</strong> <AnimatePresence mode="wait"><motion.span key={review.humanDecision} className={`badge ${decisionBadgeClass(review.humanDecision)} ms-2`}
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
+                    {review.humanDecision}
+                  </motion.span></AnimatePresence></div>
                   {review.decisionNote && <div className="mb-3"><strong>Decision Note:</strong><p className="mt-1">{review.decisionNote}</p></div>}
+                  <div className="mb-3">
+                    <strong>Evidence:</strong>
+                    <span className="evidence-bar" style={{ display: 'inline-block', width: '140px', height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,.1)', verticalAlign: 'middle', marginLeft: 8, overflow: 'hidden' }}>
+                      <motion.span style={{ display: 'block', height: '100%', background: 'var(--lime)', borderRadius: '3px' }}
+                        initial={prefersReduced ? false : { width: 0 }}
+                        animate={{ width: `${evidencePct(review.evidenceStatus)}%` }}
+                        transition={{ duration: prefersReduced ? 0 : 0.6, ease: 'easeOut' }} />
+                    </span>
+                  </div>
                   <div className="mb-3"><strong>Known Limitations:</strong>
                     <ul className="limit-list">{parseJsonList(review.knownLimitations).map((l, i) => <li key={i}>{l}</li>)}</ul>
                   </div>
                   <div className="mb-3"><strong>Operator Feedback IDs:</strong> <span className="mono" style={{ color: 'var(--gray)' }}>{parseJsonList(review.operatorFeedbackIds).join(', ') || 'none yet'}</span></div>
                   <div className="d-flex justify-content-end">
-                    <button className="btn btn-outline-primary" onClick={() => openForm(selected.windowId)}>
+                    <motion.button type="button" className="btn btn-outline-primary" onClick={() => openForm(selected.windowId)} whileTap={{ scale: 0.97 }}>
                       <Icon name="lock" color="amber" /> Set Human Decision
-                    </button>
+                    </motion.button>
                   </div>
                 </>
               ) : (
@@ -334,10 +367,16 @@ export default function Phase2() {
                 <div className="card-body">
                   <div className="row" style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
                     <div className="col" style={{ flex: '1 1 240px' }}>
-                      <strong>Evidence Status:</strong> <span className={`badge ${evidenceBadgeClass(closedReview.evidenceStatus)} ms-2`}>{closedReview.evidenceStatus}</span>
+                      <strong>Evidence Status:</strong> <AnimatePresence mode="wait"><motion.span key={closedReview.evidenceStatus} className={`badge ${evidenceBadgeClass(closedReview.evidenceStatus)} ms-2`}
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
+                        {closedReview.evidenceStatus}
+                      </motion.span></AnimatePresence>
                     </div>
                     <div className="col" style={{ flex: '1 1 240px' }}>
-                      <strong>Human Decision:</strong> <span className={`badge ${decisionBadgeClass(closedReview.humanDecision)} ms-2`}>{closedReview.humanDecision}</span>
+                      <strong>Human Decision:</strong> <AnimatePresence mode="wait"><motion.span key={closedReview.humanDecision} className={`badge ${decisionBadgeClass(closedReview.humanDecision)} ms-2`}
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
+                        {closedReview.humanDecision}
+                      </motion.span></AnimatePresence>
                     </div>
                   </div>
                   <hr />
@@ -346,9 +385,9 @@ export default function Phase2() {
                   </pre>
                   <hr />
                   <div className="d-flex justify-content-end">
-                    <button className="btn btn-outline-primary" onClick={() => openForm(closedReview.observationWindowId)}>
+                    <motion.button type="button" className="btn btn-outline-primary" onClick={() => openForm(closedReview.observationWindowId)} whileTap={{ scale: 0.97 }}>
                       <Icon name="lock" color="amber" /> Set Human Decision
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
               </div>

@@ -1,4 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import Icon from './Icon';
 
 const NAV = [
@@ -25,6 +26,9 @@ export default function Navbar() {
             >
               <Icon name={n.icon} />
               {n.label}
+              {isActive && (
+                <motion.span className="nav-underline" layoutId="navbar-underline" transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }} />
+              )}
             </NavLink>
           );
         })}
