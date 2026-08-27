@@ -53,12 +53,12 @@ export default function Phase2() {
     setFeedback(await getPhase2Feedback(id));
   };
 
-  // Reload details when selection changes
-  const [lastLoaded, setLastLoaded] = useState<number | null>(null);
-  if (selected && selected.windowId !== lastLoaded) {
-    setLastLoaded(selected.windowId);
-    void loadDetails(selected.windowId);
-  }
+  // Reload details when selection changes (replaces setState-during-render anti-pattern)
+  useEffect(() => {
+    if (selected) {
+      void loadDetails(selected.windowId);
+    }
+  }, [selected?.windowId]);
 
   // ---- Decision modal ----
   const [showForm, setShowForm] = useState(false);
