@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import type { JournalEntry } from '../api/types';
 import { getPhase1Journal, getPhase1Symbols } from '../api/client';
 import { usePolling } from '../hooks/usePolling';
 import Icon from '../components/Icon';
-import { PageReveal } from '../motion/Motion';
+import { PageReveal, fadeUp } from '../motion/Motion';
+import { useReducedMotionSafe } from '../hooks/useReducedMotionSafe';
 import { formatDateTime, downloadCsv, downloadMarkdown } from '../lib/format';
 
 function decisionBadgeClass(d: string): string {
@@ -23,6 +25,7 @@ function riskBadgeClass(s: string): string {
 }
 
 export default function Phase1() {
+  const prefersReduced = useReducedMotionSafe();
   const [symbol, setSymbol] = useState('');
   const [decision, setDecision] = useState('');
   const [riskPolicy, setRiskPolicy] = useState('');
@@ -102,9 +105,9 @@ export default function Phase1() {
               <input type="date" className="form-control" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
             </div>
             <div style={{ flex: '0 1 auto' }}>
-              <button className="btn btn-outline-secondary w-100" onClick={onRefresh} disabled={journal.loading}>
-                <Icon name="refresh-cw" /> Refresh
-              </button>
+            <motion.button type="button" className="btn btn-outline-secondary w-100" onClick={onRefresh} disabled={journal.loading} whileTap={{ scale: 0.97 }}>
+              <Icon name="refresh-cw" /> Refresh
+            </motion.button>
             </div>
           </div>
         </div>
@@ -148,22 +151,31 @@ export default function Phase1() {
                       <th>Risk Policy</th><th>Planned R</th><th>Brief Status</th><th>Note</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <motion.tbody initial="hidden" animate="show" variants={{ hidden: {}, show: { transition: { staggerChildren: prefersReduced ? 0 : 0.04 } } }}>
                     {entries.map((e) => (
-                      <tr key={e.entryId} onClick={() => setSelected(e)}
-                          style={{ cursor: 'pointer' }}
-                          className={selected?.entryId === e.entryId ? 'table-primary' : ''}>
+                      <motion.tr key={e.entryId} variants={fadeUp}
+                        onClick={() => setSelected(e)}
+                        whileHover={{ backgroundColor: 'rgba(212,255,63,.04)' }}
+                        transition={{ duration: 0.15 }}
+                        style={{ cursor: 'pointer' }}
+                        className={selected?.entryId === e.entryId ? 'table-primary' : ''}>
                         <td>{e.entryId}</td>
                         <td>{e.symbol}</td>
-                        <td><span className={`badge ${decisionBadgeClass(e.decision)}`}>{e.decision}</span></td>
+                        <td><AnimatePresence mode="wait"><motion.span key={e.decision} className={`badge ${decisionBadgeClass(e.decision)}`}
+                          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
+                          {e.decision}
+                        </motion.span></AnimatePresence></td>
                         <td>{formatDateTime(e.decidedAt)}</td>
-                        <td><span className={`badge ${riskBadgeClass(e.riskPolicyStatus)}`}>{e.riskPolicyStatus}</span></td>
+                        <td><AnimatePresence mode="wait"><motion.span key={e.riskPolicyStatus} className={`badge ${riskBadgeClass(e.riskPolicyStatus)}`}
+                          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
+                          {e.riskPolicyStatus}
+                        </motion.span></AnimatePresence></td>
                         <td>{e.plannedR != null ? e.plannedR.toFixed(2) : '—'}</td>
                         <td>{e.briefStatus ?? '—'}</td>
                         <td>{e.note ?? ''}</td>
-                      </tr>
+                      </motion.tr>
                     ))}
-                  </tbody>
+                  </motion.tbody>
                 </table>
               </div>
             </div>

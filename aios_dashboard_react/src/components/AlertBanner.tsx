@@ -2,6 +2,7 @@ import { usePolling } from '../hooks/usePolling';
 import { getAlerts } from '../api/client';
 import type { AlertBannerItem, AlertSeverity, AlertType } from '../api/types';
 import Icon from './Icon';
+import { AnimatePresence, motion } from 'framer-motion';
 
 function alertClass(severity: AlertSeverity): string {
   switch (severity) {
@@ -43,22 +44,32 @@ export default function AlertBanner() {
 
   return (
     <div className="alert-banner-container" style={{ padding: '0 24px' }}>
-      {alerts.map((alert) => (
-        <div key={`${alert.type}-${alert.relatedId}`} className={`${alertClass(alert.severity)} m-3`} role="alert">
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-            <span style={{ marginTop: 2 }}>
-              <Icon
-                name={alertIcon(alert.type)}
-                color={alert.severity === 'Error' ? 'lime' : ''}
-              />
-            </span>
-            <div style={{ flex: 1 }}>
-              <strong>{alertTitle(alert.type)}</strong>
-              <div className="small">{alert.message}</div>
+      <AnimatePresence initial={false}>
+        {alerts.map((alert) => (
+          <motion.div
+            key={`${alert.type}-${alert.relatedId}`}
+            className={`${alertClass(alert.severity)} m-3`}
+            role="alert"
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -6 }}
+            transition={{ duration: 0.18 }}
+          >
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+              <span style={{ marginTop: 2 }}>
+                <Icon
+                  name={alertIcon(alert.type)}
+                  color={alert.severity === 'Error' ? 'lime' : ''}
+                />
+              </span>
+              <div style={{ flex: 1 }}>
+                <strong>{alertTitle(alert.type)}</strong>
+                <div className="small">{alert.message}</div>
+              </div>
             </div>
-          </div>
-        </div>
-      ))}
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   );
 }

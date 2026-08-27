@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getPhase0DbInfo, getPhase0Tables, testConnection } from '../api/client';
 import { usePolling } from '../hooks/usePolling';
 import Icon from '../components/Icon';
-import { PageReveal } from '../motion/Motion';
+import { PageReveal, fadeUp } from '../motion/Motion';
+import { useReducedMotionSafe } from '../hooks/useReducedMotionSafe';
 
 export default function Phase0() {
+  const prefersReduced = useReducedMotionSafe();
   const [testing, setTesting] = useState(false);
   const [connResult, setConnResult] = useState<boolean | null>(null);
 
@@ -43,16 +46,20 @@ export default function Phase0() {
         <div className="card" style={{ flex: '1 1 280px' }}>
           <div className="card-header"><h5><Icon name="terminal" /> Connection Test</h5></div>
           <div className="card-body">
-            <button className="btn btn-primary w-100" onClick={onTest} disabled={testing}>
+            <motion.button className="btn btn-primary w-100" onClick={onTest} disabled={testing} whileTap={{ scale: 0.97 }}>
               {testing ? <span className="spinner" /> : <Icon name="refresh-cw" />}
               {testing ? 'Testing' : 'Test Connection'}
-            </button>
+            </motion.button>
             {connResult != null && (
-              <div className="mt-3">
-                {connResult
-                  ? <div className="alert alert-success">✅ Connection successful! SELECT 1 = 1</div>
-                  : <div className="alert alert-danger">❌ Connection failed</div>}
-              </div>
+              <AnimatePresence mode="wait">
+                <motion.div key={connResult ? 'ok' : 'fail'} className="mt-3"
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  transition={{ duration: 0.18 }}>
+                  {connResult
+                    ? <div className="alert alert-success">✅ Connection successful! SELECT 1 = 1</div>
+                    : <div className="alert alert-danger">❌ Connection failed</div>}
+                </motion.div>
+              </AnimatePresence>
             )}
           </div>
         </div>
@@ -64,11 +71,13 @@ export default function Phase0() {
           {tables && tables.length > 0 ? (
             <table className="table table-striped">
               <thead><tr><th>Table Name</th></tr></thead>
-              <tbody>
+              <motion.tbody initial="hidden" animate="show" variants={{ hidden: {}, show: { transition: { staggerChildren: prefersReduced ? 0 : 0.04 } } }}>
                 {tables.map((t) => (
-                  <tr key={t}><td>{t}</td></tr>
+                  <motion.tr key={t} variants={fadeUp} whileHover={{ backgroundColor: 'rgba(212,255,63,.04)' }} transition={{ duration: 0.15 }}>
+                    <td>{t}</td>
+                  </motion.tr>
                 ))}
-              </tbody>
+              </motion.tbody>
             </table>
           ) : (
             <div className="alert alert-warning">No tables found or connection failed</div>
