@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { MotionConfig } from 'framer-motion';
 import App from './App';
 import { AuthProvider, RequireAuth } from './auth/AuthContext';
 import MainLayout from './components/MainLayout';
@@ -15,6 +16,7 @@ import './styles/theme.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+    <MotionConfig reducedMotion="user">
     <BrowserRouter>
       <AuthProvider>
         <Routes>
@@ -30,5 +32,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </Routes>
       </AuthProvider>
     </BrowserRouter>
+    </MotionConfig>
   </React.StrictMode>,
 );

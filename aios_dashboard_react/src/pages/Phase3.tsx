@@ -1,9 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { AuditEvent, NotificationDedupState, Order, Position, SchedulerJobRun, Trade } from '../api/types';
 import { getPhase3Audit, getPhase3Dedup, getPhase3Orders, getPhase3Positions, getPhase3Scheduler, getPhase3Trades } from '../api/client';
 import { usePolling } from '../hooks/usePolling';
 import Icon from '../components/Icon';
 import { formatDateTime, formatIdr, downloadCsv, downloadMarkdown } from '../lib/format';
+import { PageReveal, EASE_OUT } from '../motion/Motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useReducedMotionSafe } from '../hooks/useReducedMotionSafe';
 
 type Tab = 'positions' | 'orders' | 'trades' | 'equity' | 'scheduler';
 
@@ -99,7 +102,7 @@ export default function Phase3() {
   }, [positions, trades]);
 
   return (
-    <>
+    <PageReveal>
       <h1 className="display-serif">Paper book &amp; operations</h1>
       <p className="page-sub">Simulated fills only. This page can never touch a real broker.</p>
 
@@ -112,13 +115,23 @@ export default function Phase3() {
 
       <div className="tabs">
         {TABS.map((t) => (
-          <button key={t.id} className={`tab-btn${tab === t.id ? ' active' : ''}`} onClick={() => setTab(t.id)}>
+          <button key={t.id} className={`tab-btn${tab === t.id ? ' active' : ''}`} onClick={() => setTab(t.id)} aria-current={tab === t.id ? 'page' : undefined}>
             <Icon name={t.icon} /> {t.label}
+            {tab === t.id && (
+              <motion.span className="tab-underline" layoutId="phase3-tab-underline" transition={{ duration: 0.18, ease: EASE_OUT }} />
+            )}
           </button>
         ))}
       </div>
 
-      {tab === 'positions' && (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={tab}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.2, ease: EASE_OUT }}
+        >
         <TableCard title="Paper Positions" count={positions.length} loading={positionsP.loading} onCsv={() => downloadCsv(positions, `paper_positions_${new Date().toISOString().slice(0,10)}.csv`)} onMd={() => downloadMarkdown(
           [
             { header: 'Position ID', render: (p: Position) => String(p.positionId) },
@@ -154,7 +167,6 @@ export default function Phase3() {
             ))}
           </tbody>
         </TableCard>
-      )}
 
       {tab === 'orders' && (
         <TableCard title="Paper Orders" count={orders.length} loading={ordersP.loading} onCsv={() => downloadCsv(orders, `paper_orders_${new Date().toISOString().slice(0,10)}.csv`)} onMd={() => downloadMarkdown(
@@ -368,7 +380,9 @@ export default function Phase3() {
           </div>
         </>
       )}
-    </>
+      </motion.div>
+      </AnimatePresence>
+    </PageReveal>
   );
 }
 
@@ -388,37 +402,69 @@ function TableCard({ title, count, loading, onCsv, onMd, children }: {
       </div>
       <div className="card-body p-0">
         {loading ? <div className="text-center py-4"><span className="spinner" /></div>
-          : count > 0 ? <div className="table-responsive">{children}</div>
+          : count > 0 ? <div className="table-responsive"><table className="table table-striped table-hover mb-0">{children}</table></div>
           : <div className="alert alert-info">No {title.toLowerCase()} found</div>}
       </div>
     </div>
   );
 }
 
-// Lightweight inline SVG equity curve (LAN-only: no external Chart.js CDN).
+// Animated inline SVG equity curve (LAN-only: no external Chart.js CDN).
+// Line draws in (pathLength 0->1), area fades in, zero baseline emphasized.
 function EquityChart({ labels, data }: { labels: string[]; data: number[] }) {
-  const ref = useRef<SVGSVGElement>(null);
+  const reduced = useReducedMotionSafe();
   const W = 720, H = 320, pad = 40;
   const max = Math.max(...data, 1);
   const min = Math.min(...data, 0);
   const span = max - min || 1;
-  const pts = data.map((v, i) => {
-    const x = pad + (i / Math.max(data.length - 1, 1)) * (W - 2 * pad);
-    const y = H - pad - ((v - min) / span) * (H - 2 * pad);
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  }).join(' ');
+  const xAt = (i: number) => pad + (i / Math.max(data.length - 1, 1)) * (W - 2 * pad);
+  const yAt = (v: number) => H - pad - ((v - min) / span) * (H - 2 * pad);
+  const linePts = data.map((v, i) => `${xAt(i).toFixed(1)},${yAt(v).toFixed(1)}`).join(' ');
+  // Area path: line points then down to baseline and back.
+  const baseY = yAt(0);
+  const areaPath =
+    `M ${xAt(0).toFixed(1)},${baseY.toFixed(1)} ` +
+    data.map((v, i) => `L ${xAt(i).toFixed(1)},${yAt(v).toFixed(1)}`).join(' ') +
+    ` L ${xAt(data.length - 1).toFixed(1)},${baseY.toFixed(1)} Z`;
   const last = data[data.length - 1];
+  const gridY = [0.25, 0.5, 0.75].map((f) => pad + f * (H - 2 * pad));
   return (
-    <svg ref={ref} viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', maxHeight: 400, background: '#070707', borderRadius: 8, border: '1px solid var(--edge)' }} role="img" aria-label="Equity curve">
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', maxHeight: 400, background: '#070707', borderRadius: 8, border: '1px solid var(--edge)' }} role="img" aria-label="Equity curve">
+      {/* gridlines */}
+      {gridY.map((y, i) => (
+        <line key={i} x1={pad} y1={y} x2={W - pad} y2={y} stroke="#161616" />
+      ))}
+      {/* axes */}
       <line x1={pad} y1={H - pad} x2={W - pad} y2={H - pad} stroke="#232323" />
       <line x1={pad} y1={pad} x2={pad} y2={H - pad} stroke="#232323" />
-      <polyline points={pts} fill="none" stroke="var(--lime)" strokeWidth={2} />
-      {data.map((v, i) => {
-        const x = pad + (i / Math.max(data.length - 1, 1)) * (W - 2 * pad);
-        const y = H - pad - ((v - min) / span) * (H - 2 * pad);
-        return <circle key={i} cx={x} cy={y} r={2.5} fill="var(--lime)" />;
-      })}
-      <text x={pad} y={pad - 10} fill="var(--gray)" fontSize={11}>{last >= 0 ? '+' : ''}{last.toLocaleString('id-ID')} IDR</text>
+      {/* zero baseline emphasized */}
+      <line x1={pad} y1={baseY} x2={W - pad} y2={baseY} stroke="rgba(212,255,63,.22)" strokeDasharray="3 4" />
+      {/* area fill */}
+      <motion.path
+        d={areaPath} fill="url(#equityFill)" stroke="none"
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : 0.6, ease: EASE_OUT }}
+      />
+      <defs>
+        <linearGradient id="equityFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="rgba(212,255,63,.18)" />
+          <stop offset="100%" stopColor="rgba(212,255,63,0)" />
+        </linearGradient>
+      </defs>
+      {/* line draw-in */}
+      <motion.polyline
+        points={linePts} fill="none" stroke="var(--lime)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round"
+        initial={{ pathLength: reduced ? 1 : 0, opacity: reduced ? 1 : 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: reduced ? 0 : 0.7, ease: EASE_OUT }}
+      />
+      {/* end marker */}
+      {!reduced && (
+        <motion.circle cx={xAt(data.length - 1)} cy={yAt(last)} r={3.5} fill="var(--lime)"
+          initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.6, duration: 0.2, ease: EASE_OUT }} />
+      )}
+      <text x={pad} y={pad - 10} fill="var(--gray)" fontSize={11} fontFamily="var(--font-mono)">
+        {last >= 0 ? '+' : ''}{last.toLocaleString('id-ID')} IDR
+      </text>
     </svg>
   );
 }

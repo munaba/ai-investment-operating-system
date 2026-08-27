@@ -3,6 +3,7 @@ import type { JournalEntry } from '../api/types';
 import { getPhase1Journal, getPhase1Symbols } from '../api/client';
 import { usePolling } from '../hooks/usePolling';
 import Icon from '../components/Icon';
+import { PageReveal } from '../motion/Motion';
 import { formatDateTime, downloadCsv, downloadMarkdown } from '../lib/format';
 
 function decisionBadgeClass(d: string): string {
@@ -66,7 +67,7 @@ export default function Phase1() {
     );
 
   return (
-    <>
+    <PageReveal>
       <h1 className="display-serif">Journal &amp; briefs</h1>
 
       <div className="card mb-4">
@@ -190,6 +191,6 @@ export default function Phase1() {
       ) : (
         <div className="alert alert-info">No journal entries match the filters</div>
       )}
-    </>
+    </PageReveal>
   );
 }

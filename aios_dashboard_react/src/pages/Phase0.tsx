@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { getPhase0DbInfo, getPhase0Tables, testConnection } from '../api/client';
 import { usePolling } from '../hooks/usePolling';
 import Icon from '../components/Icon';
+import { PageReveal } from '../motion/Motion';
 
 export default function Phase0() {
   const [testing, setTesting] = useState(false);
@@ -24,7 +25,7 @@ export default function Phase0() {
   };
 
   return (
-    <>
+    <PageReveal>
       <h1 className="display-serif">System integrity</h1>
       <p className="page-sub">
         Read from <code>investment_platform.db</code> via a read-only connection. Nothing here can change your data.
@@ -74,6 +75,6 @@ export default function Phase0() {
           )}
         </div>
       </div>
-    </>
+    </PageReveal>
   );
 }
