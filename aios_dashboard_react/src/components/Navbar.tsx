@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import Icon from './Icon';
 
 const NAV = [
@@ -9,20 +9,25 @@ const NAV = [
 ];
 
 export default function Navbar() {
+  const location = useLocation();
   return (
     <nav className="navbar">
       <NavLink to="/" className="navbar-brand">AIOS</NavLink>
       <div className="navbar-nav">
-        {NAV.map((n) => (
-          <NavLink
-            key={n.to}
-            to={n.to}
-            className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
-          >
-            <Icon name={n.icon} />
-            {n.label}
-          </NavLink>
-        ))}
+        {NAV.map((n) => {
+          const isActive = location.pathname === n.to;
+          return (
+            <NavLink
+              key={n.to}
+              to={n.to}
+              className={`nav-link${isActive ? ' active' : ''}`}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              <Icon name={n.icon} />
+              {n.label}
+            </NavLink>
+          );
+        })}
       </div>
       <span className="ro-plate">read-only</span>
     </nav>

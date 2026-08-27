@@ -241,16 +241,6 @@ dd { color: var(--white); font-family: var(--font-mono); font-size: 0.88rem; mar
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ---- Skeleton (loading) ---- */
-.skel {
-  background: linear-gradient(90deg, #101010 25%, #1a1a1a 50%, #101010 75%);
-  background-size: 200% 100%;
-  animation: skel-wave 1.4s ease infinite;
-  border-radius: 6px;
-  height: 12px; margin: 10px 6px;
-}
-@keyframes skel-wave { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
 /* ---- Modal (Phase 2 decision) ---- */
 .modal-overlay {
   position: fixed; inset: 0;
@@ -274,9 +264,8 @@ dd { color: var(--white); font-family: var(--font-mono); font-size: 0.88rem; mar
 
 /* ---- Reduced motion: kill every non-Framer animation ---- */
 @media (prefers-reduced-motion: reduce) {
-  .dot-live, .decision-dot.pending, .spinner, .skel { animation: none !important; }
-  .skel { background: #141414; }
-  .modal, .tab-pane { animation: none !important; }
+  .dot-live, .decision-dot.pending, .spinner { animation: none !important; }
+  .modal { animation: none !important; }
 }
 
 /* ---- Utility classes (Blazor/Bootstrap equivalents, no Bootstrap here) ---- */
