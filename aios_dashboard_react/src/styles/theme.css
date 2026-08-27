@@ -57,6 +57,7 @@
 }
 .table > tbody > tr:nth-of-type(odd) > td { background: rgba(255,255,255,.018); }
 .table > tbody > tr:hover > td { background: #101010; }
+.table > tbody > tr { transition: background-color .12s ease; }
 .table-primary > td {
   background: rgba(212,255,63,.06) !important;
   outline: 1px solid rgba(212,255,63,.35);
@@ -219,6 +220,15 @@ dd { color: var(--white); font-family: var(--font-mono); font-size: 0.88rem; mar
 .tab-btn:hover { color: var(--white); background: rgba(212,255,63,.06); }
 .tab-btn.active { color: var(--lime); border-bottom-color: var(--lime); font-weight: 500; }
 .tab-btn:focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; border-radius: 4px; }
+/* Sliding active-tab underline (framer-motion layoutId target) */
+.tab-underline {
+  position: absolute;
+  left: 16px; right: 16px; bottom: -1px;
+  height: 2px;
+  background: var(--lime);
+  border-radius: 2px;
+}
+.tab-btn { position: relative; }
 
 /* ---- Spinner ---- */
 .spinner {

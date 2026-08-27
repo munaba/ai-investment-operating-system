@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { FinalReviewRecord, ObservationWindow, OperatorFeedback } from '../api/types';
 import { getPhase2Feedback, getPhase2Review, getPhase2Windows, submitDecision } from '../api/client';
 import { usePolling } from '../hooks/usePolling';
 import Icon from '../components/Icon';
+import { PageReveal, EASE_OUT } from '../motion/Motion';
 import { formatDateTime, parseJsonList, downloadCsv, downloadMarkdown } from '../lib/format';
 
 function statusBadgeClass(status: string): string {
@@ -105,7 +107,7 @@ export default function Phase2() {
   };
 
   return (
-    <>
+    <PageReveal>
       <h1 className="display-serif">Observation window &amp; evidence</h1>
       {windowsPoll.loading && !windowsPoll.data ? (
         <div className="text-center py-4"><span className="spinner" /> <p>Loading observation windows…</p></div>
@@ -323,8 +325,23 @@ export default function Phase2() {
       )}
 
       {showForm && selected && (
-        <div className="modal-overlay" onClick={() => setShowForm(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <AnimatePresence>
+          <motion.div
+            className="modal-overlay"
+            onClick={() => setShowForm(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+          >
+            <motion.div
+              className="modal"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, scale: 0.96, y: 8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.97, y: 8 }}
+              transition={{ duration: 0.22, ease: EASE_OUT }}
+            >
             <div className="modal-header">
               <h5 className="display-serif">Set Human Decision — Window #{selected.windowId}</h5>
               <button className="btn btn-sm" onClick={() => setShowForm(false)}>✕</button>
@@ -367,9 +384,10 @@ export default function Phase2() {
                 </div>
               )}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
+        </AnimatePresence>
       )}
-    </>
+    </PageReveal>
   );
 }
