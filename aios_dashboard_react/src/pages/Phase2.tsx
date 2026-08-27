@@ -76,7 +76,9 @@ export default function Phase2() {
     setShowForm(true);
   };
 
-  // ---- Modal a11y: focus return + escape + focus trap ----
+  // ---- Modal a11y (effect 1): save opener, initial focus, restore on close ----
+  // Depends ONLY on showForm so it never re-runs while formSubmitting toggles
+  // (otherwise focus would jump back to the opener mid-submit).
   const modalRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<Element | null>(null);
 
@@ -89,6 +91,15 @@ export default function Phase2() {
       'select, textarea, input, button',
     );
     firstField?.focus();
+    return () => {
+      // Restore focus to the opener when the modal closes.
+      (openerRef.current as HTMLElement | null)?.focus?.();
+    };
+  }, [showForm]);
+
+  // ---- Modal a11y (effect 2): Escape-to-close, skips while submitting ----
+  useEffect(() => {
+    if (!showForm) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && !formSubmitting) {
         e.preventDefault();
@@ -96,11 +107,7 @@ export default function Phase2() {
       }
     };
     document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      // Restore focus to the opener when the modal closes.
-      (openerRef.current as HTMLElement | null)?.focus?.();
-    };
+    return () => document.removeEventListener('keydown', onKey);
   }, [showForm, formSubmitting]);
 
   const submit = async () => {
