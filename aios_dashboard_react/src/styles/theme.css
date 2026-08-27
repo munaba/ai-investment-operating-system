@@ -132,6 +132,13 @@
 }
 .btn:active { transform: scale(.96); }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
+/* ---- Inline SVG icons (Lucide sprite via <use>) ----
+   Explicit size is REQUIRED: <svg> has no width/height attr, so without this
+   it falls back to the replaced-element default (~300x150) and renders giant.
+   Base 18px sits inside the 16-18px range used by nav/buttons/tabs. */
+.ico { width: 18px; height: 18px; flex: none; vertical-align: middle; }
+.ico-sm { width: 16px; height: 16px; }
+.ico-lg { width: 22px; height: 22px; }
 .btn .ico { margin-right: 0; }
 .btn-primary { background: var(--lime); border-color: var(--lime); color: var(--black); }
 .btn-primary:hover { background: #E3FF66; }
