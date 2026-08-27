@@ -136,7 +136,13 @@
    Explicit size is REQUIRED: <svg> has no width/height attr, so without this
    it falls back to the replaced-element default (~300x150) and renders giant.
    Base 18px sits inside the 16-18px range used by nav/buttons/tabs. */
-.ico { width: 18px; height: 18px; flex: none; vertical-align: middle; }
+.ico { width: 18px; height: 18px; flex: none; vertical-align: middle;
+  /* Sprite symbols carry NO fill/stroke attr, so they default to fill:black
+     (hardcoded, NOT inherited from color) + stroke:none — rendering as black
+     blobs that currentColor can't reach. Force the Lucide convention:
+     no fill, stroke = currentColor (inherits .ico-lime/.ico-amber/color). */
+  fill: none; stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round; }
 .ico-sm { width: 16px; height: 16px; }
 .ico-lg { width: 22px; height: 22px; }
 /* color prop → tint via currentColor (Icon.tsx builds these classes but CSS was missing) */
