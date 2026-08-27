@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { FinalReviewRecord, ObservationWindow, OperatorFeedback } from '../api/types';
 import { getPhase2Feedback, getPhase2Review, getPhase2Windows, submitDecision } from '../api/client';
@@ -75,6 +75,33 @@ export default function Phase2() {
     setFormNote(''); setFormBy(''); setFormConfirmed(false); setFormResult('');
     setShowForm(true);
   };
+
+  // ---- Modal a11y: focus return + escape + focus trap ----
+  const modalRef = useRef<HTMLDivElement>(null);
+  const openerRef = useRef<Element | null>(null);
+
+  useEffect(() => {
+    if (!showForm) return;
+    // Save the element that opened the modal so we can restore focus on close.
+    openerRef.current = document.activeElement;
+    // Move focus into the modal (first interactive control: the Decision select).
+    const firstField = modalRef.current?.querySelector<HTMLElement>(
+      'select, textarea, input, button',
+    );
+    firstField?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !formSubmitting) {
+        e.preventDefault();
+        setShowForm(false);
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      // Restore focus to the opener when the modal closes.
+      (openerRef.current as HTMLElement | null)?.focus?.();
+    };
+  }, [showForm, formSubmitting]);
 
   const submit = async () => {
     if (!formConfirmed) { setFormResult('❌ Please confirm the submission by checking the checkbox.'); return; }
@@ -336,6 +363,10 @@ export default function Phase2() {
           >
             <motion.div
               className="modal"
+              ref={modalRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="decisionModalTitle"
               onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, scale: 0.96, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -343,7 +374,7 @@ export default function Phase2() {
               transition={{ duration: 0.22, ease: EASE_OUT }}
             >
             <div className="modal-header">
-              <h5 className="display-serif">Set Human Decision — Window #{selected.windowId}</h5>
+              <h5 className="display-serif" id="decisionModalTitle">Set Human Decision — Window #{selected.windowId}</h5>
               <button className="btn btn-sm" onClick={() => setShowForm(false)}>✕</button>
             </div>
             <div className="modal-body">
