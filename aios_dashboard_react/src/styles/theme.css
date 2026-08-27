@@ -139,6 +139,10 @@
 .ico { width: 18px; height: 18px; flex: none; vertical-align: middle; }
 .ico-sm { width: 16px; height: 16px; }
 .ico-lg { width: 22px; height: 22px; }
+/* color prop → tint via currentColor (Icon.tsx builds these classes but CSS was missing) */
+.ico-lime { color: var(--lime); }
+.ico-amber { color: var(--amber); }
+.ico-dim { color: var(--gray-dim); }
 .btn .ico { margin-right: 0; }
 .btn-primary { background: var(--lime); border-color: var(--lime); color: var(--black); }
 .btn-primary:hover { background: #E3FF66; }
@@ -341,21 +345,24 @@ dd { color: var(--white); font-family: var(--font-mono); font-size: 0.88rem; mar
 .w-100 { width: 100%; }
 .text-center { text-align: center; }
 
-/* ---- Home gate (mirrors Home.razor inline styles) ---- */
+/* ---- Home gate → responsive card grid (Black Terminal tokens only) ---- */
 .home-gate { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
-.hg-inner { text-align: center; }
+.hg-inner { text-align: center; width: 100%; max-width: 920px; }
 .hg-brand { font-family: var(--font-display); font-weight: 700; font-size: 2.6rem; letter-spacing: -0.02em; margin-bottom: 8px; }
-.hg-sub { color: var(--gray); margin-bottom: 28px; }
-.hg-links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
-.hg-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: transparent; border: 1px solid var(--edge); color: var(--white);
-  font-family: var(--font-mono); font-size: 0.82rem;
-  padding: 10px 18px; border-radius: 7px; cursor: pointer; text-decoration: none;
-  transition: border-color .15s, background .15s, transform .1s, color .15s;
+.hg-sub { color: var(--gray); margin-bottom: var(--sp-5); }
+.hg-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-4); margin-bottom: var(--sp-5); }
+.home-card {
+  display: flex; flex-direction: column; gap: var(--sp-2);
+  padding: var(--sp-4);
+  background: var(--panel); border: 1px solid var(--edge); border-radius: 10px;
+  text-decoration: none; color: var(--white);
+  transition: border-color .15s ease, background-color .15s ease, transform .12s ease;
 }
-.hg-btn:hover { border-color: var(--lime); color: var(--lime); background: rgba(212,255,63,.04); }
-.hg-btn:active { transform: scale(.97); }
+.home-card:hover { border-color: var(--lime); background: rgba(212,255,63,.04); }
+.home-card:active { transform: scale(.985); }
+.home-card .hc-icon { color: var(--lime); display: inline-flex; }
+.home-card .hc-title { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; }
+.home-card .hc-desc { color: var(--gray); font-size: 0.85rem; line-height: 1.5; }
 .ro-pill {
   font-family: var(--font-mono); font-size: 0.68rem; color: var(--gray);
   letter-spacing: .12em; text-transform: uppercase;
