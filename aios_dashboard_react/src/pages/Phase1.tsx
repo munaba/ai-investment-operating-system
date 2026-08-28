@@ -71,7 +71,7 @@ export default function Phase1() {
 
   return (
     <PageReveal>
-      <h1 className="display-serif">Journal &amp; briefs</h1>
+      <h1 className="display-serif page-title">Journal &amp; briefs</h1>
 
       <div className="card mb-4">
         <div className="card-body">
