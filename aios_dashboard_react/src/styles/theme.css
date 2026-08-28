@@ -221,6 +221,11 @@ dd { color: var(--white); font-family: var(--font-mono); font-size: 0.88rem; mar
 .limit-list { margin: 6px 0 0; padding-left: 18px; color: var(--gray); font-size: .82rem; }
 .limit-list li { margin-bottom: 7px; line-height: 1.55; }
 .limit-list li::marker { color: var(--amber); }
+/* chip per item — alpha rujukan badge rule line 80-82 (preexisting, 398b54a) */
+.chip { display: inline-block; padding: 1px 6px; margin-right: 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.04em; border: 1px solid transparent; vertical-align: 1px; }
+.chip-NOT_AVAILABLE    { background: rgba(255,92,92,.07);  color: var(--red);    border-color: rgba(255,92,92,.35); }
+.chip-EXTERNAL_BLOCKED { background: rgba(255,200,60,.08); color: var(--amber);  border-color: rgba(255,200,60,.45); }
+.chip-AVAILABLE        { background: rgba(212,255,63,.07); color: var(--lime);   border-color: rgba(212,255,63,.35); }
 
 /* ---- Tabs (Phase 3) ---- */
 .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--edge); margin-bottom: 18px; flex-wrap: wrap; }
