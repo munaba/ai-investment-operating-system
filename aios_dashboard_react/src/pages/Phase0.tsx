@@ -80,7 +80,12 @@ export default function Phase0() {
               </motion.tbody>
             </table>
           ) : (
-            <div className="alert alert-warning">No tables found or connection failed</div>
+            <div className="alert alert-warning">
+              <span className="d-flex align-items-center gap-2">
+                <Icon name="database" size="sm" color="dim" />
+                Gagal memuat daftar tabel — periksa koneksi database
+              </span>
+            </div>
           )}
         </div>
       </div>

@@ -339,7 +339,7 @@ export default function Phase3() {
                     </tbody>
                   </table>
                 </div>
-              ) : <div className="p-3 text-center text-muted">No notification dedup state recorded</div>}
+              ) : <div className="p-3 text-center text-muted d-flex align-items-center justify-content-center gap-2"><Icon name="shield-check" size="sm" color="dim" /> Belum ada duplikasi notifikasi terdeteksi — sistem berjalan normal</div>}
             </div>
           </div>
 
@@ -375,7 +375,7 @@ export default function Phase3() {
                     </tbody>
                   </table>
                 </div>
-              ) : <div className="p-3 text-center text-muted">No audit events recorded</div>}
+              ) : <div className="p-3 text-center text-muted d-flex align-items-center justify-content-center gap-2"><Icon name="activity" size="sm" color="dim" /> Belum ada aktivitas audit tercatat — log akan muncul saat ada event sistem</div>}
             </div>
           </div>
         </>
