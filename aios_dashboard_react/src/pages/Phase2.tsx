@@ -265,9 +265,23 @@ export default function Phase2() {
                         transition={{ duration: prefersReduced ? 0 : 0.6, ease: 'easeOut' }} />
                     </span>
                   </div>
-                  <div className="mb-3"><strong>Known Limitations:</strong>
-                    <ul className="limit-list">{parseJsonList(review.knownLimitations).map((l, i) => <li key={i}>{l}</li>)}</ul>
-                  </div>
+                  <div className="mb-3"><strong>Known Limitations</strong>
+                    <ul className="limit-list">{parseJsonList(review.knownLimitations).map((l, i) => {
+                      const m = /^\[(\w+)\]\s+(\w+):\s*(.*)$/s.exec(l);
+                      if (m) {
+                        const cat = m[1];
+                        const title = m[2];
+                        const desc = m[3];
+                        return (
+                          <li key={i}>
+                            <span className={'chip chip-' + cat}>{cat}</span>
+                            <strong>{title}</strong>: {desc}
+                         </li>
+                        );
+                      }
+                      return <li key={i}>{l}</li>;
+                    })}</ul>
+                </div>
                   <div className="mb-3"><strong>Operator Feedback IDs:</strong> <span className="mono" style={{ color: 'var(--gray)' }}>{parseJsonList(review.operatorFeedbackIds).join(', ') || 'none yet'}</span></div>
                   <div className="d-flex justify-content-end">
                     <motion.button type="button" className="btn btn-outline-primary" onClick={() => openForm(selected.windowId)} whileTap={{ scale: 0.97 }}>
