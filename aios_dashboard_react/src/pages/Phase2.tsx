@@ -155,7 +155,7 @@ export default function Phase2() {
 
   return (
     <PageReveal>
-      <h1 className="display-serif">Observation window &amp; evidence</h1>
+      <h1 className="display-serif page-title">Observation window &amp; evidence</h1>
       {windowsPoll.loading && !windowsPoll.data ? (
         <div className="text-center py-4"><span className="spinner" /> <p>Loading observation windows…</p></div>
       ) : (
