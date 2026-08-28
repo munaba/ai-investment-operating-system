@@ -103,7 +103,7 @@ export default function Phase3() {
 
   return (
     <PageReveal>
-      <h1 className="display-serif">Paper book &amp; operations</h1>
+      <h1 className="display-serif page-title">Paper book &amp; operations</h1>
       <p className="page-sub">Simulated fills only. This page can never touch a real broker.</p>
 
       <div className="dataline">
