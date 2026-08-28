@@ -401,10 +401,13 @@ function TableCard({ title, count, loading, onCsv, onMd, children }: {
         </div>
       </div>
       <div className="card-body p-0">
-        {loading ? <div className="text-center py-4"><span className="spinner" /></div>
-          : count > 0 ? <div className="table-responsive"><table className="table table-striped table-hover mb-0">{children}</table></div>
-          : <div className="alert alert-info">No {title.toLowerCase()} found</div>}
-      </div>
+              {loading ? <div className="text-center py-4"><span className="spinner" /></div>
+                : count > 0 ? <div className="table-responsive"><table className="table table-striped table-hover mb-0">{children}</table></div>
+                : <div className="alert alert-info d-flex align-items-center gap-2" role="status">
+                    <Icon name="circle-dot" size="sm" color="dim" />
+                    <span>Belum ada {title.toLowerCase()} — data akan muncul otomatis saat tersedia.</span>
+                  </div>}
+            </div>
     </div>
   );
 }
