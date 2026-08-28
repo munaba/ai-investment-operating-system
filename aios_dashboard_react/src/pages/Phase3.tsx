@@ -65,7 +65,7 @@ export default function Phase3() {
   const trades = tradesP.data ?? [];
   const jobs = schedP.data ?? [];
   const dedup = dedupP.data ?? [];
-  const audit = auditP.data ?? [];
+    const audit = auditP.data ?? [];
 
   const openCount = positions.filter((p) => p.status === 'OPEN').length;
   const closedCount = positions.filter((p) => p.status === 'CLOSED').length;
@@ -244,11 +244,12 @@ export default function Phase3() {
           <div className="card-header"><h5 className="mb-0"><Icon name="arrow-up-right" /> Equity Curve / Realized P&amp;L</h5></div>
           <div className="card-body">
             {equity.data.length === 0 ? (
-              <div className="alert alert-info text-center py-5">
-                <h5>Belum ada data trade untuk periode ini</h5>
-                <p className="text-muted mb-0">Chart equity/P&L akan muncul otomatis setelah ada trade yang terekseskusi.</p>
-              </div>
-            ) : (
+                          <div className="alert alert-info text-center py-5">
+                            <Icon name="activity" size="lg" color="dim" className="mb-2" />
+                            <h5>Belum ada data trade untuk periode ini</h5>
+                            <p className="text-muted mb-0">Chart equity/P&L akan muncul otomatis setelah ada trade yang terekseskusi.</p>
+                          </div>
+                        ) : (
               <EquityChart labels={equity.labels} data={equity.data} />
             )}
           </div>
