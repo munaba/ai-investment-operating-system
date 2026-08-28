@@ -27,6 +27,15 @@
 }
 .card-header h5 { margin: 0; font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; display: inline-flex; align-items: center; gap: var(--sp-2); }
 .page-title { margin: 0 0 var(--sp-5); }
+/* ---- Status badges: re-skin Bootstrap to Black Terminal tokens (Fase 2, concern #2) ---- */
+/* additive: overrides Bootstrap .badge bg-* colors with our tokens; no JSX change.
+   rgba tints follow the existing hover convention (navbar uses rgba(212,255,63,.05)). */
+.badge { font-weight: 500; letter-spacing: 0.04em; border: 1px solid transparent; }
+.badge.bg-success   { background: rgba(212,255,63,.14); color: var(--lime);   border-color: rgba(212,255,63,.35); }
+.badge.bg-danger    { background: rgba(255,92,92,.14);  color: var(--red);    border-color: rgba(255,92,92,.35); }
+.badge.bg-warning   { background: rgba(255,200,60,.14); color: var(--amber);  border-color: rgba(255,200,60,.35); }
+.badge.bg-secondary { background: rgba(158,158,158,.12); color: var(--gray);  border-color: var(--edge); }
+.badge.bg-primary   { background: rgba(158,158,158,.10); color: var(--gray);  border-color: var(--edge); }
 .card-body { color: var(--white); padding: 16px; }
 .card-body.p-0 { padding: 0; }
 
