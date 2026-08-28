@@ -240,21 +240,74 @@ export default function Phase3() {
       )}
 
       {tab === 'equity' && (
-        <div className="card">
-          <div className="card-header"><h5 className="mb-0"><Icon name="arrow-up-right" /> Equity Curve / Realized P&amp;L</h5></div>
-          <div className="card-body">
-            {equity.data.length === 0 ? (
-                          <div className="alert alert-info text-center py-5">
-                            <Icon name="activity" size="lg" color="dim" className="mb-2" />
-                            <h5>Belum ada data trade untuk periode ini</h5>
-                            <p className="text-muted mb-0">Chart equity/P&L akan muncul otomatis setelah ada trade yang terekseskusi.</p>
-                          </div>
-                        ) : (
-              <EquityChart labels={equity.labels} data={equity.data} />
+              <div className="card">
+                <div className="card-header"><h5 className="mb-0"><Icon name="arrow-up-right" /> Equity Curve / Realized P&L</h5></div>
+                <div className="card-body">
+                  {equity.data.length === 0 ? (
+                    <div className="alert alert-info text-center py-5">
+                      <Icon name="activity" size="lg" color="dim" className="mb-2" />
+                      <h5>Belum ada data trade untuk periode ini</h5>
+                      <p className="text-muted mb-0">Chart equity/P&L akan muncul otomatis setelah ada trade yang terekseskusi.</p>
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: 24,
+                        alignItems: 'flex-start',
+                      }}
+                    >
+                      {/* Left – chart, takes remaining space, min 500px before wrap */}
+                      <div style={{ flex: '2 1 500px', minWidth: 0 }}>
+                        <EquityChart labels={equity.labels} data={equity.data} />
+                      </div>
+
+                      {/* Right – last 50 trades, fixed max height, vertical scroll */}
+                      <div style={{ flex: '1 1 380px', minWidth: 0, maxHeight: 400, overflowY: 'auto' }}>
+                        <TableCard
+                          title="Paper Trades (last 50)"
+                          count={trades.length}
+                          loading={tradesP.loading}
+                          onCsv={() => downloadCsv(trades, `paper_trades_${new Date().toISOString().slice(0,10)}.csv`)}
+                          onMd={() => downloadMarkdown([
+                            { header: 'Trade ID', render: (t: Trade) => String(t.tradeId) },
+                            { header: 'Order ID', render: (t) => String(t.orderId) },
+                            { header: 'Account', render: (t) => t.accountId },
+                            { header: 'Symbol', render: (t) => t.symbol },
+                            { header: 'Action', render: (t) => t.action },
+                            { header: 'Qty', render: (t) => t.quantity.toFixed(2) },
+                            { header: 'Fill Price', render: (t) => t.fillPrice.toFixed(2) },
+                            { header: 'Fee', render: (t) => t.fee.toFixed(2) },
+                            { header: 'Tax', render: (t) => t.tax.toFixed(2) },
+                            { header: 'Executed At', render: (t) => formatDateTime(t.executedAt) },
+                          ], trades, `paper_trades_${new Date().toISOString().slice(0,10)}.md`)}
+                        >
+                          <thead><tr>
+                            <th>Trade ID</th><th>Order ID</th><th>Account</th><th>Symbol</th><th>Action</th><th>Qty</th>
+                            <th>Fill Price</th><th>Fee</th><th>Tax</th><th>Executed At</th>
+                          </tr></thead>
+                          <tbody>
+                            {[...trades]
+                              .sort((a, b) => b.executedAt.localeCompare(a.executedAt))
+                              .slice(0, 50)
+                              .map((t) => (
+                                <tr key={t.tradeId}>
+                                  <td>{t.tradeId}</td><td>{t.orderId}</td><td>{t.accountId}</td><td>{t.symbol}</td>
+                                  <td><span className={`badge ${actionBadge(t.action)}`}>{t.action}</span></td>
+                                  <td>{t.quantity.toFixed(2)}</td><td>{t.fillPrice.toFixed(2)}</td>
+                                  <td>{t.fee.toFixed(2)}</td><td>{t.tax.toFixed(2)}</td>
+                                  <td>{formatDateTime(t.executedAt)}</td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </TableCard>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
-          </div>
-        </div>
-      )}
 
       {tab === 'scheduler' && (
         <>
