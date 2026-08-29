@@ -54,7 +54,7 @@
 @if (IsLoading)
 {
     <div class="text-center py-4">
-        <div class="spinner-border text-primary" role="status">
+        <div class="spinner-border spinner-lime" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
         <p>Loading journal entries...</p>
@@ -140,7 +140,10 @@ else if (JournalEntries.Count > 0)
 }
 else
 {
-    <div class="alert alert-info">No journal entries match the filters</div>
+    <div class="alert alert-info text-center py-5">
+        <h5>📓 Belum ada journal entry</h5>
+        <p class="text-muted mb-0">Journal akan terisi otomatis setelah ada decision brief yang di-generate oleh agent.</p>
+    </div>
 }
 
 @implements IDisposable
