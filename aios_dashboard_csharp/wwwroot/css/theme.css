@@ -369,3 +369,11 @@ a:focus-visible, button:focus-visible, .nav-link:focus-visible,
     border-left: 2px solid transparent;
     cursor: default;
 }
+
+/* Loading spinner — system palette override */
+.spinner-lime {
+    width: 1.5rem; height: 1.5rem;
+    border-width: .15em;
+    border-color: var(--lime);
+    border-right-color: transparent;
+}

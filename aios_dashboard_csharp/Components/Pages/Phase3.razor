@@ -38,7 +38,7 @@
     <div class="tab-pane fade show active" id="positions" role="tabpanel">
         @if (IsLoadingPositions)
         {
-            <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+            <div class="text-center py-4"><div class="spinner-border spinner-lime"></div></div>
         }
         else if (Positions.Count > 0)
         {
@@ -95,7 +95,10 @@
         }
         else
         {
-            <div class="alert alert-info">No positions found</div>
+            <div class="alert alert-info text-center py-5">
+                <h5>📂 Belum ada posisi paper</h5>
+                <p class="text-muted mb-0">Posisi akan muncul setelah order terekseskusi dan tercatat di sistem paper trading.</p>
+            </div>
         }
     </div>
 
@@ -103,7 +106,7 @@
     <div class="tab-pane fade" id="orders" role="tabpanel">
         @if (IsLoadingOrders)
         {
-            <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+            <div class="text-center py-4"><div class="spinner-border spinner-lime"></div></div>
         }
         else if (Orders.Count > 0)
         {
@@ -162,7 +165,10 @@
         }
         else
         {
-            <div class="alert alert-info">No orders found</div>
+            <div class="alert alert-info text-center py-5">
+                <h5>📋 Belum ada order paper</h5>
+                <p class="text-muted mb-0">Order akan tercatat setelah agent mengirim sinyal eksekusi paper trading.</p>
+            </div>
         }
     </div>
 
@@ -170,7 +176,7 @@
     <div class="tab-pane fade" id="trades" role="tabpanel">
         @if (IsLoadingTrades)
         {
-            <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+            <div class="text-center py-4"><div class="spinner-border spinner-lime"></div></div>
         }
         else if (Trades.Count > 0)
         {
@@ -223,7 +229,10 @@
         }
         else
         {
-            <div class="alert alert-info">No trades found</div>
+            <div class="alert alert-info text-center py-5">
+                <h5>💹 Belum ada trade terekseskusi</h5>
+                <p class="text-muted mb-0">Trade akan muncul setelah order paper dieksekusi dan fill tercatat.</p>
+            </div>
         }
     </div>
 
@@ -231,7 +240,7 @@
     <div class="tab-pane fade" id="equity" role="tabpanel">
         @if (IsLoadingTrades || IsLoadingPositions)
         {
-            <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+            <div class="text-center py-4"><div class="spinner-border spinner-lime"></div></div>
         }
         else if (Trades.Count == 0 && Positions.Count == 0)
         {
@@ -257,7 +266,7 @@
     <div class="tab-pane fade" id="scheduler" role="tabpanel">
         @if (IsLoadingScheduler)
         {
-            <div class="text-center py-4"><div class="spinner-border text-primary"></div></div>
+            <div class="text-center py-4"><div class="spinner-border spinner-lime"></div></div>
         }
         else
         {
@@ -319,7 +328,10 @@
                     }
                     else
                     {
-                        <div class="p-3 text-center text-muted">No scheduler job runs recorded</div>
+                        <div class="text-center py-4 text-muted">
+                            <p class="mb-0">🕐 Belum ada job run tercatat</p>
+                            <small>Scheduler akan mencatat setiap eksekusi job otomatis (data refresh, health check, dll).</small>
+                        </div>
                     }
                 </div>
             </div>
