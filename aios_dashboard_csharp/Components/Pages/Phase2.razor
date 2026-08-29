@@ -1,0 +1,638 @@
+@page "/phase2"
+@inject IDatabaseService DatabaseService
+@inject ILogger<Phase2> Logger
+@rendermode InteractiveServer
+
+<PageTitle>Phase 2: Observation Window & Evidence Status</PageTitle>
+
+<h1>Observation window &amp; evidence</h1>
+
+@if (IsLoading)
+{
+    <div class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading observation windows...</p>
+    </div>
+}
+else
+{
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-clock"/></svg>&nbsp;Observation Windows</h5>
+            <div>
+                <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportWindowsCsv"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-arrow-down-right"/></svg> CSV</button>
+                <button class="btn btn-sm btn-outline-secondary" @onclick="ExportWindowsMarkdown"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-copy"/></svg> Markdown</button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            @if (Windows.Count > 0)
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Window ID</th>
+                                <th>Start At</th>
+                                <th>End At</th>
+                                <th>Timezone</th>
+                                <th>Status</th>
+                                <th>Created At</th>
+                                <th>Closed At</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var window in Windows)
+                            {
+                                <tr @onclick="() => SelectWindow(window)" style="cursor: pointer;" class="@(SelectedWindow?.WindowId == window.WindowId ? "table-primary" : "")">
+                                    <td>@window.WindowId</td>
+                                    <td>@FormatDateTime(window.StartAt)</td>
+                                    <td>@FormatDateTime(window.EndAt)</td>
+                                    <td>@window.Timezone</td>
+                                    <td><span class="badge @GetStatusBadgeClass(window.Status)">@window.Status</span></td>
+                                    <td>@FormatDateTime(window.CreatedAt)</td>
+                                    <td>@FormatDateTime(window.ClosedAt)</td>
+                                    <td>@(window.Note ?? "")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="p-3 text-center text-muted">No observation windows recorded yet</div>
+            }
+        </div>
+    </div>
+
+    @if (SelectedWindow != null)
+    {
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-circle-dot"/></svg>&nbsp;Active Window Details</h5>
+                        <span class="badge @GetStatusBadgeClass(SelectedWindow.Status)">@SelectedWindow.Status</span>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Window ID</dt>
+                            <dd class="col-sm-8">@SelectedWindow.WindowId</dd>
+                            <dt class="col-sm-4">Start</dt>
+                            <dd class="col-sm-8">@FormatDateTime(SelectedWindow.StartAt)</dd>
+                            <dt class="col-sm-4">End</dt>
+                            <dd class="col-sm-8">@FormatDateTime(SelectedWindow.EndAt)</dd>
+                            <dt class="col-sm-4">Timezone</dt>
+                            <dd class="col-sm-8">@SelectedWindow.Timezone</dd>
+                            <dt class="col-sm-4">Status</dt>
+                            <dd class="col-sm-8"><span class="badge @GetStatusBadgeClass(SelectedWindow.Status)">@SelectedWindow.Status</span></dd>
+                            <dt class="col-sm-4">Note</dt>
+                            <dd class="col-sm-8">@(SelectedWindow.Note ?? "—")</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                @if (ReviewRecord != null)
+                {
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-shield-check"/></svg>&nbsp;Sustained-Use Review Evidence</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <strong>Overall Evidence Status:</strong>
+                                <span class="badge @GetEvidenceStatusBadgeClass(ReviewRecord.EvidenceStatus) ms-2">@ReviewRecord.EvidenceStatus</span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Human Decision:</strong>
+                                <span class="badge @GetDecisionBadgeClass(ReviewRecord.HumanDecision) ms-2">@ReviewRecord.HumanDecision</span>
+                            </div>
+                            @if (!string.IsNullOrEmpty(ReviewRecord.DecisionNote))
+                            {
+                                <div class="mb-3">
+                                    <strong>Decision Note:</strong>
+                                    <p class="mt-1">@ReviewRecord.DecisionNote</p>
+                                </div>
+                            }
+                            <div class="mb-3">
+                                <strong>Known Limitations:</strong>
+                                <ul class="limit-list">
+                                @foreach (var lim in ParseList(ReviewRecord.KnownLimitations))
+                                {
+                                    <li>@lim</li>
+                                }
+                            </ul>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Operator Feedback IDs:</strong>
+                                <span class="mono" style="color:var(--gray)">@FormatIdList(ReviewRecord.OperatorFeedbackIds)</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-shield-check"/></svg>&nbsp;Sustained-Use Review Evidence</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-warning">Sustained-use review not generated yet for this window.</div>
+                            <div class="text-muted">Run: <code>python main.py report sustained-use-final</code> to generate the review record.</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @if (ReviewRecord != null)
+        {
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5><svg class="ico"><use href="/icons/_sprite.svg#i-file-text"/></svg>&nbsp;Operator Feedback</h5>
+                </div>
+                <div class="card-body">
+                    @if (Feedback.Count > 0)
+                    {
+                        <div class="table-responsive mb-3">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Feedback ID</th>
+                                        <th>Recorded At</th>
+                                        <th>Rating</th>
+                                        <th>Alert Usefulness</th>
+                                        <th>Data Reliability</th>
+                                        <th>Decision Quality</th>
+                                        <th>Workflow Usability</th>
+                                        <th>Free Text</th>
+                                        <th>Concerns</th>
+                                        <th>Operator Label</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var fb in Feedback)
+                                    {
+                                        <tr>
+                                            <td>@fb.FeedbackId</td>
+                                            <td>@FormatDateTime(fb.RecordedAt)</td>
+                                            <td>@(fb.OperatorRating?.ToString() ?? "—")</td>
+                                            <td>@(fb.AlertUsefulness ?? "—")</td>
+                                            <td>@(fb.DataReliabilityFeedback ?? "—")</td>
+                                            <td>@(fb.DecisionQualityFeedback ?? "—")</td>
+                                            <td>@(fb.WorkflowUsabilityFeedback ?? "—")</td>
+                                            <td>@(fb.FreeText ?? "—")</td>
+                                            <td>@fb.Concerns</td>
+                                            <td>@(fb.OperatorLabel ?? "—")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportFeedbackCsv"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-arrow-down-right"/></svg> CSV</button>
+                            <button class="btn btn-sm btn-outline-secondary" @onclick="ExportFeedbackMarkdown"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-copy"/></svg> Markdown</button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted">No operator feedback recorded for this window</div>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (Windows.Any(w => w.Status != "ACTIVE"))
+        {
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5><svg class="ico"><use href="/icons/_sprite.svg#i-lock"/></svg>&nbsp;Closed Window Reviews</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Select Closed Window</label>
+                            <select class="form-select" @bind="SelectedClosedWindowId" @bind:event="onchange">
+                                <option value="">-- Select --</option>
+                                @foreach (var w in Windows.Where(w => w.Status != "ACTIVE"))
+                                {
+                                    <option value="@w.WindowId">Window #@w.WindowId (@FormatDateTime(w.StartAt) → @FormatDateTime(w.EndAt))</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    @if (ClosedWindowReview != null)
+                    {
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <strong>Evidence Status:</strong>
+                                        <span class="badge @GetEvidenceStatusBadgeClass(ClosedWindowReview.EvidenceStatus) ms-2">@ClosedWindowReview.EvidenceStatus</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Human Decision:</strong>
+                                        <span class="badge @GetDecisionBadgeClass(ClosedWindowReview.HumanDecision) ms-2">@ClosedWindowReview.HumanDecision</span>
+                                    </div>
+                                </div>
+                                <hr />
+                                <pre class="bg-light p-3 rounded" style="white-space: pre-wrap; overflow-wrap: anywhere;"><code>@GetReviewJson(ClosedWindowReview)</code></pre>
+                                <hr />
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-outline-primary" @onclick="() => OpenDecisionForm(ClosedWindowReview.ObservationWindowId)">
+                                        <svg class="ico ico-sm" style="color:var(--amber)"><use href="/icons/_sprite.svg#i-lock"/></svg> Set Human Decision
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (SelectedClosedWindowId > 0)
+                    {
+                        <div class="text-muted">No review record for this window</div>
+                    }
+                </div>
+            </div>
+        }
+    }
+}
+
+@implements IDisposable
+@code {
+    private List<ObservationWindow> Windows = new();
+    private ObservationWindow? SelectedWindow = null;
+    private FinalReviewRecord? ReviewRecord = null;
+    private List<OperatorFeedback> Feedback = new();
+    private FinalReviewRecord? ClosedWindowReview = null;
+    private long SelectedClosedWindowId = 0;
+    private bool IsLoading = true;
+
+    private const string DbPath = @"F:\My Son\data\investment_platform.db";
+
+    // Phase 4a: Human Decision Form state
+    private bool ShowDecisionForm = false;
+    private string DecisionForm_Decision = "PENDING";
+    private long DecisionForm_WindowId = 0;
+    private string DecisionForm_Note = "";
+    private string DecisionForm_DecidedBy = "";
+    private bool DecisionForm_Confirmed = false;
+    private string DecisionForm_Result = "";
+    private bool DecisionForm_IsSubmitting = false;
+
+    // Phase 4d: Auto-refresh
+    private System.Threading.PeriodicTimer? _refreshTimer;
+    private bool _disposed = false;
+    private const int RefreshIntervalSeconds = 30;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+        StartAutoRefresh();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("aiosAnim.initRowHover");
+        }
+    }
+
+    private void StartAutoRefresh()
+    {
+        _refreshTimer = new System.Threading.PeriodicTimer(TimeSpan.FromSeconds(RefreshIntervalSeconds));
+        _ = AutoRefreshLoop();
+    }
+
+    private async Task AutoRefreshLoop()
+    {
+        try
+        {
+            while (await _refreshTimer!.WaitForNextTickAsync() && !_disposed)
+            {
+                var logLine = $"[refresh] {DateTime.Now:HH:mm:ss.fff} Phase2.LoadDataAsync";
+                try { File.AppendAllText(@"F:\My Son\aios_dashboard_csharp\refresh_log.txt", logLine + Environment.NewLine); } catch (Exception ex) { Console.WriteLine($"[refresh] file write error: {ex.Message}"); }
+                await LoadDataAsync();
+            }
+        }
+        catch (OperationCanceledException) { }
+        catch (ObjectDisposedException) { }
+    }
+
+    public void Dispose()
+    {
+        _disposed = true;
+        _refreshTimer?.Dispose();
+        _refreshTimer = null;
+    }
+
+    private async Task LoadDataAsync()
+    {
+        IsLoading = true;
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            Windows = await DatabaseService.GetObservationWindowsAsync();
+            
+            // Auto-select active window
+            SelectedWindow = Windows.FirstOrDefault(w => w.Status == "ACTIVE");
+            Logger.LogInformation("[phase2] {Ts} loaded {Count} windows, selected={Sel}, isLoading={Loading}", DateTime.Now.ToString("HH:mm:ss.fff"), Windows.Count, SelectedWindow?.WindowId.ToString() ?? "NONE", IsLoading);
+            if (SelectedWindow != null)
+            {
+                await LoadWindowDetailsAsync(SelectedWindow.WindowId);
+                Logger.LogInformation("[phase2] {Ts} details: review={Review} feedback={Fb}", DateTime.Now.ToString("HH:mm:ss.fff"), ReviewRecord?.EvidenceStatus ?? "NULL", Feedback.Count);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "[phase2] LoadDataAsync FAILED");
+        }
+        finally
+        {
+            IsLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task SelectWindow(ObservationWindow window)
+    {
+        Logger.LogInformation("[phase2] {Ts} row clicked: windowId={Id}", DateTime.Now.ToString("HH:mm:ss.fff"), window.WindowId);
+        SelectedWindow = window;
+        await LoadWindowDetailsAsync(window.WindowId);
+    }
+
+    private async Task LoadWindowDetailsAsync(long windowId)
+    {
+        ReviewRecord = await DatabaseService.GetFinalReviewRecordAsync(windowId);
+        Feedback = await DatabaseService.GetOperatorFeedbackAsync(windowId);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task LoadClosedWindowReview()
+    {
+        if (SelectedClosedWindowId > 0)
+        {
+            ClosedWindowReview = await DatabaseService.GetFinalReviewRecordAsync(SelectedClosedWindowId);
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private static string[] ParseList(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json)) return Array.Empty<string>();
+        try
+        {
+            var items = System.Text.Json.JsonSerializer.Deserialize<string[]>(json);
+            return items ?? Array.Empty<string>();
+        }
+        catch { return new[] { json }; }
+    }
+
+    private static string FormatIdList(string? json)
+    {
+        var items = ParseList(json);
+        return items.Length == 0 ? "none yet" : string.Join(", ", items);
+    }
+
+    private string FormatDateTime(string? dt)
+    {
+        if (string.IsNullOrEmpty(dt)) return "—";
+        if (DateTime.TryParse(dt, out var parsed))
+            return parsed.ToString("yyyy-MM-dd HH:mm:ss");
+        return dt;
+    }
+
+    private string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "ACTIVE" => "bg-success",
+            "CLOSED" => "bg-primary",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetEvidenceStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "COMPLETE_EVIDENCE" => "bg-success",
+            "PARTIAL_EVIDENCE" => "bg-warning text-dark",
+            "INSUFFICIENT_DATA" => "bg-warning text-dark",
+            "NO_DATA" => "bg-danger",
+            "NOT_VERIFIABLE" => "bg-secondary",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetDecisionBadgeClass(string decision)
+    {
+        return decision switch
+        {
+            "PENDING" => "bg-secondary",
+            "CONTINUE" => "bg-success",
+            "SIMPLIFY" => "bg-warning text-dark",
+            "AUTHORIZE_FUTURE_INVESTIGATION" => "bg-info",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetReviewJson(FinalReviewRecord review)
+    {
+        return System.Text.Json.JsonSerializer.Serialize(new
+        {
+            review_id = review.ReviewId,
+            observation_window_id = review.ObservationWindowId,
+            reviewed_at = review.ReviewedAt,
+            evidence_status = review.EvidenceStatus,
+            human_decision = review.HumanDecision,
+            decision_note = review.DecisionNote,
+            known_limitations = review.KnownLimitations,
+            operator_feedback_ids = review.OperatorFeedbackIds
+        }, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+    }
+
+    private async Task ExportWindowsCsv()
+    {
+        using var writer = new System.IO.StringWriter();
+        using var csv = new CsvHelper.CsvWriter(writer, System.Globalization.CultureInfo.InvariantCulture);
+        csv.WriteRecords(Windows);
+        var csvContent = writer.ToString();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(csvContent);
+        await JSRuntime.InvokeVoidAsync("downloadFile", $"observation_windows_{DateTime.Now:yyyyMMdd}.csv", Convert.ToBase64String(bytes), "text/csv");
+    }
+
+    private async Task ExportWindowsMarkdown()
+    {
+        using var writer = new System.IO.StringWriter();
+        writer.WriteLine("| Window ID | Start At | End At | Timezone | Status | Created At | Closed At | Note |");
+        writer.WriteLine("|-----------|----------|--------|----------|--------|------------|-----------|------|");
+        foreach (var w in Windows)
+        {
+            writer.WriteLine($"| {w.WindowId} | {FormatDateTime(w.StartAt)} | {FormatDateTime(w.EndAt)} | {w.Timezone} | {w.Status} | {FormatDateTime(w.CreatedAt)} | {FormatDateTime(w.ClosedAt)} | {w.Note ?? ""} |");
+        }
+        var mdContent = writer.ToString();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(mdContent);
+        await JSRuntime.InvokeVoidAsync("downloadFile", $"observation_windows_{DateTime.Now:yyyyMMdd}.md", Convert.ToBase64String(bytes), "text/markdown");
+    }
+
+    private async Task ExportFeedbackCsv()
+    {
+        using var writer = new System.IO.StringWriter();
+        using var csv = new CsvHelper.CsvWriter(writer, System.Globalization.CultureInfo.InvariantCulture);
+        csv.WriteRecords(Feedback);
+        var csvContent = writer.ToString();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(csvContent);
+        await JSRuntime.InvokeVoidAsync("downloadFile", $"operator_feedback_window_{SelectedWindow?.WindowId}_{DateTime.Now:yyyyMMdd}.csv", Convert.ToBase64String(bytes), "text/csv");
+    }
+
+    private async Task ExportFeedbackMarkdown()
+    {
+        using var writer = new System.IO.StringWriter();
+        writer.WriteLine("| Feedback ID | Recorded At | Rating | Alert Usefulness | Data Reliability | Decision Quality | Workflow Usability | Free Text | Concerns | Operator Label |");
+        writer.WriteLine("|-------------|-------------|--------|------------------|------------------|------------------|--------------------|-----------|----------|----------------|");
+        foreach (var fb in Feedback)
+        {
+            writer.WriteLine($"| {fb.FeedbackId} | {FormatDateTime(fb.RecordedAt)} | {fb.OperatorRating?.ToString() ?? "—"} | {fb.AlertUsefulness ?? "—"} | {fb.DataReliabilityFeedback ?? "—"} | {fb.DecisionQualityFeedback ?? "—"} | {fb.WorkflowUsabilityFeedback ?? "—"} | {fb.FreeText ?? "—"} | {fb.Concerns} | {fb.OperatorLabel ?? "—"} |");
+        }
+        var mdContent = writer.ToString();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(mdContent);
+        await JSRuntime.InvokeVoidAsync("downloadFile", $"operator_feedback_window_{SelectedWindow?.WindowId}_{DateTime.Now:yyyyMMdd}.md", Convert.ToBase64String(bytes), "text/markdown");
+    }
+
+    [Inject] public IJSRuntime JSRuntime { get; set; } = default!;
+    [Inject] public IHumanDecisionService HumanDecisionService { get; set; } = default!;
+
+    private void OpenDecisionForm(long windowId)
+    {
+        DecisionForm_WindowId = windowId;
+        DecisionForm_Decision = "PENDING";
+        DecisionForm_Note = "";
+        DecisionForm_DecidedBy = "";
+        DecisionForm_Confirmed = false;
+        DecisionForm_Result = "";
+        ShowDecisionForm = true;
+    }
+
+    private void CloseDecisionForm()
+    {
+        ShowDecisionForm = false;
+    }
+
+    private async Task SubmitDecisionAsync()
+    {
+        if (!DecisionForm_Confirmed)
+        {
+            DecisionForm_Result = "❌ Please confirm the submission by checking the checkbox.";
+            return;
+        }
+
+        DecisionForm_IsSubmitting = true;
+        DecisionForm_Result = "";
+        StateHasChanged();
+
+        try
+        {
+            var (success, output, error) = await HumanDecisionService.SubmitDecisionAsync(
+                DecisionForm_Decision,
+                DecisionForm_WindowId,
+                string.IsNullOrWhiteSpace(DecisionForm_Note) ? null : DecisionForm_Note,
+                string.IsNullOrWhiteSpace(DecisionForm_DecidedBy) ? null : DecisionForm_DecidedBy
+            );
+
+            if (success)
+            {
+                DecisionForm_Result = $"✅ Success:\n{output}";
+                // Refresh the data from DB
+                await LoadDataAsync();
+                if (SelectedWindow?.WindowId == DecisionForm_WindowId)
+                {
+                    await LoadWindowDetailsAsync(SelectedWindow.WindowId);
+                }
+                if (ClosedWindowReview?.ObservationWindowId == DecisionForm_WindowId)
+                {
+                    await LoadClosedWindowReview();
+                }
+            }
+            else
+            {
+                DecisionForm_Result = $"❌ Error:\n{error}\n\nOutput:\n{output}";
+            }
+        }
+        catch (Exception ex)
+        {
+            DecisionForm_Result = $"❌ Exception: {ex.Message}";
+        }
+        finally
+        {
+            DecisionForm_IsSubmitting = false;
+            StateHasChanged();
+        }
+    }
+}
+
+@if (ShowDecisionForm)
+{
+    <div class="modal fade show d-block" style="background-color: rgba(0,0,0,0.5);" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><span style="font-family:Fraunces,serif;font-style:italic;color:var(--amber)">Set Human Decision</span> — Window #@DecisionForm_WindowId</h5>
+                    <button type="button" class="btn-close btn-close-white" @onclick="CloseDecisionForm"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <strong>Konfirmasi Wajib:</strong> Form ini akan menjalankan command CLI <code>python main.py sustained-use-final decide</code> dari <code>F:\My Son</code>. 
+                        Proses ini <strong>tidak</strong> menulis langsung ke database dari C# — C# hanya memanggil proses eksternal yang sama persis dengan manual ketik CLI.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Decision <span class="text-danger">*</span></label>
+                        <select class="form-select" @bind="DecisionForm_Decision">
+                            <option value="PENDING">PENDING</option>
+                            <option value="CONTINUE">CONTINUE</option>
+                            <option value="SIMPLIFY">SIMPLIFY</option>
+                            <option value="AUTHORIZE_FUTURE_INVESTIGATION">AUTHORIZE_FUTURE_INVESTIGATION</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Note (opsional)</label>
+                        <textarea class="form-control" rows="3" @bind="DecisionForm_Note" placeholder="Catatan keputusan..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Decided By (opsional)</label>
+                        <input class="form-control" @bind="DecisionForm_DecidedBy" placeholder="Nama operator..." />
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input class="form-check-input" type="checkbox" @bind="DecisionForm_Confirmed" id="confirmDecision" />
+                        <label class="form-check-label" for="confirmDecision">
+                            Saya yakin ingin mengirim keputusan ini via CLI <code>python main.py sustained-use-final decide</code>
+                        </label>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" @onclick="SubmitDecisionAsync" disabled="@DecisionForm_IsSubmitting">
+                            @if (DecisionForm_IsSubmitting)
+                            {
+                                <span class="spinner-border spinner-border-sm me-2"></span><span>Submitting...</span>
+                            }
+                            else
+                            {
+                                <span>✅ Submit Decision</span>
+                            }
+                        </button>
+                        <button class="btn btn-secondary" @onclick="CloseDecisionForm" disabled="@DecisionForm_IsSubmitting">Batal</button>
+                    </div>
+                    @if (!string.IsNullOrEmpty(DecisionForm_Result))
+                    {
+                        <div class="mt-3 p-3 @(DecisionForm_Result.StartsWith("✅") ? "bg-success bg-opacity-10 border border-success" : "bg-danger bg-opacity-10 border border-danger") rounded">
+                            <pre class="mb-0 small" style="white-space: pre-wrap; overflow-wrap: anywhere;">@DecisionForm_Result</pre>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
