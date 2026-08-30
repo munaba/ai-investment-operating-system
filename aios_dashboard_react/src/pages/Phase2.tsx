@@ -17,11 +17,11 @@ function statusBadgeClass(status: string): string {
 }
 function evidenceBadgeClass(status: string): string {
   switch (status) {
-    case 'COMPLETE_EVIDENCE': return 'badge bg-success';
-    case 'PARTIAL_EVIDENCE': return 'badge bg-warning';
-    case 'INSUFFICIENT_DATA': return 'badge bg-warning';
-    case 'NO_DATA': return 'badge bg-danger';
-    case 'NOT_VERIFIABLE': return 'badge bg-secondary';
+    case 'COMPLETE_EVIDENCE': return 'badge badge-status-available';
+    case 'PARTIAL_EVIDENCE': return 'badge badge-status-available';
+    case 'INSUFFICIENT_DATA': return 'badge badge-status-insufficient-data';
+    case 'NO_DATA': return 'badge badge-status-no-data';
+    case 'NOT_VERIFIABLE': return 'badge badge-status-not-verifiable';
     default: return 'badge bg-secondary';
   }
 }

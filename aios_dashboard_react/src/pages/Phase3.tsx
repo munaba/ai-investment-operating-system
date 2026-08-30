@@ -12,33 +12,33 @@ type Tab = 'positions' | 'orders' | 'trades' | 'equity' | 'scheduler';
 
 function statusBadge(s: string) {
   switch (s) {
-    case 'OPEN': case 'FILLED': case 'SUCCESS': return 'badge bg-success';
-    case 'CLOSED': case 'RUNNING': return 'badge bg-primary';
-    case 'FAILED': case 'REJECTED': return 'badge bg-danger';
-    case 'PARTIALLY_FILLED': case 'INSUFFICIENT_DATA': return 'badge bg-warning';
+    case 'OPEN': case 'FILLED': case 'SUCCESS': return 'badge badge-status-available';
+    case 'CLOSED': case 'RUNNING': return 'badge badge-status-available';
+    case 'FAILED': case 'REJECTED': return 'badge badge-status-no-data';
+    case 'PARTIALLY_FILLED': case 'INSUFFICIENT_DATA': return 'badge badge-status-insufficient-data';
     default: return 'badge bg-secondary';
   }
 }
 function actionBadge(a: string) {
   switch (a) {
-    case 'BUY': return 'badge bg-success';
-    case 'SELL': return 'badge bg-danger';
+    case 'BUY': return 'badge badge-status-available';
+    case 'SELL': return 'badge badge-status-no-data';
     default: return 'badge bg-secondary';
   }
 }
 function jobBadge(s: string) {
   switch (s) {
-    case 'SUCCESS': return 'badge bg-success';
-    case 'RUNNING': return 'badge bg-primary';
-    case 'FAILED': return 'badge bg-danger';
+    case 'SUCCESS': return 'badge badge-status-available';
+    case 'RUNNING': return 'badge badge-status-available';
+    case 'FAILED': return 'badge badge-status-no-data';
     default: return 'badge bg-secondary';
   }
 }
 function dedupBadge(s: string) {
   switch (s) {
-    case 'SENT': return 'badge bg-success';
-    case 'SUPPRESSED': return 'badge bg-warning';
-    case 'FAILED': return 'badge bg-danger';
+    case 'SENT': return 'badge badge-status-available';
+    case 'SUPPRESSED': return 'badge badge-status-insufficient-data';
+    case 'FAILED': return 'badge badge-status-no-data';
     default: return 'badge bg-secondary';
   }
 }

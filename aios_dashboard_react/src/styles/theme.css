@@ -84,6 +84,28 @@
 .badge.bg-info    { background: rgba(158,158,158,.08) !important; color: var(--white) !important; border-color: rgba(158,158,158,.35); }
 .badge.bg-secondary { background: rgba(158,158,158,.06) !important; color: var(--gray) !important; border-color: rgba(158,158,158,.3); }
 
+/* ---- STATUS BADGE UTILITIES (using design tokens from tokens.css) ---- */
+.badge-status-available {
+  background: var(--status-available-bg) !important;
+  color: var(--status-available-text) !important;
+  border-color: var(--status-available-border) !important;
+}
+.badge-status-no-data {
+  background: var(--status-no-data-bg) !important;
+  color: var(--status-no-data-text) !important;
+  border-color: var(--status-no-data-border) !important;
+}
+.badge-status-insufficient-data {
+  background: var(--status-insufficient-data-bg) !important;
+  color: var(--status-insufficient-data-text) !important;
+  border-color: var(--status-insufficient-data-border) !important;
+}
+.badge-status-not-verifiable {
+  background: var(--status-not-verifiable-bg) !important;
+  color: var(--status-not-verifiable-text) !important;
+  border-color: var(--status-not-verifiable-border) !important;
+}
+
 /* ---- Forms & buttons ---- */
 .form-control, .form-select, textarea {
   background-color: #070707;
@@ -223,9 +245,9 @@ dd { color: var(--white); font-family: var(--font-mono); font-size: 0.88rem; mar
 .limit-list li::marker { color: var(--amber); }
 /* chip per item — alpha rujukan badge rule line 80-82 (preexisting, 398b54a) */
 .chip { display: inline-block; padding: 1px 6px; margin-right: 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.04em; border: 1px solid transparent; vertical-align: 1px; }
-.chip-NOT_AVAILABLE    { background: rgba(255,92,92,.07);  color: var(--red);    border-color: rgba(255,92,92,.35); }
-.chip-EXTERNAL_BLOCKED { background: rgba(255,200,60,.08); color: var(--amber);  border-color: rgba(255,200,60,.45); }
-.chip-AVAILABLE        { background: rgba(212,255,63,.07); color: var(--lime);   border-color: rgba(212,255,63,.35); }
+.chip-NOT_AVAILABLE    { background: var(--status-no-data-bg);  color: var(--status-no-data-text);    border-color: var(--status-no-data-border); }
+.chip-EXTERNAL_BLOCKED { background: var(--status-insufficient-data-bg); color: var(--status-insufficient-data-text);  border-color: var(--status-insufficient-data-border); }
+.chip-AVAILABLE        { background: var(--status-available-bg); color: var(--status-available-text);   border-color: var(--status-available-border); }
 
 /* ---- Tabs (Phase 3) ---- */
 .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--edge); margin-bottom: 18px; flex-wrap: wrap; }
@@ -322,6 +344,59 @@ dd { color: var(--white); font-family: var(--font-mono); font-size: 0.88rem; mar
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* ---- POLLING INDICATOR (auto-refresh visual) ---- */
+.polling-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-dim);
+}
+.polling-indicator::before {
+  content: '';
+  width: var(--polling-indicator-size);
+  height: var(--polling-indicator-size);
+  border-radius: 50%;
+  background: var(--polling-indicator-bg);
+  animation: polling-pulse 2s ease-in-out infinite;
+}
+@keyframes polling-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .polling-indicator::before { animation: none; opacity: 0.6; }
+}
+
+/* ---- EXPORT TOAST (download feedback) ---- */
+.export-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1100;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 12px 16px;
+  background: var(--export-toast-bg);
+  border: 1px solid var(--export-toast-border);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--white);
+  box-shadow: 0 4px 12px rgba(0,0,0,.4);
+  animation: toast-in 0.2s ease-out;
+}
+.export-toast.success { border-color: var(--export-toast-success); }
+.export-toast.error { border-color: var(--export-toast-error); }
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ---- Modal (Phase 2 decision) ---- */
 .modal-overlay {
   position: fixed; inset: 0;
@@ -347,6 +422,19 @@ dd { color: var(--white); font-family: var(--font-mono); font-size: 0.88rem; mar
 @media (prefers-reduced-motion: reduce) {
   .dot-live, .decision-dot.pending, .spinner { animation: none !important; }
   .modal { animation: none !important; }
+}
+
+/* ---- Visually hidden (for screen readers) ---- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ---- Utility classes (Blazor/Bootstrap equivalents, no Bootstrap here) ---- */
