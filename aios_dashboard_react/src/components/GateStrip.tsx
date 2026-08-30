@@ -40,6 +40,22 @@ const evidencePct = (status: string | null | undefined): number => {
   }
 };
 
+const evidenceStatusClass = (status: string | null | undefined): string => {
+  switch (status) {
+    case 'COMPLETE_EVIDENCE':
+    case 'PARTIAL_EVIDENCE':
+      return 'badge-status-available';
+    case 'INSUFFICIENT_DATA':
+      return 'badge-status-insufficient-data';
+    case 'NO_DATA':
+      return 'badge-status-no-data';
+    case 'NOT_VERIFIABLE':
+      return 'badge-status-not-verifiable';
+    default:
+      return '';
+  }
+};
+
 const decisionColor = (decision: string): string => {
   switch (decision) {
     case 'CONTINUE': return 'var(--lime)';
@@ -67,6 +83,7 @@ const staggerItem = {
 export default function GateStrip() {
   const [data, setData] = useState<GateStripData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
   // Signature moment only animates when the user allows motion.
   const prefersReduced = useReducedMotionSafe();
 
@@ -77,7 +94,10 @@ export default function GateStrip() {
     async function tick() {
       try {
         const next = await loadGateData();
-        if (!cancelled) setData(next);
+        if (!cancelled) {
+          setData(next);
+          setLastRefresh(new Date());
+        }
       } catch {
         // strip is best-effort; body must always render — same contract as Blazor
         if (!cancelled) setData(null);
@@ -101,6 +121,8 @@ export default function GateStrip() {
   const isPending = decision === 'PENDING';
   const pct = evidencePct(review?.evidenceStatus);
   const left = window_ ? daysLeft(window_.endAt) : null;
+
+  const formatTime = (d: Date) => d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
   return (
     <div className="gate-strip">
@@ -156,7 +178,9 @@ export default function GateStrip() {
                   transition={{ duration: prefersReduced ? 0 : 0.6, ease: 'easeOut' }}
                 />
               </span>
-              {review?.evidenceStatus ?? 'NO_REVIEW'}
+              <span className={`badge ${evidenceStatusClass(review?.evidenceStatus)} ms-2`}>
+                {review?.evidenceStatus ?? 'NO_REVIEW'}
+              </span>
             </motion.span>
             <span className="gate-sep gate-hide-sm">│</span>
             <motion.span className="gate-item" variants={staggerItem}>
@@ -175,6 +199,11 @@ export default function GateStrip() {
               />
               {isPending ? 'Menunggu kamu' : decision}
             </motion.span>
+            <span className="gate-sep">│</span>
+            <span className="polling-indicator" aria-live="polite" aria-atomic="true">
+              <span className="visually-hidden">Auto-refresh active</span>
+              {lastRefresh ? `last ${formatTime(lastRefresh)}` : 'initializing…'}
+            </span>
           </motion.div>
         )}
       </AnimatePresence>

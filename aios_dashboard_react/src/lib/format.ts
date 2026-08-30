@@ -38,7 +38,7 @@ export function toCsv<T extends object>(rows: T[]): string {
   const headers = Object.keys(rows[0]);
   const escape = (v: unknown) => {
     const s = v == null ? '' : String(v);
-    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    return /[\",\n]/.test(s) ? `"${s.replace(/\"/g, '""')}"` : s;
   };
   const lines = [headers.join(',')];
   for (const row of rows) {
@@ -72,4 +72,29 @@ export function downloadMarkdown<R extends object>(
   const sep = `| ${table.map(() => '---').join(' | ')} |`;
   const body = rows.map((r) => `| ${table.map((c) => c.render(r)).join(' | ')} |`).join('\n');
   downloadFile(filename, `${header}\n${sep}\n${body}\n`, 'text/markdown');
+}
+
+/* ---- Enhanced export with toast feedback ---- */
+export function exportWithToast<T extends object>(
+  rows: T[],
+  filename: string,
+  format: 'csv' | 'md',
+  columns?: { header: string; render: (row: T) => string }[],
+  showToast?: (msg: string, type: 'success' | 'error') => void
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    try {
+      if (format === 'csv') {
+        downloadCsv(rows, filename);
+      } else {
+        if (!columns) throw new Error('Columns required for markdown export');
+        downloadMarkdown(columns, rows, filename);
+      }
+      showToast?.(`Exported ${rows.length} rows to ${filename}`, 'success');
+      resolve();
+    } catch (e) {
+      showToast?.(`Export failed: ${e instanceof Error ? e.message : String(e)}`, 'error');
+      reject(e);
+    }
+  });
 }

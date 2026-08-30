@@ -54,6 +54,51 @@
   --sp-4: 16px;
   --sp-5: 24px;
   --sp-6: 32px;
+
+  /* ============================================================
+     STATUS TOKENS — standardized across all pages
+     Semantic mapping for AVAILABLE / NO_DATA / INSUFFICIENT_DATA / NOT_VERIFIABLE
+     Each token defines: bg, text, border, icon-color
+     ============================================================ */
+
+  /* AVAILABLE — data present, actionable, green/lime */
+  --status-available-bg: rgba(212, 255, 63, 0.07);
+  --status-available-text: var(--lime);
+  --status-available-border: rgba(212, 255, 63, 0.35);
+  --status-available-icon: var(--lime);
+
+  /* NO_DATA — nothing collected yet, red/danger */
+  --status-no-data-bg: rgba(255, 92, 92, 0.07);
+  --status-no-data-text: var(--red);
+  --status-no-data-border: rgba(255, 92, 92, 0.35);
+  --status-no-data-icon: var(--red);
+
+  /* INSUFFICIENT_DATA — partial but not actionable, amber/warning */
+  --status-insufficient-data-bg: rgba(255, 200, 60, 0.08);
+  --status-insufficient-data-text: var(--amber);
+  --status-insufficient-data-border: rgba(255, 200, 60, 0.45);
+  --status-insufficient-data-icon: var(--amber);
+
+  /* NOT_VERIFIABLE — cannot be validated, gray/secondary */
+  --status-not-verifiable-bg: rgba(158, 158, 158, 0.08);
+  --status-not-verifiable-text: var(--white);
+  --status-not-verifiable-border: rgba(158, 158, 158, 0.35);
+  --status-not-verifiable-icon: var(--gray);
+
+  /* POLLING / AUTO-REFRESH tokens */
+  --polling-interval-fast: 30000;    /* 30s for active data (positions, orders) */
+  --polling-interval-standard: 60000; /* 60s for status strips, alerts */
+  --polling-indicator-size: 8px;
+  --polling-indicator-color: var(--lime);
+  --polling-indicator-bg: rgba(212, 255, 63, 0.15);
+
+  /* EXPORT FLOW tokens */
+  --export-btn-gap: var(--sp-2);
+  --export-toast-duration: 3000;
+  --export-toast-bg: var(--panel);
+  --export-toast-border: var(--edge);
+  --export-toast-success: var(--lime);
+  --export-toast-error: var(--red);
 }
 
 html, body, #root {
