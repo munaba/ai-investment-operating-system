@@ -6,7 +6,10 @@ import Icon from '../components/Icon';
 import { formatDateTime, formatIdr, downloadCsv, downloadMarkdown } from '../lib/format';
 import { PageReveal, EASE_OUT } from '../motion/Motion';
 import { AnimatePresence, motion } from 'framer-motion';
+import NumberFlow from '@number-flow/react';
 import { useReducedMotionSafe } from '../hooks/useReducedMotionSafe';
+import EquityChartBklit from '../components/EquityChartBklit';
+import { useVaultMotion } from '../hooks/useVaultMotion';
 
 type Tab = 'positions' | 'orders' | 'trades' | 'equity' | 'scheduler';
 
@@ -52,6 +55,7 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
 ];
 
 export default function Phase3() {
+  const prefersReduced = useReducedMotionSafe();
   const [tab, setTab] = useState<Tab>('positions');
   const positionsP = usePolling<Position[]>(() => getPhase3Positions(), 30_000, { immediate: true });
   const ordersP = usePolling<Order[]>(() => getPhase3Orders(), 30_000, { immediate: true });
@@ -101,16 +105,25 @@ export default function Phase3() {
     return { labels, data };
   }, [positions, trades]);
 
+  // Vault motion layer: per-row + section-head scroll reveals, gated on
+  // prefers-reduced-motion (see hooks/useVaultMotion.ts).
+  const scopeRef = useVaultMotion<HTMLDivElement>();
+
   return (
+    <div ref={scopeRef}>
     <PageReveal>
-      <h1 className="display-serif page-title">Paper book &amp; operations</h1>
+      <h1 className="font-display page-title text-2xl font-bold tracking-tight">Paper book &amp; operations</h1>
       <p className="page-sub">Simulated fills only. This page can never touch a real broker.</p>
 
       <div className="dataline">
         <span className="dl"><span className="lbl">Open positions</span><span className="v">{openCount}</span></span>
         <span className="dl"><span className="lbl">Closed positions</span><span className="v">{closedCount}</span></span>
-        <span className="dl"><span className="lbl">Realized P&L</span><span className={`v ${totalPnl >= 0 ? 'pos' : 'neg'}`}>{totalPnl.toLocaleString('id-ID')} IDR</span></span>
-        <span className="dl"><span className="lbl">Total fees</span><span className="v">{totalFees.toLocaleString('id-ID')} IDR</span></span>
+        <span className="dl"><span className="lbl">Realized P&L</span><span className={`v ${totalPnl >= 0 ? 'pos' : 'neg'}`}>
+          {prefersReduced ? formatIdr(totalPnl) : <NumberFlow value={totalPnl} locales="id-ID" format={{ style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }} />}
+        </span></span>
+        <span className="dl"><span className="lbl">Total fees</span><span className="v">
+          {prefersReduced ? formatIdr(totalFees) : <NumberFlow value={totalFees} locales="id-ID" format={{ style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }} />}
+        </span></span>
       </div>
 
       <div className="tabs">
@@ -241,30 +254,23 @@ export default function Phase3() {
 
       {tab === 'equity' && (
               <div className="card">
-                <div className="card-header"><h5 className="mb-0"><Icon name="arrow-up-right" /> Equity Curve / Realized P&L</h5></div>
+                <div className="card-header"><h2 className="mb-0 h5"><Icon name="arrow-up-right" /> Equity Curve / Realized P&L</h2></div>
                 <div className="card-body">
                   {equity.data.length === 0 ? (
                     <div className="alert alert-info text-center py-5">
                       <Icon name="activity" size="lg" color="dim" className="mb-2" />
-                      <h5>Belum ada data trade untuk periode ini</h5>
+                      <h2 className="h5">Belum ada data trade untuk periode ini</h2>
                       <p className="text-muted mb-0">Chart equity/P&L akan muncul otomatis setelah ada trade yang terekseskusi.</p>
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: 24,
-                        alignItems: 'flex-start',
-                      }}
-                    >
+                    <div className="flex flex-wrap items-start gap-6">
                       {/* Left – chart, takes remaining space, min 500px before wrap */}
-                      <div style={{ flex: '2 1 500px', minWidth: 0 }}>
-                        <EquityChart labels={equity.labels} data={equity.data} />
+                      <div className="min-w-0 flex-[2_1_500px]">
+                        <EquityChartBklit labels={equity.labels} data={equity.data} />
                       </div>
 
                       {/* Right – last 50 trades, fixed max height, vertical scroll */}
-                      <div style={{ flex: '1 1 380px', minWidth: 0, maxHeight: 400, overflowY: 'auto' }}>
+                      <div className="min-w-0 flex-[1_1_380px] max-h-[400px] overflow-y-auto">
                         <TableCard
                           title="Paper Trades (last 50)"
                           count={trades.length}
@@ -313,7 +319,7 @@ export default function Phase3() {
         <>
           <div className="card mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
-              <h5 className="mb-0"><Icon name="settings" /> Latest Job Runs</h5>
+              <h2 className="mb-0 h5"><Icon name="settings" /> Latest Job Runs</h2>
               <div>
                 <button className="btn btn-sm btn-outline-primary me-2" onClick={() => downloadCsv(jobs, `scheduler_job_runs_${new Date().toISOString().slice(0,10)}.csv`)}><Icon name="arrow-down-right" /> CSV</button>
                 <button className="btn btn-sm btn-outline-secondary" onClick={() => downloadMarkdown(
@@ -349,8 +355,8 @@ export default function Phase3() {
                     </table>
                   </div>
                   <div className="card-footer">
-                    <h6>Job Status Summary</h6>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                    <h3 className="h6">Job Status Summary</h3>
+                    <div className="flex flex-wrap gap-3">
                       {Object.entries(jobs.reduce<Record<string, number>>((m, j) => { m[j.status] = (m[j.status] ?? 0) + 1; return m; }, {})).map(([k, v]) => (
                         <span key={k} className={`badge ${jobBadge(k)}`} style={{ fontSize: '0.78rem' }}>{k}: {v}</span>
                       ))}
@@ -363,7 +369,7 @@ export default function Phase3() {
 
           <div className="card mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
-              <h5 className="mb-0"><Icon name="circle-dot" /> Notification Dedup State</h5>
+              <h2 className="mb-0 h5"><Icon name="circle-dot" /> Notification Dedup State</h2>
               <div>
                 <button className="btn btn-sm btn-outline-primary me-2" onClick={() => downloadCsv(dedup, `notification_dedup_state_${new Date().toISOString().slice(0,10)}.csv`)}><Icon name="arrow-down-right" /> CSV</button>
                 <button className="btn btn-sm btn-outline-secondary" onClick={() => downloadMarkdown(
@@ -399,7 +405,7 @@ export default function Phase3() {
 
           <div className="card">
             <div className="card-header d-flex justify-content-between align-items-center">
-              <h5 className="mb-0"><Icon name="activity" /> Recent Audit Events (Last 50)</h5>
+              <h2 className="mb-0 h5"><Icon name="activity" /> Recent Audit Events (Last 50)</h2>
               <div>
                 <button className="btn btn-sm btn-outline-primary me-2" onClick={() => downloadCsv(audit, `audit_events_${new Date().toISOString().slice(0,10)}.csv`)}><Icon name="arrow-down-right" /> CSV</button>
                 <button className="btn btn-sm btn-outline-secondary" onClick={() => downloadMarkdown(
@@ -437,6 +443,7 @@ export default function Phase3() {
       </motion.div>
       </AnimatePresence>
     </PageReveal>
+    </div>
   );
 }
 
@@ -447,8 +454,8 @@ function TableCard({ title, count, loading, onCsv, onMd, children }: {
 }) {
   return (
     <div className="card mb-4">
-      <div className="card-header d-flex justify-content-between align-items-center">
-        <h5 className="mb-0"><Icon name="book-open" /> {title} ({count} records)</h5>
+      <div className="card-header d-flex justify-content-between align-items-center section-head">
+        <h2 className="mb-0 h5"><Icon name="book-open" /> {title} ({count} records)</h2>
         <div>
           <button className="btn btn-sm btn-outline-primary me-2" onClick={onCsv}><Icon name="arrow-down-right" /> CSV</button>
           <button className="btn btn-sm btn-outline-secondary" onClick={onMd}><Icon name="copy" /> Markdown</button>
@@ -463,65 +470,5 @@ function TableCard({ title, count, loading, onCsv, onMd, children }: {
                   </div>}
             </div>
     </div>
-  );
-}
-
-// Animated inline SVG equity curve (LAN-only: no external Chart.js CDN).
-// Line draws in (pathLength 0->1), area fades in, zero baseline emphasized.
-function EquityChart({ labels, data }: { labels: string[]; data: number[] }) {
-  const reduced = useReducedMotionSafe();
-  const W = 720, H = 320, pad = 40;
-  const max = Math.max(...data, 1);
-  const min = Math.min(...data, 0);
-  const span = max - min || 1;
-  const xAt = (i: number) => pad + (i / Math.max(data.length - 1, 1)) * (W - 2 * pad);
-  const yAt = (v: number) => H - pad - ((v - min) / span) * (H - 2 * pad);
-  const linePts = data.map((v, i) => `${xAt(i).toFixed(1)},${yAt(v).toFixed(1)}`).join(' ');
-  // Area path: line points then down to baseline and back.
-  const baseY = yAt(0);
-  const areaPath =
-    `M ${xAt(0).toFixed(1)},${baseY.toFixed(1)} ` +
-    data.map((v, i) => `L ${xAt(i).toFixed(1)},${yAt(v).toFixed(1)}`).join(' ') +
-    ` L ${xAt(data.length - 1).toFixed(1)},${baseY.toFixed(1)} Z`;
-  const last = data[data.length - 1];
-  const gridY = [0.25, 0.5, 0.75].map((f) => pad + f * (H - 2 * pad));
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', maxHeight: 400, background: '#070707', borderRadius: 8, border: '1px solid var(--edge)' }} role="img" aria-label="Equity curve">
-      {/* gridlines */}
-      {gridY.map((y, i) => (
-        <line key={i} x1={pad} y1={y} x2={W - pad} y2={y} stroke="#161616" />
-      ))}
-      {/* axes */}
-      <line x1={pad} y1={H - pad} x2={W - pad} y2={H - pad} stroke="#232323" />
-      <line x1={pad} y1={pad} x2={pad} y2={H - pad} stroke="#232323" />
-      {/* zero baseline emphasized */}
-      <line x1={pad} y1={baseY} x2={W - pad} y2={baseY} stroke="rgba(212,255,63,.22)" strokeDasharray="3 4" />
-      {/* area fill */}
-      <motion.path
-        d={areaPath} fill="url(#equityFill)" stroke="none"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : 0.6, ease: EASE_OUT }}
-      />
-      <defs>
-        <linearGradient id="equityFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgba(212,255,63,.18)" />
-          <stop offset="100%" stopColor="rgba(212,255,63,0)" />
-        </linearGradient>
-      </defs>
-      {/* line draw-in */}
-      <motion.polyline
-        points={linePts} fill="none" stroke="var(--lime)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round"
-        initial={{ pathLength: reduced ? 1 : 0, opacity: reduced ? 1 : 0 }}
-        animate={{ pathLength: 1, opacity: 1 }}
-        transition={{ duration: reduced ? 0 : 0.7, ease: EASE_OUT }}
-      />
-      {/* end marker */}
-      {!reduced && (
-        <motion.circle cx={xAt(data.length - 1)} cy={yAt(last)} r={3.5} fill="var(--lime)"
-          initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.6, duration: 0.2, ease: EASE_OUT }} />
-      )}
-      <text x={pad} y={pad - 10} fill="var(--gray)" fontSize={11} fontFamily="var(--font-mono)">
-        {last >= 0 ? '+' : ''}{last.toLocaleString('id-ID')} IDR
-      </text>
-    </svg>
   );
 }

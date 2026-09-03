@@ -1,8 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* ============================================================
    AIOS — "Black Terminal" design tokens (v5/v6, ported to React)
    Source of truth: aios_dashboard_csharp/wwwroot/css/theme.css
    True black surface · grayscale discipline · ONE lime accent.
    Fraunces = decision moments only. Amber = human gate only.
+   tokens.css remains single source for --lime/#D4FF3F etc.;
+   tailwind.config.js maps to these vars (no parallel palette).
    ============================================================ */
 
 @font-face {
@@ -41,6 +47,30 @@
   --lime: #D4FF3F;
   --red: #FF5C5C;
   --amber: #FFC83C;
+
+  /* --- CHROME palette (Black Terminal → Gold/Bronze/Wine) ---
+     Additive only — --lime/--red/--amber/--gray + status tokens untouched. */
+  --gold: #cda23f;
+  --gold-bright: #e9c876;
+  --bronze: #a2702f;
+  --wine: #6d2436;
+  --wine-bright: #8f3247;
+  --bg-base: #0a0908;
+  --bg-raised: #131110;
+  --bg-edge: rgba(232, 219, 194, 0.09);
+
+  /* --- Extended chrome surfaces + ink ramp (from aios_mockup_iterasi11) ---
+     Values below are the mockup's WCAG-CORRECTED ones, not the originals:
+       --ink-faint was #6b6355 → 3.35:1 on --bg-base (fails AA normal text).
+     Re-checked: --ink 16.19:1 / --ink-dim 7.52:1 / --ink-faint 5.23:1 on
+     --bg-base — all pass AA for normal text, and also on --bg-panel.
+     No --green / --red imported from the mockup: P&L keeps the existing
+     status --lime/--red so chrome and evidence colors never mix. */
+  --bg-panel: #17140f;
+  --hair-strong: rgba(232, 219, 194, 0.16);
+  --ink: #efe7d8;
+  --ink-dim: #a89e8c;
+  --ink-faint: #8a8272;
 
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'IBM Plex Sans', 'Segoe UI', sans-serif;
@@ -85,19 +115,19 @@
   --status-not-verifiable-border: rgba(158, 158, 158, 0.35);
   --status-not-verifiable-icon: var(--gray);
 
-  /* POLLING / AUTO-REFRESH tokens */
+  /* POLLING / AUTO-REFRESH tokens — chrome (not evidence status) → gold */
   --polling-interval-fast: 30000;    /* 30s for active data (positions, orders) */
   --polling-interval-standard: 60000; /* 60s for status strips, alerts */
   --polling-indicator-size: 8px;
-  --polling-indicator-color: var(--lime);
-  --polling-indicator-bg: rgba(212, 255, 63, 0.15);
+  --polling-indicator-color: var(--gold);
+  --polling-indicator-bg: rgba(205, 162, 63, 0.16);
 
   /* EXPORT FLOW tokens */
   --export-btn-gap: var(--sp-2);
   --export-toast-duration: 3000;
-  --export-toast-bg: var(--panel);
-  --export-toast-border: var(--edge);
-  --export-toast-success: var(--lime);
+  --export-toast-bg: var(--bg-raised);
+  --export-toast-border: var(--bg-edge);
+  --export-toast-success: var(--gold);
   --export-toast-error: var(--red);
 }
 
@@ -107,7 +137,7 @@ html, body, #root {
 
 body {
   margin: 0;
-  background-color: var(--black);
+  background-color: var(--bg-base);
   color: var(--white);
   font-family: var(--font-body);
   font-size: 0.9rem;
@@ -123,14 +153,71 @@ h1, h2, h3, h4, h5 {
 
 .mono { font-family: var(--font-mono); }
 
-/* keyboard focus visibility — carried over from theme.css, non-negotiable */
+/* keyboard focus visibility — chrome → gold (not status) */
 a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
-  outline: 2px solid var(--lime);
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: var(--black); }
-::-webkit-scrollbar-thumb { background: #232323; border-radius: 5px; }
-::-webkit-scrollbar-thumb:hover { background: #333; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: #2a2520; border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: #3a332c; }
+
+/* shadcn base layer removed — Black Terminal tokens above are single source.
+   No @apply border-border; body already bg var(--black) text var(--white). */
+
+@layer base {
+  :root {
+    --chart-1: oklch(0.32 0 none);
+    --chart-2: oklch(0.41 0 none);
+    --chart-3: oklch(0.54 0 none);
+    --chart-4: oklch(0.71 0 none);
+    --chart-5: oklch(0.89 0 none);
+    --chart-background: oklch(1 0 0);
+    --chart-foreground: oklch(0.145 0.004 285);
+    --chart-foreground-muted: oklch(0.55 0.014 260);
+    --chart-line-primary: var(--chart-1);
+    --chart-line-secondary: var(--chart-2);
+    --chart-crosshair: oklch(0.4 0.1828 274.34);
+    --chart-grid: oklch(0.9 0 0);
+    --chart-brush-border: var(--chart-grid);
+    --chart-tooltip-background: oklch(0.21 0.006 285 / 0.8);
+    --chart-tooltip-foreground: oklch(0.985 0 0);
+    --chart-tooltip-muted: oklch(0.65 0.01 260);
+    --chart-marker-background: oklch(0.97 0.005 260);
+    --chart-marker-border: oklch(0.85 0.01 260);
+    --chart-marker-foreground: oklch(0.3 0.01 260);
+    --chart-label: oklch(0.45 0.01 260);
+    --chart-scale-01: oklch(0.98 0.003 106);
+    --chart-scale-02: oklch(0.92 0.008 106);
+    --chart-scale-03: oklch(0.82 0.015 106);
+    --chart-scale-04: oklch(0.68 0.02 106);
+    --chart-scale-05: oklch(0.55 0.025 106);
+    --chart-scale-pattern-color: oklch(0.96 0.005 106);
+  }
+  .dark {
+    --chart-1: oklch(1 0 none);
+    --chart-2: oklch(0.73 0 none);
+    --chart-3: oklch(0.51 0 none);
+    --chart-4: oklch(0.39 0 none);
+    --chart-5: oklch(0.32 0 none);
+    --chart-background: oklch(0.145 0 0);
+    --chart-foreground: oklch(0.45 0 0);
+    --chart-foreground-muted: oklch(0.65 0.01 260);
+    --chart-crosshair: oklch(0.45 0 0);
+    --chart-grid: oklch(0.25 0 0);
+    --chart-brush-border: var(--chart-grid);
+    --chart-marker-background: oklch(0.25 0.01 260);
+    --chart-marker-border: oklch(0.4 0.01 260);
+    --chart-marker-foreground: oklch(0.9 0 0);
+    --chart-label: oklch(0.75 0.01 260);
+    --chart-scale-01: oklch(0.28 0.03 270);
+    --chart-scale-02: oklch(0.38 0.04 270);
+    --chart-scale-03: oklch(0.48 0.05 270);
+    --chart-scale-04: oklch(0.58 0.06 270);
+    --chart-scale-05: oklch(0.68 0.07 270);
+    --chart-scale-pattern-color: oklch(0.145 0 0);
+  }
+}
