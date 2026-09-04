@@ -52,9 +52,44 @@ describe('Phase3 — Paper book', () => {
     render(<Phase3 />);
     const tab = await screen.findByRole('button', { name: /Equity\/P&L/i });
     fireEvent.click(tab);
-    const chart = await screen.findByLabelText('Equity curve', undefined, { timeout: 2000 });
+    const chart = await screen.findByRole('img', { name: /Equity curve/i }, { timeout: 2000 });
     expect(chart).toBeInTheDocument();
-    expect(chart.tagName.toLowerCase()).toBe('svg');
+  });
+
+  // Brief 5 §1 — the chart is div-based (EquityChartBklit), so the old
+  // `tagName === 'svg'` assertion no longer describes it. The chart carries
+  // its value on the accessible name, which lets the assertion test the DATA
+  // rather than the tag — strictly stronger than what it replaced.
+  it('equity chart exposes the final P&L value on its accessible name', async () => {
+    render(<Phase3 />);
+    const tab = await screen.findByRole('button', { name: /Equity\/P&L/i });
+    fireEvent.click(tab);
+    // POS is a single CLOSED position with realizedPnl 120000 -> cumulative +120.000
+    const chart = await screen.findByLabelText('Equity curve, +120.000 IDR', undefined, { timeout: 2000 });
+    expect(chart).toHaveAttribute('role', 'img');
+  });
+
+  it('equity chart: negative P&L renders a signed negative value', async () => {
+    (api.getPhase3Positions as ReturnType<typeof vi.fn>).mockResolvedValue([{
+      ...POS[0], realizedPnl: -450000,
+    }]);
+    render(<Phase3 />);
+    const tab = await screen.findByRole('button', { name: /Equity\/P&L/i });
+    fireEvent.click(tab);
+    const chart = await screen.findByLabelText('Equity curve, -450.000 IDR', undefined, { timeout: 2000 });
+    expect(chart).toBeInTheDocument();
+  });
+
+  it('equity chart: no closed positions shows empty state, not a chart', async () => {
+    (api.getPhase3Positions as ReturnType<typeof vi.fn>).mockResolvedValue([{
+      ...POS[0], status: 'OPEN', realizedPnl: 0,
+    }]);
+    (api.getPhase3Trades as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+    render(<Phase3 />);
+    const tab = await screen.findByRole('button', { name: /Equity\/P&L/i });
+    fireEvent.click(tab);
+    expect(await screen.findByText(/Belum ada data trade/)).toBeInTheDocument();
+    expect(screen.queryByRole('img', { name: /Equity curve/i })).not.toBeInTheDocument();
   });
 
   it('interaction: switching to Orders tab calls getPhase3Orders', async () => {
