@@ -8,7 +8,6 @@ import { PageReveal, EASE_OUT } from '../motion/Motion';
 import { AnimatePresence, motion } from 'framer-motion';
 import NumberFlow from '@number-flow/react';
 import { useReducedMotionSafe } from '../hooks/useReducedMotionSafe';
-import EquityChartBklit from '../components/EquityChartBklit';
 import { useVaultMotion } from '../hooks/useVaultMotion';
 
 type Tab = 'positions' | 'orders' | 'trades' | 'equity' | 'scheduler';
@@ -266,7 +265,7 @@ export default function Phase3() {
                     <div className="flex flex-wrap items-start gap-6">
                       {/* Left – chart, takes remaining space, min 500px before wrap */}
                       <div className="min-w-0 flex-[2_1_500px]">
-                        <EquityChartBklit labels={equity.labels} data={equity.data} />
+                        <EquityChart labels={equity.labels} data={equity.data} />
                       </div>
 
                       {/* Right – last 50 trades, fixed max height, vertical scroll */}
@@ -470,5 +469,63 @@ function TableCard({ title, count, loading, onCsv, onMd, children }: {
                   </div>}
             </div>
     </div>
+  );
+}
+
+function EquityChart({ labels, data }: { labels: string[]; data: number[] }) {
+  const reduced = useReducedMotionSafe();
+  const W = 720, H = 320, pad = 40;
+  const max = Math.max(...data, 1);
+  const min = Math.min(...data, 0);
+  const span = max - min || 1;
+  const xAt = (i: number) => pad + (i / Math.max(data.length - 1, 1)) * (W - 2 * pad);
+  const yAt = (v: number) => H - pad - ((v - min) / span) * (H - 2 * pad);
+  const linePts = data.map((v, i) => `${xAt(i).toFixed(1)},${yAt(v).toFixed(1)}`).join(' ');
+  // Area path: line points then down to baseline and back.
+  const baseY = yAt(0);
+  const areaPath =
+    `M ${xAt(0).toFixed(1)},${baseY.toFixed(1)} ` +
+    data.map((v, i) => `L ${xAt(i).toFixed(1)},${yAt(v).toFixed(1)}`).join(' ') +
+    ` L ${xAt(data.length - 1).toFixed(1)},${baseY.toFixed(1)} Z`;
+  const last = data[data.length - 1];
+  const gridY = [0.25, 0.5, 0.75].map((f) => pad + f * (H - 2 * pad));
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', maxHeight: 400, background: '#070707', borderRadius: 8, border: '1px solid var(--edge)' }} role="img" aria-label="Equity curve">
+      {/* gridlines */}
+      {gridY.map((y, i) => (
+        <line key={i} x1={pad} y1={y} x2={W - pad} y2={y} stroke="#161616" />
+      ))}
+      {/* axes */}
+      <line x1={pad} y1={H - pad} x2={W - pad} y2={H - pad} stroke="#232323" />
+      <line x1={pad} y1={pad} x2={pad} y2={H - pad} stroke="#232323" />
+      {/* zero baseline emphasized */}
+      <line x1={pad} y1={baseY} x2={W - pad} y2={baseY} stroke="rgba(212,255,63,.22)" strokeDasharray="3 4" />
+      {/* area fill */}
+      <motion.path
+        d={areaPath} fill="url(#equityFill)" stroke="none"
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : 0.6, ease: EASE_OUT }}
+      />
+      <defs>
+        <linearGradient id="equityFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="rgba(212,255,63,.18)" />
+          <stop offset="100%" stopColor="rgba(212,255,63,0)" />
+        </linearGradient>
+      </defs>
+      {/* line draw-in */}
+      <motion.polyline
+        points={linePts} fill="none" stroke="var(--lime)" strokeWidth={2} strokeLinejoin="round" strokeLinecap="round"
+        initial={{ pathLength: reduced ? 1 : 0, opacity: reduced ? 1 : 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: reduced ? 0 : 0.7, ease: EASE_OUT }}
+      />
+      {/* end marker */}
+      {!reduced && (
+        <motion.circle cx={xAt(data.length - 1)} cy={yAt(last)} r={3.5} fill="var(--lime)"
+          initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.6, duration: 0.2, ease: EASE_OUT }} />
+      )}
+      <text x={pad} y={pad - 10} fill="var(--gray)" fontSize={11} fontFamily="var(--font-mono)">
+        {last >= 0 ? '+' : ''}{last.toLocaleString('id-ID')} IDR
+      </text>
+    </svg>
   );
 }
