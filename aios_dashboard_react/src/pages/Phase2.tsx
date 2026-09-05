@@ -113,13 +113,28 @@ export default function Phase2() {
     };
   }, [showForm]);
 
-  // ---- Modal a11y (effect 2): Escape-to-close, skips while submitting ----
+  // ---- Modal a11y (effect 2): Escape-to-close + focus trap ----
   useEffect(() => {
     if (!showForm) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && !formSubmitting) {
         e.preventDefault();
         setShowForm(false);
+        return;
+      }
+      // ponytail: focus trap — fewest lines, no dep; upgrade to focus-trap-react if dialog gains nested portals
+      if (e.key === 'Tab') {
+        const nodes = modalRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
+        if (!nodes || nodes.length === 0) { e.preventDefault(); return; }
+        const first = nodes[0], last = nodes[nodes.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+        if (e.shiftKey) {
+          if (active === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (active === last) { e.preventDefault(); first.focus(); }
+        }
       }
     };
     document.addEventListener('keydown', onKey);

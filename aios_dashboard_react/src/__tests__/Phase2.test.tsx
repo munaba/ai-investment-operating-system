@@ -113,4 +113,63 @@ describe('Phase2 — Observation window & evidence', () => {
     fireEvent.click(submit);
     expect(await screen.findByText(/Error/i)).toBeInTheDocument();
   });
+
+  it('a11y: Escape closes dialog (not while submitting), focus returns to opener', async () => {
+    render(<Phase2 />);
+    const row = (await screen.findAllByText('ACTIVE'))[0];
+    fireEvent.click(row);
+    const openBtn = await screen.findByRole('button', { name: /Set Human Decision/i });
+    openBtn.focus();
+    fireEvent.click(openBtn);
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' });
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    // focus returns to opener
+    expect(document.activeElement).toBe(openBtn);
+  });
+
+  it('a11y: focus trap — Tab on last cycles to first, Shift+Tab on first cycles to last', async () => {
+    render(<Phase2 />);
+    const row = (await screen.findAllByText('ACTIVE'))[0];
+    fireEvent.click(row);
+    const openBtn = await screen.findByRole('button', { name: /Set Human Decision/i });
+    fireEvent.click(openBtn);
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    // collect focusable nodes inside dialog
+    const nodes = Array.from(dialog.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ));
+    expect(nodes.length).toBeGreaterThan(1);
+    const first = nodes[0] as HTMLElement;
+    const last = nodes[nodes.length - 1] as HTMLElement;
+    // Tab on last wraps to first
+    last.focus();
+    expect(document.activeElement).toBe(last);
+    fireEvent.keyDown(document, { key: 'Tab', code: 'Tab' });
+    expect(document.activeElement).toBe(first);
+    // Shift+Tab on first wraps to last
+    first.focus();
+    expect(document.activeElement).toBe(first);
+    fireEvent.keyDown(document, { key: 'Tab', code: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(last);
+  });
+
+  it('a11y: normal Tab inside dialog moves focus (no spurious trap)', async () => {
+    render(<Phase2 />);
+    const row = (await screen.findAllByText('ACTIVE'))[0];
+    fireEvent.click(row);
+    const openBtn = await screen.findByRole('button', { name: /Set Human Decision/i });
+    fireEvent.click(openBtn);
+    const dialog = await screen.findByRole('dialog');
+    const select = dialog.querySelector('select') as HTMLElement;
+    // jsdom focus: manually focus select, then Tab should NOT wrap if not on edge
+    select.focus();
+    expect(document.activeElement).toBe(select);
+    fireEvent.keyDown(document, { key: 'Tab', code: 'Tab' });
+    // handler only wraps at edges, so no preventDefault — jsdom keeps focus on select
+    // (real browser would advance; we just assert trap did not misfire)
+    expect(document.activeElement).toBe(select);
+  });
 });
