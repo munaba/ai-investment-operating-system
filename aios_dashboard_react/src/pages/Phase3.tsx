@@ -14,7 +14,12 @@ import { useVaultMotion } from '../hooks/useVaultMotion';
 type Tab = 'positions' | 'orders' | 'trades' | 'equity' | 'scheduler';
 
 function statusBadge(s: string) {
-  switch (s) {
+  // Status casing is not consistent across tables: `positions.status` is
+  // lowercase ('closed') while `operator_observation_windows.status` and
+  // `scheduler_job_runs.status` are uppercase ('ACTIVE'/'SUCCESS'). The API
+  // returns DB values verbatim (no normalisation in DatabaseService), so
+  // compare case-insensitively.
+  switch (s.toUpperCase()) {
     case 'OPEN': case 'FILLED': case 'SUCCESS': return 'badge badge-status-available';
     case 'CLOSED': case 'RUNNING': return 'badge badge-status-available';
     case 'FAILED': case 'REJECTED': return 'badge badge-status-no-data';
@@ -71,15 +76,15 @@ export default function Phase3() {
   const dedup = dedupP.data ?? [];
     const audit = auditP.data ?? [];
 
-  const openCount = positions.filter((p) => p.status === 'OPEN').length;
-  const closedCount = positions.filter((p) => p.status === 'CLOSED').length;
+  const openCount = positions.filter((p) => p.status.toLowerCase() === 'open').length;
+  const closedCount = positions.filter((p) => p.status.toLowerCase() === 'closed').length;
   const totalPnl = positions.reduce((s, p) => s + p.realizedPnl, 0);
   const totalFees = trades.reduce((s, t) => s + t.fee, 0);
 
   // Build equity curve (cumulative realized P&L) — same logic as Blazor Phase3.
   const equity = useMemo(() => {
     const closed = positions
-      .filter((p) => p.status === 'CLOSED' && p.realizedPnl !== 0)
+      .filter((p) => p.status.toLowerCase() === 'closed' && p.realizedPnl !== 0)
       .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
     const labels: string[] = [];
     const data: number[] = [];
