@@ -25,7 +25,10 @@ interface GateStripData {
 // mirror of DatabaseService.GetObservationWindowsAsync / GetFinalReviewRecordAsync).
 async function loadGateData(): Promise<GateStripData> {
   const windows = await getPhase2Windows();
-  const window = windows.find((w) => w.status === 'ACTIVE') ?? null;
+  // `operator_observation_windows.status` is 'ACTIVE' today (DB source), but
+  // `positions.status` lives in the same UI in lowercase ('closed'). Normalise
+  // here so a future casing drift does not silently orphan the gate.
+  const window = windows.find((w) => w.status.toUpperCase() === 'ACTIVE') ?? null;
   const review = window ? await getPhase2Review(window.windowId) : null;
   return { window, review };
 }
