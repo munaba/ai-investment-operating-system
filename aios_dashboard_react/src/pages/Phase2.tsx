@@ -9,7 +9,10 @@ import { useReducedMotionSafe } from '../hooks/useReducedMotionSafe';
 import { formatDateTime, parseJsonList, downloadCsv, downloadMarkdown } from '../lib/format';
 
 function statusBadgeClass(status: string): string {
-  switch (status) {
+  // Status casing differs per table: `operator_observation_windows.status` is
+  // uppercase ('ACTIVE'), `positions.status` is lowercase ('closed'). The API
+  // returns DB values verbatim, so compare case-insensitively.
+  switch (status.toUpperCase()) {
     case 'ACTIVE': return 'badge bg-success';
     case 'CLOSED': return 'badge bg-primary';
     default: return 'badge bg-secondary';
@@ -59,7 +62,7 @@ export default function Phase2() {
   const [closedReview, setClosedReview] = useState<FinalReviewRecord | null>(null);
 
   // Auto-select ACTIVE window once data arrives (mirrors Blazor LoadDataAsync)
-  const selected = selectedId != null ? windows.find((w) => w.windowId === selectedId) ?? null : windows.find((w) => w.status === 'ACTIVE') ?? null;
+  const selected = selectedId != null ? windows.find((w) => w.windowId === selectedId) ?? null : windows.find((w) => w.status.toUpperCase() === 'ACTIVE') ?? null;
 
   const loadDetails = async (id: number) => {
     setReview(await getPhase2Review(id));
@@ -155,7 +158,7 @@ export default function Phase2() {
 
   return (
     <PageReveal>
-      <h1 className="display-serif page-title">Observation window &amp; evidence</h1>
+      <h1 className="font-display page-title text-2xl font-bold tracking-tight">Observation window &amp; evidence</h1>
       {windowsPoll.loading && !windowsPoll.data ? (
         <div className="text-center py-4"><span className="spinner" /> <p>Loading observation windows…</p></div>
       ) : (
@@ -199,7 +202,7 @@ export default function Phase2() {
                       <motion.tr key={w.windowId} style={{ cursor: 'pointer' }}
                           className={(selected?.windowId === w.windowId) ? 'table-primary' : ''}
                           onClick={() => setSelectedId(w.windowId)}
-                          whileHover={{ backgroundColor: 'rgba(212,255,63,.04)' }}
+                          whileHover={{ backgroundColor: 'rgba(205,162,63,.08)' }}
                           transition={{ duration: 0.15 }}>
                         <td>{w.windowId}</td>
                         <td>{formatDateTime(w.startAt)}</td>
@@ -225,8 +228,8 @@ export default function Phase2() {
       )}
 
       {selected && (
-        <div className="row g-4" style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-          <div className="card" style={{ flex: '1 1 360px' }}>
+        <div className="flex flex-wrap gap-4">
+          <div className="card flex-[1_1_360px]">
             <div className="card-header d-flex justify-content-between align-items-center">
               <h5 className="mb-0"><Icon name="circle-dot" /> Active Window Details</h5>
               <span className={`badge ${statusBadgeClass(selected.status)}`}>{selected.status}</span>
@@ -242,7 +245,7 @@ export default function Phase2() {
               </dl>
             </div>
           </div>
-          <div className="card" style={{ flex: '1 1 360px' }}>
+          <div className="card flex-[1_1_360px]">
             <div className="card-header"><h5 className="mb-0"><Icon name="shield-check" /> Sustained-Use Review Evidence</h5></div>
             <div className="card-body">
               {review ? (
@@ -361,16 +364,16 @@ export default function Phase2() {
         </div>
       )}
 
-      {windows.some((w) => w.status !== 'ACTIVE') && (
+      {windows.some((w) => w.status.toUpperCase() !== 'ACTIVE') && (
         <div className="card mt-4">
           <div className="card-header"><h5 className="mb-0"><Icon name="lock" /> Closed Window Reviews</h5></div>
           <div className="card-body">
-            <div className="row mb-3" style={{ display: 'flex', gap: 12, alignItems: 'flex-end' }}>
-              <div style={{ flex: '1 1 280px' }}>
+            <div className="mb-3 flex flex-wrap items-end gap-3">
+              <div className="flex-[1_1_280px]">
                 <label className="form-label">Select Closed Window</label>
                 <select className="form-select" value={closedId} onChange={(e) => onSelectClosed(Number(e.target.value))}>
                   <option value={0}>-- Select --</option>
-                  {windows.filter((w) => w.status !== 'ACTIVE').map((w) => (
+                  {windows.filter((w) => w.status.toUpperCase() !== 'ACTIVE').map((w) => (
                     <option key={w.windowId} value={w.windowId}>Window #{w.windowId} ({formatDateTime(w.startAt)} → {formatDateTime(w.endAt)})</option>
                   ))}
                 </select>
@@ -379,14 +382,14 @@ export default function Phase2() {
             {closedReview && (
               <div className="card">
                 <div className="card-body">
-                  <div className="row" style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                    <div className="col" style={{ flex: '1 1 240px' }}>
+                  <div className="flex flex-wrap gap-4">
+                    <div className="flex-[1_1_240px]">
                       <strong>Evidence Status:</strong> <AnimatePresence mode="wait"><motion.span key={closedReview.evidenceStatus} className={`badge ${evidenceBadgeClass(closedReview.evidenceStatus)} ms-2`}
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
                         {closedReview.evidenceStatus}
                       </motion.span></AnimatePresence>
                     </div>
-                    <div className="col" style={{ flex: '1 1 240px' }}>
+                    <div className="flex-[1_1_240px]">
                       <strong>Human Decision:</strong> <AnimatePresence mode="wait"><motion.span key={closedReview.humanDecision} className={`badge ${decisionBadgeClass(closedReview.humanDecision)} ms-2`}
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
                         {closedReview.humanDecision}
@@ -434,7 +437,7 @@ export default function Phase2() {
               transition={{ duration: 0.22, ease: EASE_OUT }}
             >
             <div className="modal-header">
-              <h5 className="display-serif" id="decisionModalTitle">Set Human Decision — Window #{selected.windowId}</h5>
+              <h5 className="font-display font-bold" id="decisionModalTitle">Set Human Decision — Window #{selected.windowId}</h5>
               <button className="btn btn-sm" onClick={() => setShowForm(false)}>✕</button>
             </div>
             <div className="modal-body">

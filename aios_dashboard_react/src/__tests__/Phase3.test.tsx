@@ -12,9 +12,13 @@ vi.mock('../api/client', () => ({
   getPhase3Audit: vi.fn(),
 }));
 
+// NOTE: `status` is lowercase here on purpose. The backend returns DB values
+// verbatim and `positions.status` really is 'closed' — these fixtures used to
+// say 'CLOSED', which is exactly why the lowercase/uppercase bug went
+// uncaught. Keep them matching production.
 const POS = [{
   positionId: 1, accountId: 'ACC', symbol: 'BBCA', quantity: 100, averagePrice: 9000,
-  realizedPnl: 120000, status: 'CLOSED', direction: 'LONG', stopLoss: 8700, takeProfit: 9500,
+  realizedPnl: 120000, status: 'closed', direction: 'LONG', stopLoss: 8700, takeProfit: 9500,
   buyFeeAccumulated: 9000, createdAt: '2026-08-20T10:00:00Z',
 }];
 
@@ -80,9 +84,34 @@ describe('Phase3 — Paper book', () => {
     expect(chart).toBeInTheDocument();
   });
 
+  // Regression: the backend returns `positions.status` lowercase ('closed'),
+  // but the UI compared against 'CLOSED'. Both casings must produce a chart,
+  // otherwise the equity tab silently shows the empty state.
+  it('equity chart: lowercase status (as the API returns it) still renders', async () => {
+    (api.getPhase3Positions as ReturnType<typeof vi.fn>).mockResolvedValue([{
+      ...POS[0], status: 'closed', realizedPnl: 120000,
+    }]);
+    render(<Phase3 />);
+    const tab = await screen.findByRole('button', { name: /Equity\/P&L/i });
+    fireEvent.click(tab);
+    const chart = await screen.findByLabelText('Equity curve, +120.000 IDR', undefined, { timeout: 2000 });
+    expect(chart).toBeInTheDocument();
+  });
+
+  it('equity chart: UPPERCASE status also renders (casing must not matter)', async () => {
+    (api.getPhase3Positions as ReturnType<typeof vi.fn>).mockResolvedValue([{
+      ...POS[0], status: 'CLOSED', realizedPnl: 120000,
+    }]);
+    render(<Phase3 />);
+    const tab = await screen.findByRole('button', { name: /Equity\/P&L/i });
+    fireEvent.click(tab);
+    const chart = await screen.findByLabelText('Equity curve, +120.000 IDR', undefined, { timeout: 2000 });
+    expect(chart).toBeInTheDocument();
+  });
+
   it('equity chart: no closed positions shows empty state, not a chart', async () => {
     (api.getPhase3Positions as ReturnType<typeof vi.fn>).mockResolvedValue([{
-      ...POS[0], status: 'OPEN', realizedPnl: 0,
+      ...POS[0], status: 'open', realizedPnl: 0,
     }]);
     (api.getPhase3Trades as ReturnType<typeof vi.fn>).mockResolvedValue([]);
     render(<Phase3 />);

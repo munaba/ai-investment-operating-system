@@ -35,7 +35,7 @@ export default function Home() {
   // hero chart and the Phase3 chart can never disagree.
   const equity = useMemo(() => {
     const closed = positions
-      .filter((p) => p.status === 'CLOSED' && p.realizedPnl !== 0)
+      .filter((p) => p.status.toLowerCase() === 'closed' && p.realizedPnl !== 0)
       .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
     const labels: string[] = [];
     const data: number[] = [];
