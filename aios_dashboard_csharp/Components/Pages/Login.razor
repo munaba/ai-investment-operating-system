@@ -1,0 +1,37 @@
+@page "/login"
+@using aios_dashboard_csharp.Services
+@inject IAuthService AuthService
+@inject Microsoft.AspNetCore.Components.NavigationManager NavManager
+
+@{
+    var loginError = NavManager.Uri.Contains("error=1", StringComparison.OrdinalIgnoreCase);
+}
+
+<div class="container" style="max-width: 420px; margin-top: 12vh;">
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <h3 class="text-center mb-1" style="font-family: Fraunces, Georgia, serif; font-weight:700;">AIOS<span style="color:var(--lime)">.</span></h3>
+            <p class="text-center text-muted mb-4">Akses terbatas — jaringan rumah saja</p>
+
+            @if (loginError)
+            {
+                <div class="alert alert-danger py-2">Username atau password salah.</div>
+            }
+
+            <form method="get" action="/login-direct">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input class="form-control" type="text" name="u" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input class="form-control" type="password" name="p" required />
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+        </div>
+    </div>
+    <p class="text-center text-muted mt-3" style="font-size: 0.85em;">
+        Session timeout: @(AuthService.SessionTimeoutMinutes) menit tidak aktif
+    </p>
+</div>

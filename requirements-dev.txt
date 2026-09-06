@@ -1,0 +1,23 @@
+# Development / test dependencies for AIOS.
+# Install on top of the core manifest:
+#   pip install -r requirements.txt -r requirements-dev.txt
+#
+# pytest: required by exactly 3 of 246 test files under Tests/ (AST-import
+# scan + grep-verified) — Tests/test_stage5_suspend_resume.py,
+# Tests/test_stage6_delegate.py, and Tests/test_stage7_cancel.py use
+# `import pytest` / `pytest.raises(...)` / `sys.exit(pytest.main(...))`.
+#
+# A separate set of 3 test files (Tests/test_manual_scan_command.py,
+# Tests/test_stage_l17_memory.py, Tests/test_market_analysis_foundation.py)
+# use the stdlib `unittest` module — no extra package needed for those.
+#
+# The remaining 240 test files are standalone proof scripts with no
+# pytest/unittest import and no external test-framework dependency.
+#
+# Note: this file intentionally does NOT pull in requirements-gemini.txt /
+# requirements-ollama.txt / requirements-optional.txt — none of the 246
+# test files import google.genai, requests, plotly, numpy, or yfinance
+# directly (AST-verified), so running the test suite does not require any
+# provider-specific or optional-feature package on top of core + pytest.
+-r requirements.txt
+pytest>=7.4.0

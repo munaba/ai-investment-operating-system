@@ -1,0 +1,349 @@
+@page "/phase1"
+@inject IDatabaseService DatabaseService
+@inject IJSRuntime JSRuntime
+@inject ILogger<Phase1> Logger
+@rendermode InteractiveServer
+
+<PageTitle>Phase 1: Journal & Brief Viewer</PageTitle>
+
+<h1>Journal &amp; briefs</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Symbol</label>
+                <select class="form-select" @bind="SymbolFilter" @bind:event="onchange">
+                    <option value="">All</option>
+                    @foreach (var sym in Symbols)
+                    {
+                        <option value="@sym">@sym</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Decision</label>
+                <select class="form-select" @bind="DecisionFilter" @bind:event="onchange">
+                    <option value="">All</option>
+                    <option value="TAKE">TAKE</option>
+                    <option value="SKIP">SKIP</option>
+                    <option value="WAIT">WAIT</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Risk Policy</label>
+                <select class="form-select" @bind="RiskPolicyFilter" @bind:event="onchange">
+                    <option value="">All</option>
+                    <option value="ACCEPTED">ACCEPTED</option>
+                    <option value="RISK_REJECTED">RISK_REJECTED</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">From Date</label>
+                <input type="date" class="form-control" @bind="FromDate" @bind:event="onchange" />
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-outline-secondary w-100" @onclick="RefreshData">
+                    🔄 Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (IsLoading)
+{
+    <div class="text-center py-4">
+        <div class="spinner-border spinner-lime" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading journal entries...</p>
+    </div>
+}
+else if (JournalEntries.Count > 0)
+{
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-book-open"/></svg>&nbsp;Journal Entries (@(JournalEntries.Count) records)</h5>
+            <div>
+                <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportCsv"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-arrow-down-right"/></svg> CSV</button>
+                <button class="btn btn-sm btn-outline-secondary" @onclick="ExportMarkdown"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-copy"/></svg> Markdown</button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Entry ID</th>
+                            <th>Symbol</th>
+                            <th>Decision</th>
+                            <th>Decided At</th>
+                            <th>Risk Policy</th>
+                            <th>Planned R</th>
+                            <th>Brief Status</th>
+                            <th>Note</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var entry in JournalEntries)
+                        {
+                            <tr @onclick="() => SelectEntry(entry)" style="cursor: pointer;" class="@(SelectedEntry?.EntryId == entry.EntryId ? "table-primary" : "")">
+                                <td>@entry.EntryId</td>
+                                <td>@entry.Symbol</td>
+                                <td><span class="badge @GetDecisionBadgeClass(entry.Decision)">@entry.Decision</span></td>
+                                <td>@FormatDateTime(entry.DecidedAt)</td>
+                                <td><span class="badge @GetRiskPolicyBadgeClass(entry.RiskPolicyStatus)">@entry.RiskPolicyStatus</span></td>
+                                <td>@(entry.PlannedR.HasValue ? entry.PlannedR.Value.ToString("F2") : "—")</td>
+                                <td>@(entry.BriefStatus ?? "—")</td>
+                                <td>@(entry.Note ?? "")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @if (SelectedEntry != null)
+    {
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><svg class="ico"><use href="/icons/_sprite.svg#i-file-text"/></svg>&nbsp;Journal Entry Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <pre class="mb-0"><code>@GetJournalEntryJson(SelectedEntry)</code></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><svg class="ico"><use href="/icons/_sprite.svg#i-file-text"/></svg>&nbsp;Decision Brief Details</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (SelectedEntry.BriefId > 0)
+                        {
+                            <pre class="mb-0"><code>@GetDecisionBriefJson(SelectedEntry)</code></pre>
+                        }
+                        else
+                        {
+                            <div class="text-muted">No linked brief</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-info text-center py-5">
+        <h5>📓 Belum ada journal entry</h5>
+        <p class="text-muted mb-0">Journal akan terisi otomatis setelah ada decision brief yang di-generate oleh agent.</p>
+    </div>
+}
+
+@implements IDisposable
+@code {
+    private List<JournalEntry> JournalEntries = new();
+    private List<string> Symbols = new();
+    private string SymbolFilter = "";
+    private string DecisionFilter = "";
+    private string RiskPolicyFilter = "";
+    private DateTime? FromDate = null;
+    private bool IsLoading = false;
+    private JournalEntry? SelectedEntry = null;
+
+    // Phase 4d: Auto-refresh
+    private System.Threading.PeriodicTimer? _refreshTimer;
+    private bool _disposed = false;
+    private const int RefreshIntervalSeconds = 30;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadSymbolsAsync();
+        await RefreshDataAsync();
+        StartAutoRefresh();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("aiosAnim.initRowHover");
+        }
+    }
+
+    private void StartAutoRefresh()
+    {
+        _refreshTimer = new System.Threading.PeriodicTimer(TimeSpan.FromSeconds(RefreshIntervalSeconds));
+        _ = AutoRefreshLoop();
+    }
+
+    private async Task AutoRefreshLoop()
+    {
+        try
+        {
+            while (await _refreshTimer!.WaitForNextTickAsync() && !_disposed)
+            {
+                var logLine = $"[refresh] {DateTime.Now:HH:mm:ss.fff} Phase1.RefreshDataAsync";
+                Logger.LogInformation(logLine);
+                // Also write to file for verification
+                try { File.AppendAllText(@"F:\My Son\aios_dashboard_csharp\refresh_log.txt", logLine + Environment.NewLine); } catch (Exception ex) { Logger.LogWarning(ex, "[phase1] refresh_log write failed"); }
+                await RefreshDataAsync();
+            }
+        }
+        catch (OperationCanceledException) { }
+        catch (ObjectDisposedException) { }
+    }
+
+    public void Dispose()
+    {
+        _disposed = true;
+        _refreshTimer?.Dispose();
+        _refreshTimer = null;
+    }
+
+    private async Task LoadSymbolsAsync()
+    {
+        try
+        {
+            using var context = new Data.ReadOnlyDbContext($"Data Source={DbPath};Mode=ReadOnly");
+            Symbols = await context.JournalEntries
+                .Select(j => j.Symbol)
+                .Distinct()
+                .OrderBy(s => s)
+                .ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "[phase1] LoadSymbolsAsync failed");
+        }
+    }
+
+    private void RefreshData() => _ = RefreshDataAsync();
+
+    private async Task RefreshDataAsync()
+    {
+        IsLoading = true;
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            JournalEntries = await DatabaseService.GetJournalEntriesAsync(
+                string.IsNullOrEmpty(SymbolFilter) ? null : SymbolFilter,
+                string.IsNullOrEmpty(DecisionFilter) ? null : DecisionFilter,
+                string.IsNullOrEmpty(RiskPolicyFilter) ? null : RiskPolicyFilter,
+                FromDate
+            );
+            SelectedEntry = null;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error refreshing data");
+        }
+        finally
+        {
+            IsLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void SelectEntry(JournalEntry entry)
+    {
+        SelectedEntry = entry;
+    }
+
+    private string FormatDateTime(string? dt)
+    {
+        if (string.IsNullOrEmpty(dt)) return "—";
+        if (DateTime.TryParse(dt, out var parsed))
+            return parsed.ToString("yyyy-MM-dd HH:mm:ss");
+        return dt;
+    }
+
+    private string GetDecisionBadgeClass(string decision)
+    {
+        return decision switch
+        {
+            "TAKE" => "bg-success",
+            "SKIP" => "bg-secondary",
+            "WAIT" => "bg-warning text-dark",
+            _ => "bg-light text-dark"
+        };
+    }
+
+    private string GetRiskPolicyBadgeClass(string status)
+    {
+        return status switch
+        {
+            "ACCEPTED" => "bg-success",
+            "RISK_REJECTED" => "bg-danger",
+            _ => "bg-light text-dark"
+        };
+    }
+
+    private string GetJournalEntryJson(JournalEntry entry)
+    {
+        return System.Text.Json.JsonSerializer.Serialize(new
+        {
+            entry_id = entry.EntryId,
+            brief_id = entry.BriefId,
+            symbol = entry.Symbol,
+            decision = entry.Decision,
+            decided_at = entry.DecidedAt,
+            risk_policy_status = entry.RiskPolicyStatus,
+            risk_policy_reason = entry.RiskPolicyReason,
+            planned_r = entry.PlannedR,
+            note = entry.Note
+        }, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+    }
+
+    private string GetDecisionBriefJson(JournalEntry entry)
+    {
+        return System.Text.Json.JsonSerializer.Serialize(new
+        {
+            brief_id = entry.BriefId,
+            status = entry.BriefStatus,
+            generated_at = entry.BriefGeneratedAt,
+            source_snapshot_id = entry.SourceSnapshotId,
+            reason = entry.BriefReason,
+            entry_price = entry.EntryPrice,
+            stop_loss_price = entry.StopLossPrice,
+            take_profit_price = entry.TakeProfitPrice,
+            risk_amount = entry.RiskAmount,
+            position_size = entry.PositionSize,
+            risk_reward_ratio = entry.RiskRewardRatio
+        }, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+    }
+
+    private async Task ExportCsv()
+    {
+        using var writer = new System.IO.StringWriter();
+        using var csv = new CsvHelper.CsvWriter(writer, System.Globalization.CultureInfo.InvariantCulture);
+        csv.WriteRecords(JournalEntries);
+        var csvContent = writer.ToString();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(csvContent);
+        await JSRuntime.InvokeVoidAsync("downloadFile", $"journal_entries_{DateTime.Now:yyyyMMdd}.csv", Convert.ToBase64String(bytes), "text/csv");
+    }
+
+    private async Task ExportMarkdown()
+    {
+        using var writer = new System.IO.StringWriter();
+        // Write header
+        writer.WriteLine("| Entry ID | Symbol | Decision | Decided At | Risk Policy | Planned R | Brief Status | Note |");
+        writer.WriteLine("|----------|--------|----------|------------|-------------|-----------|--------------|------|");
+        foreach (var entry in JournalEntries)
+        {
+            writer.WriteLine($"| {entry.EntryId} | {entry.Symbol} | {entry.Decision} | {FormatDateTime(entry.DecidedAt)} | {entry.RiskPolicyStatus} | {entry.PlannedR?.ToString("F2") ?? "—"} | {entry.BriefStatus ?? "—"} | {entry.Note ?? ""} |");
+        }
+        var mdContent = writer.ToString();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(mdContent);
+        await JSRuntime.InvokeVoidAsync("downloadFile", $"journal_entries_{DateTime.Now:yyyyMMdd}.md", Convert.ToBase64String(bytes), "text/markdown");
+    }
+
+    private const string DbPath = @"F:\My Son\data\investment_platform.db";
+}

@@ -1,0 +1,14 @@
+# Convenience "install everything" manifest — core + every provider +
+# every optional feature. Equivalent to:
+#   pip install -r requirements.txt -r requirements-gemini.txt \
+#               -r requirements-ollama.txt -r requirements-optional.txt
+#
+# Use this if you want full functionality (both providers, chart,
+# backtest, market data, notifications) without installing each add-on
+# file individually. For a minimal install, use requirements.txt alone
+# plus only the specific add-on file(s) you need — see the comment header
+# in requirements.txt for the per-feature install commands.
+-r requirements.txt
+-r requirements-gemini.txt
+-r requirements-ollama.txt
+-r requirements-optional.txt

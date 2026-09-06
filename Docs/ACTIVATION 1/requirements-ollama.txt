@@ -1,0 +1,14 @@
+# Ollama provider add-on (Providers/ollama.py) — HTTP calls to a local
+# Ollama server. Only needed if the Ollama provider is actually connected
+# to at runtime — `requests` is imported lazily inside connect(), wrapped
+# in try/except with an actionable "pip install requests" error message.
+# NOT required to import Core/composition_root.py or start main.py.
+#
+# Usage: pip install -r requirements.txt -r requirements-ollama.txt
+#
+# Note: `requests` is the same package used by the Telegram/Discord
+# notification feature (see requirements-optional.txt). If you install
+# this file you already have it for notifications too, and vice versa —
+# it is listed in both files because it is genuinely used by two
+# independent features, not duplicated by mistake.
+requests>=2.31.0

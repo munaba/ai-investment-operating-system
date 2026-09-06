@@ -1,0 +1,11 @@
+# Gemini provider add-on (Providers/gemini.py, Providers/gemini_vision_provider.py).
+# Only needed if the Gemini provider is actually connected to at runtime —
+# `from google import genai` is imported lazily inside connect(), wrapped in
+# try/except with an actionable "pip install google-genai" error message.
+# NOT required to import Core/composition_root.py or start main.py.
+#
+# Usage: pip install -r requirements.txt -r requirements-gemini.txt
+#
+# Note: import name is `google.genai` -> PyPI distribution `google-genai`
+# (the newer unified SDK), NOT the older `google-generativeai` package.
+google-genai>=1.0.0
