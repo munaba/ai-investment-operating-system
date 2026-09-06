@@ -55,8 +55,8 @@ AIOS is a personal, evidence-led daily trading decision-support agent for IDX. I
 
 ```bash
 # 1. Clone
-git clone https://github.com/<you>/aios-ai-investment-system.git
-cd aios-ai-investment-system
+git clone https://github.com/munaba/ai-investment-operating-system.git
+cd ai-investment-operating-system
 
 # 2. Python env (3.11+)
 python -m venv .venv
@@ -140,7 +140,7 @@ Actively developed — **Phase H (Sustained-use review, no automatic expansion)*
 
 ## Author
 
-**Nabil** — GitHub: `github.com/<you>` · LinkedIn: `linkedin.com/in/<you>` · Email: `<you@example.com>`
+**Nabil** — GitHub: `github.com/munaba` · LinkedIn: `linkedin.com/in/munaba` · Email: `munaba@example.com`
 
 ## License
 
