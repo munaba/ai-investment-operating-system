@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHASE 0 — System Integrity (v5 Robinhood-bold)</title>
+<style>
+@font-face{font-family:'Fraunces';src:url('/fonts/fraunces-600.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:'Fraunces';src:url('/fonts/fraunces-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'IBM Plex Sans';src:url('/fonts/ibm-plex-sans-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('/fonts/ibm-plex-mono-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('/fonts/ibm-plex-mono-500.woff2') format('woff2');font-weight:500;font-display:swap}
+
+/* ==== ROBINHOOD-LESSON PALETTE ====
+   Lesson from Robinhood: pure black surface + ONE screaming saturated accent.
+   Their #CCFF00 chartreuse on #000. Ours: same energy, IDX context —
+   "Signal Lime" #D4FF3F on true black. Everything else is grayscale discipline. */
+:root{
+  --black:#000000;         /* surface, true black like RH */
+  --panel:#0C0C0C;         /* barely-raised panel */
+  --edge:#232323;
+  --white:#FFFFFF;         /* primary text */
+  --gray:#9E9E9E;          /* secondary text */
+  --gray-dim:#5A5A5A;      /* tertiary/disabled */
+  --lime:#D4FF3F;          /* THE accent — saturated, loud, unapologetic */
+  --red:#FF5C5C;           /* danger only */
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:var(--black); color:var(--white);
+  font-family:'IBM Plex Sans',sans-serif;font-size:14px;
+  -webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;
+}
+
+.nav{display:flex;align-items:center;gap:22px;padding:12px 24px;border-bottom:1px solid var(--edge);flex:none}
+.brand{font-family:'Fraunces',serif;font-weight:700;font-size:19px;color:var(--white);letter-spacing:-.02em}
+.brand .tick{color:var(--lime)}
+.links{display:flex;gap:2px;margin-left:16px}
+.links a{color:var(--gray);text-decoration:none;font-size:13px;font-weight:400;padding:6px 14px;border-radius:6px;transition:.15s}
+.links a:hover{color:var(--white)}
+.links a.active{color:var(--black);background:var(--lime);font-weight:500}
+
+.ro{margin-left:auto;display:flex;align-items:center;gap:7px;font-family:'IBM Plex Mono';font-size:10px;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--gray);
+  border:1px solid var(--edge);border-radius:6px;padding:5px 11px}
+.ro .lockdot{width:6px;height:6px;border-radius:50%;background:var(--lime)}
+
+.workspace{flex:1;display:flex;flex-direction:column;padding:20px 28px 22px;min-height:0}
+
+.sect{padding:16px 0}
+.sect + .sect{border-top:1px solid var(--edge)}
+.sect-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.k{font-family:'IBM Plex Mono';font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gray)}
+.meta{font-family:'IBM Plex Mono';font-size:11px;color:var(--gray-dim)}
+
+/* status line — Fraunces serif makes the state word distinctive */
+.status-line{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.status-word{
+  font-family:'Fraunces',serif;font-weight:700;font-size:26px;letter-spacing:-.01em;color:var(--white);
+}
+.status-word .dot{color:var(--lime)}
+.status-detail{font-family:'IBM Plex Mono';font-size:12px;color:var(--gray)}
+.status-detail b{color:var(--white);font-weight:400}
+.clock{margin-left:auto;display:flex;align-items:baseline;gap:9px}
+.clock-big{font-family:'IBM Plex Mono';font-weight:500;font-size:15px;font-variant-numeric:tabular-nums;color:var(--white)}
+.tick{animation:tickpop .35s ease}
+@keyframes tickpop{0%{color:var(--lime)}100%{}}
+
+.console{display:flex;align-items:center;gap:11px;background:#070707;border:1px solid var(--edge);border-radius:7px;
+  padding:10px 16px;font-family:'IBM Plex Mono',monospace;font-size:12.5px}
+.console .prompt{color:var(--gray)}
+.console .cmd{color:var(--white)}
+.console .ok{color:var(--lime)}
+.cursor{width:7px;height:14px;background:var(--lime);animation:blink 1.2s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.btn-test{margin-left:auto;background:transparent;border:1px solid #333;color:var(--white);
+  font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+  padding:5px 14px;border-radius:5px;cursor:pointer;transition:.15s}
+.btn-test:hover{border-color:var(--lime);color:var(--lime)}
+.btn-test:active{transform:scale(.96)}
+
+/* registry rows */
+.rrow{display:grid;grid-template-columns:250px 90px 110px 110px 1fr;gap:16px;align-items:center;
+  padding:9px 6px;border-bottom:1px solid #161616;cursor:pointer;
+  transition:background .14s ease, padding-left .14s ease;
+  animation:rise .3s ease backwards;animation-delay:calc(var(--i,0)*22ms)}
+.rrow:hover{background:#111;padding-left:12px}
+.rrow:hover .rowchev{opacity:1;transform:none}
+.rrow.head{cursor:default;padding:6px}
+.rrow.head span{font-family:'IBM Plex Mono';font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gray-dim)}
+.rname{font-family:'IBM Plex Mono';font-size:13px;color:var(--white)}
+.rcount{font-family:'IBM Plex Mono';font-size:13px;text-align:right;color:var(--white);font-variant-numeric:tabular-nums}
+.rcount.zero{color:var(--gray-dim)}
+.rcols{font-family:'IBM Plex Mono';font-size:11px;color:var(--gray)}
+.rowchev{opacity:0;transform:translateX(-6px);transition:.18s ease;color:var(--lime);font-family:'IBM Plex Mono';font-size:12px;text-align:right}
+.rdot{width:6px;height:6px;border-radius:50%;background:var(--lime);display:inline-block;margin-right:9px;vertical-align:1px}
+.rdot.dim{background:#2E2E2E}
+@keyframes rise{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* activity log fills rest */
+.activity{flex:1;overflow-y:auto;min-height:140px}
+.aline{display:grid;grid-template-columns:92px 185px 1fr;gap:14px;padding:7px 6px;color:var(--gray);
+  font-family:'IBM Plex Mono';font-size:12px;border-bottom:1px solid #101010;transition:.14s;
+  animation:rise .3s ease backwards;animation-delay:calc(var(--i)*18ms)}
+.aline:hover{background:#0D0D0D;color:var(--white)}
+.aline .t{color:var(--gray-dim)}
+.aline .etype{color:var(--lime)}
+.aline .payload{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.8}
+.aline .payload b{color:var(--white);font-weight:400}
+
+@media(max-width:900px){
+  .workspace{padding:12px 14px}
+  .rrow,.aline{grid-template-columns:150px 1fr}
+  .rcols,.rowchev,.aline .payload span.hide-sm{display:none}
+  .clock{margin-left:0;width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="brand">AIOS<span class="tick">.</span></span>
+  <div class="links"><a class="active" href="#" onclick="return false">System</a><a href="#" onclick="return false">Journal</a><a href="#" onclick="return false">Windows</a><a href="#" onclick="return false">Book</a></div>
+  <span class="ro"><span class="lockdot"></span>Read-only</span>
+</div>
+
+<div class="workspace">
+
+  <div class="sect">
+    <div class="status-line">
+      <span class="status-word"><span class="dot">●</span> Nominal</span>
+      <span class="status-detail">SELECT 1 → <b>1</b> · round-trip <b>2 ms</b> · mode <b>ReadOnly</b> · db <b>0.30 MB</b> · schema <b>v32</b></span>
+      <div class="clock">
+        <span class="k">WIB</span>
+        <span class="clock-big"><span id="hh">16</span>:<span id="mm">41</span>:<span id="ss">07</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="console">
+    <span class="prompt">aios@lan:~$</span>
+    <span class="cmd">sqlite3 file:…investment_platform.db?mode=ro</span>
+    <span class="ok">✓ connected</span>
+    <span class="cursor"></span>
+    <button class="btn-test" onclick="this.textContent='✓ Re-tested'">Re-run test</button>
+  </div>
+
+  <div class="sect">
+    <div class="sect-head"><span class="k">Table registry</span><span class="meta">12 objects</span></div>
+    <div id="reg"></div>
+  </div>
+
+  <div class="sect" style="flex:1;display:flex;flex-direction:column;min-height:150px">
+    <div class="sect-head"><span class="k">Recent activity</span><span class="meta">audit_events · last 24h</span></div>
+    <div class="activity" id="act"></div>
+  </div>
+
+</div>
+
+<script>
+const rows = [
+  ['journal_entries','2','14 cols',1],['decision_briefs','16','13 cols',1],
+  ['positions','0','13 cols',0],['orders','0','14 cols',0],['trades','0','10 cols',0],
+  ['scheduler_job_runs','2','8 cols',1],['notification_dedup_state','2','5 cols',1],
+  ['audit_events','18','4 cols',1],['operator_observation_windows','1','8 cols',1],
+  ['final_review_records','1','12 cols',1],['operator_feedback','0','11 cols',0],['accounts','1','9 cols',1],
+];
+document.getElementById('reg').innerHTML =
+  `<div class="rrow head"><span>Table</span><span style="text-align:right">Rows</span><span>Cols</span><span>Trend</span><span></span></div>` +
+  rows.map((r,i)=>`<div class="rrow" style="--i:${i}">
+    <span class="rname"><span class="${r[3]?'rdot':'rdot dim'}"></span>${r[0]}</span>
+    <span class="rcount ${r[1]==='0'?'zero':''}">${r[1]}</span>
+    <span class="rcols">${r[2]}</span>
+    <span style="font-family:'IBM Plex Mono';font-size:11px;color:${r[3]?'var(--lime)':'#2E2E2E'}">${r[3]?'▁▂▃▅▄▆':'▁▁▁▁▁▁'}</span>
+    <span class="rowchev">inspect ›</span></div>`).join('');
+
+const acts = [
+  ['16:41:07','job_started','scheduler session_scan started · attempt 1'],
+  ['16:41:08','job_succeeded','session_scan completed · 10 symbols · FRESH'],
+  ['16:41:09','notification_suppressed','data_freshness · SUPPRESS_NO_CHANGE'],
+  ['15:58:22','job_started','scheduler idx-tick started · attempt 1'],
+  ['15:58:24','job_succeeded','idx-tick completed · market closed'],
+  ['15:12:03','brief_generated','decision_briefs id=16 ANTM entry=3200 sl=3136 tp=3328'],
+  ['15:12:44','journal_recorded','entry_id=2 decision=TAKE risk_policy=ACCEPTED'],
+  ['14:59:51','risk_limit_checked','capital=100M max_risk=1% cooldown OK'],
+  ['14:37:19','migration_applied','final_review_records v32'],
+  ['14:37:19','migration_applied','operator_feedback v31'],
+  ['13:48:33','page_viewed','phase2 window#1 selected by operator'],
+  ['04:24:18','snapshot_created','ranking_snapshots id=71 scan_time ok'],
+];
+document.getElementById('act').innerHTML = acts.map((a,i)=>
+  `<div class="aline" style="--i:${i}"><span class="t">${a[0]}</span><span class="etype">${a[1]}</span><span class="payload"><b>${a[2].split(' ')[0]}</b> <span class="hide-sm">${a[2].substring(a[2].indexOf(' ')+1)}</span></span></div>`
+).join('');
+
+function pad(n){return String(n).padStart(2,'0')}
+setInterval(()=>{
+  const w = new Date(Date.now() + (7*60 + new Date().getTimezoneOffset())*60000);
+  [['hh',pad(w.getHours())],['mm',pad(w.getMinutes())],['ss',pad(w.getSeconds())]].forEach(([id,v])=>{
+    const el=document.getElementById(id);
+    if(el.textContent!==v){el.textContent=v;el.classList.remove('tick');void el.offsetWidth;el.classList.add('tick');}
+  });
+},1000);
+</script>
+</body>
+</html>

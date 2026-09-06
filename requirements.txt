@@ -1,0 +1,38 @@
+# AIOS dependency manifest (Activation 1.1, revised).
+#
+# This file is CORE ONLY — the minimum needed to import
+# Core/composition_root.py and start main.py. It intentionally does NOT
+# include provider-specific or optional-feature packages, so that
+# `pip install -r requirements.txt` never forces an operator to install
+# something they may not need (Gemini SDK, Ollama HTTP client, chart
+# rendering, backtesting, live market data).
+#
+# Add what you actually need on top of this:
+#   pip install -r requirements.txt -r requirements-gemini.txt      # Gemini provider
+#   pip install -r requirements.txt -r requirements-ollama.txt      # Ollama provider
+#   pip install -r requirements.txt -r requirements-optional.txt    # chart/backtest/market-data features
+#   pip install -r requirements.txt -r requirements-dev.txt         # run the test suite
+#   pip install -r requirements-full.txt                            # everything at once
+#
+# See Docs/ACTIVATION 1/AIOS_Activation1.1_Dependency_Manifest_Report.md
+# for the full audit and evidence trail behind every line below and in the
+# sibling requirements-*.txt files.
+
+# python-dotenv: Core/config.py loads .env unconditionally at module import
+# time (`from dotenv import load_dotenv`), no try/except guard.
+python-dotenv>=1.0.0
+
+# pandas: imported eagerly (module level, not lazy) in Services/chart_service.py,
+# Services/moving_average_service.py, Services/technical_indicator_service.py,
+# and Services/technical_score_service.py. All four are imported at module
+# level by Core/composition_root.py, which main.py imports unconditionally.
+# In practice this makes pandas mandatory to even start the app today, even
+# though conceptually it "belongs" to chart/technical-indicator features.
+# (This eager-import behavior is a source-code characteristic, not something
+# this manifest activation is scoped to change — see the report's
+# Out-of-Scope Findings.)
+pandas>=2.0.0,<3.0.0
+
+# Activation 2 production scanner: StockDataRepository/StockService use yfinance.
+# Latest stable PyPI release verified 2026-08-20.
+yfinance>=1.6.0,<2.0.0

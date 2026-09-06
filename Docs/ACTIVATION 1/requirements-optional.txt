@@ -1,0 +1,34 @@
+# Optional-feature add-ons — none of these are needed to import
+# Core/composition_root.py or start main.py. Each is lazily imported inside
+# the specific feature's code path, wrapped in try/except with an
+# actionable "pip install ..." error message, so a missing package here
+# only breaks the one feature that needs it, not the whole application.
+#
+# Usage: pip install -r requirements.txt -r requirements-optional.txt
+# (install all three) — or install only the package(s) for the feature(s)
+# you actually use.
+
+# Chart rendering (Services/chart_service.py: plotly.graph_objects / subplots).
+plotly>=5.20.0
+
+# Backtesting numeric ops (Services/backtest_service.py). Note: in practice
+# this package is already present in any environment with `pandas`
+# installed (pandas declares numpy as its own install-time dependency), so
+# listing it here is about the application's own lazy-import contract, not
+# about whether the package physically ends up installed.
+numpy>=1.26.0
+
+# Live market data / news fetch (Services/stock_service.py,
+# Repository/external/stock_data_repository.py,
+# Repository/external/news_repository.py). In practice this is needed for
+# the two real production commands (`auto`, `scan`) to return real data,
+# even though the import itself is lazy/optional at the code level.
+yfinance>=0.2.40
+
+# Telegram/Discord notification sending (Services/notification_service.py).
+# Same package as requirements-ollama.txt's `requests` — listed again here
+# because it is also independently required by this unrelated feature.
+# Per Activation 0 baseline, no live command path currently calls
+# NotificationService.execute(), so this is not load-bearing for `auto`/`scan`
+# today.
+requests>=2.31.0

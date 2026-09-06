@@ -1,0 +1,59 @@
+.gate-strip {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: #070707;
+  border-bottom: 1px solid var(--edge);
+  padding: 7px 24px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--gray);
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+.gate-strip::-webkit-scrollbar { display: none; }
+
+.gate-item { display: inline-flex; align-items: center; gap: 7px; }
+.gate-item b { color: var(--white); font-weight: 500; }
+.gate-sep { color: #222; }
+.accent { color: var(--lime); }
+
+.evidence-bar {
+  display: inline-block;
+  width: 90px;
+  height: 8px;
+  background: #161616;
+  border-radius: 4px;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.evidence-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--lime);
+  border-radius: 4px;
+}
+
+.decision-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  background: var(--gray-dim);
+}
+/* .pending no longer needs a CSS @keyframes — the pulse is driven by
+   Framer Motion's `animate` prop in GateStrip.tsx so it can be interrupted
+   / retimed if the decision resolves mid-animation. */
+.decision-dot.pending {
+  background: var(--amber);
+}
+
+@media (max-width: 576px) {
+  .gate-strip { gap: 10px; font-size: 0.68rem; padding-left: 14px; }
+  .gate-hide-sm { display: none; }
+}

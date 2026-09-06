@@ -1,0 +1,836 @@
+@page "/phase3"
+@inject IDatabaseService DatabaseService
+@inject ILogger<Phase3> Logger
+@rendermode InteractiveServer
+
+<PageTitle>Phase 3: Paper Positions & Scheduler Health</PageTitle>
+
+<h1>Paper book &amp; operations</h1>
+<p class="page-sub">Simulated fills only. This page can never touch a real broker.</p>
+
+<div class="dataline mb-4">
+    <span class="dl"><span class="lbl">Open positions</span><span class="v">@OpenPositionsCount</span></span>
+    <span class="dl"><span class="lbl">Closed positions</span><span class="v">@ClosedPositionsCount</span></span>
+    <span class="dl"><span class="lbl">Realized P&L</span><span class="v @(TotalRealizedPnl >= 0 ? "pos" : "neg")" id="pnl-value">@(TotalRealizedPnl.ToString("N0")) IDR</span></span>
+    <span class="dl"><span class="lbl">Total fees</span><span class="v" id="fees-value">@(TotalFees.ToString("N0")) IDR</span></span>
+</div>
+
+<ul class="nav nav-tabs mb-4" id="phase3Tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="positions-tab" data-bs-toggle="tab" data-bs-target="#positions" type="button" role="tab"><svg class="ico"><use href="/icons/_sprite.svg#i-book-open"/></svg> Positions</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab"><svg class="ico"><use href="/icons/_sprite.svg#i-file-text"/></svg> Orders</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="trades-tab" data-bs-toggle="tab" data-bs-target="#trades" type="button" role="tab"><svg class="ico"><use href="/icons/_sprite.svg#i-activity"/></svg> Trades</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="equity-tab" data-bs-toggle="tab" data-bs-target="#equity" type="button" role="tab"><svg class="ico"><use href="/icons/_sprite.svg#i-arrow-up-right"/></svg> Equity/P&L</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="scheduler-tab" data-bs-toggle="tab" data-bs-target="#scheduler" type="button" role="tab"><svg class="ico"><use href="/icons/_sprite.svg#i-settings"/></svg> Scheduler</button>
+    </li>
+</ul>
+
+<div class="tab-content" id="phase3TabContent">
+    <!-- Positions Tab -->
+    <div class="tab-pane fade show active" id="positions" role="tabpanel">
+        @if (IsLoadingPositions)
+        {
+            <div class="text-center py-4"><div class="spinner-border spinner-lime"></div></div>
+        }
+        else if (Positions.Count > 0)
+        {
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-book-open"/></svg>&nbsp;Paper Positions (@(Positions.Count) records)</h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportPositionsCsv"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-arrow-down-right"/></svg> CSV</button>
+                        <button class="btn btn-sm btn-outline-secondary" @onclick="ExportPositionsMarkdown"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-copy"/></svg> Markdown</button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Position ID</th>
+                                    <th>Account</th>
+                                    <th>Symbol</th>
+                                    <th>Qty</th>
+                                    <th>Avg Price</th>
+                                    <th>Realized P&L</th>
+                                    <th>Status</th>
+                                    <th>Direction</th>
+                                    <th>Stop Loss</th>
+                                    <th>Take Profit</th>
+                                    <th>Buy Fee Acc.</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var pos in Positions)
+                                {
+                                    <tr>
+                                        <td>@pos.PositionId</td>
+                                        <td>@pos.AccountId</td>
+                                        <td>@pos.Symbol</td>
+                                        <td>@pos.Quantity.ToString("N2")</td>
+                                        <td>@pos.AveragePrice.ToString("N2")</td>
+                                        <td class="@(pos.RealizedPnl >= 0 ? "text-success" : "text-danger")">@pos.RealizedPnl.ToString("N0")</td>
+                                        <td><span class="badge @GetStatusBadgeClass(pos.Status)">@pos.Status</span></td>
+                                        <td>@pos.Direction</td>
+                                        <td>@(pos.StopLoss?.ToString("N2") ?? "—")</td>
+                                        <td>@(pos.TakeProfit?.ToString("N2") ?? "—")</td>
+                                        <td>@pos.BuyFeeAccumulated.ToString("N2")</td>
+                                        <td>@FormatDateTime(pos.CreatedAt)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info text-center py-5">
+                <h5>📂 Belum ada posisi paper</h5>
+                <p class="text-muted mb-0">Posisi akan muncul setelah order terekseskusi dan tercatat di sistem paper trading.</p>
+            </div>
+        }
+    </div>
+
+    <!-- Orders Tab -->
+    <div class="tab-pane fade" id="orders" role="tabpanel">
+        @if (IsLoadingOrders)
+        {
+            <div class="text-center py-4"><div class="spinner-border spinner-lime"></div></div>
+        }
+        else if (Orders.Count > 0)
+        {
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-file-text"/></svg>&nbsp;Paper Orders (@(Orders.Count) records)</h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportOrdersCsv"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-arrow-down-right"/></svg> CSV</button>
+                        <button class="btn btn-sm btn-outline-secondary" @onclick="ExportOrdersMarkdown"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-copy"/></svg> Markdown</button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Account</th>
+                                    <th>Symbol</th>
+                                    <th>Action</th>
+                                    <th>Qty</th>
+                                    <th>Req Price</th>
+                                    <th>Filled Price</th>
+                                    <th>Filled Qty</th>
+                                    <th>Status</th>
+                                    <th>Reason</th>
+                                    <th>Created At</th>
+                                    <th>Filled At</th>
+                                    <th>Analysis Snapshot</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Orders)
+                                {
+                                    <tr>
+                                        <td>@order.OrderId</td>
+                                        <td>@order.AccountId</td>
+                                        <td>@order.Symbol</td>
+                                        <td><span class="badge @GetActionBadgeClass(order.Action)">@order.Action</span></td>
+                                        <td>@order.Quantity.ToString("N2")</td>
+                                        <td>@order.RequestedPrice.ToString("N2")</td>
+                                        <td>@order.FilledPrice.ToString("N2")</td>
+                                        <td>@order.FilledQuantity.ToString("N2")</td>
+                                        <td><span class="badge @GetOrderStatusBadgeClass(order.Status)">@order.Status</span></td>
+                                        <td>@order.Reason</td>
+                                        <td>@FormatDateTime(order.CreatedAt)</td>
+                                        <td>@FormatDateTime(order.FilledAt)</td>
+                                        <td>@(order.AnalysisSnapshotId?.ToString() ?? "—")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info text-center py-5">
+                <h5>📋 Belum ada order paper</h5>
+                <p class="text-muted mb-0">Order akan tercatat setelah agent mengirim sinyal eksekusi paper trading.</p>
+            </div>
+        }
+    </div>
+
+    <!-- Trades Tab -->
+    <div class="tab-pane fade" id="trades" role="tabpanel">
+        @if (IsLoadingTrades)
+        {
+            <div class="text-center py-4"><div class="spinner-border spinner-lime"></div></div>
+        }
+        else if (Trades.Count > 0)
+        {
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-activity"/></svg>&nbsp;Paper Trades (@(Trades.Count) records)</h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportTradesCsv"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-arrow-down-right"/></svg> CSV</button>
+                        <button class="btn btn-sm btn-outline-secondary" @onclick="ExportTradesMarkdown"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-copy"/></svg> Markdown</button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Trade ID</th>
+                                    <th>Order ID</th>
+                                    <th>Account</th>
+                                    <th>Symbol</th>
+                                    <th>Action</th>
+                                    <th>Qty</th>
+                                    <th>Fill Price</th>
+                                    <th>Fee</th>
+                                    <th>Tax</th>
+                                    <th>Executed At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var trade in Trades)
+                                {
+                                    <tr>
+                                        <td>@trade.TradeId</td>
+                                        <td>@trade.OrderId</td>
+                                        <td>@trade.AccountId</td>
+                                        <td>@trade.Symbol</td>
+                                        <td><span class="badge @GetActionBadgeClass(trade.Action)">@trade.Action</span></td>
+                                        <td>@trade.Quantity.ToString("N2")</td>
+                                        <td>@trade.FillPrice.ToString("N2")</td>
+                                        <td>@trade.Fee.ToString("N2")</td>
+                                        <td>@trade.Tax.ToString("N2")</td>
+                                        <td>@FormatDateTime(trade.ExecutedAt)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info text-center py-5">
+                <h5>💹 Belum ada trade terekseskusi</h5>
+                <p class="text-muted mb-0">Trade akan muncul setelah order paper dieksekusi dan fill tercatat.</p>
+            </div>
+        }
+    </div>
+
+    <!-- Equity/P&L Chart Tab -->
+    <div class="tab-pane fade" id="equity" role="tabpanel">
+        @if (IsLoadingTrades || IsLoadingPositions)
+        {
+            <div class="text-center py-4"><div class="spinner-border spinner-lime"></div></div>
+        }
+        else if (Trades.Count == 0 && Positions.Count == 0)
+        {
+            <div class="alert alert-info text-center py-5">
+                <h5>Belum ada data trade untuk periode ini</h5>
+                <p class="text-muted mb-0">Chart equity/P&L akan muncul otomatis setelah ada trade yang terekseskusi.</p>
+            </div>
+        }
+        else
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-arrow-up-right"/></svg>&nbsp;Equity Curve / Realized P&amp;L</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="equityChart" style="max-height: 400px;"></canvas>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Scheduler Health Tab -->
+    <div class="tab-pane fade" id="scheduler" role="tabpanel">
+        @if (IsLoadingScheduler)
+        {
+            <div class="text-center py-4"><div class="spinner-border spinner-lime"></div></div>
+        }
+        else
+        {
+            <!-- Job Runs -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-settings"/></svg>&nbsp;Latest Job Runs</h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportJobRunsCsv"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-arrow-down-right"/></svg> CSV</button>
+                        <button class="btn btn-sm btn-outline-secondary" @onclick="ExportJobRunsMarkdown"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-copy"/></svg> Markdown</button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @if (JobRuns.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Job Type</th>
+                                        <th>Trading Date</th>
+                                        <th>Status</th>
+                                        <th>Attempt</th>
+                                        <th>Started At</th>
+                                        <th>Finished At</th>
+                                        <th>Next Retry</th>
+                                        <th>Detail</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var job in JobRuns)
+                                    {
+                                        <tr>
+                                            <td>@job.JobType</td>
+                                            <td>@job.TradingDate</td>
+                                            <td><span class="badge @GetJobStatusBadgeClass(job.Status)">@job.Status</span></td>
+                                            <td>@job.Attempt</td>
+                                            <td>@FormatDateTime(job.StartedAt)</td>
+                                            <td>@FormatDateTime(job.FinishedAt)</td>
+                                            <td>@FormatDateTime(job.NextRetryAt)</td>
+                                            <td>@(job.Detail ?? "")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="card-footer">
+                            <h6>Job Status Summary</h6>
+                            <div class="row">
+                                @foreach (var kvp in JobStatusCounts)
+                                {
+                                    <div class="col-auto me-3">
+                                        <span class="badge @GetJobStatusBadgeClass(kvp.Key) fs-6">@kvp.Key: @kvp.Value</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4 text-muted">
+                            <p class="mb-0">🕐 Belum ada job run tercatat</p>
+                            <small>Scheduler akan mencatat setiap eksekusi job otomatis (data refresh, health check, dll).</small>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Notification Dedup State -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-circle-dot"/></svg>&nbsp;Notification Dedup State</h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportDedupCsv"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-arrow-down-right"/></svg> CSV</button>
+                        <button class="btn btn-sm btn-outline-secondary" @onclick="ExportDedupMarkdown"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-copy"/></svg> Markdown</button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @if (DedupState.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Alert Type</th>
+                                        <th>Last Signature</th>
+                                        <th>Last Sent At</th>
+                                        <th>Last Status</th>
+                                        <th>Updated At</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var d in DedupState)
+                                    {
+                                        <tr>
+                                            <td>@d.AlertType</td>
+                                            <td>@(d.LastSignature ?? "—")</td>
+                                            <td>@FormatDateTime(d.LastSentAt)</td>
+                                            <td><span class="badge @GetDedupStatusBadgeClass(d.LastStatus)">@d.LastStatus</span></td>
+                                            <td>@FormatDateTime(d.UpdatedAt)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-3 text-center text-muted">No notification dedup state recorded</div>
+                    }
+                </div>
+            </div>
+
+            <!-- Audit Events -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><svg class="ico"><use href="/icons/_sprite.svg#i-activity"/></svg>&nbsp;Recent Audit Events (Last 50)</h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportAuditCsv"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-arrow-down-right"/></svg> CSV</button>
+                        <button class="btn btn-sm btn-outline-secondary" @onclick="ExportAuditMarkdown"><svg class="ico ico-sm"><use href="/icons/_sprite.svg#i-copy"/></svg> Markdown</button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @if (AuditEvents.Count > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Event Type</th>
+                                        <th>Payload</th>
+                                        <th>Created At</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var a in AuditEvents)
+                                    {
+                                        <tr>
+                                            <td>@a.Id</td>
+                                            <td>@a.EventType</td>
+                                            <td>
+                                                <pre class="mb-0 small" style="white-space: pre-wrap; overflow-wrap: anywhere;"><code>@(a.Payload ?? "")</code></pre>
+                                            </td>
+                                            <td>@FormatDateTime(a.CreatedAt)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="p-3 text-center text-muted">No audit events recorded</div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@implements IDisposable
+@code {
+    private List<Position> Positions = new();
+    private List<Order> Orders = new();
+    private List<Trade> Trades = new();
+    private List<SchedulerJobRun> JobRuns = new();
+    private List<NotificationDedupState> DedupState = new();
+    private List<AuditEvent> AuditEvents = new();
+    
+    private bool IsLoadingPositions = true;
+    private bool IsLoadingOrders = true;
+    private bool IsLoadingTrades = true;
+    private bool IsLoadingScheduler = true;
+    
+    // Summary counts
+    private int OpenPositionsCount => Positions.Count(p => p.Status == "OPEN");
+    private int ClosedPositionsCount => Positions.Count(p => p.Status == "CLOSED");
+    private double TotalRealizedPnl => Positions.Sum(p => p.RealizedPnl);
+    private double TotalFees => Trades.Sum(t => t.Fee);
+    private double TotalTax => Trades.Sum(t => t.Tax);
+    private Dictionary<string, int> JobStatusCounts => JobRuns.GroupBy(j => j.Status).ToDictionary(g => g.Key, g => g.Count());
+    
+    // Phase 4d: Auto-refresh
+    private System.Threading.PeriodicTimer? _refreshTimer;
+    private bool _disposed = false;
+    private const int RefreshIntervalSeconds = 30;
+    private double _previousPnl;
+    private double _previousFees;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("phase3Tabs.init");
+            await JSRuntime.InvokeVoidAsync("aiosAnim.initRowHover");
+        }
+
+        // Count-up animation for P&L and fees
+        if (Math.Abs(TotalRealizedPnl - _previousPnl) > 0.5)
+        {
+            await JSRuntime.InvokeVoidAsync("aiosAnim.countUp",
+                "pnl-value", _previousPnl, TotalRealizedPnl, 500, "", " IDR");
+        }
+        if (Math.Abs(TotalFees - _previousFees) > 0.5)
+        {
+            await JSRuntime.InvokeVoidAsync("aiosAnim.countUp",
+                "fees-value", _previousFees, TotalFees, 500, "", " IDR");
+        }
+        _previousPnl = TotalRealizedPnl;
+        _previousFees = TotalFees;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAllDataAsync();
+        StartAutoRefresh();
+    }
+
+    private void StartAutoRefresh()
+    {
+        _refreshTimer = new System.Threading.PeriodicTimer(TimeSpan.FromSeconds(RefreshIntervalSeconds));
+        _ = AutoRefreshLoop();
+    }
+
+    private async Task AutoRefreshLoop()
+    {
+        try
+        {
+            while (await _refreshTimer!.WaitForNextTickAsync() && !_disposed)
+            {
+                var logLine = $"[refresh] {DateTime.Now:HH:mm:ss.fff} Phase3.LoadAllDataAsync";
+                Console.WriteLine(logLine);
+                try { System.IO.File.AppendAllText(@"F:\My Son\aios_dashboard_csharp\refresh_log.txt", logLine + Environment.NewLine); } catch (Exception ex) { Console.WriteLine($"[refresh] file write error: {ex.Message}"); }
+                await LoadAllDataAsync();
+            }
+        }
+        catch (OperationCanceledException) { }
+        catch (ObjectDisposedException) { }
+    }
+
+    public void Dispose()
+    {
+        _disposed = true;
+        _refreshTimer?.Dispose();
+        _refreshTimer = null;
+    }
+
+    private async Task LoadAllDataAsync()
+    {
+        // Load in parallel
+        var positionsTask = LoadPositionsAsync();
+        var ordersTask = LoadOrdersAsync();
+        var tradesTask = LoadTradesAsync();
+        var schedulerTask = LoadSchedulerAsync();
+
+        try
+        {
+            await Task.WhenAll(positionsTask, ordersTask, tradesTask, schedulerTask);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "[phase3] LoadAllDataAsync: one or more loaders failed");
+        }
+    }
+
+    private async Task LoadPositionsAsync()
+    {
+        IsLoadingPositions = true;
+        try { Positions = await DatabaseService.GetPositionsAsync(); }
+        finally { IsLoadingPositions = false; await InvokeAsync(StateHasChanged); }
+    }
+
+    private async Task LoadOrdersAsync()
+    {
+        IsLoadingOrders = true;
+        try { Orders = await DatabaseService.GetOrdersAsync(); }
+        finally { IsLoadingOrders = false; await InvokeAsync(StateHasChanged); }
+    }
+
+    private async Task LoadTradesAsync()
+    {
+        IsLoadingTrades = true;
+        try { Trades = await DatabaseService.GetTradesAsync(); }
+        finally { IsLoadingTrades = false; await InvokeAsync(StateHasChanged); }
+        
+        // Render chart after trades loaded
+        await RenderEquityChartAsync();
+    }
+
+    private async Task LoadSchedulerAsync()
+    {
+        IsLoadingScheduler = true;
+        try 
+        {
+            JobRuns = await DatabaseService.GetSchedulerJobRunsAsync();
+            DedupState = await DatabaseService.GetNotificationDedupStateAsync();
+            AuditEvents = await DatabaseService.GetAuditEventsAsync(50);
+        }
+        finally { IsLoadingScheduler = false; await InvokeAsync(StateHasChanged); }
+    }
+
+    private string FormatDateTime(string? dt)
+    {
+        if (string.IsNullOrEmpty(dt)) return "—";
+        if (DateTime.TryParse(dt, out var parsed))
+            return parsed.ToString("yyyy-MM-dd HH:mm:ss");
+        return dt;
+    }
+
+    private string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "OPEN" => "bg-success",
+            "CLOSED" => "bg-primary",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetActionBadgeClass(string action)
+    {
+        return action switch
+        {
+            "BUY" => "bg-success",
+            "SELL" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetOrderStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "NEW" => "bg-secondary",
+            "VALIDATED" => "bg-info",
+            "SUBMITTED" => "bg-primary",
+            "PARTIALLY_FILLED" => "bg-warning text-dark",
+            "FILLED" => "bg-success",
+            "CANCELLED" => "bg-secondary",
+            "REJECTED" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetJobStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "SUCCESS" => "bg-success",
+            "RUNNING" => "bg-primary",
+            "FAILED" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+
+    private string GetDedupStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "SENT" => "bg-success",
+            "SUPPRESSED" => "bg-warning text-dark",
+            "FAILED" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+
+    // Export methods
+    private async Task ExportPositionsCsv()
+    {
+        await ExportToCsv(Positions, $"paper_positions_{DateTime.Now:yyyyMMdd}.csv");
+    }
+
+    private async Task ExportPositionsMarkdown()
+    {
+        await ExportToMarkdown(Positions, $"paper_positions_{DateTime.Now:yyyyMMdd}.md",
+            ("Position ID", p => p.PositionId.ToString()),
+            ("Account", p => p.AccountId),
+            ("Symbol", p => p.Symbol),
+            ("Qty", p => p.Quantity.ToString("N2")),
+            ("Avg Price", p => p.AveragePrice.ToString("N2")),
+            ("Realized P&L", p => p.RealizedPnl.ToString("N0")),
+            ("Status", p => p.Status),
+            ("Direction", p => p.Direction),
+            ("Stop Loss", p => p.StopLoss?.ToString("N2") ?? "—"),
+            ("Take Profit", p => p.TakeProfit?.ToString("N2") ?? "—"),
+            ("Buy Fee Acc.", p => p.BuyFeeAccumulated.ToString("N2")),
+            ("Created At", p => FormatDateTime(p.CreatedAt)));
+    }
+
+    private async Task ExportOrdersCsv()
+    {
+        await ExportToCsv(Orders, $"paper_orders_{DateTime.Now:yyyyMMdd}.csv");
+    }
+
+    private async Task ExportOrdersMarkdown()
+    {
+        await ExportToMarkdown(Orders, $"paper_orders_{DateTime.Now:yyyyMMdd}.md",
+            ("Order ID", o => o.OrderId.ToString()),
+            ("Account", o => o.AccountId),
+            ("Symbol", o => o.Symbol),
+            ("Action", o => o.Action),
+            ("Qty", o => o.Quantity.ToString("N2")),
+            ("Req Price", o => o.RequestedPrice.ToString("N2")),
+            ("Filled Price", o => o.FilledPrice.ToString("N2")),
+            ("Filled Qty", o => o.FilledQuantity.ToString("N2")),
+            ("Status", o => o.Status),
+            ("Reason", o => o.Reason),
+            ("Created At", o => FormatDateTime(o.CreatedAt)),
+            ("Filled At", o => FormatDateTime(o.FilledAt)),
+            ("Analysis Snapshot", o => o.AnalysisSnapshotId?.ToString() ?? "—"));
+    }
+
+    private async Task ExportTradesCsv()
+    {
+        await ExportToCsv(Trades, $"paper_trades_{DateTime.Now:yyyyMMdd}.csv");
+    }
+
+    private async Task ExportTradesMarkdown()
+    {
+        await ExportToMarkdown(Trades, $"paper_trades_{DateTime.Now:yyyyMMdd}.md",
+            ("Trade ID", t => t.TradeId.ToString()),
+            ("Order ID", t => t.OrderId.ToString()),
+            ("Account", t => t.AccountId),
+            ("Symbol", t => t.Symbol),
+            ("Action", t => t.Action),
+            ("Qty", t => t.Quantity.ToString("N2")),
+            ("Fill Price", t => t.FillPrice.ToString("N2")),
+            ("Fee", t => t.Fee.ToString("N2")),
+            ("Tax", t => t.Tax.ToString("N2")),
+            ("Executed At", t => FormatDateTime(t.ExecutedAt)));
+    }
+
+    private async Task ExportJobRunsCsv()
+    {
+        await ExportToCsv(JobRuns, $"scheduler_job_runs_{DateTime.Now:yyyyMMdd}.csv");
+    }
+
+    private async Task ExportJobRunsMarkdown()
+    {
+        await ExportToMarkdown(JobRuns, $"scheduler_job_runs_{DateTime.Now:yyyyMMdd}.md",
+            ("Job Type", j => j.JobType),
+            ("Trading Date", j => j.TradingDate),
+            ("Status", j => j.Status),
+            ("Attempt", j => j.Attempt.ToString()),
+            ("Started At", j => FormatDateTime(j.StartedAt)),
+            ("Finished At", j => FormatDateTime(j.FinishedAt)),
+            ("Next Retry", j => FormatDateTime(j.NextRetryAt)),
+            ("Detail", j => j.Detail ?? ""));
+    }
+
+    private async Task ExportDedupCsv()
+    {
+        await ExportToCsv(DedupState, $"notification_dedup_state_{DateTime.Now:yyyyMMdd}.csv");
+    }
+
+    private async Task ExportDedupMarkdown()
+    {
+        await ExportToMarkdown(DedupState, $"notification_dedup_state_{DateTime.Now:yyyyMMdd}.md",
+            ("Alert Type", d => d.AlertType),
+            ("Last Signature", d => d.LastSignature ?? "—"),
+            ("Last Sent At", d => FormatDateTime(d.LastSentAt)),
+            ("Last Status", d => d.LastStatus),
+            ("Updated At", d => FormatDateTime(d.UpdatedAt)));
+    }
+
+    private async Task ExportAuditCsv()
+    {
+        await ExportToCsv(AuditEvents, $"audit_events_{DateTime.Now:yyyyMMdd}.csv");
+    }
+
+    private async Task ExportAuditMarkdown()
+    {
+        await ExportToMarkdown(AuditEvents, $"audit_events_{DateTime.Now:yyyyMMdd}.md",
+            ("ID", a => a.Id?.ToString() ?? "—"),
+            ("Event Type", a => a.EventType),
+            ("Payload", a => a.Payload ?? ""),
+            ("Created At", a => FormatDateTime(a.CreatedAt)));
+    }
+
+    private async Task ExportToCsv<T>(List<T> data, string filename)
+    {
+        using var writer = new System.IO.StringWriter();
+        using var csv = new CsvHelper.CsvWriter(writer, System.Globalization.CultureInfo.InvariantCulture);
+        csv.WriteRecords(data);
+        var csvContent = writer.ToString();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(csvContent);
+        await JSRuntime.InvokeVoidAsync("downloadFile", filename, Convert.ToBase64String(bytes), "text/csv");
+    }
+
+    private async Task ExportToMarkdown<T>(List<T> data, string filename, params (string Header, Func<T, string> Selector)[] columns)
+    {
+        using var writer = new System.IO.StringWriter();
+        // Header
+        writer.Write("| " + string.Join(" | ", columns.Select(c => c.Header)) + " |");
+        writer.WriteLine();
+        writer.Write("| " + string.Join(" | ", columns.Select(_ => "---")) + " |");
+        writer.WriteLine();
+        
+        foreach (var item in data)
+        {
+            writer.Write("| " + string.Join(" | ", columns.Select(c => c.Selector(item))) + " |");
+            writer.WriteLine();
+        }
+        
+        var mdContent = writer.ToString();
+        var bytes = System.Text.Encoding.UTF8.GetBytes(mdContent);
+        await JSRuntime.InvokeVoidAsync("downloadFile", filename, Convert.ToBase64String(bytes), "text/markdown");
+    }
+
+    [Inject] public IJSRuntime JSRuntime { get; set; } = default!;
+
+        // Phase 4b: Equity chart rendering
+    private async Task RenderEquityChartAsync()
+    {
+        if (Trades.Count == 0 && Positions.Count == 0)
+            return;
+
+        // Use positions for equity curve - realized P&L from closed positions
+        var closedPositions = Positions.Where(p => p.Status == "CLOSED" && p.RealizedPnl != 0)
+            .OrderBy(p => p.CreatedAt)
+            .ToList();
+
+        var labels = new List<string>();
+        var equityData = new List<double>();
+        double cumulativeEquity = 0;
+
+        foreach (var pos in closedPositions)
+        {
+            if (DateTime.TryParse(pos.CreatedAt, out var dt))
+            {
+                labels.Add(dt.ToString("yyyy-MM-dd HH:mm"));
+                cumulativeEquity += pos.RealizedPnl;
+                equityData.Add(cumulativeEquity);
+            }
+        }
+
+        // If no closed positions, fall back to trades
+        if (labels.Count == 0 && Trades.Count > 0)
+        {
+            var sortedTrades = Trades.OrderBy(t => t.ExecutedAt).ToList();
+            
+            foreach (var trade in sortedTrades)
+            {
+                if (DateTime.TryParse(trade.ExecutedAt, out var dt))
+                {
+                    labels.Add(dt.ToString("yyyy-MM-dd HH:mm"));
+                    // Simplified P&L per trade (sell - buy) - this is a proxy since we don't have matched fills
+                    double tradePnl = (trade.Action == "SELL" ? 1 : -1) * trade.FillPrice * trade.Quantity - trade.Fee - trade.Tax;
+                    cumulativeEquity += tradePnl;
+                    equityData.Add(cumulativeEquity);
+                }
+            }
+        }
+
+        if (labels.Count == 0)
+            return;
+
+        var datasets = new[]
+        {
+            new { label = "Cumulative Equity (Realized P&L)", data = equityData, borderColor = "rgb(54, 162, 235)", backgroundColor = "rgba(54, 162, 235, 0.1)", fill = true, tension = 0.1 }
+        };
+
+        await JSRuntime.InvokeVoidAsync("renderEquityChart", "equityChart", labels, datasets);
+    }
+}

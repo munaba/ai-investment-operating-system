@@ -1,0 +1,121 @@
+@inject IDatabaseService DatabaseService
+@implements IDisposable
+
+<div class="gate-strip">
+    @if (_loading)
+    {
+        <span class="gate-item">◇ loading window…</span>
+    }
+    else if (_window == null)
+    {
+        <span class="gate-item">◆ no active observation window</span>
+        <span class="gate-sep">│</span>
+        <span class="gate-item">evidence —</span>
+        <span class="gate-sep">│</span>
+        <span class="gate-item">decision <span class="decision-dot"></span></span>
+    }
+    else
+    {
+        var daysLeft = (_window.EndAt != null && DateTime.TryParse(_window.EndAt, out var end))
+            ? (end.Date - DateTime.Now.Date).Days
+            : (int?)null;
+
+        <span class="gate-item">◆ WINDOW <b>#@_window.WindowId</b> @_window.Status.ToUpperInvariant()</span>
+        <span class="gate-hide-sm gate-sep">│</span>
+        <span class="gate-hide-sm">@(daysLeft.HasValue ? $"sisa {daysLeft} hari" : _window.EndAt)</span>
+        <span class="gate-sep">│</span>
+        <span class="gate-item accent">
+            evidence
+            <span class="evidence-bar"><span style="width: @_evidencePct%"></span></span>
+            @(_review?.EvidenceStatus ?? "NO_REVIEW")
+        </span>
+        <span class="gate-hide-sm gate-sep">│</span>
+        <span class="gate-item">
+            decision
+            @{
+                var dec = _review?.HumanDecision ?? "NO_REVIEW";
+                var isPending = dec == "PENDING";
+            }
+            <span class="decision-dot @(isPending ? "pending" : "")" style="@(isPending ? "" : $"background:{DecisionColor(dec)}")"></span>
+            @(isPending ? "Menunggu kamu" : dec)
+        </span>
+    }
+</div>
+
+@code {
+    private ObservationWindow? _window;
+    private FinalReviewRecord? _review;
+    private bool _loading = true;
+    private int _evidencePct;
+
+    private System.Threading.PeriodicTimer? _timer;
+    private bool _disposed;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAsync();
+        StartTimer();
+    }
+
+    private void StartTimer()
+    {
+        _timer = new System.Threading.PeriodicTimer(TimeSpan.FromSeconds(60));
+        _ = LoopAsync();
+    }
+
+    private async Task LoopAsync()
+    {
+        try
+        {
+            while (await _timer!.WaitForNextTickAsync() && !_disposed)
+            {
+                await LoadAsync();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (OperationCanceledException) { }
+        catch (ObjectDisposedException) { }
+    }
+
+    private async Task LoadAsync()
+    {
+        try
+        {
+            var windows = await DatabaseService.GetObservationWindowsAsync();
+            _window = windows.FirstOrDefault(w => w.Status == "ACTIVE");
+            _review = _window != null
+                ? await DatabaseService.GetFinalReviewRecordAsync(_window.WindowId)
+                : null;
+            _evidencePct = (_review?.EvidenceStatus) switch
+            {
+                "COMPLETE_EVIDENCE" => 100,
+                "PARTIAL_EVIDENCE" => 60,
+                "INSUFFICIENT_DATA" => 30,
+                "NOT_VERIFIABLE" => 15,
+                _ => 0
+            };
+        }
+        catch { /* strip is best-effort; body must always render */ }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    // Use design-system tokens (not hardcoded hex) so GateStrip follows theme.css
+    // lime = machine-passed gates; amber handled by .pending CSS; gray = neutral fallback
+    private static string DecisionColor(string d) => d switch
+    {
+        "CONTINUE" => "var(--lime)",
+        "SIMPLIFY" => "var(--amber)",
+        "AUTHORIZE_FUTURE_INVESTIGATION" => "var(--gray)",
+        _ => "var(--gray-dim)"
+    };
+
+    public void Dispose()
+    {
+        _disposed = true;
+        _timer?.Dispose();
+        _timer = null;
+    }
+}

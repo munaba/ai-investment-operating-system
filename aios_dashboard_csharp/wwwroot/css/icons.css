@@ -1,0 +1,59 @@
+/* ============================================================
+   AIOS icon system — Lucide, inline SVG sprite, currentColor
+   Usage: <svg class="ico"><use href="/icons/_sprite.svg#i-name"/></svg>
+   ============================================================ */
+
+.ico {
+    width: 15px; height: 15px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vertical-align: -2px;
+    flex: none;
+}
+.ico-sm { width: 12px; height: 12px; }
+.ico-lg { width: 20px; height: 20px; }
+.ico-lime { color: var(--lime); }
+.ico-amber { color: var(--amber); }
+.ico-dim  { color: var(--gray); }
+
+/* nav links get small icons before label */
+.navbar-nav .nav-link .ico { margin-right: 7px; opacity: .75; }
+.navbar-nav .nav-link.active .ico { opacity: 1; color: var(--black); }
+
+/* buttons with icons */
+.btn .ico { margin-right: 6px; }
+
+/* section header icon */
+.sect-head .k { display: inline-flex; align-items: center; gap: 8px; }
+.sect-head .k .ico { color: var(--lime); opacity: .9; }
+
+/* status dot breathing for live elements */
+@keyframes breathe {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(212,255,63,.35); }
+    50%      { box-shadow: 0 0 0 5px rgba(212,255,63,0); }
+}
+.dot-live { animation: breathe 2.6s ease-in-out infinite; }
+
+/* delta arrows */
+.delta-up   { color: var(--lime); }
+.delta-down { color: var(--red); }
+.delta-up .ico, .delta-down .ico { width: 12px; height: 12px; font-weight: bold; }
+
+/* skeleton loading */
+.skel {
+    background: linear-gradient(90deg, #101010 25%, #1a1a1a 50%, #101010 75%);
+    background-size: 200% 100%;
+    animation: skel-wave 1.4s ease infinite;
+    border-radius: 6px;
+}
+@keyframes skel-wave { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.skel-line { height: 12px; margin: 10px 6px; }
+.skel-line.w60 { width: 60%; } .skel-line.w40 { width: 40%; } .skel-line.w80 { width: 80%; }
+
+@media (prefers-reduced-motion: reduce) {
+    .dot-live, .decision-dot.pending, .cursor, .tick { animation: none !important; }
+    .skel { animation: none; background: #141414; }
+}
