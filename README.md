@@ -28,6 +28,12 @@ AIOS is a personal, evidence-led daily trading decision-support agent for IDX. I
 | Providers | `Providers/` (Gemini, Ollama, selector) |
 | Tests | `pytest` / `vitest` / `playwright` |
 
+## Development Process
+
+This project was architected and directed by Nabil, with implementation carried out through AI-assisted engineering — using Claude, ChatGPT, and an autonomous coding agent (Hermes) to implement the design across iterative phases (see `Docs/` for phase-by-phase closeout reports). Nabil defined the system architecture, risk policies, and decision-flow requirements, then broke them into tasks directed to AI agents, reviewing and testing each output.
+
+This reflects an AI-directed development workflow — a skill increasingly relevant in modern software engineering — rather than a claim that every line was hand-written unassisted.
+
 ## Project Structure
 
 ```
