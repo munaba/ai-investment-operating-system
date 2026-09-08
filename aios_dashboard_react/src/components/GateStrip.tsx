@@ -109,12 +109,33 @@ export default function GateStrip() {
       }
     }
 
-    tick();
     // 60s refresh — same cadence as PeriodicTimer in GateStrip.razor
-    timer = setInterval(tick, 60_000);
+    const start = () => {
+      if (timer !== undefined) return;
+      timer = setInterval(tick, 60_000);
+    };
+    const stop = () => {
+      if (timer !== undefined) {
+        clearInterval(timer);
+        timer = undefined;
+      }
+    };
+
+    // P1-6a: pause while hidden, resume on return. Resume only re-arms the
+    // interval — no immediate tick(), so returning never double-fetches.
+    const onVisibilityChange = () => {
+      if (document.hidden) stop();
+      else start();
+    };
+
+    tick();
+    if (!document.hidden) start();
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
     return () => {
       cancelled = true;
-      if (timer) clearInterval(timer);
+      stop();
+      document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   }, []);
 

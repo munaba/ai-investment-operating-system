@@ -36,6 +36,29 @@ export function usePolling<T>(
     let timer: ReturnType<typeof setInterval> | undefined;
     cancelledRef.current = false;
 
+    const start = () => {
+      if (timer !== undefined) return;
+      timer = setInterval(() => void run.current(), intervalMs);
+    };
+    const stop = () => {
+      if (timer !== undefined) {
+        clearInterval(timer);
+        timer = undefined;
+      }
+    };
+
+    // P1-6a: pause polling while the tab is hidden, resume on return.
+    // Resume only re-arms the interval — it does NOT fire run.current()
+    // immediately, so returning to the tab never double-fetches.
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        stop();
+        return;
+      }
+      if (options?.immediate === false) return;
+      start();
+    };
+
     void (async () => {
       if (options?.immediate === false) {
         setLoading(false);
@@ -43,12 +66,15 @@ export function usePolling<T>(
       }
       await run.current();
       if (cancelledRef.current) return;
-      timer = setInterval(() => void run.current(), intervalMs);
+      if (!document.hidden) start();
     })();
+
+    document.addEventListener('visibilitychange', onVisibilityChange);
 
     return () => {
       cancelledRef.current = true;
-      if (timer) clearInterval(timer);
+      stop();
+      document.removeEventListener('visibilitychange', onVisibilityChange);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [intervalMs]);
