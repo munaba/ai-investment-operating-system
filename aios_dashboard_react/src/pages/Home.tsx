@@ -91,13 +91,23 @@ export default function Home() {
 
         {/* Hero frame carries the REAL cumulative P&L area chart — replaces the
             mockup's gold-bar photo (no per-asset imagery in the data model). */}
-        <div data-motion="frame" className="hero-frame mx-auto mb-12 w-full max-w-[560px] p-3">
+        {/* P1-7: reserve the chart's height so the container does not jump when
+            equity data arrives. The empty state mirrors the chart's own
+            aspect-ratio (2/1) instead of a fixed px, so the reserved box tracks
+            the real chart height at every width (560px -> 280px, 342px -> 171px)
+            rather than over-reserving on mobile. Text is centered in that box. */}
+        <div
+          data-motion="frame"
+          className="hero-frame mx-auto mb-12 grid w-full max-w-[560px] place-items-center p-3"
+        >
           {equity.data.length > 0 ? (
             <EquityChartBklit labels={equity.labels} data={equity.data} />
           ) : (
-            <p className="px-4 py-10 text-[0.85rem] text-[var(--ink-faint)]">
-              Belum ada posisi closed — kurva P&amp;L kumulatif muncul setelah ada posisi ditutup.
-            </p>
+            <div className="flex w-full items-center justify-center" style={{ aspectRatio: '2 / 1' }}>
+              <p className="px-4 text-[0.85rem] text-[var(--ink-faint)]">
+                Belum ada posisi closed — kurva P&amp;L kumulatif muncul setelah ada posisi ditutup.
+              </p>
+            </div>
           )}
         </div>
       </div>
