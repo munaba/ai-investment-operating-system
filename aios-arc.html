@@ -30,10 +30,10 @@ a{color:inherit;text-decoration:none}
 .wrap{padding:92px 40px 0;position:relative;z-index:6}
 .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:end}
 .h1{font-family:"Instrument Serif",Georgia,serif;font-size:clamp(44px,7vw,92px);line-height:.95;letter-spacing:1px;color:#fff6ed}
-.h1 em{font-family:'Playfair Display',serif;font-style:italic;font-weight:500;color:#d8c9b6}
+.h1 em{font-style:italic;font-weight:500;color:#d8c9b6}
 .sub{margin-top:14px;max-width:52ch;font-size:14px;line-height:1.7;color:#b9bec7;font-weight:300}
 .meta{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
-.chip{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#d8d8e6;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);padding:6px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:6px}
+.chip{font-family:monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#d8d8e6;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);padding:6px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:6px}
 .chip i{width:6px;height:6px;border-radius:50%;background:var(--ac,#d8c9b6);box-shadow:0 0 8px var(--ac,#d8c9b6);display:inline-block}
 .stage{position:relative;border:1px solid rgba(255,255,255,.1);border-radius:18px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));min-height:420px}
 #cv{display:block;width:100%;height:520px}
@@ -45,15 +45,15 @@ a{color:inherit;text-decoration:none}
 .tab small{opacity:.6;font-weight:400;margin-left:4px}
 .info{margin-top:14px;display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
 .card{border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);border-radius:14px;padding:14px}
-.card h3{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9aa0b0;margin-bottom:8px}
+.card h3{font-family:monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9aa0b0;margin-bottom:8px}
 .card p{font-size:13px;line-height:1.6;color:#c8cdd6}
 .brief{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px}
 .brief:last-child{border:0}
-.brief b{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em}
-.tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.12);color:#b9bec7}
+.brief b{font-family:monospace;font-size:11px;letter-spacing:.06em}
+.tag{font-family:monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.12);color:#b9bec7}
 .tag.ok{color:#8fd1a8;border-color:rgba(143,209,168,.3)}
 .tag.no{color:#c9a87c;border-color:rgba(201,168,124,.3)}
-.foot{margin-top:26px;padding:14px 0 24px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6b7080}
+
 @media(max-width:900px){
 .hdr{padding:14px 16px}.wrap{padding:82px 16px 0}.gl{left:10px;right:10px}
 .hero{grid-template-columns:1fr}#cv{height:46vh;min-height:360px}.info{grid-template-columns:1fr}
@@ -249,7 +249,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
     <div class="card">
       <h3>5 brief · sumber lintasan</h3>
       <div id="briefList"></div>
-      <p style="margin-top:10px;color:#8b90a0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em">70 titik = jejak valuasi 14 minggu per brief. Nilai dinormalisasi −1..+1 untuk visual, bukan harga.</p>
+      <p style="margin-top:10px;color:#8b90a0;font-family:monospace;font-size:11px;letter-spacing:.04em">70 titik = jejak valuasi 14 minggu per brief. Nilai dinormalisasi −1..+1 untuk visual, bukan harga.</p>
     </div>
   </section>
 
@@ -329,7 +329,7 @@ const list=document.getElementById('briefList');
 briefs.forEach(b=>{
   const d=document.createElement('div'); d.className='brief';
   const w=Math.round(Math.max(6,Math.min(100, (b.v.reduce((s,x)=>s+(x+1.15)/2.3,0)/b.v.length)*100)));
-  d.innerHTML='<span style="flex:1;min-width:0"><b>'+b.k+'</b> · '+b.nm+'<br><span style="color:#8b90a0;font-family:JetBrains Mono,monospace;font-size:10px">'+b.d+'</span><span class="pbar"><i data-w="'+w+'" style="background:'+(b.tg==='ok'?'#8fd1a8':'#c9a87c')+'"></i></span></span><span class="tag '+(b.tg==='ok'?'ok':'no')+'" style="align-self:flex-start">'+(b.tg==='ok'?'terbuka':'tertahan')+'</span>';
+  d.innerHTML='<span style="flex:1;min-width:0"><b>'+b.k+'</b> · '+b.nm+'<br><span style="color:#8b90a0;font-family:monospace;font-size:10px">'+b.d+'</span><span class="pbar"><i data-w="'+w+'" style="background:'+(b.tg==='ok'?'#8fd1a8':'#c9a87c')+'"></i></span></span><span class="tag '+(b.tg==='ok'?'ok':'no')+'" style="align-self:flex-start">'+(b.tg==='ok'?'terbuka':'tertahan')+'</span>';
   list.appendChild(d);
 });
 
