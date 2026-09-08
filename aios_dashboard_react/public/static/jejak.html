@@ -209,8 +209,8 @@ button{font:inherit}
 .tu-layer{position:absolute!important;left:0;top:0;width:100%;height:100%;display:block;pointer-events:none}
 #tuHeroGrid{opacity:.5}
 #tuSnapParticles{opacity:.55;border-radius:inherit}
-/* marquee */
-.tu-marquee{position:relative;max-width:88rem;margin:1.1rem auto 0;overflow:hidden;padding:.7rem 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);-webkit-mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+/* marquee — P1-CLS-JEJAK-marquee: reserve height so the marquee does not grow on first paint; rem tracks html{font-size:vw}, +2px covers the two 1px borders */
+.tu-marquee{min-height:calc(2.15rem + 2px);position:relative;max-width:88rem;margin:1.1rem auto 0;overflow:hidden;padding:.7rem 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);-webkit-mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
 .tu-mq-track{display:flex;gap:2rem;will-change:transform;white-space:nowrap}
 .tu-mq-item{display:inline-flex;align-items:center;gap:.5rem;font-family:"JetBrains Mono",monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .tu-mq-item b{color:var(--fg);font-weight:600}
