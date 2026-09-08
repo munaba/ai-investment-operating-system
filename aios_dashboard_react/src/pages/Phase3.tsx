@@ -62,12 +62,17 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
 export default function Phase3() {
   const prefersReduced = useReducedMotionSafe();
   const [tab, setTab] = useState<Tab>('positions');
+  // P1-6b: per-tab polling gating. The Positions table + dataline header are
+  // always visible, so positionsP polls unconditionally. orders/trades/
+  // scheduler pollers only run while their tab is active, and refetch once
+  // immediately on re-enable (handled inside usePolling) so returning to a
+  // tab never shows data up to one full interval stale.
   const positionsP = usePolling<Position[]>(() => getPhase3Positions(), 30_000, { immediate: true });
-  const ordersP = usePolling<Order[]>(() => getPhase3Orders(), 30_000, { immediate: true });
-  const tradesP = usePolling<Trade[]>(() => getPhase3Trades(), 30_000, { immediate: true });
-  const schedP = usePolling<SchedulerJobRun[]>(() => getPhase3Scheduler(), 30_000, { immediate: true });
-  const dedupP = usePolling<NotificationDedupState[]>(() => getPhase3Dedup(), 30_000, { immediate: true });
-  const auditP = usePolling<AuditEvent[]>(() => getPhase3Audit(50), 30_000, { immediate: true });
+  const ordersP = usePolling<Order[]>(() => getPhase3Orders(), 30_000, { immediate: true, enabled: tab === 'orders' });
+  const tradesP = usePolling<Trade[]>(() => getPhase3Trades(), 30_000, { immediate: true, enabled: tab === 'trades' || tab === 'equity' });
+  const schedP = usePolling<SchedulerJobRun[]>(() => getPhase3Scheduler(), 30_000, { immediate: true, enabled: tab === 'scheduler' });
+  const dedupP = usePolling<NotificationDedupState[]>(() => getPhase3Dedup(), 30_000, { immediate: true, enabled: tab === 'scheduler' });
+  const auditP = usePolling<AuditEvent[]>(() => getPhase3Audit(50), 30_000, { immediate: true, enabled: tab === 'scheduler' });
 
   const positions = positionsP.data ?? [];
   const orders = ordersP.data ?? [];
