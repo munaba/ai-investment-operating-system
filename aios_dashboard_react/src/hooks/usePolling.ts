@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 export function usePolling<T>(
   loader: () => Promise<T>,
   intervalMs: number,
-  options?: { immediate?: boolean },
+  options?: { immediate?: boolean; enabled?: boolean },
 ): { data: T | null; loading: boolean; error: Error | null; refresh: () => void } {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
@@ -59,9 +59,11 @@ export function usePolling<T>(
       start();
     };
 
+    const enabled = options?.enabled !== false;
+
     void (async () => {
-      if (options?.immediate === false) {
-        setLoading(false);
+      if (options?.immediate === false || !enabled) {
+        if (!enabled) setLoading(false);
         return;
       }
       await run.current();
@@ -77,7 +79,20 @@ export function usePolling<T>(
       document.removeEventListener('visibilitychange', onVisibilityChange);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [intervalMs]);
+  }, [intervalMs, options?.enabled]);
+
+  // P1-6b: when a disabled poller is re-enabled (e.g. its tab becomes active
+  // again), fetch once immediately instead of leaving the user looking at data
+  // that may be up to one full interval stale.
+  const wasEnabled = useRef(options?.enabled !== false);
+  useEffect(() => {
+    const enabled = options?.enabled !== false;
+    if (enabled && !wasEnabled.current) {
+      void run.current();
+    }
+    wasEnabled.current = enabled;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options?.enabled]);
 
   return { data, loading, error, refresh: () => void run.current() };
 }
