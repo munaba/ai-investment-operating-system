@@ -162,7 +162,10 @@ app.MapPost("/api/auth/login", async (HttpContext ctx, [FromServices] IAuthServi
     return Results.Json(new { success = true });
 });
 
-app.MapGet("/logout", async (HttpContext ctx) =>
+// Logout is POST-only: a GET logout sends its cookie on every top-level
+// navigation (CSRF-able under SameSite=Lax). Lax already blocks cross-site
+// POST cookies, so POST-only logout + Lax closes the hole with no token infra.
+app.MapPost("/logout", async (HttpContext ctx) =>
 {
     await ctx.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     ctx.Response.Redirect("/login");
