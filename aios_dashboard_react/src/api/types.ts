@@ -173,7 +173,6 @@ export interface DecisionSubmitRequest {
 }
 
 export interface Phase0DbInfo {
-  path: string;
   exists: boolean;
   sizeMb: number;
 }

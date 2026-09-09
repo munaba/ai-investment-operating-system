@@ -196,13 +196,13 @@ var api = app.MapGroup("/api").RequireAuthorization();
 
 api.MapGet("/health", () => Results.Ok(new { status = "ok", timestamp = DateTime.UtcNow }));
 
-// Phase 0: Database info + connection test
+// M-03+M-08: db-info hanya {exists,sizeMb} (tanpa path); path tunggal dari IDatabaseService.DbPath.
 api.MapGet("/phase0/db-info", async (IDatabaseService db) =>
 {
-    var dbPath = @"F:\My Son\data\investment_platform.db";
+    var dbPath = db.DbPath;
     var exists = System.IO.File.Exists(dbPath);
     var sizeMb = exists ? Math.Round(new System.IO.FileInfo(dbPath).Length / (1024.0 * 1024.0), 2) : 0;
-    return Results.Ok(new { path = dbPath, exists, sizeMb });
+    return Results.Ok(new { exists, sizeMb });
 });
 
 api.MapPost("/phase0/test-connection", async (IDatabaseService db) =>
@@ -213,7 +213,7 @@ api.MapPost("/phase0/test-connection", async (IDatabaseService db) =>
 
 api.MapGet("/phase0/tables", async (IDatabaseService db) =>
 {
-    var dbPath = @"F:\My Son\data\investment_platform.db";
+    var dbPath = db.DbPath;
     if (!System.IO.File.Exists(dbPath)) return Results.Ok(new List<string>());
     try
     {
