@@ -13,7 +13,7 @@ describe('Phase0 — System integrity', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (api.getPhase0DbInfo as ReturnType<typeof vi.fn>).mockResolvedValue({
-      path: 'investment_platform.db', exists: true, sizeMb: 12.5,
+      exists: true, sizeMb: 12.5,
     });
     (api.getPhase0Tables as ReturnType<typeof vi.fn>).mockResolvedValue(['positions', 'orders', 'trades']);
   });

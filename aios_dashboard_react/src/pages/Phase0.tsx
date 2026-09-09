@@ -38,7 +38,6 @@ export default function Phase0() {
         <div className="card" style={{ flex: '2 1 420px' }}>
           <div className="card-header"><h5><Icon name="database" /> Database Information</h5></div>
           <div className="card-body">
-            <p><strong>Database Path:</strong> <code>{dbInfo?.path ?? '—'}</code></p>
             <p><strong>Exists:</strong> {dbInfo ? (dbInfo.exists ? 'true' : 'false') : '—'}</p>
             {dbInfo?.exists && <p><strong>Size:</strong> {dbInfo.sizeMb} MB</p>}
           </div>
