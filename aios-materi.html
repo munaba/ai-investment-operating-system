@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Materi - Studio Tekstur AIOS</title>
+<meta name="description" content="Studio tekstur AIOS - lookbook material woven, brand orbs, dan device showcase.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+:root{--bg0:#0e1418;--bg1:#1a2a26;--bg2:#0b1e1c;--glass:rgba(255,255,255,.08);--bd:rgba(255,255,255,.14);--mut:rgba(255,255,255,.78);--pink:#fbcfe8;--ink:#0b1a18}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Onest",system-ui,sans-serif;background:radial-gradient(900px 600px at 50% 0%,#1e3a34 0%,var(--bg1) 45%,var(--bg0) 100%);color:#fff;overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}
+.header{display:flex;justify-content:space-between;align-items:center;padding:18px 4%;position:fixed;top:0;left:0;width:100%;z-index:50}
+.logo{font-family:"Instrument Serif",Georgia,serif;font-size:1.25rem;display:flex;gap:8px;align-items:center}
+.nav.glass{display:flex;gap:4px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:5px;border-radius:999px;box-shadow:0 8px 32px rgba(0,0,0,.18),inset 0 0 0 1px rgba(255,255,255,.06)}
+.nav-item{font-size:.78rem;font-weight:700;padding:7px 14px;border-radius:999px;color:var(--mut);transition:.25s}
+.nav-item.active,.nav-item:hover{background:var(--pink);color:#0b1a18}
+.contact-btn{background:rgba(0,0,0,.45);color:#fff;border:1px solid rgba(255,255,255,.12);padding:9px 18px;border-radius:999px;font-weight:700;font-size:.78rem;cursor:pointer}
+.hero{min-height:100vh;display:flex;align-items:center;padding:90px 4% 40px}
+.hero-grid{display:grid;grid-template-columns:320px 1fr 340px;gap:24px;align-items:center;width:100%;max-width:1280px;margin:0 auto}
+.eyebrow{font-size:.68rem;letter-spacing:.18em;color:var(--pink);font-weight:800}
+.h-title{font-family:"Instrument Serif",Georgia,serif;font-size:clamp(3.2rem,7vw,5.2rem);line-height:.9;font-weight:400}
+.h-title .outline{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.9)}
+.desc{color:var(--mut);font-size:.92rem;line-height:1.65;margin:12px 0 14px;max-width:320px}
+.cta{display:inline-flex;align-items:center;gap:12px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.08);color:#fff;padding:6px 6px 6px 18px;border-radius:999px;font-weight:800;cursor:pointer}
+.cta i{background:var(--pink);color:#0b1a18;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;font-style:normal}
+.hero-center{position:relative;display:grid;place-items:center;perspective:1200px;min-height:520px}
+.phone-hero{width:270px;position:relative;transform-style:preserve-3d;transition:transform .15s}
+.frame{border-radius:44px;padding:9px;box-shadow:0 28px 70px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.14)}
+.frame.phone{background:linear-gradient(180deg,#3a3f52,#1b1e2e)}
+.screen{background:#000;border-radius:36px;overflow:hidden;position:relative;aspect-ratio:9/19.4;border:1px solid rgba(255,255,255,.07)}
+.island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:86px;height:24px;background:#000;border-radius:20px;z-index:2}
+.look{position:absolute;inset:0;background:linear-gradient(180deg,#fdf8f0,#ece6db);display:flex;flex-direction:column}
+.look-top{padding:38px 16px 14px}
+.badge{font-size:.6rem;letter-spacing:.14em;background:#111;color:#fff;display:inline-block;padding:5px 9px;border-radius:999px}
+.look h3{font-family:"Onest",system-ui,sans-serif;font-size:1.15rem;font-weight:900;line-height:1;color:#111;margin-top:10px}
+.look p{font-size:.7rem;color:rgba(0,0,0,.5);margin-top:6px}
+.swatch-row{display:flex;gap:6px;margin-top:10px}
+.swatch-row span{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.hero-specs{display:flex;flex-direction:column;gap:14px;align-items:flex-end;text-align:right}
+.spec-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(12px);border-radius:18px;padding:14px 16px;min-width:210px}
+.spec-card b{font-family:"Onest",system-ui,sans-serif;font-size:1.05rem}
+.spec-card p{font-size:.72rem;color:var(--mut);margin-top:4px}
+.side-title{font-family:"Instrument Serif",Georgia,serif;font-size:clamp(2.6rem,5vw,4rem);line-height:.9;text-align:right}
+.section{padding:28px 4%;max-width:1280px;margin:0 auto}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.sec-head h2{font-family:"Onest",system-ui,sans-serif;font-weight:900;font-size:1.35rem;letter-spacing:-.02em}
+.sec-head p{color:var(--mut);font-size:.82rem;max-width:520px;line-height:1.6}
+.woven-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.woven{position:relative;border-radius:20px;overflow:hidden;background:#0d0d0f;border:1px solid rgba(255,255,255,.08);min-height:320px;display:flex;flex-direction:column}
+.woven canvas{width:100%;height:220px;display:block}
+.woven-body{padding:14px 16px;display:flex;justify-content:space-between;gap:12px;align-items:center;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01))}
+.woven-body h3{font-family:"Onest",system-ui,sans-serif;font-size:.95rem;font-weight:800}
+.woven-body p{font-size:.72rem;color:var(--mut);margin-top:3px}
+.tag{font-size:.62rem;letter-spacing:.12em;background:var(--pink);color:#0b1a18;padding:5px 9px;border-radius:999px;font-weight:800;white-space:nowrap}
+.orbs-wrap{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:18px}
+.orbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:14px}
+.orb{aspect-ratio:1;border-radius:50%;position:relative;display:grid;place-items:center;background:radial-gradient(circle at 30% 28%,#fff 0%,#ececf2 14%,#9a9ab0 42%,#2d2d3a 78%,#0a0a0f 100%);box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 1px 1px rgba(255,255,255,.85);cursor:pointer;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.orb:hover{transform:scale(1.04) translateY(-2px)}
+.orb::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 28% 18%,rgba(255,255,255,.38),transparent 56%);pointer-events:none}
+.orb b{width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.9)}
+.orb label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.58rem;letter-spacing:.14em;color:rgba(255,255,255,.55);white-space:nowrap;font-weight:700}
+.devices{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.device{border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);padding:14px;display:flex;flex-direction:column;gap:10px;transition:.3s}
+.device:hover{transform:translateY(-4px);background:rgba(255,255,255,.07)}
+.mini-frame{border-radius:14px;padding:6px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.mini-frame.phone{background:linear-gradient(180deg,#343a52,#1c1f2e);border-radius:20px}
+.mini-frame.ipad{background:linear-gradient(180deg,#2e3348,#1a1d2e);border-radius:12px}
+.mini-frame.mac{background:linear-gradient(180deg,#232845,#14182a);border-radius:10px}
+.mini-frame.watch{background:linear-gradient(180deg,#3a4048,#1d2328);border-radius:22px}
+.mini-screen{background:#f7f5f1;border-radius:12px;overflow:hidden;position:relative}
+.mini-screen.phone{aspect-ratio:9/14;border-radius:14px}
+.mini-screen.ipad{aspect-ratio:4/3}
+.mini-screen.mac{aspect-ratio:16/10;border-radius:6px}
+.mini-screen.watch{aspect-ratio:1/1.15;border-radius:18px}
+.device h4{font-size:.82rem;font-weight:800}
+.device p{font-size:.7rem;color:var(--mut);line-height:1.5}
+.footer{padding:26px 4%;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--mut);font-size:.72rem;max-width:1280px;margin:0 auto}
+/* ─── polish · komponen threeui (tambahan, tidak mengubah struktur) ─── */
+.mono-s{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;opacity:.6}
+/* blur-fade */
+.rv{opacity:0;transform:translateY(18px);filter:blur(6px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1),filter .7s}
+.rv.in{opacity:1;transform:none;filter:blur(0)}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;filter:none;transition:none}}
+/* magic-card - spotlight mengikuti kursor */
+.woven{position:relative}
+.woven .spot{position:absolute;inset:0;opacity:0;transition:opacity .25s;pointer-events:none;z-index:3}
+/* border-beam - tepi menyala */
+.beam{position:absolute;inset:0;border-radius:20px;pointer-events:none;z-index:2}
+/* shimmer-button */
+.cta,.contact-btn{position:relative;overflow:hidden}
+.cta::after,.contact-btn::after{content:'';position:absolute;top:0;left:-140%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transform:skewX(-18deg);animation:shimmer 3.6s ease-in-out infinite}
+@keyframes shimmer{0%{left:-140%}60%,100%{left:160%}}
+@media(prefers-reduced-motion:reduce){.cta::after,.contact-btn::after{display:none}}
+/* marquee - nama material */
+.marq{overflow:hidden;mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marq-track{display:flex;gap:.5rem;will-change:transform}
+.marq-item{flex:0 0 auto;border:1px solid var(--bd);background:rgba(255,255,255,.06);border-radius:999px;padding:.35rem .8rem;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;color:rgba(255,255,255,.72)}
+/* dock - etalase material */
+.dock{display:flex;gap:.5rem;align-items:flex-end;justify-content:center;padding:.7rem .9rem;border-radius:22px;background:rgba(255,255,255,.08);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--bd);width:fit-content;margin:0 auto;box-shadow:0 20px 40px rgba(0,0,0,.35)}
+.dock .app{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:1.1rem;cursor:pointer;flex:0 0 auto;user-select:none;border:1px solid rgba(255,255,255,.14);transition:transform .12s}
+/* grid kanvas hidup */
+.hidup-grid{display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:820px){.hidup-grid{grid-template-columns:1fr 1fr}}
+.hcard2{background:rgba(255,255,255,.05);border:1px solid var(--bd);border-radius:20px;overflow:hidden;display:flex;flex-direction:column}
+.hcard2 .cap{display:flex;justify-content:space-between;align-items:center;gap:.6rem;padding:.8rem 1rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.hcard2 .cap b{font-size:.85rem;font-weight:800}
+.hcard2 .cap span{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.hcard2>canvas{width:100%;height:180px;display:block}
+.hcard2 .note{padding:.7rem 1rem;font-size:.72rem;line-height:1.6;color:var(--mut)}
+/* number-ticker */
+.ticks{display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center}
+.tick{min-width:118px;padding:.8rem 1rem;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid var(--bd);text-align:center}
+.tick b{display:block;font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
+.tick s{display:block;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);text-decoration:none;margin-top:.2rem}
+/* swatch hex label */
+.swatch-hex{font-size:.58rem;letter-spacing:.08em;color:rgba(0,0,0,.45);text-align:center;margin-top:6px}
+/* word-rotate */
+.words{display:inline-block;min-width:8ch}
+/* badge pulse - spark-badge */
+.orb::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(251,207,232,.35);opacity:0;pointer-events:none}
+.orb.pulse::before{animation:orbPulse .6s ease-out}
+@keyframes orbPulse{from{opacity:.9;transform:scale(.9)}to{opacity:0;transform:scale(1.25)}}
+@media(prefers-reduced-motion:reduce){.orb.pulse::before{animation:none}}
+/* nav - identik dengan aios-atrium.html */
+@media(max-width:980px){.hero-grid{grid-template-columns:1fr;gap:18px}.hero-center{order:-1;min-height:420px}.hero-specs{align-items:stretch;text-align:left}.side-title{text-align:left}.woven-grid{grid-template-columns:1fr}.devices{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.nav{overflow:auto;max-width:62vw}.devices{grid-template-columns:1fr}.orbs{grid-template-columns:repeat(3,1fr)}}
+/* nav - identik dengan aios-atrium.html */
+.site-header{display:flex;align-items:center;justify-content:space-between;padding:1.5rem 1.5rem 0;font-size:.75rem;color:#fff}
+@media(min-width:640px){.site-header{padding:2rem 2.5rem 0}}
+.nav-left{display:none;gap:1.35rem;flex:1;align-items:center}
+@media(min-width:1024px){.nav-left{display:flex}}
+.nav-left a{color:rgba(255,255,255,.72);letter-spacing:.06em;text-transform:uppercase;font-size:.68rem;transition:color .2s}
+.nav-left a:hover{color:#fff}
+.nav-left a.active{color:#fff;position:relative}
+.nav-left a.active::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:1px;background:rgba(255,255,255,.9)}
+.brand-center{flex:1;display:flex;justify-content:center;align-items:center;gap:.5rem;font-size:1rem;font-weight:500;text-transform:uppercase;letter-spacing:.2em;color:#fff}
+@media(max-width:1023px){.brand-center{justify-content:flex-start}}
+.nav-right{flex:1;display:flex;justify-content:flex-end;align-items:center;gap:1rem}
+@media(min-width:640px){.nav-right{gap:1.25rem}}
+.book-link{display:none;text-transform:uppercase;letter-spacing:.08em}
+@media(min-width:640px){.book-link{display:inline}}
+.book-link:hover{text-decoration:underline}
+.burger{width:2.5rem;height:2.5rem;display:grid;place-items:center;border-radius:62.5rem;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);transition:background .2s}
+.burger:hover{background:rgba(255,255,255,.25)}
+.burger-bars{display:flex;flex-direction:column;gap:5px}
+.burger-bars i{display:block;width:1rem;height:1px;background:#fff}
+/* hero */
+.hero{padding:clamp(4rem,11vw,8.5rem) 0 clamp(3rem,6vw,5rem);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(700px 380px at 18% 8%,rgba(143,209,168,.09),transparent 70%),radial-gradient(520px 300px at 88% 30%,rgba(201,168,124,.07),transparent 70%);pointer-events:none}
+.hero>*{position:relative}
+.hero .display em{font-style:italic;color:var(--up)}
+.hero p.lead{margin-top:1.25rem;max-width:44ch;color:#a8a8b4;font-size:.9375rem;line-height:1.8}
+.searchbar{margin-top:2rem;display:flex;align-items:center;gap:.75rem;max-width:34rem;background:var(--surface);border:1px solid var(--line);border-radius:62.5rem;padding:.6rem .6rem .6rem 1.25rem;transition:border-color .2s}
+.searchbar:focus-within{border-color:rgba(143,209,168,.45)}
+.searchbar input{flex:1;background:none;border:none;color:var(--fg);font:inherit;outline:none;min-width:0}
+.searchbar input::placeholder{color:var(--muted)}
+.searchbar .go{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;flex:none}
+.hero-stats{margin-top:3rem;display:flex;flex-wrap:wrap;gap:2.5rem 3.5rem;border-top:1px solid var(--line);padding-top:1.75rem}
+.hero-stats div .n{font-family:var(--display);font-size:2.25rem;line-height:1}
+.hero-stats div .l{margin-top:.35rem;font-size:.6875rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* footer + eyebrow + pill - identik aios-atrium.html */
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.22em;color:var(--muted)}
+.eyebrow.light{color:rgba(255,255,255,.7)}
+.eyebrow.light .dot{background:#5790e6}
+.eyebrow .dot{width:.375rem;height:.375rem;border-radius:62.5rem;flex-shrink:0;background:var(--up)}
+.pill{display:inline-flex;align-items:center;gap:.5rem;border-radius:62.5rem;padding:.875rem 1.75rem;font-size:.875rem;font-weight:500;text-transform:uppercase;letter-spacing:.04em;transition:background .2s,color .2s}
+.pill.light{background:#fff;color:#0f2f63}
+.pill.light:hover{background:#5790e6;color:#fff}
+.pill svg{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.pill:hover svg{transform:translateX(5px)}
+.clip{overflow:hidden;display:inline-block;padding-bottom:.02em;vertical-align:bottom}
+#contact{background:#0f2f63;color:#fff;border-radius:2rem;margin:0 .75rem .75rem;padding:3.5rem 1.5rem}
+@media(min-width:640px){#contact{padding:4rem 2.5rem}}
+.footer-cta{border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:3.5rem;display:flex;flex-direction:column;gap:1.5rem}
+@media(min-width:640px){.footer-cta{flex-direction:row;justify-content:space-between;align-items:flex-end}}
+.footer-cta h2{font-size:clamp(2.25rem,5vw,3.75rem);font-weight:500;line-height:.92;letter-spacing:-.02em}
+.footer-cols{padding:3.5rem 0;display:grid;gap:2.5rem}
+@media(min-width:900px){.footer-cols{grid-template-columns:1.4fr 1fr 1fr 1fr}}
+.footer-brand{max-width:20rem}
+.footer-brand-title{display:flex;align-items:center;gap:.5rem;font-size:1.125rem;font-weight:500;text-transform:uppercase;letter-spacing:.2em}
+#contact a{color:inherit}
+#contact ul li a:hover{text-decoration:underline}
+
+
+/* footer + eyebrow + pill - identik aios-atrium.html */
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.22em;color:var(--muted)}
+.eyebrow.light{color:rgba(255,255,255,.7)}
+.eyebrow.light .dot{background:#5790e6}
+.eyebrow .dot{width:.375rem;height:.375rem;border-radius:62.5rem;flex-shrink:0;background:var(--up)}
+.pill{display:inline-flex;align-items:center;gap:.5rem;border-radius:62.5rem;padding:.875rem 1.75rem;font-size:.875rem;font-weight:500;text-transform:uppercase;letter-spacing:.04em;transition:background .2s,color .2s}
+.pill.light{background:#fff;color:#0f2f63}
+.pill.light:hover{background:#5790e6;color:#fff}
+.pill svg{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.pill:hover svg{transform:translateX(5px)}
+.clip{overflow:hidden;display:inline-block;padding-bottom:.02em;vertical-align:bottom}
+#contact{background:#0f2f63;color:#fff;border-radius:2rem;margin:0 .75rem .75rem;padding:3.5rem 1.5rem}
+@media(min-width:640px){#contact{padding:4rem 2.5rem}}
+.footer-cta{border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:3.5rem;display:flex;flex-direction:column;gap:1.5rem}
+@media(min-width:640px){.footer-cta{flex-direction:row;justify-content:space-between;align-items:flex-end}}
+.footer-cta h2{font-size:clamp(2.25rem,5vw,3.75rem);font-weight:500;line-height:.92;letter-spacing:-.02em}
+.footer-cols{padding:3.5rem 0;display:grid;gap:2.5rem}
+@media(min-width:900px){.footer-cols{grid-template-columns:1.4fr 1fr 1fr 1fr}}
+.footer-brand{max-width:20rem}
+.footer-brand-title{display:flex;align-items:center;gap:.5rem;font-size:1.125rem;font-weight:500;text-transform:uppercase;letter-spacing:.2em}
+#contact a{color:inherit}
+#contact ul li a:hover{text-decoration:underline}
+
+</style>
+
+
+
+
+
+
+
+<style data-fullbleed>
+html,body{margin:0!important;padding:0!important;width:100%!important;max-width:100%!important}
+main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
+  max-width:none!important;width:100%!important;margin-left:0!important;margin-right:0!important;
+  padding-left:0!important;padding-right:0!important}
+.ghost,.ghost-sub,.ghost-heading,.foot-note,.tu-marquee,.shell,.hero-grid,.sub,.desc,
+.s-title,.s-desc,.hero-sub,.fac-intro,.fac-body,.prog-meter,.footer-brand{
+  max-width:none!important;width:100%!important}
+.max-w-7xl,.max-w-6xl,.max-w-5xl,.max-w-4xl,.max-w-3xl,.max-w-2xl,.max-w-xl,.max-w-lg,.max-w-md,.max-w-sm,.max-w-xs,
+[class*="max-w-"]{max-width:100%!important}
+/* MOBILE: kill horizontal overflow from wide children */
+@media (max-width:820px){
+  .dock{max-width:100%!important;left:0!important;right:0!important;transform:none!important}
+  body,html{overflow-x:hidden!important}
+  section,main{overflow-x:clip}
+}
+@media (orientation:landscape){html,body{width:100%}main,section{width:100%!important;max-width:100%!important}}
+</style>
+</head>
+<body>
+<header class="site-header">
+    <nav class="nav-left" aria-label="Primary"><a href="aios-atrium.html">Atrium</a><a href="aios-atlas.html">Atlas</a><a href="aios-arc.html">Arc</a><a href="aios-materi.html" class="active" aria-current="page">Materi</a><a href="aios-jejak.html">Jejak</a><a href="aios-ikhtisar.html">Ikhtisar</a></nav>
+    <a class="brand-center" href="aios-atrium.html" href="aios-atrium.html" aria-label="AIOS — beranda" aria-label="AIOS - beranda"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/></svg> AIOS · Materi</a>
+    <div class="nav-right"><button class="book-link" id="bookHeader">Atur Notifikasi</button><button class="burger" id="burger" aria-label="Open menu"><span class="burger-bars"><i></i><i></i></span></button></div>
+  </header>
+
+<main class="hero" id="materi">
+<div class="hero-grid">
+<div>
+<div class="eyebrow">STUDIO TEKSTUR - LOOKBOOK 2025</div>
+<h1 class="h-title" id="t1"><span class="outline">Studio</span><br><span class="words" id="matWords">Materi</span></h1>
+<p class="desc">Bukan trading. Ini arsip sentuh - tenun, anyam, dan sablon yang dirawat sebagai material hidup untuk produk dan ruang.</p>
+<button class="cta" id="cta">Jelajah Swatch <i>+</i></button>
+<div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+<span style="font-size:.62rem;letter-spacing:.12em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:999px">4 WOVEN SHADER</span>
+<span style="font-size:.62rem;letter-spacing:.12em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:999px">23 ORBS · 8 DEVICES</span>
+</div>
+</div>
+<div class="hero-center" id="heroCenter">
+<div class="phone-hero" id="phoneHero">
+<div class="frame phone"><div class="screen"><div class="island"></div>
+<div class="look">
+<div class="look-top">
+<span class="badge">LOOKBOOK · MATERI 01</span>
+<h3>Woven<br>Silk Drape</h3>
+<p>Weave rapat + sheen specular. Untuk cover, lining, dan editorial.</p>
+<div class="swatch-row"><span style="background:#d94a6a"></span><span style="background:#f0e6d6"></span><span style="background:#1a365d"></span><span style="background:#c9a86a"></span></div>
+</div>
+<div style="margin:auto 12px 12px;background:#111;color:#fff;border-radius:14px;padding:12px;display:flex;justify-content:space-between;align-items:center">
+<div><div style="font-size:.68rem;letter-spacing:.12em;opacity:.8">STOK</div><div style="font-weight:800;font-size:.9rem">Ready · 42m</div></div><span style="background:#fbcfe8;color:#111;padding:6px 10px;border-radius:999px;font-size:.72rem;font-weight:800">Detail →</span>
+</div>
+</div>
+</div></div>
+<div style="position:absolute;left:8%;right:8%;bottom:-18px;height:26px;background:radial-gradient(ellipse at center,rgba(0,0,0,.5),transparent 70%);filter:blur(8px)"></div>
+</div>
+</div>
+<div class="hero-specs">
+<div class="spec-card"><b>4 Panel Besar</b><p>Shader weave + sheen · silk / linen / tartan / bamboo. Hover untuk kilau bergerak.</p></div>
+<div class="spec-card"><b>23 Brand Orbs</b><p>Grid floating - identitas material partner, bukan ticker.</p></div>
+<div class="spec-card"><b>8 Device Showcase</b><p>LS-graphics frames - lookbook di iPhone, iPad, MacBook & Watch.</p></div>
+<h2 class="side-title">Tekstur<br><span style="color:var(--pink)">Hidup</span></h2>
+</div>
+</div>
+</main>
+
+<section class="section" id="studio">
+<div class="sec-head"><div><div class="eyebrow">01 - WOVEN PANELS</div><h2>Tenun sebagai shader</h2></div><p>Empat panel besar. Tiap panel pakai <b>ShaderMaterial</b> ringkas: vertex warp lembut + fragment weave/sheen. Gerak sheen jalan terus - hover percepat.</p></div>
+<div class="marq" style="margin-bottom:14px" aria-hidden="true"><div class="marq-track" id="marqMat"></div></div>
+<div class="woven-grid">
+<article class="woven rv" data-sheen="silk"><div class="beam"></div><div class="spot"></div><canvas id="cv-silk" width="560" height="220"></canvas><div class="woven-body"><div><h3>01 - Silk Drape</h3><p>Weave 28×28 · sheen specular 12-power · fold sinus</p></div><span class="tag">SILK · #d94a6a</span></div></article>
+<article class="woven rv" data-sheen="linen"><div class="beam"></div><div class="spot"></div><canvas id="cv-linen" width="560" height="220"></canvas><div class="woven-body"><div><h3>02 - Linen Weave</h3><p>Warp/weft 22×22 · slubs acak · AO tepi</p></div><span class="tag">LINEN · #ece6db</span></div></article>
+<article class="woven rv" data-sheen="tartan"><div class="beam"></div><div class="spot"></div><canvas id="cv-tartan" width="560" height="220"></canvas><div class="woven-body"><div><h3>03 - Tartan Plaid</h3><p>Overcheck + twill diagonal · palet navy/red/gold</p></div><span class="tag">TARTAN · #1a365d</span></div></article>
+<article class="woven rv" data-sheen="bamboo"><div class="beam"></div><div class="spot"></div><canvas id="cv-bamboo" width="560" height="220"></canvas><div class="woven-body"><div><h3>04 - Bamboo Mat</h3><p>Slat anyam · binding gelap · varnish halus</p></div><span class="tag">BAMBOO · #c9a86a</span></div></article>
+</div>
+</section>
+
+<section class="section rv" id="hidup">
+<div class="sec-head"><div><div class="eyebrow">04 - KOMPONEN HIDUP</div><h2>Tekstur yang bergerak</h2></div><p>Empat panel ringan: marquee nama material, dock etalase, grid partikel yang menolak kursor, dan laser sweep. Semua Canvas2D - tidak ada WebGL, tidak ada build.</p></div>
+<div class="hidup-grid">
+  <article class="hcard2"><div class="cap"><b>Particles - tolak kursor</b><span>magic/particles</span></div><canvas id="mPart"></canvas><p class="note">40 titik; kursor mendorong yang terdekat. Garis muncul di bawah 70px.</p></article>
+  <article class="hcard2"><div class="cap"><b>Laser - sweep</b><span>laser-01</span></div><canvas id="mLaser"></canvas><p class="note">Sapuan vertikal + grid latar. Klik kanvas untuk mengganti mode.</p></article>
+</div>
+<div style="margin-top:14px;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:20px;padding:16px">
+  <div class="dock" id="mDock" role="list" aria-label="Etalase material"></div>
+  <p style="text-align:center;font-size:.68rem;color:var(--mut);margin-top:10px">Dock - hover untuk membesar, klik untuk memantul.</p>
+</div>
+</section>
+
+<section class="section rv" id="angka">
+<div class="sec-head"><div><div class="eyebrow">05 - ANGKA STUDIO</div><h2>Koleksi dalam hitungan</h2></div><p>Penghitung naik saat bagian ini terlihat. Bukan metrik pasar - ini jumlah material yang dirawat.</p></div>
+<div class="ticks" id="ticks">
+  <div class="tick"><b id="tk1">0</b><s>Panel woven</s></div>
+  <div class="tick"><b id="tk2">0</b><s>Brand orb</s></div>
+  <div class="tick"><b id="tk3">0</b><s>Device</s></div>
+  <div class="tick"><b id="tk4">0</b><s>Swatch</s></div>
+</div>
+</section>
+
+<section class="section" id="koleksi">
+<div class="sec-head"><div><div class="eyebrow">02 - BRAND ORBS</div><h2>23 material partner</h2></div><p>Grid floating - tiap orb chrome dengan highlight. Klik untuk pulse. Bukan harga, tapi asal serat & proses.</p></div>
+<div class="orbs-wrap"><div class="orbs" id="orbs"></div></div>
+</section>
+
+<section class="section" id="atelier">
+<div class="sec-head"><div><div class="eyebrow">03 - DEVICE SHOWCASE</div><h2>Lookbook di 8 device</h2></div><p>LS-graphics frames: iPhone · iPad · MacBook · Watch - di-grid sebagai etalase koleksi, bukan dashboard trading.</p></div>
+<div class="devices" id="devices"></div>
+</section>
+
+<section class="section" id="journal" style="padding-bottom:40px">
+<div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:18px;display:grid;grid-template-columns:1.2fr .8fr;gap:16px">
+<div><div class="eyebrow">JOURNAL</div><h3 style="font-family:Onest,system-ui,sans-serif;font-size:1.2rem;font-weight:900;margin-top:6px">Cara pakai materi</h3><p style="color:var(--mut);font-size:.82rem;line-height:1.7;margin-top:8px">Pilih panel → lihat sheen & weave di scale besar. Cocokkan dengan orb (asal serat). Lalu cek di device: silk untuk cover premium, linen untuk everyday, tartan untuk statement, bamboo untuk alas & packaging.</p></div>
+<div style="background:#f7f5f1;color:#111;border-radius:16px;padding:16px"><div style="font-size:.7rem;letter-spacing:.12em;opacity:.6">SWATCH GRID</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px" id="swatches"></div><div style="font-size:.68rem;opacity:.78;margin-top:10px">Tap swatch → hero ikut ganti nuansa.</div></div>
+</div>
+</section>
+
+<footer id="contact">
+  <div class="footer-cta">
+    <div><div class="eyebrow light"><span class="dot"></span> Mulai pakai</div><h2 style="margin-top:1rem"><span class="clip"><span>Siap baca</span></span><br><span class="clip"><span>pasar?</span></span></h2></div>
+    <button class="pill light" id="footerCta">Atur Notifikasi <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  </div>
+  <div class="footer-cols">
+    <div class="footer-brand"><div class="footer-brand-title"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg> AIOS · Materi</div><p style="margin-top:1rem;font-size:.875rem;color:rgba(255,255,255,.65)">Bukti ditulis, rencana ditahan, alasan disimpan. Bukan sinyal.</p><address style="margin-top:1.5rem;font-style:normal;font-size:.875rem;color:rgba(255,255,255,.8)"><a href="mailto:hello@aios.app">hello@aios.app</a></address></div>
+    <div><p class="mono-s" style="margin-bottom:.9rem">Halaman</p><ul style="font-size:.875rem;color:rgba(255,255,255,.7);display:grid;gap:.55rem"><li><a href="aios-atrium.html">Atrium</a></li><li><a href="aios-atlas.html">Atlas</a></li><li><a href="aios-arc.html">Arc</a></li><li><a href="aios-jejak.html">Jejak</a></li><li><a href="aios-ikhtisar.html">Ikhtisar</a></li></ul></div>
+    <div><p class="mono-s" style="margin-bottom:.9rem">Data</p><ul style="font-size:.875rem;color:rgba(255,255,255,.7);display:grid;gap:.55rem"><li>70 snapshot</li><li>5 brief keputusan</li><li>1 jendela aktif</li><li>3 posisi ditutup</li></ul></div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,.15);margin-top:2.5rem;padding-top:1.5rem;display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;font-size:.75rem;color:rgba(255,255,255,.6)"><p>© 2026 AIOS</p><p>Phase H · 24 Agt - 23 Sep 2026 · Asia/Jakarta</p></div>
+</footer>
+
+<script>
+// ponytail: shader via Canvas2D fragment emulation (no Three import) - ceiling: true ShaderMaterial, upgrade: import three + ShaderMaterial per panel if GPU weave needed.
+const $=s=>document.querySelector(s);
+// GSAP intro
+gsap.from('#t1',{y:22,opacity:0,duration:.7,ease:'power2.out'});
+gsap.from('.spec-card',{y:16,opacity:0,duration:.6,stagger:.08,delay:.15});
+gsap.from('.phone-hero',{y:20,opacity:0,scale:.98,duration:.8,delay:.2,ease:'back.out(1.2)'});
+// hero tilt
+const stage=document.getElementById('heroCenter'), phone=document.getElementById('phoneHero');
+let tx=0,ty=0,rx=0,ry=0,raf=0;
+stage.addEventListener('mousemove',e=>{
+  const r=stage.getBoundingClientRect();
+  const x=(e.clientX-(r.left+r.width/2))/r.width, y=(e.clientY-(r.top+r.height/2))/r.height;
+  tx=y*-10; ty=x*14; if(!raf) raf=requestAnimationFrame(tick);
+});
+stage.addEventListener('mouseleave',()=>{tx=0;ty=0; if(!raf) raf=requestAnimationFrame(tick)});
+function tick(){raf=0;rx+=(tx-rx)*.09; ry+=(ty-ry)*.09; phone.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`; if(Math.abs(rx-tx)>.05||Math.abs(ry-ty)>.05) raf=requestAnimationFrame(tick);}
+// canvases - fragment-like paint
+function paintSilk(c,t,boost){
+  const w=c.width,h=c.height,g=c.getContext('2d'); g.clearRect(0,0,w,h);
+  for(let y=0;y<h;y++){ for(let x=0;x<w;x++){ const uvx=x/w, uvy=y/h;
+    const weave=( ( (uvx*28)%1>.5?1:0)*.08 + ((uvy*28)%1>.5?1:0)*.08 );
+    const sheen=Math.pow(Math.max(0, .62),12)*.4 + Math.sin(uvx*6 + t*.9)*.04*boost + Math.sin(uvy*3+t*.6)*.02;
+    const fold=Math.sin(uvx*6+t*.5)*.06;
+    let r=.85+weave*.6+sheen*.7+fold, g2=.2+weave*.35+sheen*.35, b=.42+weave*.3+sheen*.3;
+    r=Math.min(1,Math.max(0,r)); g2=Math.min(1,Math.max(0,g2)); b=Math.min(1,Math.max(0,b));
+    g.fillStyle=`rgb(${r*255|0},${g2*255|0},${b*255|0})`; g.fillRect(x,y,1,1);
+  }}
+}
+function paintLinen(c,t){
+  const w=c.width,h=c.height,g=c.getContext('2d');
+  for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+    const uvx=x/w, uvy=y/h;
+    const warp=(uvx*22)%1>.5?1:0, weft=(uvy*22)%1>.5?1:0;
+    const weave=warp*.18+weft*.18-warp*weft*.12;
+    const slub=(Math.sin(uvx*127+uvy*311)*43758%1)>.985? .18:0;
+    const ao=Math.hypot(uvx-.5,uvy-.5)*1.2; const dark=ao>.5?(ao-.5)*-.16:0;
+    let v=.92+weave+slub+dark; v=Math.min(1,v);
+    const r=v*242, gg=v*225, b=v*198;
+    g.fillStyle=`rgb(${r|0},${gg|0},${b|0})`; g.fillRect(x,y,1,1);
+  }
+}
+function paintTartan(c){
+  const w=c.width,h=c.height,g=c.getContext('2d');
+  for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+    const uvx=x/w, uvy=y/h;
+    const rx=(uvx*6)%1, ry=(uvy*6)%1;
+    let bandX=(rx>.02&&rx<.22)||(rx>.48&&rx<.52)?1:0;
+    let bandY=(ry>.02&&ry<.22)||(ry>.48&&ry<.52)?1:0;
+    let r=18,g2=34,b=50;
+    if(bandX){r=209;g2=46;b=46} if(bandY){r=209;g2=46;b=46} if(bandX&&bandY){r=235;g2=199;b=36}
+    const wX=(rx>.49&&rx<.51)?1:0, wY=(ry>.49&&ry<.51)?1:0; if(wX||wY){r=r*.3+242*.7; g2=g2*.3+242*.7; b=b*.3+235*.7}
+    const twill=Math.sin((uvx-uvy)*44)*10+10; r+=twill; g2+=twill; b+=twill;
+    g.fillStyle=`rgb(${r|0},${g2|0},${b|0})`; g.fillRect(x,y,1,1);
+  }
+}
+function paintBamboo(c,t){
+  const w=c.width,h=c.height,g=c.getContext('2d'); g.fillStyle='#141210'; g.fillRect(0,0,w,h);
+  const slats=12;
+  for(let i=0;i<slats;i++){
+    const y=(i/slats)*h + Math.sin(t*.6+i)*2;
+    const hh=h/slats-2; const isDark=i%3===0;
+    g.fillStyle=isDark?'#8a6a3a':'#c9a86a'; g.fillRect(6,y,w-12,hh);
+    g.fillStyle='rgba(255,255,255,.12)'; g.fillRect(6,y,w-12,2);
+  }
+  g.fillStyle='#2b1d0e';
+  for(let i=0;i<5;i++){ const x=18+i*(w-36)/4; g.fillRect(x,0,6,h); }
+}
+const cvS=document.getElementById('cv-silk'), cvL=document.getElementById('cv-linen'), cvT=document.getElementById('cv-tartan'), cvB=document.getElementById('cv-bamboo');
+let t=0, silkBoost=1;
+let lastSilk=0;
+function loop(now){
+  if(now&&now-lastSilk<33){requestAnimationFrame(loop);return} if(now)lastSilk=now;
+  t+=0.016*silkBoost;
+  paintSilk(cvS,t,silkBoost); if(t%2<0.02){paintLinen(cvL,t); paintTartan(cvT); paintBamboo(cvB,t);}
+  requestAnimationFrame(loop);
+}
+paintLinen(cvL,0); paintTartan(cvT); paintBamboo(cvB,0); loop();
+document.querySelectorAll('.woven').forEach(el=>{
+  el.addEventListener('mouseenter',()=>silkBoost=1.7);
+  el.addEventListener('mouseleave',()=>silkBoost=1);
+});
+// orbs 23
+const orbNames=["AURA SILK","KINA LINEN","TERRA TARTAN","BAMBU NARA","SORA WEAVE","MORI COTTON","HANA JUTE","RIN HEMP","KAZE WOOL","YUME CASHMERE","IKAT","SHIBORI","BINGKAI","TENUN","LURIK","SONGKET","TAPIS","ULOS","GRINGSING","ABACA","RAMIE","KOZO","WASHI"];
+const orbs=document.getElementById('orbs');
+orbNames.forEach((n,i)=>{
+  const d=document.createElement('div'); d.className='orb'; d.tabIndex=0; d.setAttribute('role','button'); d.setAttribute('aria-label',n);
+  d.innerHTML=`<b></b><label>${String(i+1).padStart(2,'0')} - ${n}</label>`;
+  d.style.animationDelay=(i*0.07)+'s'; orbs.appendChild(d);
+  d.addEventListener('click',()=>{d.animate([{transform:'scale(1)'},{transform:'scale(1.12)'},{transform:'scale(1)'}],{duration:380,easing:'ease-out'}); bPulse(d)});
+});
+function bPulse(el){ const b=el.querySelector('b'); b.animate([{transform:'scale(1)',opacity:1},{transform:'scale(1.9)',opacity:0}],{duration:420,easing:'ease-out'}) }
+gsap.to('.orb',{y:-6,duration:1.8+Math.random(),repeat:-1,yoyo:true,ease:'sine.inOut',stagger:{each:.06,from:'random'}});
+// devices 8 - LS graphics frames lookbook
+const devices=[
+ {k:'phone',t:'iPhone 15 Pro - Silk Cover',d:'Editorial drape untuk product card & hero.',c:'linear-gradient(135deg,#d94a6a,#f7a8b8)'},
+ {k:'ipad',t:'iPad Pro 12.9 - Linen Atelier',d:'Katalog tenun matte untuk lookbook.',c:'linear-gradient(135deg,#ece6db,#d9c8a8)'},
+ {k:'mac',t:'MacBook Air - Tartan System',d:'Plaid grid untuk landing & packaging.',c:'linear-gradient(135deg,#1a365d,#2a5a8a)'},
+ {k:'watch',t:'Watch Ultra - Bamboo Strap',d:'Anyam bambu untuk aksesori & alas.',c:'linear-gradient(135deg,#c9a86a,#8a6a3a)'},
+ {k:'phone',t:'iPhone Stack - Swatch Pack',d:'Tumpukan swatch untuk picker warna.',c:'linear-gradient(135deg,#111,#3a3a4a)'},
+ {k:'ipad',t:'iPad Landscape - Journal',d:'Layout editorial material & care.',c:'linear-gradient(135deg,#f7f5f1,#c9a86a)'},
+ {k:'mac',t:'MacBook Pro 16 - Atelier Desk',d:'Workspace penata koleksi tekstur.',c:'linear-gradient(135deg,#0f172a,#2d3a5a)'},
+ {k:'watch',t:'Plop 3D Icons - Material Kit',d:'80 ikon glossy turunan weave.',c:'linear-gradient(135deg,#ff6b9d,#ffd93d)'},
+];
+const devWrap=document.getElementById('devices');
+devices.forEach(o=>{
+  const el=document.createElement('div'); el.className='device';
+  el.innerHTML=`<div class="mini-frame ${o.k}"><div class="mini-screen ${o.k}"><div style="position:absolute;inset:0;background:${o.c}"></div><div style="position:absolute;left:10px;right:10px;top:10px;background:#fff;border-radius:10px;padding:8px;display:flex;gap:8px;align-items:center"><div style="width:28px;height:28px;border-radius:8px;background:#111;display:grid;place-items:center;color:#fff;font-size:.7rem">◨</div><div><div style="font-size:.68rem;font-weight:800">AIOS</div><div style="font-size:.6rem;opacity:.5">Materi</div></div><span style="margin-left:auto;font-size:.6rem;background:#111;color:#fff;padding:4px 8px;border-radius:999px">View</span></div></div></div><h4>${o.t}</h4><p>${o.d}</p>`;
+  devWrap.appendChild(el);
+});
+// swatches
+const sw=document.getElementById('swatches');
+['#d94a6a','#ece6db','#1a365d','#c9a86a','#6c5cff','#0f172a','#f7a8b8','#8a6a3a'].forEach(hex=>{
+  const b=document.createElement('button'); b.style.cssText=`width:100%;aspect-ratio:1;border-radius:10px;border:2px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.12);background:${hex};cursor:pointer`; b.setAttribute('aria-label',hex);
+  b.onclick=()=>{document.querySelector('.look h3').style.color=hex; gsap.fromTo(b,{scale:.9},{scale:1,duration:.25,ease:'back.out(1.6)'})};
+  sw.appendChild(b);
+});
+document.getElementById('cta').onclick=()=>document.getElementById('studio').scrollIntoView({behavior:'smooth'});
+
+/* ─── POLISH · komponen threeui ─── */
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const DPR_MOBILE=()=>Math.min(devicePixelRatio||1,innerWidth<=640?1:2);
+
+/* blur-fade - reveal saat masuk viewport */
+(function(){
+  if(REDUCE||!('IntersectionObserver' in window)){
+    document.querySelectorAll('.rv').forEach(e=>e.classList.add('in'));return;
+  }
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{rootMargin:'0px 0px -8% 0px',threshold:.1});
+  document.querySelectorAll('.rv').forEach(e=>io.observe(e));
+})();
+
+/* magic-card - spotlight di tiap panel woven */
+document.querySelectorAll('.woven').forEach(card=>{
+  const spot=card.querySelector('.spot');if(!spot)return;
+  card.addEventListener('pointermove',e=>{
+    const r=card.getBoundingClientRect();
+    spot.style.opacity='1';
+    spot.style.background='radial-gradient(360px 220px at '+(e.clientX-r.left)+'px '+(e.clientY-r.top)+'px, rgba(251,207,232,.20), transparent 60%)';
+  });
+  card.addEventListener('pointerleave',()=>spot.style.opacity='0');
+});
+
+/* border-beam - tepi menyala pada panel woven */
+(function(){
+  if(REDUCE)return;
+  const beams=[...document.querySelectorAll('.woven .beam')];
+  if(!beams.length)return;
+  let a=0;
+  let lastBeam=0;
+  (function frame(now){ if(now&&now-lastBeam<33){requestAnimationFrame(frame);return} if(now)lastBeam=now;
+    a=(a+0.5)%360;
+    beams.forEach((el,i)=>{
+      const ang=(a+i*90)%360;
+      el.style.background='conic-gradient(from '+ang+'deg at 50% 50%, transparent 0deg, transparent 300deg, rgba(251,207,232,.85) 360deg)';
+      el.style.mask='linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)';
+      el.style.webkitMask='linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)';
+      el.style.maskComposite='exclude'; el.style.webkitMaskComposite='xor';
+      el.style.padding='1.5px';
+    });
+    requestAnimationFrame(frame);
+  })();
+})();
+
+/* marquee - magic/marquee-01, nama material */
+(function(){
+  const track=document.getElementById('marqMat');if(!track)return;
+  const names=orbNames.slice(0,12);
+  const seq=[];for(let i=0;i<4;i++)seq.push(...names);
+  seq.forEach(n=>{const d=document.createElement('span');d.className='marq-item';d.textContent=n;track.appendChild(d)});
+  if(REDUCE)return;
+  let x=0,dir=-1;
+  let lastMarqM=0;
+  (function loop(now){ if(now&&now-lastMarqM<33){requestAnimationFrame(loop);return} if(now)lastMarqM=now;
+    x+=dir*.7;
+    const w=track.scrollWidth/4;
+    if(x<-w)x=0; if(x>0)x=-w;
+    track.style.transform='translateX('+x+'px)';
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* animated-dock - etalase material */
+(function(){
+  const dock=document.getElementById('mDock');if(!dock)return;
+  const icons=['◐','⬢','⬣','◆','✦','◎','▣','⬔'];
+  const cols=['#fbcfe8','#ece6db','#1a365d','#c9a86a','#d94a6a','#6c5cff','#f7a8b8','#8a6a3a'];
+  const apps=icons.map((ic,i)=>{
+    const el=document.createElement('div');el.className='app';el.textContent=ic;
+    el.style.background=cols[i];el.style.color='#0b1a18';el.title=orbNames[i]||('Material '+(i+1));
+    el.setAttribute('role','listitem');dock.appendChild(el);return el;
+  });
+  let mx=-1;
+  dock.addEventListener('pointermove',e=>{mx=e.clientX-dock.getBoundingClientRect().left});
+  dock.addEventListener('pointerleave',()=>{mx=-1;apps.forEach(a=>a.style.transform='scale(1) translateY(0)')});
+  apps.forEach(el=>el.addEventListener('click',()=>{
+    el.animate([{transform:'scale(1.2) translateY(-14px)'},{transform:'scale(.92) translateY(2px)'},{transform:'scale(1) translateY(0)'}],
+      {duration:520,easing:'cubic-bezier(.34,1.56,.64,1)'});
+  }));
+  if(REDUCE)return;
+  (function frame(){
+    if(mx>=0){
+      const dr=dock.getBoundingClientRect();
+      apps.forEach(el=>{
+        const r=el.getBoundingClientRect(),cx=r.left+r.width/2-dr.left;
+        const mag=Math.max(0,1-Math.abs(cx-mx)/130);
+        el.style.transform='scale('+(1+mag*.8)+') translateY('+(-mag*16)+'px)';
+      });
+    }
+    requestAnimationFrame(frame);
+  })();
+})();
+
+/* particles-01 - bidang tolak kursor */
+(function(){
+  const cv=document.getElementById('mPart');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  let W=0,H=0,ps=[],mouse={x:-999,y:-999};
+  const DPR=Math.min(devicePixelRatio||1,innerWidth<=640?1:2);
+  function rs(){
+    const r=cv.getBoundingClientRect();if(!r.width)return;
+    W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+    ps=[];for(let i=0;i<40;i++)ps.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.6,vy:(Math.random()-.5)*.6,r:1+Math.random()*1.6});
+  }
+  addEventListener('resize',rs);rs();
+  cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top});
+  cv.addEventListener('pointerleave',()=>{mouse.x=mouse.y=-999});
+  let lastMp=0;
+  function draw(now){ if(now&&now-lastMp<33){requestAnimationFrame(draw);return} if(now)lastMp=now;
+    ctx.clearRect(0,0,W,H);
+    ps.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1;
+      const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);
+      if(d<70&&d>0){p.x+=dx/d*1.2;p.y+=dy/d*1.2}
+      ctx.fillStyle='rgba(251,207,232,.85)';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+    });
+    for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){
+      const dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,d=Math.hypot(dx,dy);
+      if(d<70){ctx.strokeStyle='rgba(251,207,232,'+(0.18*(1-d/70))+')';ctx.lineWidth=1;
+        ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.stroke()}
+    }
+    requestAnimationFrame(draw);
+  }
+  if(!REDUCE) draw();
+})();
+
+/* laser-01 - sweep / pulse / split */
+(function(){
+  const cv=document.getElementById('mLaser');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const C1='#fbcfe8',C2='#6c5cff';
+  let W=0,H=0,mode=1,tL=0;
+  const DPR=Math.min(devicePixelRatio||1,innerWidth<=640?1:2);
+  function rs(){const r=cv.getBoundingClientRect();if(!r.width)return;W=r.width;H=r.height;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
+  addEventListener('resize',rs);rs();
+  cv.style.cursor='pointer';
+  cv.addEventListener('click',()=>{mode=(mode+1)%3});
+  let lastLaser=0;
+  function drawL(now){ if(now&&now-lastLaser<33){requestAnimationFrame(drawL);return} if(now)lastLaser=now;
+    if(!W){requestAnimationFrame(drawL);return}
+    if(!REDUCE)tL+=0.02;
+    ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;
+    for(let x=0;x<W;x+=28){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}
+    for(let y=0;y<H;y+=28){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
+    const cx=W/2,cy=H/2;
+    if(mode===1){
+      const sx=(Math.sin(tL*.7)*W*.42)+cx;
+      const g=ctx.createLinearGradient(sx-100,0,sx+100,0);
+      g.addColorStop(0,'transparent');g.addColorStop(.5,C1);g.addColorStop(1,'transparent');
+      ctx.fillStyle=g;ctx.fillRect(sx-100,0,200,H);
+      ctx.strokeStyle=C1;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(sx,0);ctx.lineTo(sx,H);ctx.stroke();
+      ctx.shadowBlur=20;ctx.shadowColor=C1;ctx.fillStyle=C1;ctx.beginPath();ctx.arc(sx,cy,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    }else if(mode===0){
+      for(let k=0;k<5;k++){
+        const a=tL*.6+k*1.26,len=Math.min(W,H)*.42+Math.sin(tL*2+k)*26;
+        const x2=cx+Math.cos(a)*len,y2=cy+Math.sin(a)*len;
+        ctx.shadowBlur=16;ctx.shadowColor=C1;ctx.strokeStyle=C1;ctx.lineWidth=2.2;
+        ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(x2,y2);ctx.stroke();ctx.shadowBlur=0;
+        ctx.fillStyle=C1;ctx.beginPath();ctx.arc(x2,y2,3.5,0,Math.PI*2);ctx.fill();
+      }
+      ctx.strokeStyle=C1;ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(cx,cy,40,0,Math.PI*2);ctx.stroke();
+    }else{
+      for(let k=-2;k<=2;k++){
+        const y=cy+k*38+Math.sin(tL*1.2+k)*7;
+        ctx.shadowBlur=10;ctx.shadowColor=k===0?C1:C2;ctx.strokeStyle=k===0?C1:C2;ctx.lineWidth=k===0?2.6:1.4;
+        ctx.beginPath();ctx.moveTo(0,y);
+        for(let x=0;x<W;x+=16)ctx.lineTo(x,y+Math.sin(x*.02+tL+k)*5);
+        ctx.stroke();ctx.shadowBlur=0;
+      }
+    }
+    requestAnimationFrame(drawL);
+  }
+  drawL();
+})();
+
+/* number-ticker - magic/number-ticker-01 */
+(function(){
+  function runTicker(){
+    const pairs=[['tk1',4],['tk2',orbNames.length],['tk3',devices.length],['tk4',8]];
+    pairs.forEach(([id,target])=>{
+      const el=document.getElementById(id);if(!el)return;
+      if(REDUCE){el.textContent=target;return}
+      const start=performance.now(),dur=1300;
+      (function f(now){
+        const p=Math.min(1,(now-start)/dur),e=1-Math.pow(1-p,3);
+        el.textContent=Math.floor(target*e);
+        if(p<1)requestAnimationFrame(f);
+      })(start);
+    });
+  }
+  const sec=document.getElementById('angka');
+  if(sec&&'IntersectionObserver' in window){
+    let done=false;
+    const io=new IntersectionObserver(e=>{if(e[0].isIntersecting&&!done){done=true;runTicker();io.disconnect()}},{threshold:.3});
+    io.observe(sec);
+  } else runTicker();
+})();
+
+/* spark-badge - pulse pada orb saat diklik */
+document.querySelectorAll('.orb').forEach(o=>{
+  o.addEventListener('click',()=>{
+    o.classList.remove('pulse');void o.offsetWidth;o.classList.add('pulse');
+  });
+});
+
+/* word-rotate - magic/word-rotate-01 di judul hero */
+(function(){
+  const el=document.getElementById('matWords');if(!el)return;
+  const words=['Materi','Tenun','Anyam','Tekstur'];
+  if(REDUCE)return;
+  let i=0;
+  setInterval(()=>{
+    el.style.transition='none';el.style.transform='translateY(12px)';el.style.opacity='0';
+    setTimeout(()=>{i=(i+1)%words.length;el.textContent=words[i];
+      el.style.transition='all .5s cubic-bezier(.16,1,.3,1)';el.style.transform='none';el.style.opacity='1'},60);
+  },2400);
+})();
+</script>
+</body>
+</html>
