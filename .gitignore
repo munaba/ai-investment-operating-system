@@ -29,3 +29,16 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# ===== Secrets: never commit real credentials =====
+# Dashboard auth (BCrypt hash + username) lives in gitignored environment files.
+# Use appsettings.Production.json (gitignored) or `dotnet user-secrets`.
+appsettings.json
+appsettings.*.json
+!appsettings.json.example
+!appsettings.*.json.example
+secrets.json
+
+# ===== .NET build output =====
+[Bb]in/
+[Oo]bj/

@@ -1,11 +1,12 @@
 @page "/login"
 @using aios_dashboard_csharp.Services
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using System.Security.Claims
 @inject IAuthService AuthService
 @inject Microsoft.AspNetCore.Components.NavigationManager NavManager
-
-@{
-    var loginError = NavManager.Uri.Contains("error=1", StringComparison.OrdinalIgnoreCase);
-}
+@inject IHttpContextAccessor HttpContextAccessor
+@inject Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage.ProtectedLocalStorage ProtectedLocalStorage
 
 <div class="container" style="max-width: 420px; margin-top: 12vh;">
     <div class="card shadow-sm">
@@ -18,20 +19,86 @@
                 <div class="alert alert-danger py-2">Username atau password salah.</div>
             }
 
-            <form method="get" action="/login-direct">
+            <EditForm Model="model" OnValidSubmit="HandleLogin" FormName="loginForm">
+                <DataAnnotationsValidator />
                 <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input class="form-control" type="text" name="u" required />
+                    <label class="form-label" for="username">Username</label>
+                    <InputText id="username" class="form-control" @bind-Value="model.Username" autocomplete="username" />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input class="form-control" type="password" name="p" required />
+                    <label class="form-label" for="password">Password</label>
+                    <InputText id="password" type="password" class="form-control" @bind-Value="model.Password" autocomplete="current-password" />
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-            </form>
+                <button type="submit" class="btn btn-primary w-100" disabled="@isBusy">
+                    @(isBusy ? "Memproses…" : "Login")
+                </button>
+            </EditForm>
         </div>
     </div>
     <p class="text-center text-muted mt-3" style="font-size: 0.85em;">
         Session timeout: @(AuthService.SessionTimeoutMinutes) menit tidak aktif
     </p>
 </div>
+
+@code {
+    private LoginModel model = new();
+    private bool loginError;
+    private bool isBusy;
+
+    protected override void OnInitialized()
+    {
+        loginError = NavManager.Uri.Contains("error=1", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private async Task HandleLogin()
+    {
+        if (isBusy) return;
+        isBusy = true;
+        loginError = false;
+
+        try
+        {
+            if (!AuthService.ValidateCredentials(model.Username ?? string.Empty, model.Password ?? string.Empty))
+            {
+                loginError = true;
+                isBusy = false;
+                return;
+            }
+
+            var httpContext = HttpContextAccessor.HttpContext;
+            if (httpContext is null)
+            {
+                // No HttpContext (prerender) — fall back to the SPA POST endpoint path.
+                NavManager.NavigateTo("/login?error=1", forceLoad: true);
+                return;
+            }
+
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, AuthService.Username) };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await httpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(identity),
+                new AuthenticationProperties
+                {
+                    IsPersistent = false,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(AuthService.SessionTimeoutMinutes),
+                });
+
+            // Clear credentials from memory immediately after use.
+            model.Password = string.Empty;
+
+            NavManager.NavigateTo("/", forceLoad: true);
+        }
+        finally
+        {
+            isBusy = false;
+        }
+    }
+
+    private sealed class LoginModel
+    {
+        public string? Username { get; set; }
+        public string? Password { get; set; }
+    }
+}

@@ -46,8 +46,11 @@ builder.Services
         options.SlidingExpiration = true;      // 30-60 min inactivity → re-login
         options.Cookie.HttpOnly = true;
         options.Cookie.SameSite = SameSiteMode.Lax;
-        // LAN-only: no Secure flag enforcement since we serve plain HTTP on the local network.
-        // If HTTPS is ever enabled, set: options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        // LAN-only HTTP in development → allow plain HTTP cookies; everywhere else
+        // require HTTPS so the cookie is never sent in clear text.
+        options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+            ? CookieSecurePolicy.SameAsRequest
+            : CookieSecurePolicy.Always;
     });
 builder.Services.AddAuthorization();
 
@@ -67,6 +70,38 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// ===== Security response headers (defence in depth) =====
+// 'wasm-unsafe-eval' is required by Blazor Server's blazor.web.js runtime;
+// 'unsafe-inline' for styles is required by Blazor's own scoped-CSS injection.
+app.Use(async (context, next) =>
+{
+    var headers = context.Response.Headers;
+
+    headers["X-Frame-Options"] = "DENY";
+    headers["X-Content-Type-Options"] = "nosniff";
+    headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=(), payment=(), usb=()";
+    headers["Cross-Origin-Opener-Policy"] = "same-origin";
+
+    if (!headers.ContainsKey("Content-Security-Policy"))
+    {
+        headers["Content-Security-Policy"] =
+            "default-src 'self'; " +
+            "script-src 'self' 'wasm-unsafe-eval'; " +
+            "style-src 'self' 'unsafe-inline'; " +
+            "img-src 'self' data: https:; " +
+            "font-src 'self' data:; " +
+            "connect-src 'self' https:; " +
+            "frame-ancestors 'none'; " +
+            "base-uri 'self'; " +
+            "form-action 'self'; " +
+            "object-src 'none'";
+    }
+
+    await next();
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -77,7 +112,7 @@ app.Use(async (context, next) =>
     var path = context.Request.Path.Value?.ToLowerInvariant() ?? "/";
 
     var isPublic =
-        path.StartsWith("/login") ||            // Blazor login page + /login-direct
+        path.StartsWith("/login") ||            // Blazor login page (GET /login-direct removed)
         path.StartsWith("/api/auth/login") ||   // SPA login endpoint (must be reachable pre-auth)
         path.StartsWith("/logout") ||
         path.StartsWith("/_blazor") ||
@@ -103,12 +138,10 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-// Server-side sign-in endpoint (used by Login.razor)
-app.MapLoginEndpoints();
-
-// SPA login: POST JSON credentials, set auth cookie. Replaces the insecure
-// GET /login-direct?u=...&p=... (password-in-query-string) flow for the React app.
-// Cookie auth is required so the browser sends it on subsequent /api calls.
+// NOTE: GET /login-direct?u=...&p=... was REMOVED (password travelled in the query
+// string and leaked into access logs). Blazor Login.razor now signs in in-process
+// via IAuthService + HttpContext.SignInAsync; the React SPA uses the POST endpoint
+// below. Both paths use cookie auth, so subsequent /api calls are authenticated.
 app.MapPost("/api/auth/login", async (HttpContext ctx, [FromServices] IAuthService auth) =>
 {
     var req = await ctx.Request.ReadFromJsonAsync<LoginRequest>();
