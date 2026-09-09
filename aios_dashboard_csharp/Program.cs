@@ -1,5 +1,6 @@
 using aios_dashboard_csharp.Components;
 using aios_dashboard_csharp.Services;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,23 @@ builder.Services
     });
 builder.Services.AddAuthorization();
 
+// M-02: brute-force guard on the public login endpoint (single-user LAN:
+// 5 attempts/min per client IP; legit mistypes unaffected, bots throttled).
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("login", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0
+            }));
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,6 +88,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseRateLimiter();
 
 // ===== Security response headers (defence in depth) =====
 // 'wasm-unsafe-eval' is required by Blazor Server's blazor.web.js runtime;
@@ -160,7 +180,7 @@ app.MapPost("/api/auth/login", async (HttpContext ctx, [FromServices] IAuthServi
         });
 
     return Results.Json(new { success = true });
-});
+}).RequireRateLimiting("login");
 
 // Logout is POST-only: a GET logout sends its cookie on every top-level
 // navigation (CSRF-able under SameSite=Lax). Lax already blocks cross-site
