@@ -289,6 +289,8 @@ function scrambleTo(el,target){
     iter+=1/3;
   },28);
 }
+/* M-07: data di file ini literal const (bukan URL/API). esc() kunci sink bila sumber berubah; tanpa ubah visual. */
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 const cv=document.getElementById('cv');
 const scene=new THREE.Scene(); scene.background=new THREE.Color(0x060608); scene.fog=new THREE.Fog(0x060608,8,18);
 const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:false}); renderer.setPixelRatio(Math.min(devicePixelRatio,1.85));
@@ -323,13 +325,13 @@ const ARCS=[
 const tabs=document.getElementById('tabs');
 ARCS.forEach((a,i)=>{
   const b=document.createElement('button'); b.className='tab'+(i===0?' on':''); b.setAttribute('role','tab'); b.setAttribute('aria-selected',i===0?'true':'false');
-  b.innerHTML=a.short+' <small>'+a.id+'</small>'; b.onclick=()=>{load(i); scrambleTo(document.getElementById('acName'), a.name);}; tabs.appendChild(b);
+  b.innerHTML=esc(a.short)+' <small>'+esc(a.id)+'</small>'; b.onclick=()=>{load(i); scrambleTo(document.getElementById('acName'), a.name);}; tabs.appendChild(b);
 });
 const list=document.getElementById('briefList');
 briefs.forEach(b=>{
   const d=document.createElement('div'); d.className='brief';
   const w=Math.round(Math.max(6,Math.min(100, (b.v.reduce((s,x)=>s+(x+1.15)/2.3,0)/b.v.length)*100)));
-  d.innerHTML='<span style="flex:1;min-width:0"><b>'+b.k+'</b> · '+b.nm+'<br><span style="color:#8b90a0;font-family:monospace;font-size:10px">'+b.d+'</span><span class="pbar"><i data-w="'+w+'" style="background:'+(b.tg==='ok'?'#8fd1a8':'#c9a87c')+'"></i></span></span><span class="tag '+(b.tg==='ok'?'ok':'no')+'" style="align-self:flex-start">'+(b.tg==='ok'?'terbuka':'tertahan')+'</span>';
+  d.innerHTML='<span style="flex:1;min-width:0"><b>'+esc(b.k)+'</b> · '+esc(b.nm)+'<br><span style="color:#8b90a0;font-family:monospace;font-size:10px">'+esc(b.d)+'</span><span class="pbar"><i data-w="'+w+'" style="background:'+(b.tg==='ok'?'#8fd1a8':'#c9a87c')+'"></i></span></span><span class="tag '+(b.tg==='ok'?'ok':'no')+'" style="align-self:flex-start">'+(b.tg==='ok'?'terbuka':'tertahan')+'</span>';
   list.appendChild(d);
 });
 
