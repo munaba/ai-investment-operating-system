@@ -87,7 +87,7 @@ export async function login(username: string, password: string): Promise<void> {
 }
 
 export async function logout(): Promise<void> {
-  await fetch(BASE + '/logout', { method: 'GET', credentials: 'include' }).catch(() => {});
+  await fetch(BASE + '/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
   clearSession();
 }
 
