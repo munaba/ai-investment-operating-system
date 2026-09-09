@@ -228,7 +228,9 @@ api.MapGet("/phase0/tables", async (IDatabaseService db) =>
     }
     catch (Exception ex)
     {
-        return Results.Problem(ex.Message);
+        // M-04: pesan exception mentah tidak ke client; detail hanya di log server.
+        app.Logger.LogError(ex, "[phase0] GET /api/phase0/tables failed");
+        return Results.Problem("Gagal memuat daftar tabel.");
     }
 });
 
@@ -310,10 +312,16 @@ api.MapGet("/alerts", async (IAlertService alerts) =>
 });
 
 // Human decision submission (mirrors HumanDecisionService.SubmitDecisionAsync)
+// M-04: output/error mentah proses CLI hanya di log server; client terima status + pesan aman.
 api.MapPost("/decision/submit", async (IHumanDecisionService svc, DecisionSubmitRequest req) =>
 {
     var (success, output, error) = await svc.SubmitDecisionAsync(req.Decision, req.WindowId, req.Note, req.DecidedBy);
-    return success ? Results.Ok(new { success, output }) : Results.BadRequest(new { success, error, output });
+    if (!success)
+    {
+        app.Logger.LogWarning("[decision] submit failed for window {WindowId}: {Error} {Output}", req.WindowId, error, output);
+        return Results.BadRequest(new { success = false, error = "Pengajuan keputusan gagal." });
+    }
+    return Results.Ok(new { success = true });
 });
 
 app.Run();
