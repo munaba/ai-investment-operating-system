@@ -433,7 +433,7 @@ export default function Phase2() {
         <AnimatePresence>
           <motion.div
             className="modal-overlay"
-            onClick={() => setShowForm(false)}
+            onClick={() => { if (!formSubmitting) setShowForm(false); }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -453,7 +453,7 @@ export default function Phase2() {
             >
             <div className="modal-header">
               <h5 className="font-display font-bold" id="decisionModalTitle">Set Human Decision — Window #{selected.windowId}</h5>
-              <button className="btn btn-sm" onClick={() => setShowForm(false)}>✕</button>
+              <button className="btn btn-sm" onClick={() => setShowForm(false)} disabled={formSubmitting} aria-label="Tutup dialog">✕</button>
             </div>
             <div className="modal-body">
               <div className="alert alert-warning">
