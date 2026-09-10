@@ -13,6 +13,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <style>
 html{color-scheme: light dark}
+:where(.kpi strong,.num,.tick b,.stat-val,.hero-stats b,.hero-stats .n,.lv-n){font-variant-numeric:tabular-nums}
+h1,h2{text-wrap:balance}
+p{overflow-wrap:break-word}
+*{-webkit-tap-highlight-color:transparent}
+a,button{touch-action:manipulation}
+html{scroll-padding-top:1rem}
 :root{--bg0:#0e1418;--bg1:#1a2a26;--bg2:#0b1e1c;--glass:rgba(255,255,255,.08);--bd:rgba(255,255,255,.14);--mut:rgba(255,255,255,.78);--pink:#fbcfe8;--ink:#0b1a18}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:"Onest",system-ui,sans-serif;background:radial-gradient(900px 600px at 50% 0%,#1e3a34 0%,var(--bg1) 45%,var(--bg0) 100%);color:#fff;overflow-x:hidden;min-height:100vh}
