@@ -60,6 +60,17 @@ a{color:inherit;text-decoration:none}
 .brief b{font-family:monospace;font-size:11px;letter-spacing:.06em}
 .tag{font-family:monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid rgba(255,255,255,.12);color:#b9bec7}
 .tag.ok{color:#8fd1a8;border-color:rgba(143,209,168,.3)}
+/* Signature fix — Arc: tabs jadi lens rail vertikal sinkron canvas + brief ledger
+   penuh lebar (DESIGN §7). Additive: menimpa .tabs pill row via kaskade. */
+#tabs{margin-top:14px;display:grid;grid-auto-flow:column;grid-auto-columns:max-content;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+@media(min-width:1024px){
+  #tabs{display:flex;flex-direction:column;flex-wrap:nowrap;overflow:visible;gap:6px;margin-top:0}
+  #tabs .tab{width:100%;text-align:left;border-radius:8px;padding:9px 12px;display:flex;justify-content:space-between;align-items:center}
+  .arc-main{display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:start}
+  #tabs{position:sticky;top:12px}
+}
+@media(min-width:1024px){.brief-col{grid-column:1/-1}.info{grid-template-columns:1fr}}
+.brief{max-width:none;font-size:13px;padding:9px 0}
 .tag.no{color:#c9a87c;border-color:rgba(201,168,124,.3)}
 
 @media(max-width:900px){
@@ -244,6 +255,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
     </div>
   </section>
 
+  <div class="arc-main">
   <div class="tabs" id="tabs" role="tablist" aria-label="Skenario lintasan"></div>
 
   <section class="info">
@@ -261,6 +273,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
       <p style="margin-top:10px;color:#8b90a0;font-family:monospace;font-size:11px;letter-spacing:.04em">70 titik = jejak valuasi 14 minggu per brief. Nilai dinormalisasi −1..+1 untuk visual, bukan harga.</p>
     </div>
   </section>
+  </div>
 
   <footer id="contact">
   <div id="ripples" aria-hidden="true"></div>
