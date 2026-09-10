@@ -107,6 +107,20 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .grid{margin-top:1.35rem;display:grid;gap:1rem}
 @media(min-width:760px){.grid.two{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:900px){.grid.three{grid-template-columns:repeat(3,1fr)}}
+/* Signature fix — Profil: 5 keputusan jadi manifesto wall nomor 6rem di gutter +
+   blueprint sebagai connector, bukan wallpaper (DESIGN §7). Additive via kaskade. */
+@media(min-width:900px){
+  .grid.three{grid-template-columns:1fr;gap:0}
+  .grid.three > *{
+    position:relative;padding-left:8.5rem;padding-top:1.6rem;padding-bottom:1.6rem;
+    border-top:1px solid var(--hair,rgba(10,10,10,.1));background:transparent;border-radius:0;box-shadow:none}
+  .grid.three > *:last-child{border-bottom:1px solid var(--hair,rgba(10,10,10,.1))}
+  .grid.three > *::before{
+    content:attr(data-num);position:absolute;left:1.5rem;top:1.1rem;
+    font-family:"Instrument Serif",serif;font-size:6rem;line-height:.85;font-weight:400;
+    color:rgba(10,10,10,.13);letter-spacing:-.03em;pointer-events:none}
+  .grid.three > * .card-top .num{font-size:0;position:absolute;width:1px;height:1px;overflow:hidden}
+}
 .card{position:relative;background:var(--surface-card);border:1px solid var(--hairline);border-radius:1.4rem;padding:1.35rem;overflow:hidden;transition:transform .32s cubic-bezier(.16,1,.3,1),box-shadow .32s}
 @media(min-width:640px){.card{padding:1.6rem 1.7rem;border-radius:1.6rem}}
 .card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,0,0,.35)}
@@ -258,35 +272,35 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
   </section>
 
   <div class="grid three">
-    <article class="card in"><div class="beam"></div>
+    <article class="card in" data-num="01"><div class="beam"></div>
       <div class="card-top"><span class="num blue">Keputusan 01</span></div>
       <h3>Bukan broker</h3>
       <p>Tidak ada akun broker, API key, pengiriman order live, atau rekonsiliasi broker di mana pun di basis kode ini. Eksekusi riil <b>hanya manusia</b>, di broker miliknya sendiri.</p>
       <p class="why">Alasannya sederhana: begitu sistem bisa menekan tombol beli, semua kehati-hatian lain jadi ornamen.</p>
     </article>
 
-    <article class="card in"><div class="beam teal"></div>
+    <article class="card in" data-num="02"><div class="beam teal"></div>
       <div class="card-top"><span class="num blue">Keputusan 02</span></div>
       <h3>Bukti dulu, rencana kemudian</h3>
       <p>Sebuah rencana butuh bukti bersumber dan ber-stempel waktu. Input yang hilang, basi, bertentangan, atau gagal menghasilkan <b>status non-aksi yang eksplisit</b> — bukan rekomendasi arah.</p>
       <p class="why">Di 5 brief yang tercatat, 2 berstatus <b>POLICY_BLOCKED</b> karena parameter risiko tidak diberikan. Sistem menolak mengarang entry/stop/target.</p>
     </article>
 
-    <article class="card in"><div class="beam"></div>
+    <article class="card in" data-num="03"><div class="beam"></div>
       <div class="card-top"><span class="num blue">Keputusan 03</span></div>
       <h3>Gagal = tertutup</h3>
       <p>Kegagalan provider, scheduler, notifikasi, izin, atau persistensi muncul di catatan health/audit dan <b>tidak pernah memicu aksi finansial</b>.</p>
       <p class="why">12 audit event tersimpan — termasuk satu notifikasi yang justru <b>ditahan</b> karena signature-nya tidak berubah sejak kirim terakhir.</p>
     </article>
 
-    <article class="card in"><div class="beam teal"></div>
+    <article class="card in" data-num="04"><div class="beam teal"></div>
       <div class="card-top"><span class="num blue">Keputusan 04</span></div>
       <h3>Paper terpisah</h3>
       <p>Keputusan jurnal tidak pernah otomatis menjadi order paper. Eksekusi paper butuh <b>perintah atau persetujuan eksplisit</b> dari operator.</p>
       <p class="why">Satu akun tercatat: <b>paper · Munaba · IDR · 100.000.000</b>. Mode paper, bukan mode nyata.</p>
     </article>
 
-    <article class="card in"><div class="beam amber"></div>
+    <article class="card in" data-num="05"><div class="beam amber"></div>
       <div class="card-top"><span class="num blue">Keputusan 05</span></div>
       <h3>Hak paling sedikit</h3>
       <p>Tool bersifat <b>read-only secara bawaan</b>. Yang menulis pun ter-scope, bisa diaudit, dan digate oleh izin. Copilot berjalan <b>READ_ONLY</b>.</p>
