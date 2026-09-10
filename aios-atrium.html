@@ -173,6 +173,14 @@ main{width:100%;overflow-x:clip;padding:0}
 .stat-val{font-size:3.75rem;font-weight:500;letter-spacing:-.02em;line-height:1}
 @media(min-width:640px){.stat-val{font-size:4.5rem}}
 .stat-label{margin-top:.75rem;font-size:.875rem;color:rgba(255,255,255,.65)}
+/* Signature fix — Atrium: stats jadi ledger vertikal Instrument 5rem + hairline (DESIGN §7).
+   Additive: menimpa .stats-grid 4 kolom via kaskade (urutan setelah @media 1024). */
+.stats-grid{margin-top:3rem;grid-template-columns:1fr;gap:0}
+.stat{border-top:1px solid rgba(255,255,255,.2);padding:1.5rem 0}
+.stat dd{display:flex;align-items:baseline;justify-content:space-between;gap:2rem;width:100%}
+.stat-val{font-family:"Instrument Serif",serif;font-size:5rem;font-weight:400;line-height:.9;letter-spacing:-.01em}
+.stat-label{margin-top:0;text-align:right;max-width:18rem;align-self:baseline}
+@media(max-width:639px){.stat-val{font-size:3.5rem}.stat dd{gap:1rem}.stat-label{font-size:.8125rem;max-width:9rem}}
 
 /* threeui polish — aurora hero, constellation trust, border-beam */
 #auroraHero{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:.92}
