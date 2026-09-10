@@ -11,6 +11,35 @@ interface AuthState {
 
 const AuthContext = createContext<AuthState | null>(null);
 
+// Literal, compile-time in-app path. Navigation targets must NEVER be built
+// from user input, URL params or server data.
+const LOGIN_PATH = '/login';
+
+// A root-relative path: starts with '/', is not protocol-relative ('//evil'),
+// and carries no scheme/userinfo/port/query — i.e. it cannot escape the origin.
+const SAFE_APP_PATH = /^\/(?!\/)[A-Za-z0-9._~\-/]*$/;
+
+/**
+ * Hardened in-app navigation (replaces window.location.assign).
+ *
+ * `location.assign(x)` accepts ANY absolute URL — including a `javascript:` /
+ * `data:` URL or a protocol-relative `//attacker.example` — so any caller that
+ * can reach it with dynamic text becomes an XSS / open-redirect sink. This
+ * helper only ever accepts a validated root-relative path and refuses anything
+ * else, so a future refactor that interpolates data fails closed instead of
+ * navigating the operator off-site.
+ */
+export function navigateToAppPath(path: string): void {
+  if (typeof window === 'undefined') return;
+  if (!SAFE_APP_PATH.test(path)) {
+    if (import.meta.env.DEV) {
+      console.error(`[auth] refused unsafe navigation target: ${JSON.stringify(path)}`);
+    }
+    return;
+  }
+  window.location.href = path;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthed, setIsAuthed] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
@@ -60,7 +89,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   const { isAuthed, loading } = useAuth();
   if (loading) return null; // wait for session check
   if (!isAuthed) {
-    if (typeof window !== 'undefined') window.location.assign('/login');
+    navigateToAppPath(LOGIN_PATH);
     return null;
   }
   return <>{children}</>;
