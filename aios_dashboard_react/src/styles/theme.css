@@ -116,7 +116,10 @@
   font-family: var(--font-body);
   font-size: 0.85rem;
 }
-.form-control:focus, .form-select:focus, textarea:focus {
+/* Keyboard-only focus ring: :focus-visible instead of :focus so mouse/click
+   focus on inputs no longer paints the gold ring (cosmetic a11y polish).
+   Keyboard users still get it — see tokens.css a/button/[tabindex]:focus-visible. */
+.form-control:focus-visible, .form-select:focus-visible, textarea:focus-visible {
   border-color: var(--gold);
   box-shadow: 0 0 0 3px rgba(205,162,63,.14);
   outline: none;
