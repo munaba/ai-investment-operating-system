@@ -328,15 +328,15 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
     <article class="hcard rv" data-mod="gauge">
       <div class="cap"><b>Gauge - kepadatan</b><span>gauge-01</span></div>
       <div class="lvs">
-        <div class="lv"><canvas class="lv-h" id="lv1"></canvas><div class="lv-n" id="lv1n">-</div><div class="lv-l">Tempat</div></div>
-        <div class="lv"><canvas class="lv-h" id="lv2"></canvas><div class="lv-n" id="lv2n">-</div><div class="lv-l">Ide</div></div>
-        <div class="lv"><canvas class="lv-h" id="lv3"></canvas><div class="lv-n" id="lv3n">-</div><div class="lv-l">Orang</div></div>
+        <div class="lv"><canvas class="lv-h" id="lv1" aria-hidden="true"></canvas><div class="lv-n" id="lv1n">-</div><div class="lv-l">Tempat</div></div>
+        <div class="lv"><canvas class="lv-h" id="lv2" aria-hidden="true"></canvas><div class="lv-n" id="lv2n">-</div><div class="lv-l">Ide</div></div>
+        <div class="lv"><canvas class="lv-h" id="lv3" aria-hidden="true"></canvas><div class="lv-n" id="lv3n">-</div><div class="lv-l">Orang</div></div>
       </div>
       <p class="note" style="border-top:1px solid #e6e5e2">Proporsi tiap kategori, naik pelan saat kartu terlihat. Klik gauge untuk nilai acak.</p>
     </article>
     <article class="hcard rv" data-mod="part">
       <div class="cap"><b>Particles - bidang tolak</b><span>magic/particles</span></div>
-      <canvas class="pmin" id="pmin" style="border-top:none"></canvas>
+      <canvas class="pmin" id="pmin" aria-hidden="true" style="border-top:none"></canvas>
       <p class="note" style="border-top:1px solid #e6e5e2">30 titik saling terhubung di bawah 110px; kursor mendorong mereka menjauh.</p>
     </article>
   </div>
@@ -481,7 +481,7 @@ towers.forEach((t,i)=>{
   const el=document.createElement('article');el.className='tower rv';
   el.style.transitionDelay=(i%3*0.07)+'s';
   const tint=TINTS[i%3];
-  el.innerHTML=`<div class="tower-top"><canvas width="300" height="120"></canvas><span class="tower-spin"><i style="background:${tint}"></i></span><span>${esc(t.icon)}</span><b>${esc(t.sub)}</b></div><div class="tower-body"><h3>${esc(t.n)}</h3><p>${esc(t.desc)}</p><div class="tower-meta"><s>${esc(t.tags[0])}</s><s>${esc(t.tags[1])}</s></div></div>`;
+  el.innerHTML=`<div class="tower-top"><canvas width="300" height="120" aria-hidden="true"></canvas><span class="tower-spin"><i style="background:${tint}"></i></span><span>${esc(t.icon)}</span><b>${esc(t.sub)}</b></div><div class="tower-body"><h3>${esc(t.n)}</h3><p>${esc(t.desc)}</p><div class="tower-meta"><s>${esc(t.tags[0])}</s><s>${esc(t.tags[1])}</s></div></div>`;
   tWrap.appendChild(el);
   wireSphere(el.querySelector('.tower-top canvas'),tint);
 });
