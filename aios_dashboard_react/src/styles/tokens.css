@@ -38,6 +38,7 @@
 }
 
 :root {
+  --muted: 0 0% 62%; /* formerly lightswind — preserves text-muted */
   --black: #000000;
   --panel: #0C0C0C;
   --edge: #232323;
