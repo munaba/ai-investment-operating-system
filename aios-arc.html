@@ -175,7 +175,7 @@ a{color:inherit;text-decoration:none}
 @keyframes tape{0%{transform:translateY(-105vh);opacity:0}8%{opacity:1}92%{opacity:1}100%{transform:translateY(105vh);opacity:0}}
 @media(prefers-reduced-motion:reduce){.vl .tape{animation:none;opacity:.5}}
 
-</style>
+a.skip{position:fixed;left:1rem;top:1rem;z-index:9999;background:#0a0a0a;color:#fff;border-radius:.6rem;padding:.5rem 1rem;transform:translateY(-175%);transition:transform .15s}a.skip:focus{transform:translateY(0)} .wrap[id],main[id]{scroll-margin-top:1rem}</style>
 
 
 
@@ -203,6 +203,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
 </style>
 </head>
 <body>
+<a href="#main" class="skip">Skip to content</a>
 <div class="gh"></div>
 <div class="gl"><div class="vl" data-tape="52"></div><div class="vl" data-tape="18"><i class="vd t"></i><i class="vd b"></i></div><div class="vl" data-tape="74"></div><div class="vl" data-tape="34"><i class="vd t"></i><i class="vd b"></i></div><div class="vl" data-tape="61"></div></div>
 
@@ -212,7 +213,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
     <div class="nav-right"><button class="book-link" id="bookHeader">Atur Notifikasi</button><button class="burger" id="burger" aria-label="Open menu"><span class="burger-bars"><i></i><i></i></span></button></div>
   </header>
 
-<main class="wrap">
+<main id="main" tabindex="-1" class="wrap">
   <section class="hero">
     <canvas id="heroGrid" aria-hidden="true"></canvas>
     <div>
@@ -615,5 +616,5 @@ let raf=0; const clock=new THREE.Clock();
   requestAnimationFrame(f);
 })();
 </script>
-</body>
+<script>addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});</script></body>
 </html>

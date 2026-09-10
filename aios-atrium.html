@@ -273,7 +273,7 @@ main{width:100%;overflow-x:clip;padding:0}
 .word-rot{display:inline-block;min-width:6.5em;text-align:left;transition:transform .45s cubic-bezier(.16,1,.3,1),opacity .45s}
 /* 10) animated list — stats stagger (magic/animated-list-01.html + blur-fade-01.html) */
 .stat{transition:opacity .7s,transform .7s,filter .7s}
-</style>
+a.skip{position:fixed;left:1rem;top:1rem;z-index:9999;background:#0a0a0a;color:#fff;border-radius:.6rem;padding:.5rem 1rem;transform:translateY(-175%);transition:transform .15s}a.skip:focus{transform:translateY(0)} .wrap[id],main[id]{scroll-margin-top:1rem}</style>
 
 
 
@@ -301,11 +301,12 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
 </style>
 </head>
 <body>
+<a href="#main" class="skip">Skip to content</a>
 <div id="loader" aria-hidden="false">
   <div class="loader-mark" id="loaderMark"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/></svg> AIOS</div>
   <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
 </div>
-<main>
+<main id="main" tabindex="-1">
 <section id="hero">
   <div class="hero-bg" aria-hidden="true">
     <div class="hero-bg-inner" id="heroParallax"><canvas id="auroraHero" aria-hidden="true"></canvas><canvas id="meteorHero" aria-hidden="true"></canvas><img id="heroImg" width="1200" height="800" alt="Gradien abstrak merepresentasikan pergerakan pasar" fetchpriority="high" style="display:block" decoding="async"></div>
@@ -1009,5 +1010,5 @@ function whenVisible(el,fn){ const io=new IntersectionObserver(e=>{fn(e[0].isInt
   items.forEach(el=>io.observe(el));
 })();
 </script>
-</body>
+<script>addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});</script></body>
 </html>

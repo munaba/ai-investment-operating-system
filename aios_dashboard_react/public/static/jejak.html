@@ -228,7 +228,7 @@ button{font:inherit}
 .pill.light::after{content:"";position:absolute;top:0;bottom:0;width:36%;left:-45%;pointer-events:none;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);animation:tuShine 3.8s ease-in-out infinite}
 @keyframes tuShine{0%{left:-45%}60%{left:125%}100%{left:125%}}
 @media(max-width:640px){.tu-mq-item{font-size:.6rem}}
-</style>
+a.skip{position:fixed;left:1rem;top:1rem;z-index:9999;background:#0a0a0a;color:#fff;border-radius:.6rem;padding:.5rem 1rem;transform:translateY(-175%);transition:transform .15s}a.skip:focus{transform:translateY(0)} .wrap[id],main[id]{scroll-margin-top:1rem}</style>
 
 
 
@@ -256,6 +256,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
 </style>
 </head>
 <body class="grain">
+<a href="#main" class="skip">Skip to content</a>
 <header class="site-header">
     <nav class="nav-left" aria-label="Primary"><a href="aios-atrium.html">Atrium</a><a href="aios-atlas.html">Atlas</a><a href="aios-arc.html">Arc</a><a href="aios-materi.html">Materi</a><a href="aios-jejak.html" class="active" aria-current="page">Jejak</a><a href="aios-ikhtisar.html">Ikhtisar</a></nav>
     <a class="brand-center" href="aios-atrium.html" href="aios-atrium.html" aria-label="AIOS — beranda" aria-label="AIOS — beranda"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/></svg> AIOS · Jejak</a>
@@ -276,7 +277,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
 <span class="tu-mq-item"><i class=""></i><b>0</b> JOURNAL</span>
 </div></div>
 
-<main class="wrap">
+<main id="main" tabindex="-1" class="wrap">
   <section class="hero in">
     <h1>Jejak keputusan, <i>bukan ringkasan angka.</i></h1>
     <p>Setiap brief di sini dicatat apa adanya — kalau <b>POLICY_BLOCKED</b> ya dikutip alasannya, kalau <b>SUCCESS</b> ya terlihat entry/stop/target-nya. 70 snapshots semua <b>MEDIUM</b>, 3 posisi sudah closed. Tidak ada jurnal yang mengada-ada.</p>
@@ -525,5 +526,5 @@ function tick(){ tickRaf=0; if(reduceTick||!tickVisible){ tickRaf=requestAnimati
 if(!reduceTick) tickRaf=requestAnimationFrame(tick);
 document.addEventListener('visibilitychange', function(){ if(document.hidden){ if(tickRaf)cancelAnimationFrame(tickRaf); tickRaf=0; } else if(tickVisible&&!tickRaf&&!reduceTick) tickRaf=requestAnimationFrame(tick); });
 </script>
-</body>
+<script>addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});</script></body>
 </html>
