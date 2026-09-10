@@ -79,6 +79,26 @@ h2.s-title{font-size:2rem;font-weight:700;letter-spacing:-.02em;line-height:1}
 .towers{display:grid;grid-template-columns:1fr;gap:.9rem;margin-top:2rem}
 @media(min-width:640px){.towers{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1024px){.towers{grid-template-columns:repeat(3,1fr)}}
+/* Signature fix — Atlas: 11 towers jadi peta absolut constellation (DESIGN §7).
+   Additive CSS-only: posisi absolut per nth-child; JS render tidak diubah. */
+@media(min-width:1024px){
+  .towers{display:block;position:relative;height:1180px;margin-top:2rem}
+  .towers .tower{position:absolute!important;width:250px!important;max-width:40%;border-radius:1rem;
+    box-shadow:0 2px 6px rgba(0,0,0,.05),0 14px 34px rgba(0,0,0,.07)}
+  .towers .tower::after{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;
+    border-radius:50%;background:#c9c7c2;transform:translate(-50%,-50%);z-index:-1}
+  .towers .tower:nth-child(1){left:2%;top:2%}
+  .towers .tower:nth-child(2){left:29%;top:0%}
+  .towers .tower:nth-child(3){left:56%;top:5%}
+  .towers .tower:nth-child(4){left:80%;top:1%}
+  .towers .tower:nth-child(5){left:12%;top:26%}
+  .towers .tower:nth-child(6){left:40%;top:31%}
+  .towers .tower:nth-child(7){left:68%;top:27%}
+  .towers .tower:nth-child(8){left:4%;top:55%}
+  .towers .tower:nth-child(9){left:31%;top:60%}
+  .towers .tower:nth-child(10){left:58%;top:56%}
+  .towers .tower:nth-child(11){left:78%;top:62%}
+}
 .tower{border:1px solid #e6e5e2;border-radius:1.25rem;overflow:hidden;background:#fff;transition:transform .35s,box-shadow .35s}
 @media(hover:hover){.tower:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.08)}}
 .tower-top{height:6.2rem;position:relative;overflow:hidden;background:linear-gradient(135deg,#f1f0ee,#e3e2df);display:flex;align-items:center;justify-content:center}
