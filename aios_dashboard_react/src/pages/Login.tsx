@@ -30,7 +30,7 @@ export default function Login() {
           </p>
 
           {loginError && (
-            <div className="alert alert-danger py-2" style={{ fontSize: '0.82rem' }}>
+            <div className="alert alert-danger py-2" style={{ fontSize: '0.82rem' }} id="login-error" role="alert">
               {loginError}
             </div>
           )}
@@ -46,6 +46,8 @@ export default function Login() {
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 autoComplete="username"
+                aria-invalid={!!loginError}
+                aria-describedby={loginError ? "login-error" : undefined}
               />
             </div>
             <div style={{ marginBottom: 18 }}>
@@ -58,6 +60,8 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
+                aria-invalid={!!loginError}
+                aria-describedby={loginError ? "login-error" : undefined}
               />
             </div>
             <button type="submit" className="btn btn-primary w-100" disabled={submitting}>
