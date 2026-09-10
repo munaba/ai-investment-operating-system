@@ -534,7 +534,7 @@ function addPoints(list,cat){
   list.forEach((txt,i)=>{
     const [title,note]=txt.split(' - ');
     const d=document.createElement('div');d.className='point';d.dataset.cat=cat;
-    d.innerHTML=`<b>${String(i+1).padStart(2,'0')}</b><p><strong class="pt-anim" aria-label="${esc(title)}">${[...title].map((ch,k)=>`<span style="animation-delay:${k*0.05}s">${ch===' '?'&nbsp;':esc(ch)}</span>`).join('')}</strong> - ${esc(note||'')}<em>${esc(cat)} · #${String(i+1).padStart(2,'0')}</em></p>`;
+    d.innerHTML=`<b>${String(i+1).padStart(2,'0')}</b><p><strong class="pt-anim">${[...title].map((ch,k)=>`<span style="animation-delay:${k*0.05}s">${ch===' '?'&nbsp;':esc(ch)}</span>`).join('')}</strong> - ${esc(note||'')}<em>${esc(cat)} · #${String(i+1).padStart(2,'0')}</em></p>`;
     pointsEl.appendChild(d);
   });
 }
