@@ -113,7 +113,7 @@ export default function Home() {
       </div>
 
       <Stagger className="relative z-[2] mx-auto max-w-[920px] px-6 pb-16 text-center" gap={0.07}>
-        <h1 className="font-display text-[2.6rem] font-bold tracking-tight text-white">AIOS<span className="text-[var(--gold)]">.</span></h1>
+        <h2 className="font-display text-[2.6rem] font-bold tracking-tight text-white">AIOS<span className="text-[var(--gold)]">.</span></h2>
         <p className="mb-6 text-[0.92rem] text-gray">Personal IDX decision &amp; support agent — <em className="accent-em">read-only</em> dashboard.</p>
         <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {LINKS.map((l) => (
