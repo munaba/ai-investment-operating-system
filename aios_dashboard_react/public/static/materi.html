@@ -46,7 +46,7 @@ a{color:inherit;text-decoration:none}
 .look{position:absolute;inset:0;background:linear-gradient(180deg,#fdf8f0,#ece6db);display:flex;flex-direction:column}
 .look-top{padding:38px 16px 14px}
 .badge{font-size:.6rem;letter-spacing:.14em;background:#111;color:#fff;display:inline-block;padding:5px 9px;border-radius:999px}
-.look h3{font-family:"Onest",system-ui,sans-serif;font-size:1.15rem;font-weight:900;line-height:1;color:#111;margin-top:10px}
+.look h2,.look h3{font-family:"Onest",system-ui,sans-serif;font-size:1.15rem;font-weight:900;line-height:1;color:#111;margin-top:10px}
 .look p{font-size:.7rem;color:rgba(0,0,0,.5);margin-top:6px}
 .swatch-row{display:flex;gap:6px;margin-top:10px}
 .swatch-row span{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.12)}
@@ -86,7 +86,7 @@ a{color:inherit;text-decoration:none}
 .mini-screen.ipad{aspect-ratio:4/3}
 .mini-screen.mac{aspect-ratio:16/10;border-radius:6px}
 .mini-screen.watch{aspect-ratio:1/1.15;border-radius:18px}
-.device h4{font-size:.82rem;font-weight:800}
+.device h4,.device h3{font-size:.82rem;font-weight:800}
 .device p{font-size:.7rem;color:var(--mut);line-height:1.5}
 .footer{padding:26px 4%;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--mut);font-size:.72rem;max-width:1280px;margin:0 auto}
 /* ─── polish · komponen threeui (tambahan, tidak mengubah struktur) ─── */
@@ -273,7 +273,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
 <div class="look">
 <div class="look-top">
 <span class="badge">LOOKBOOK · MATERI 01</span>
-<h3>Woven<br>Silk Drape</h3>
+<h2>Woven<br>Silk Drape</h2>
 <p>Weave rapat + sheen specular. Untuk cover, lining, dan editorial.</p>
 <div class="swatch-row"><span style="background:#d94a6a"></span><span style="background:#f0e6d6"></span><span style="background:#1a365d"></span><span style="background:#c9a86a"></span></div>
 </div>
@@ -464,14 +464,14 @@ const devices=[
 const devWrap=document.getElementById('devices');
 devices.forEach(o=>{
   const el=document.createElement('div'); el.className='device';
-  el.innerHTML=`<div class="mini-frame ${o.k}"><div class="mini-screen ${o.k}"><div style="position:absolute;inset:0;background:${o.c}"></div><div style="position:absolute;left:10px;right:10px;top:10px;background:#fff;border-radius:10px;padding:8px;display:flex;gap:8px;align-items:center"><div style="width:28px;height:28px;border-radius:8px;background:#111;display:grid;place-items:center;color:#fff;font-size:.7rem">◨</div><div><div style="font-size:.68rem;font-weight:800">AIOS</div><div style="font-size:.6rem;opacity:.5">Materi</div></div><span style="margin-left:auto;font-size:.6rem;background:#111;color:#fff;padding:4px 8px;border-radius:999px">View</span></div></div></div><h4>${o.t}</h4><p>${o.d}</p>`;
+  el.innerHTML=`<div class="mini-frame ${o.k}"><div class="mini-screen ${o.k}"><div style="position:absolute;inset:0;background:${o.c}"></div><div style="position:absolute;left:10px;right:10px;top:10px;background:#fff;border-radius:10px;padding:8px;display:flex;gap:8px;align-items:center"><div style="width:28px;height:28px;border-radius:8px;background:#111;display:grid;place-items:center;color:#fff;font-size:.7rem">◨</div><div><div style="font-size:.68rem;font-weight:800">AIOS</div><div style="font-size:.6rem;opacity:.5">Materi</div></div><span style="margin-left:auto;font-size:.6rem;background:#111;color:#fff;padding:4px 8px;border-radius:999px">View</span></div></div></div><h3>${o.t}</h3><p>${o.d}</p>`;
   devWrap.appendChild(el);
 });
 // swatches
 const sw=document.getElementById('swatches');
 ['#d94a6a','#ece6db','#1a365d','#c9a86a','#6c5cff','#0f172a','#f7a8b8','#8a6a3a'].forEach(hex=>{
   const b=document.createElement('button'); b.style.cssText=`width:100%;aspect-ratio:1;border-radius:10px;border:2px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.12);background:${hex};cursor:pointer`; b.setAttribute('aria-label',hex);
-  b.onclick=()=>{document.querySelector('.look h3').style.color=hex; gsap.fromTo(b,{scale:.9},{scale:1,duration:.25,ease:'back.out(1.6)'})};
+  b.onclick=()=>{document.querySelector('.look h2').style.color=hex; gsap.fromTo(b,{scale:.9},{scale:1,duration:.25,ease:'back.out(1.6)'})};
   sw.appendChild(b);
 });
 document.getElementById('cta').onclick=()=>document.getElementById('studio').scrollIntoView({behavior:'smooth'});
