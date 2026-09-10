@@ -288,18 +288,18 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
 <div class="sec-head"><div><div class="eyebrow">01 - WOVEN PANELS</div><h2>Tenun sebagai shader</h2></div><p>Empat panel besar. Tiap panel pakai <b>ShaderMaterial</b> ringkas: vertex warp lembut + fragment weave/sheen. Gerak sheen jalan terus - hover percepat.</p></div>
 <div class="marq" style="margin-bottom:14px" aria-hidden="true"><div class="marq-track" id="marqMat"></div></div>
 <div class="woven-grid">
-<article class="woven rv" data-sheen="silk"><div class="beam"></div><div class="spot"></div><canvas id="cv-silk" width="560" height="220"></canvas><div class="woven-body"><div><h3>01 - Silk Drape</h3><p>Weave 28×28 · sheen specular 12-power · fold sinus</p></div><span class="tag">SILK · #d94a6a</span></div></article>
-<article class="woven rv" data-sheen="linen"><div class="beam"></div><div class="spot"></div><canvas id="cv-linen" width="560" height="220"></canvas><div class="woven-body"><div><h3>02 - Linen Weave</h3><p>Warp/weft 22×22 · slubs acak · AO tepi</p></div><span class="tag">LINEN · #ece6db</span></div></article>
-<article class="woven rv" data-sheen="tartan"><div class="beam"></div><div class="spot"></div><canvas id="cv-tartan" width="560" height="220"></canvas><div class="woven-body"><div><h3>03 - Tartan Plaid</h3><p>Overcheck + twill diagonal · palet navy/red/gold</p></div><span class="tag">TARTAN · #1a365d</span></div></article>
-<article class="woven rv" data-sheen="bamboo"><div class="beam"></div><div class="spot"></div><canvas id="cv-bamboo" width="560" height="220"></canvas><div class="woven-body"><div><h3>04 - Bamboo Mat</h3><p>Slat anyam · binding gelap · varnish halus</p></div><span class="tag">BAMBOO · #c9a86a</span></div></article>
+<article class="woven rv" data-sheen="silk"><div class="beam"></div><div class="spot"></div><canvas id="cv-silk" aria-hidden="true" width="560" height="220"></canvas><div class="woven-body"><div><h3>01 - Silk Drape</h3><p>Weave 28×28 · sheen specular 12-power · fold sinus</p></div><span class="tag">SILK · #d94a6a</span></div></article>
+<article class="woven rv" data-sheen="linen"><div class="beam"></div><div class="spot"></div><canvas id="cv-linen" aria-hidden="true" width="560" height="220"></canvas><div class="woven-body"><div><h3>02 - Linen Weave</h3><p>Warp/weft 22×22 · slubs acak · AO tepi</p></div><span class="tag">LINEN · #ece6db</span></div></article>
+<article class="woven rv" data-sheen="tartan"><div class="beam"></div><div class="spot"></div><canvas id="cv-tartan" aria-hidden="true" width="560" height="220"></canvas><div class="woven-body"><div><h3>03 - Tartan Plaid</h3><p>Overcheck + twill diagonal · palet navy/red/gold</p></div><span class="tag">TARTAN · #1a365d</span></div></article>
+<article class="woven rv" data-sheen="bamboo"><div class="beam"></div><div class="spot"></div><canvas id="cv-bamboo" aria-hidden="true" width="560" height="220"></canvas><div class="woven-body"><div><h3>04 - Bamboo Mat</h3><p>Slat anyam · binding gelap · varnish halus</p></div><span class="tag">BAMBOO · #c9a86a</span></div></article>
 </div>
 </section>
 
 <section class="section rv" id="hidup">
 <div class="sec-head"><div><div class="eyebrow">04 - KOMPONEN HIDUP</div><h2>Tekstur yang bergerak</h2></div><p>Empat panel ringan: marquee nama material, dock etalase, grid partikel yang menolak kursor, dan laser sweep. Semua Canvas2D - tidak ada WebGL, tidak ada build.</p></div>
 <div class="hidup-grid">
-  <article class="hcard2"><div class="cap"><b>Particles - tolak kursor</b><span>magic/particles</span></div><canvas id="mPart"></canvas><p class="note">40 titik; kursor mendorong yang terdekat. Garis muncul di bawah 70px.</p></article>
-  <article class="hcard2"><div class="cap"><b>Laser - sweep</b><span>laser-01</span></div><canvas id="mLaser"></canvas><p class="note">Sapuan vertikal + grid latar. Klik kanvas untuk mengganti mode.</p></article>
+  <article class="hcard2"><div class="cap"><b>Particles - tolak kursor</b><span>magic/particles</span></div><canvas id="mPart" aria-hidden="true"></canvas><p class="note">40 titik; kursor mendorong yang terdekat. Garis muncul di bawah 70px.</p></article>
+  <article class="hcard2"><div class="cap"><b>Laser - sweep</b><span>laser-01</span></div><canvas id="mLaser" role="img" aria-label="Laser sweep — klik untuk ganti mode" tabindex="0"></canvas><p class="note">Sapuan vertikal + grid latar. Klik kanvas untuk mengganti mode.</p></article>
 </div>
 <div style="margin-top:14px;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:20px;padding:16px">
   <div class="dock" id="mDock" role="list" aria-label="Etalase material"></div>
@@ -607,6 +607,7 @@ document.querySelectorAll('.woven').forEach(card=>{
   addEventListener('resize',rs);rs();
   cv.style.cursor='pointer';
   cv.addEventListener('click',()=>{mode=(mode+1)%3});
+  cv.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();mode=(mode+1)%3}});
   let lastLaser=0;
   function drawL(now){ if(now&&now-lastLaser<33){requestAnimationFrame(drawL);return} if(now)lastLaser=now;
     if(!W){requestAnimationFrame(drawL);return}
