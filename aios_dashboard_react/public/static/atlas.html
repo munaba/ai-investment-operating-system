@@ -18,7 +18,7 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 :root{--ink:#0a0a0a;--muted:#595959;--line:#e6e5e2;--surface:#f1f0ee;--accent:#b15f2c;--accent2:#cf8047}
 .shell{max-width:88rem;margin:0 auto}
 .skip{position:fixed;left:1rem;top:1rem;z-index:60;background:#0a0a0a;color:#fff;border-radius:.6rem;padding:.5rem 1rem;transform:translateY(-150%)}
-.skip:focus{transform:translateY(0)}
+.skip:focus-visible{transform:translateY(0)}
 /* header */
 #header{position:absolute;inset-inline:0;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.25rem}
 @media(min-width:640px){#header{padding:1.4rem 2rem}}
@@ -241,7 +241,7 @@ footer{background:#0a0a0a;color:#fff;border-radius:2rem 2rem 0 0;margin-top:1rem
 #contact a{color:inherit}
 #contact ul li a:hover{text-decoration:underline}
 
-a.skip{position:fixed;left:1rem;top:1rem;z-index:9999;background:#0a0a0a;color:#fff;border-radius:.6rem;padding:.5rem 1rem;transform:translateY(-175%);transition:transform .15s}a.skip:focus{transform:translateY(0)} .wrap[id],main[id]{scroll-margin-top:1rem}</style>
+a.skip{position:fixed;left:1rem;top:1rem;z-index:9999;background:#0a0a0a;color:#fff;border-radius:.6rem;padding:.5rem 1rem;transform:translateY(-175%);transition:transform .15s}a.skip:focus-visible{transform:translateY(0)} .wrap[id],main[id]{scroll-margin-top:1rem}</style>
 
 
 
