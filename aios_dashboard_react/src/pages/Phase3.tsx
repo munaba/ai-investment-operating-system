@@ -368,8 +368,8 @@ export default function Phase3() {
                     <table className="table table-striped table-hover mb-0">
                       <thead><tr><th>Job Type</th><th>Trading Date</th><th>Status</th><th>Attempt</th><th>Started At</th><th>Finished At</th><th>Next Retry</th><th>Detail</th></tr></thead>
                       <tbody>
-                        {jobs.map((j, i) => (
-                          <tr key={`${j.jobType}-${j.tradingDate}-${i}`}>
+                        {jobs.map((j) => (
+                          <tr key={`${j.jobType}-${j.tradingDate}`}>
                             <td>{j.jobType}</td><td>{j.tradingDate}</td><td><span className={`badge ${jobBadge(j.status)}`}>{j.status}</span></td>
                             <td>{j.attempt}</td><td>{formatDateTime(j.startedAt)}</td><td>{formatDateTime(j.finishedAt)}</td>
                             <td>{formatDateTime(j.nextRetryAt)}</td><td>{j.detail ?? ''}</td>
@@ -414,8 +414,8 @@ export default function Phase3() {
                   <table className="table table-striped table-hover mb-0">
                     <thead><tr><th>Alert Type</th><th>Last Signature</th><th>Last Sent At</th><th>Last Status</th><th>Updated At</th></tr></thead>
                     <tbody>
-                      {dedup.map((d, i) => (
-                        <tr key={`${d.alertType}-${i}`}>
+                      {dedup.map((d) => (
+                        <tr key={d.alertType}>
                           <td>{d.alertType}</td><td>{d.lastSignature ?? '—'}</td><td>{formatDateTime(d.lastSentAt)}</td>
                           <td><span className={`badge ${dedupBadge(d.lastStatus)}`}>{d.lastStatus}</span></td><td>{formatDateTime(d.updatedAt)}</td>
                         </tr>
