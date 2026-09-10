@@ -32,7 +32,6 @@
     "gsap": "^3.15.0",
     "imagesloaded": "^5.0.0",
     "lenis": "^1.3.26",
-    "lightswind": "^3.2.4",
     "lucide-react": "^0.479.0",
     "media-chrome": "^4.19.2",
     "motion": "^13.1.1",
@@ -73,7 +72,6 @@
     "gsap": true,
     "canvas": true,
     "simplex-noise": true,
-    "framer-motion": true,
-    "lightswind": true
+    "framer-motion": true
   }
 }
