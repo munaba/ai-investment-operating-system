@@ -48,7 +48,14 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
   // 204 / empty body
   const contentType = res.headers.get('content-type') ?? '';
-  if (!contentType.includes('application/json')) return undefined as T;
+  // Non-JSON (or empty) body means "no payload" — e.g. 204 No Content.
+  // Previously `undefined as T` asserted "undefined is a T", which is unsound
+  // whenever T isn't nullable. We keep the same runtime contract (the caller's
+  // declared T is still what it gets back) but move the single unavoidable
+  // assertion to the function's return type instead of lying per-branch.
+  if (!contentType.includes('application/json')) {
+    return undefined as unknown as T;
+  }
   return (await res.json()) as T;
 }
 
