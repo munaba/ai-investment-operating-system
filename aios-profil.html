@@ -180,7 +180,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .in.show{opacity:1;transform:translateY(0)}
 .foot-note{max-width:88rem;margin:1.5rem auto 0;padding:1.2rem 1.5rem 2rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:#5f6878;line-height:1.8}
 @media(min-width:640px){.foot-note{padding:1.4rem 2.5rem 2.2rem}}
-</style>
+a.skip{position:fixed;left:1rem;top:1rem;z-index:9999;background:#0a0a0a;color:#fff;border-radius:.6rem;padding:.5rem 1rem;transform:translateY(-175%);transition:transform .15s}a.skip:focus{transform:translateY(0)} .wrap[id],main[id]{scroll-margin-top:1rem}</style>
 
 
 
@@ -208,6 +208,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
 </style>
 </head>
 <body class="grain">
+<a href="#main" class="skip">Skip to content</a>
 
 <header class="site-header">
   <nav class="nav-left" aria-label="Primary"><a href="aios-atrium.html">Atrium</a><a href="aios-atlas.html">Atlas</a><a href="aios-arc.html">Arc</a><a href="aios-materi.html">Materi</a><a href="aios-jejak.html">Jejak</a><a href="aios-ikhtisar.html">Ikhtisar</a></nav>
@@ -224,7 +225,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
 <div class="ghost" aria-hidden="true"><span>PROFIL</span> <b>— ARSITEK</b> <em>sistem</em></div>
 <div class="ghost-sub"><span>Nabil · <strong>arsitek sistem AIOS</strong> · bukan pemberi sinyal</span><span class="tag">Phase A–G selesai · H diobservasi</span><span class="tag">IDX · paper · read-only copilot</span></div>
 
-<main class="wrap">
+<main id="main" tabindex="-1" class="wrap">
 
   <section class="hero in">
     <canvas id="blueprint" aria-hidden="true"></canvas>
@@ -450,5 +451,5 @@ document.querySelectorAll('a[href^="#"]').forEach(x=>x.addEventListener('click',
   requestAnimationFrame(draw);
 })();
 </script>
-</body>
+<script>addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});</script></body>
 </html>

@@ -211,7 +211,7 @@ a{color:inherit;text-decoration:none}
 #contact a{color:inherit}
 #contact ul li a:hover{text-decoration:underline}
 
-</style>
+a.skip{position:fixed;left:1rem;top:1rem;z-index:9999;background:#0a0a0a;color:#fff;border-radius:.6rem;padding:.5rem 1rem;transform:translateY(-175%);transition:transform .15s}a.skip:focus{transform:translateY(0)} .wrap[id],main[id]{scroll-margin-top:1rem}</style>
 
 
 
@@ -239,13 +239,14 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
 </style>
 </head>
 <body>
+<a href="#main" class="skip">Skip to content</a>
 <header class="site-header">
     <nav class="nav-left" aria-label="Primary"><a href="aios-atrium.html">Atrium</a><a href="aios-atlas.html">Atlas</a><a href="aios-arc.html">Arc</a><a href="aios-materi.html" class="active" aria-current="page">Materi</a><a href="aios-jejak.html">Jejak</a><a href="aios-ikhtisar.html">Ikhtisar</a></nav>
     <a class="brand-center" href="aios-atrium.html" href="aios-atrium.html" aria-label="AIOS — beranda" aria-label="AIOS - beranda"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/></svg> AIOS · Materi</a>
     <div class="nav-right"><button class="book-link" id="bookHeader">Atur Notifikasi</button><button class="burger" id="burger" aria-label="Open menu"><span class="burger-bars"><i></i><i></i></span></button></div>
   </header>
 
-<main class="hero" id="materi">
+<main id="main" tabindex="-1" class="hero">
 <div class="hero-grid">
 <div>
 <div class="eyebrow">STUDIO TEKSTUR - LOOKBOOK 2025</div>
@@ -690,5 +691,5 @@ document.querySelectorAll('.orb').forEach(o=>{
   },2400);
 })();
 </script>
-</body>
+<script>addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});</script></body>
 </html>

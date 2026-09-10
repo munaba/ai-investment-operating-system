@@ -239,7 +239,7 @@ footer{background:#0a0a0a;color:#fff;border-radius:2rem 2rem 0 0;margin-top:1rem
 #contact a{color:inherit}
 #contact ul li a:hover{text-decoration:underline}
 
-</style>
+a.skip{position:fixed;left:1rem;top:1rem;z-index:9999;background:#0a0a0a;color:#fff;border-radius:.6rem;padding:.5rem 1rem;transform:translateY(-175%);transition:transform .15s}a.skip:focus{transform:translateY(0)} .wrap[id],main[id]{scroll-margin-top:1rem}</style>
 
 
 
@@ -275,7 +275,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
   </header>
 <div id="mnav" inert aria-hidden="true"><div style="display:flex;justify-content:space-between;align-items:center"><b>ATLAS</b><button id="closeNav" style="border:1px solid rgba(255,255,255,.2);border-radius:9999px;padding:.4rem .8rem;font-size:.75rem">Tutup ✕</button></div><nav style="margin-top:2rem;display:flex;flex-direction:column"><a href="#hero">Peta</a><a href="#menara">Menara</a><a href="#alur">Alur</a><a href="#titik">Titik</a><a href="#tentang">Tentang</a></nav><p style="margin-top:auto;padding-top:2rem;font-size:.8rem;color:rgba(255,255,255,.5)">Peta jaringan personal - tempat · ide · orang. 42 simpul · 11 menara · 70 titik.</p></div>
 
-<main id="main">
+<main id="main" tabindex="-1">
 <section id="hero">
   <canvas id="atlasCanvas" aria-hidden="true"></canvas>
   <div class="vig"></div>
@@ -834,5 +834,5 @@ try{new IntersectionObserver(es=>heroVisible=es[0].isIntersecting,{threshold:0})
 
 // ponytail: 70 points hardcoded - ganti dengan fetch JSON saat jadi CMS; constellation pakai 2D canvas - upgrade ke Three.js points saat butuh depth/zoom. Komponen polish: marquee, gauge, particles, orbiting, animated-beam, blur-fade, wavy-text, word-rotate, wireframe-sphere.
 </script>
-</body>
+<script>addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});</script></body>
 </html>
