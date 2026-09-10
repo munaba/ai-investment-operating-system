@@ -393,7 +393,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
   <div class="footer-bottom"><span>© 2026 AIOS · Atrium.</span><nav><a href="https://x.com/AIOS">X</a><a href="https://x.com/AIOS">Telegram</a></nav><nav><a href="aios-profil.html">Privasi</a><a href="aios-profil.html">Ketentuan</a></nav></div>
 </footer>
 </main>
-<div id="menu" aria-hidden="true">
+<div id="menu" aria-hidden="true" inert>
   <div class="menu-backdrop" id="menuBackdrop"></div>
   <div class="menu-panel"><div class="menu-inner">
     <div class="menu-top"><span style="display:flex;align-items:center;gap:.5rem;font-weight:500;text-transform:uppercase;letter-spacing:.2em;color:#fff"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/></svg> AIOS</span><button class="menu-close" id="menuClose" aria-label="Close"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -401,7 +401,7 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
     <div class="menu-bottom"><button class="pill light" id="menuBook"><span class="shimmer-glare" aria-hidden="true"></span>Atur Notifikasi <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><nav style="display:flex;gap:1rem;font-size:.875rem;color:rgba(255,255,255,.7)"><a href="https://x.com/AIOS">X</a><a href="https://x.com/AIOS">Telegram</a></nav></div>
   </div></div>
 </div>
-<div id="modal" aria-hidden="true">
+<div id="modal" aria-hidden="true" inert>
   <div class="modal-backdrop" id="modalBackdrop"></div>
   <div class="modal-panel" role="dialog" aria-modal="true" aria-label="Book a visit">
     <div class="modal-head"><div><div class="eyebrow dark"><span class="dot"></span> Atur notifikasi</div><h2 style="margin-top:.75rem;font-size:1.875rem;font-weight:500;line-height:.95;letter-spacing:-.02em" id="modalTitle"><span class="clip"><span>Kabari aku</span></span><br><span class="clip"><span>kalau ada apa-apa</span></span></h2></div><button class="menu-close" id="modalClose" aria-label="Close" style="background:#f4f4f4;color:#0a0a0a"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -652,16 +652,16 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   });
 });
 const menu=document.getElementById('menu');
-function openMenu(){menu.classList.add('open');menu.setAttribute('aria-hidden','false');lock()}
-function closeMenu(){menu.classList.remove('open');menu.setAttribute('aria-hidden','true');unlock()}
+function openMenu(){menu.classList.add('open');menu.setAttribute('aria-hidden','false');menu.removeAttribute('inert');lock()}
+function closeMenu(){menu.classList.remove('open');menu.setAttribute('aria-hidden','true');menu.setAttribute('inert','');unlock()}
 document.getElementById('burger').addEventListener('click',openMenu);
 document.getElementById('menuClose').addEventListener('click',closeMenu);
 document.getElementById('menuBackdrop').addEventListener('click',closeMenu);
 document.getElementById('menuBook').addEventListener('click',()=>{closeMenu();openModal()});
 menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
 const modal=document.getElementById('modal'),form=document.getElementById('contactForm'),successPanel=document.getElementById('successPanel'),successText=document.getElementById('successText');
-function openModal(){modal.classList.add('open');modal.setAttribute('aria-hidden','false');lock();setTimeout(()=>document.getElementById('f-name').focus(),120)}
-function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');unlock();setTimeout(()=>{form.reset();form.style.display='';successPanel.style.display='none';document.getElementById('modalSubmit').textContent='Aktifkan notifikasi';document.getElementById('modalSubmit').disabled=false},350)}
+function openModal(){modal.classList.add('open');modal.setAttribute('aria-hidden','false');modal.removeAttribute('inert');lock();setTimeout(()=>document.getElementById('f-name').focus(),120)}
+function closeModal(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');modal.setAttribute('inert','');unlock();setTimeout(()=>{form.reset();form.style.display='';successPanel.style.display='none';document.getElementById('modalSubmit').textContent='Aktifkan notifikasi';document.getElementById('modalSubmit').disabled=false},350)}
 window.openModal=openModal;window.closeMenu=closeMenu;
 document.getElementById('bookHeader').addEventListener('click',openModal);
 document.getElementById('footerCta').addEventListener('click',openModal);
