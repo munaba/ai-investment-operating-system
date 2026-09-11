@@ -55,6 +55,18 @@ builder.Services
     });
 builder.Services.AddAuthorization();
 
+// M-06: CORS whitelist for React SPA dev (5173) + prod self-host (5000)
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:5173", "http://192.168.44.47:5000")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
+});
+
 // M-02: brute-force guard on the public login endpoint (single-user LAN:
 // 5 attempts/min per client IP; legit mistypes unaffected, bots throttled).
 builder.Services.AddRateLimiter(options =>
@@ -78,6 +90,7 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    // M-05: HSTS in production (15768000s = 6 months, includeSubDomains off for LAN wildcard cert)
     app.UseHsts();
 }
 
@@ -88,6 +101,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseCors();  // M-06: apply CORS policy before auth
 
 app.UseRateLimiter();
 
