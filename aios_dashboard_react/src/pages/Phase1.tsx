@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { JournalEntry } from '../api/types';
 import { getPhase1Journal, getPhase1Symbols } from '../api/client';
@@ -42,6 +42,10 @@ export default function Phase1() {
 
   const entries = useMemo(() => journal.data ?? [], [journal.data]);
 
+  // Re-fetch journal when filter criteria change (usePolling does not watch loader
+  // closure — ponytail: add `enabled`/deps to usePolling when we need less refetch).
+  useEffect(() => { void journal.refresh(); }, [symbol, decision, riskPolicy, fromDate]);
+
   const onRefresh = async () => {
     await journal.refresh();
   };
@@ -71,50 +75,50 @@ export default function Phase1() {
 
   return (
     <PageReveal>
-      <h1 className="display-serif page-title">Journal &amp; briefs</h1>
+      <h1 className="font-display page-title text-2xl font-bold tracking-tight">Journal & briefs</h1>
 
       <div className="card mb-4">
         <div className="card-body">
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-end' }}>
-            <div style={{ flex: '1 1 160px' }}>
-              <label className="form-label">Symbol</label>
-              <select className="form-select" value={symbol} onChange={(e) => setSymbol(e.target.value)}>
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="flex-[1_1_160px]">
+              <label className="form-label" htmlFor="journal-filter-symbol">Symbol</label>
+              <select id="journal-filter-symbol" className="form-select" value={symbol} onChange={(e) => setSymbol(e.target.value)}>
                 <option value="">All</option>
                 {(symbols ?? []).map((s) => <option key={s} value={s}>{s}</option>)}
-              </select>
-            </div>
-            <div style={{ flex: '1 1 120px' }}>
-              <label className="form-label">Decision</label>
-              <select className="form-select" value={decision} onChange={(e) => setDecision(e.target.value)}>
+                             </select>
+           </div>
+            <div className="flex-[1_1_120px]">
+              <label className="form-label" htmlFor="journal-filter-decision">Decision</label>
+              <select id="journal-filter-decision" className="form-select" value={decision} onChange={(e) => setDecision(e.target.value)}>
                 <option value="">All</option>
                 <option value="TAKE">TAKE</option>
                 <option value="SKIP">SKIP</option>
                 <option value="WAIT">WAIT</option>
-              </select>
-            </div>
-            <div style={{ flex: '1 1 120px' }}>
-              <label className="form-label">Risk Policy</label>
-              <select className="form-select" value={riskPolicy} onChange={(e) => setRiskPolicy(e.target.value)}>
+             </select>
+           </div>
+            <div className="flex-[1_1_120px]">
+              <label className="form-label" htmlFor="journal-filter-risk">Risk Policy</label>
+              <select id="journal-filter-risk" className="form-select" value={riskPolicy} onChange={(e) => setRiskPolicy(e.target.value)}>
                 <option value="">All</option>
                 <option value="ACCEPTED">ACCEPTED</option>
                 <option value="RISK_REJECTED">RISK_REJECTED</option>
-              </select>
-            </div>
-            <div style={{ flex: '1 1 160px' }}>
-              <label className="form-label">From Date</label>
-              <input type="date" className="form-control" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
-            </div>
-            <div style={{ flex: '0 1 auto' }}>
-            <motion.button type="button" className="btn btn-outline-secondary w-100" onClick={onRefresh} disabled={journal.loading} whileTap={{ scale: 0.97 }}>
-              <Icon name="refresh-cw" /> Refresh
-            </motion.button>
-            </div>
-          </div>
-        </div>
-      </div>
+             </select>
+           </div>
+            <div className="flex-[1_1_160px]">
+              <label className="form-label" htmlFor="journal-filter-fromDate">From Date</label>
+              <input id="journal-filter-fromDate" type="date" className="form-control" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
+           </div>
+            <div className="flex-[0_1_auto]">
+              <motion.button type="button" className="btn btn-outline-secondary w-100" onClick={onRefresh} disabled={journal.loading} whileTap={{ scale: 0.97 }}>
+                <Icon name="refresh-cw" /> Refresh
+             </motion.button>
+           </div>
+         </div>
+       </div>
+     </div>
 
       {journal.loading && !journal.data ? (
-        <div className="text-center py-4"><span className="spinner" /> <p>Loading journal entries…</p></div>
+        <div className="text-center py-4"><span className="spinner" /> <p>Loading journal entries</p></div>
       ) : entries.length > 0 ? (
         <>
           <div className="card mb-4">
@@ -123,7 +127,7 @@ export default function Phase1() {
               <div>
                 <button className="btn btn-sm btn-outline-primary me-2" onClick={() => downloadCsv(entries, `journal_entries_${new Date().toISOString().slice(0,10)}.csv`)}>
                   <Icon name="arrow-down-right" /> CSV
-                </button>
+               </button>
                 <button className="btn btn-sm btn-outline-secondary" onClick={() => downloadMarkdown(
                   [
                     { header: 'Entry ID', render: (r: JournalEntry) => String(r.entryId) },
@@ -139,9 +143,9 @@ export default function Phase1() {
                   `journal_entries_${new Date().toISOString().slice(0,10)}.md`,
                 )}>
                   <Icon name="copy" /> Markdown
-                </button>
-              </div>
-            </div>
+               </button>
+             </div>
+           </div>
             <div className="card-body p-0">
               <div className="table-responsive">
                 <table className="table table-striped table-hover mb-0">
@@ -149,13 +153,13 @@ export default function Phase1() {
                     <tr>
                       <th>Entry ID</th><th>Symbol</th><th>Decision</th><th>Decided At</th>
                       <th>Risk Policy</th><th>Planned R</th><th>Brief Status</th><th>Note</th>
-                    </tr>
-                  </thead>
+                   </tr>
+                 </thead>
                   <motion.tbody initial="hidden" animate="show" variants={{ hidden: {}, show: { transition: { staggerChildren: prefersReduced ? 0 : 0.04 } } }}>
                     {entries.map((e) => (
                       <motion.tr key={e.entryId} variants={fadeUp}
                         onClick={() => setSelected(e)}
-                        whileHover={{ backgroundColor: 'rgba(212,255,63,.04)' }}
+                        whileHover={{ backgroundColor: 'rgba(205,162,63,.08)' }}
                         transition={{ duration: 0.15 }}
                         style={{ cursor: 'pointer' }}
                         className={selected?.entryId === e.entryId ? 'table-primary' : ''}>
@@ -164,45 +168,45 @@ export default function Phase1() {
                         <td><AnimatePresence mode="wait"><motion.span key={e.decision} className={`badge ${decisionBadgeClass(e.decision)}`}
                           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
                           {e.decision}
-                        </motion.span></AnimatePresence></td>
+                       </motion.span></AnimatePresence></td>
                         <td>{formatDateTime(e.decidedAt)}</td>
                         <td><AnimatePresence mode="wait"><motion.span key={e.riskPolicyStatus} className={`badge ${riskBadgeClass(e.riskPolicyStatus)}`}
                           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
                           {e.riskPolicyStatus}
-                        </motion.span></AnimatePresence></td>
+                       </motion.span></AnimatePresence></td>
                         <td>{e.plannedR != null ? e.plannedR.toFixed(2) : '—'}</td>
                         <td>{e.briefStatus ?? '—'}</td>
                         <td>{e.note ?? ''}</td>
-                      </motion.tr>
+                     </motion.tr>
                     ))}
-                  </motion.tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+                 </motion.tbody>
+               </table>
+             </div>
+           </div>
+         </div>
 
           {selected && (
-            <div className="row g-4" style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-              <div className="card" style={{ flex: '1 1 360px' }}>
+            <div className="flex flex-wrap gap-4">
+              <div className="card flex-[1_1_360px]">
                 <div className="card-header"><h5><Icon name="file-text" /> Journal Entry Details</h5></div>
                 <div className="card-body">
                   <pre className="mb-0"><code>{journalDetailJson(selected)}</code></pre>
-                </div>
-              </div>
-              <div className="card" style={{ flex: '1 1 360px' }}>
+               </div>
+             </div>
+              <div className="card flex-[1_1_360px]">
                 <div className="card-header"><h5><Icon name="file-text" /> Decision Brief Details</h5></div>
                 <div className="card-body">
                   {selected.briefId > 0
                     ? <pre className="mb-0"><code>{briefDetailJson(selected)}</code></pre>
                     : <div className="text-muted">No linked brief</div>}
-                </div>
-              </div>
-            </div>
+               </div>
+             </div>
+           </div>
           )}
         </>
       ) : (
         <div className="alert alert-info">No journal entries match the filters</div>
       )}
-    </PageReveal>
+   </PageReveal>
   );
 }
