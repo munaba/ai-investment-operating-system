@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { clearSession, hasSession, login as apiLogin, logout as apiLogout } from '../api/client';
+import { hasSession, login as apiLogin, logout as apiLogout } from '../api/client';
 
 interface AuthState {
   isAuthed: boolean;
@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsAuthed(true);
       return true;
     } catch {
-      clearSession();
+      // Login failed — server cookie not set. hasSession() will return false on next check.
       setIsAuthed(false);
       setLoginError('Username atau password salah.');
       return false;
