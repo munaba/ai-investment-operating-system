@@ -161,6 +161,24 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   border-radius: 4px;
 }
 
+/* skip-link (WCAG 2.4.1 Bypass Blocks) */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 9999;
+  background: var(--bg-raised);
+  color: var(--gold);
+  padding: 12px 20px;
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  font-weight: 500;
+  text-decoration: none;
+}
+.skip-link:focus {
+  left: 8px;
+}
+
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--bg-base); }
 ::-webkit-scrollbar-thumb { background: #2a2520; border-radius: 5px; }
