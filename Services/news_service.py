@@ -2,9 +2,10 @@ from __future__ import annotations
 import time
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
-from Core.exceptions import AgentError
+from Core.exceptions import AgentError, RepositoryError
 from Core.logger import get_logger
 from Core.request_defaults import DEFAULT_MAX_NEWS, DEFAULT_TICKER
+from Repository.external.news_repository import NewsRepository
 from Services.base_service import BaseService
 from Services.service_context import ServiceContext
 from Services.service_result import ServiceResult
@@ -38,11 +39,30 @@ class NewsService(BaseService):
             instead of importing ``yfinance`` lazily. This is the same
             dependency-injection seam used by ``StockService``, and exists
             so this service can be smoke-tested without network access or
-            without ``yfinance`` installed at all.
+            without ``yfinance`` installed at all. Passed straight through
+            to an internal :class:`NewsRepository`, which performs the
+            actual external I/O. Ignored when ``news_repository`` is
+            provided.
+        news_repository: Optional pre-built
+            :class:`~Repository.external.news_repository.NewsRepository`
+            to use directly (Task 1B addition, additive only --
+            Composition Root injection seam). When provided,
+            ``yfinance_module`` is ignored entirely and this instance is
+            held as-is, never copied or wrapped. When omitted (the
+            default), behavior is exactly what it was before this seam
+            existed: a ``NewsRepository`` is constructed internally from
+            ``yfinance_module``.
     """
 
-    def __init__(self, yfinance_module: Optional[Any] = None) -> None:
-        self._yfinance_module: Optional[Any] = yfinance_module
+    def __init__(
+        self,
+        yfinance_module: Optional[Any] = None,
+        news_repository: Optional[NewsRepository] = None,
+    ) -> None:
+        if news_repository is not None:
+            self._repository = news_repository
+        else:
+            self._repository = NewsRepository(yfinance_module=yfinance_module)
 
     @property
     def name(self) -> str:
@@ -58,28 +78,6 @@ class NewsService(BaseService):
     def category(self) -> str:
         """Logical grouping this service belongs to."""
         return "finance"
-
-    def _get_yfinance(self) -> Any:
-        """Resolve the ``yfinance`` module, injected or lazily imported.
-
-        Returns:
-            The injected module if one was provided at construction time,
-            otherwise the freshly (lazily) imported ``yfinance`` module.
-
-        Raises:
-            NewsServiceError: If no module was injected and ``yfinance``
-                is not installed.
-        """
-        if self._yfinance_module is not None:
-            return self._yfinance_module
-        try:
-            import yfinance as yf
-        except ImportError as exc:
-            raise NewsServiceError(
-                "yfinance is not installed. Install it with 'pip install yfinance'.",
-                details={"error": str(exc)},
-            ) from exc
-        return yf
 
     def execute(self, context: ServiceContext) -> ServiceResult:
         """Fetch news for the ticker/max_news given in ``context.metadata``.
@@ -101,8 +99,7 @@ class NewsService(BaseService):
             ticker = self._resolve_ticker(context)
             max_news = self._resolve_max_news(context)
 
-            yfinance_module = self._get_yfinance()
-            raw_news = self._fetch_raw_news(yfinance_module, ticker)
+            raw_news = self._fetch_raw_news(ticker)
 
             news_items = [self._normalize_news_item(item) for item in raw_news[:max_news]]
 
@@ -166,12 +163,16 @@ class NewsService(BaseService):
             )
         return max_news
 
-    @staticmethod
-    def _fetch_raw_news(yfinance_module: Any, ticker: str) -> List[Dict[str, Any]]:
-        """Call ``yfinance`` to retrieve the raw news payload for ``ticker``.
+    def _fetch_raw_news(self, ticker: str) -> List[Dict[str, Any]]:
+        """Fetch and normalize the raw news payload for ``ticker``.
+
+        Delegates the actual external call to :class:`NewsRepository`
+        (which returns the payload unchanged), then applies the same
+        normalization this method has always applied: a falsy payload
+        (``None``, empty) becomes ``[]``, and any non-list payload is
+        also treated as ``[]``.
 
         Args:
-            yfinance_module: The (injected or imported) ``yfinance`` module.
             ticker: The stock ticker symbol to fetch news for.
 
         Returns:
@@ -179,17 +180,17 @@ class NewsService(BaseService):
             empty if the ticker is invalid or has no recent news).
 
         Raises:
-            NewsServiceError: If the underlying ``yfinance`` call raises.
+            NewsServiceError: If the underlying repository call fails.
         """
         try:
-            ticker_obj = yfinance_module.Ticker(ticker)
-            raw_news = getattr(ticker_obj, "news", None) or []
-        except Exception as exc:  # noqa: BLE001 - normalize any SDK-specific error
+            raw_news = self._repository.get_news(ticker)
+        except RepositoryError as exc:
             raise NewsServiceError(
                 f"Failed to fetch news for ticker '{ticker}'",
-                details={"ticker": ticker, "error": str(exc)},
+                details={"ticker": ticker, "error": exc.details.get("error", str(exc))},
             ) from exc
 
+        raw_news = raw_news or []
         if not isinstance(raw_news, list):
             return []
         return raw_news
@@ -285,17 +286,17 @@ class NewsService(BaseService):
         Mirrors the ``bool``-returning contract shared by every
         ``health_check()`` in the framework (``BaseProvider``,
         ``BaseAgent``, ``BaseService``). Deliberately does not perform a
-        live network call: it only verifies that ``yfinance`` (injected or
-        importable) is available, so health checks remain fast and safe to
-        call frequently. Never raises.
+        live network call: delegates to ``NewsRepository.health_check()``,
+        which only verifies that ``yfinance`` (injected or importable) is
+        available, so health checks remain fast and safe to call
+        frequently. Never raises.
 
         Returns:
             ``True`` if the ``yfinance`` dependency can be resolved,
             ``False`` otherwise.
         """
         try:
-            self._get_yfinance()
-            return True
+            return self._repository.health_check()
         except Exception as exc:  # noqa: BLE001
             logger.warning(f"NewsService.health_check failed: {exc}")
             return False

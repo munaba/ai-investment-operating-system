@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Iterator, List, Optional
+from .capabilities import ProviderCapabilities
 from .message import Message
 from .response import ProviderResponse
 
@@ -81,6 +82,35 @@ class BaseProvider(ABC):
             A short string identifying this provider.
         """
         return self.__class__.__name__
+
+    @property
+    def capabilities(self) -> ProviderCapabilities:
+        """Static capability metadata for this provider.
+
+        Not abstract, so this is purely additive (Stage L2): every
+        existing concrete ``BaseProvider`` subclass -- including test
+        doubles defined outside this package -- keeps working unchanged
+        even though it never overrides this property. It defaults to
+        the all-``False``/unknown baseline (:class:`ProviderCapabilities`
+        with no arguments), which is the conservative, correct answer
+        for a provider that hasn't declared anything about itself.
+
+        Concrete providers override this to declare what they actually
+        support, so callers can branch on capability metadata instead
+        of provider name or type, e.g.::
+
+            if provider.capabilities.supports_stream:
+                ...
+
+        rather than::
+
+            if provider_name == "gemini":
+                ...
+
+        Returns:
+            This provider's :class:`ProviderCapabilities`.
+        """
+        return ProviderCapabilities()
 
     @abstractmethod
     def connect(self) -> None:

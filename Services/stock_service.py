@@ -3,8 +3,10 @@ from __future__ import annotations
 import time
 from typing import Any, Dict, List, Optional, Tuple
 
+from Core.exceptions import RepositoryError
 from Core.logger import get_logger
 from Core.request_defaults import DEFAULT_INTERVAL, DEFAULT_PERIOD, DEFAULT_TICKER
+from Repository.external.stock_data_repository import StockDataRepository
 from Services.base_service import BaseService
 from Services.service_context import ServiceContext
 from Services.service_result import ServiceResult
@@ -27,18 +29,37 @@ class StockService(BaseService):
     Attributes:
         yfinance_module: The ``yfinance``-compatible module used to fetch
             data. Defaults to ``None``, meaning the real ``yfinance``
-            package is imported lazily on first use.
+            package is imported lazily on first use. Ignored when
+            ``stock_repository`` is provided (see below).
     """
 
-    def __init__(self, yfinance_module: Optional[Any] = None) -> None:
+    def __init__(
+        self,
+        yfinance_module: Optional[Any] = None,
+        stock_repository: Optional[StockDataRepository] = None,
+    ) -> None:
         """Initialize the service without importing ``yfinance`` yet.
 
         Args:
             yfinance_module: Optional substitute for the real ``yfinance``
                 module, exposing the same ``Ticker(symbol)`` interface.
                 Intended for tests; production callers should omit this.
+                Ignored when ``stock_repository`` is provided.
+            stock_repository: Optional pre-built
+                :class:`~Repository.external.stock_data_repository.StockDataRepository`
+                to use directly (Task 1B addition, additive only --
+                Composition Root injection seam). When provided,
+                ``yfinance_module`` is ignored entirely and this instance
+                is held as-is, never copied or wrapped. When omitted
+                (the default), behavior is exactly what it was before
+                this seam existed: a ``StockDataRepository`` is
+                constructed internally from ``yfinance_module``.
         """
         self._yfinance_module: Optional[Any] = yfinance_module
+        if stock_repository is not None:
+            self._stock_repository = stock_repository
+        else:
+            self._stock_repository = StockDataRepository(yfinance_module=yfinance_module)
 
     @property
     def name(self) -> str:
@@ -149,22 +170,19 @@ class StockService(BaseService):
         }
 
         try:
-            yfinance_module = self._resolve_yfinance()
-        except ImportError as exc:
+            history = self._stock_repository.get_history(ticker_symbol, period, interval)
+        except RepositoryError as exc:  # noqa: BLE001 - normalize any yfinance/network failure
+            original_error = exc.__cause__ or exc
+            if isinstance(original_error, ImportError):
+                return ServiceResult.fail(
+                    error=original_error,
+                    message="yfinance is not installed. Install it with 'pip install yfinance'.",
+                    metadata=request_metadata,
+                    execution_time_ms=self._elapsed_ms(started_at),
+                )
             return ServiceResult.fail(
-                error=exc,
-                message="yfinance is not installed. Install it with 'pip install yfinance'.",
-                metadata=request_metadata,
-                execution_time_ms=self._elapsed_ms(started_at),
-            )
-
-        try:
-            ticker = yfinance_module.Ticker(ticker_symbol)
-            history = ticker.history(period=period, interval=interval)
-        except Exception as exc:  # noqa: BLE001 - normalize any yfinance/network failure
-            return ServiceResult.fail(
-                error=exc,
-                message=f"Failed to fetch history for ticker '{ticker_symbol}': {exc}",
+                error=original_error,
+                message=f"Failed to fetch history for ticker '{ticker_symbol}': {original_error}",
                 metadata=request_metadata,
                 execution_time_ms=self._elapsed_ms(started_at),
             )
@@ -184,9 +202,10 @@ class StockService(BaseService):
 
         info: Optional[Dict[str, Any]]
         try:
-            info = ticker.info or None
-        except Exception as exc:  # noqa: BLE001 - company info is best-effort only
-            logger.warning(f"Could not fetch company info for '{ticker_symbol}': {exc}")
+            info = self._stock_repository.get_info(ticker_symbol) or None
+        except RepositoryError as exc:  # noqa: BLE001 - company info is best-effort only
+            original_error = exc.__cause__ or exc
+            logger.warning(f"Could not fetch company info for '{ticker_symbol}': {original_error}")
             info = None
 
         harga = self._extract_latest_close(history_records)
@@ -219,11 +238,4 @@ class StockService(BaseService):
         Returns:
             ``True`` if a small history fetch succeeded, ``False`` otherwise.
         """
-        try:
-            yfinance_module = self._resolve_yfinance()
-            ticker = yfinance_module.Ticker(DEFAULT_TICKER)
-            history = ticker.history(period="1d", interval="1d")
-            return history is not None and not history.empty
-        except Exception as exc:  # noqa: BLE001
-            logger.warning(f"StockService health_check failed: {exc}")
-            return False
+        return self._stock_repository.health_check()
