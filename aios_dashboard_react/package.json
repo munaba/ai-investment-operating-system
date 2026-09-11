@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "lint:debug-regressions": "bash -c 'set -e; echo \"=== Checking debug regressions ===\"; ! grep -rn \"cat\\.length\" public/static/*.html || { echo \"ERROR: cat.length found (should be tempat.length)\"; exit 1; }; ! grep -rn \"let heroVisible\" public/static/*.html || { echo \"ERROR: let heroVisible found (should be var)\"; exit 1; }; echo \"All checks passed.\"'"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
