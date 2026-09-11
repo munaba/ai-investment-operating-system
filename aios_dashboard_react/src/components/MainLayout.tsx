@@ -12,9 +12,10 @@ export default function MainLayout() {
   const isStatic = STATIC_ROUTES.includes(location.pathname);
   return (
     <div className="app-shell">
+      <a href="#main" className="skip-link">Skip to content</a>
       <Navbar />
       <GateStrip />
-      <main className={isStatic ? 'main-content w-full' : 'main-content mx-auto w-full max-w-[1200px] px-6'}>
+      <main id="main" tabIndex={-1} className={isStatic ? 'main-content w-full' : 'main-content mx-auto w-full max-w-[1200px] px-6'}>
         <AlertBanner />
         <AnimatePresence mode="wait">
           <motion.div
