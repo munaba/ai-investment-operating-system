@@ -29,9 +29,9 @@
 <style data-fix-smooth>
 /* smooth height for bars */
 div[style*="bars.webp"]{transition:height .45s cubic-bezier(.22,1,.36,1)!important}
-#tuJEJAKGrid,.tu-grid-canvas{will-change:transform}
-[aria-label="Highlights"] div[style*="scaleX"]{transition:transform .35s cubic-bezier(.22,1,.36,1)!important;will-change:transform}
-#heroTitle, #heroImg{will-change:transform,opacity;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .6s ease}
+/* R7b: will-change hover/scroll-only, not static */
+[aria-label="Highlights"] div[style*="scaleX"]{transition:transform .35s cubic-bezier(.22,1,.36,1)!important}
+[aria-label="Highlights"]:hover div[style*="scaleX"]{will-change:transform}
 </style>
 
 
@@ -90,8 +90,8 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
   var items = [].slice.call(document.querySelectorAll(sel)).filter(function(el){ return !el.closest('header'); });
 
   // set awal: tersembunyi tapi akan dipaksa tampil kalau IO gagal
+  // R7b: no static willChange — apply on entry, remove on settle via IO callback
   items.forEach(function(el){
-    el.style.willChange = 'opacity, transform';
     el.style.transition = 'opacity .75s cubic-bezier(.22,1,.36,1), transform .75s cubic-bezier(.22,1,.36,1)';
     el.style.opacity = '0';
     el.style.transform = 'translateY(28px)';
@@ -101,11 +101,13 @@ main,section,.page,.content,article,.container,.wrap,.inner,.wrapper{
     entries.forEach(function(e){
       if(!e.isIntersecting) return;
       var el=e.target;
+      el.style.willChange = 'opacity, transform'; // R7b: apply on entry
       var sibs=[].slice.call(el.parentNode?el.parentNode.children:[]);
       var idx=Math.max(0,sibs.indexOf(el));
       el.style.transitionDelay = Math.min(idx*55,420)+'ms';
       el.style.opacity='1';
       el.style.transform='none';
+      setTimeout(function(){ el.style.willChange='auto'; },850); // remove after settle
       io.unobserve(el);
     });
   },{threshold:0.12, rootMargin:'0px 0px -6% 0px'});
