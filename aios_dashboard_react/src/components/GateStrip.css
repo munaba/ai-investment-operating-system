@@ -5,8 +5,8 @@
   display: flex;
   align-items: center;
   gap: 18px;
-  background: #070707;
-  border-bottom: 1px solid var(--edge);
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--bg-edge);
   padding: 7px 24px;
   font-family: var(--font-mono);
   font-size: 0.72rem;
