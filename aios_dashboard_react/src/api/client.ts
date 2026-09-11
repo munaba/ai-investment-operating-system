@@ -15,7 +15,8 @@ import type {
   Trade,
 } from './types';
 
-const SESSION_KEY = 'aios.session';
+// M-09: Session is httpOnly cookie (server source of truth).
+// localStorage is NOT used for auth — only /api/health indicates auth state.
 
 // Cross-origin in dev is solved by the Vite proxy (see vite.config.ts): every
 // /api, /login, /logout request hits the ASP.NET host through the same origin,
@@ -38,8 +39,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   });
 
   if (res.status === 401) {
-    // Auth lost (cookie expired / not logged in) — drop client session marker.
-    clearSession();
+    // Auth lost (cookie expired / not logged in) — server cookie is source of truth.
     throw new ApiError(401, 'unauthorized');
   }
   if (!res.ok) {
@@ -60,23 +60,14 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 // Verify session with server (GET /api/health) — source of truth.
-// localStorage is kept for optimistic UI to avoid flash-of-login-page.
+// httpOnly cookie is NOT accessible to JS; /api/health response indicates auth state.
 export async function hasSession(): Promise<boolean> {
   try {
     const res = await fetch(BASE + '/api/health', { credentials: 'include' });
-    const ok = res.ok;
-    if (ok) setSession(); else clearSession();
-    return ok;
+    return res.ok;
   } catch {
-    clearSession();
     return false;
   }
-}
-function setSession() {
-  try { localStorage.setItem(SESSION_KEY, '1'); } catch { /* ignore */ }
-}
-export function clearSession() {
-  try { localStorage.removeItem(SESSION_KEY); } catch { /* ignore */ }
 }
 
 // ---- Auth ----
@@ -90,12 +81,12 @@ export async function login(username: string, password: string): Promise<void> {
   if (!res.ok) {
     throw new ApiError(res.status, 'invalid credentials');
   }
-  setSession();
+  // M-09: no localStorage write — server sets httpOnly cookie via Set-Cookie header.
 }
 
 export async function logout(): Promise<void> {
   await fetch(BASE + '/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
-  clearSession();
+  // M-09: no localStorage clear — server clears cookie via SignOutAsync.
 }
 
 // ---- Phase 0 ----
