@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { JournalEntry } from '../api/types';
 import { getPhase1Journal, getPhase1Symbols } from '../api/client';
@@ -42,10 +42,6 @@ export default function Phase1() {
 
   const entries = useMemo(() => journal.data ?? [], [journal.data]);
 
-  // Re-fetch journal when filter criteria change (usePolling does not watch loader
-  // closure — ponytail: add `enabled`/deps to usePolling when we need less refetch).
-  useEffect(() => { void journal.refresh(); }, [symbol, decision, riskPolicy, fromDate]);
-
   const onRefresh = async () => {
     await journal.refresh();
   };
@@ -75,19 +71,19 @@ export default function Phase1() {
 
   return (
     <PageReveal>
-      <h1 className="font-display page-title text-2xl font-bold tracking-tight">Journal & briefs</h1>
+      <h1 className="display-serif page-title">Journal & briefs</h1>
 
       <div className="card mb-4">
         <div className="card-body">
-          <div className="flex flex-wrap items-end gap-3">
-            <div className="flex-[1_1_160px]">
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+            <div style={{ flex: '1 1 160px' }}>
               <label className="form-label" htmlFor="journal-filter-symbol">Symbol</label>
               <select id="journal-filter-symbol" className="form-select" value={symbol} onChange={(e) => setSymbol(e.target.value)}>
                 <option value="">All</option>
                 {(symbols ?? []).map((s) => <option key={s} value={s}>{s}</option>)}
                              </select>
            </div>
-            <div className="flex-[1_1_120px]">
+            <div style={{ flex: '1 1 120px' }}>
               <label className="form-label" htmlFor="journal-filter-decision">Decision</label>
               <select id="journal-filter-decision" className="form-select" value={decision} onChange={(e) => setDecision(e.target.value)}>
                 <option value="">All</option>
@@ -96,7 +92,7 @@ export default function Phase1() {
                 <option value="WAIT">WAIT</option>
              </select>
            </div>
-            <div className="flex-[1_1_120px]">
+            <div style={{ flex: '1 1 120px' }}>
               <label className="form-label" htmlFor="journal-filter-risk">Risk Policy</label>
               <select id="journal-filter-risk" className="form-select" value={riskPolicy} onChange={(e) => setRiskPolicy(e.target.value)}>
                 <option value="">All</option>
@@ -104,11 +100,11 @@ export default function Phase1() {
                 <option value="RISK_REJECTED">RISK_REJECTED</option>
              </select>
            </div>
-            <div className="flex-[1_1_160px]">
+            <div style={{ flex: '1 1 160px' }}>
               <label className="form-label" htmlFor="journal-filter-fromDate">From Date</label>
               <input id="journal-filter-fromDate" type="date" className="form-control" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
            </div>
-            <div className="flex-[0_1_auto]">
+            <div style={{ flex: '0 1 auto' }}>
               <motion.button type="button" className="btn btn-outline-secondary w-100" onClick={onRefresh} disabled={journal.loading} whileTap={{ scale: 0.97 }}>
                 <Icon name="refresh-cw" /> Refresh
              </motion.button>
@@ -123,7 +119,7 @@ export default function Phase1() {
         <>
           <div className="card mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
-              <h5 className="mb-0"><Icon name="book-open" /> Journal Entries ({entries.length} records)</h5>
+              <h5 className="mb-0"><Icon name="book-open" /> Journal Entries ({entries.length} records</h5>
               <div>
                 <button className="btn btn-sm btn-outline-primary me-2" onClick={() => downloadCsv(entries, `journal_entries_${new Date().toISOString().slice(0,10)}.csv`)}>
                   <Icon name="arrow-down-right" /> CSV
@@ -159,16 +155,16 @@ export default function Phase1() {
                     {entries.map((e) => (
                       <motion.tr key={e.entryId} variants={fadeUp}
                         onClick={() => setSelected(e)}
-                        whileHover={{ backgroundColor: 'rgba(205,162,63,.08)' }}
+                        whileHover={{ backgroundColor: 'rgba(212,255,63,.04)' }}
                         transition={{ duration: 0.15 }}
                         style={{ cursor: 'pointer' }}
                         className={selected?.entryId === e.entryId ? 'table-primary' : ''}>
                         <td>{e.entryId}</td>
                         <td>{e.symbol}</td>
                         <td><AnimatePresence mode="wait"><motion.span key={e.decision} className={`badge ${decisionBadgeClass(e.decision)}`}
-                          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
-                          {e.decision}
-                       </motion.span></AnimatePresence></td>
+                            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
+                            {e.decision}
+                         </motion.span></AnimatePresence></td>
                         <td>{formatDateTime(e.decidedAt)}</td>
                         <td><AnimatePresence mode="wait"><motion.span key={e.riskPolicyStatus} className={`badge ${riskBadgeClass(e.riskPolicyStatus)}`}
                           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }}>
@@ -186,14 +182,14 @@ export default function Phase1() {
          </div>
 
           {selected && (
-            <div className="flex flex-wrap gap-4">
-              <div className="card flex-[1_1_360px]">
+            <div className="row g-4" style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              <div className="card" style={{ flex: '1 1 360px' }}>
                 <div className="card-header"><h5><Icon name="file-text" /> Journal Entry Details</h5></div>
                 <div className="card-body">
                   <pre className="mb-0"><code>{journalDetailJson(selected)}</code></pre>
                </div>
              </div>
-              <div className="card flex-[1_1_360px]">
+              <div className="card" style={{ flex: '1 1 360px' }}>
                 <div className="card-header"><h5><Icon name="file-text" /> Decision Brief Details</h5></div>
                 <div className="card-body">
                   {selected.briefId > 0
