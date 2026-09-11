@@ -86,6 +86,17 @@ export default function Phase2() {
   const [formResult, setFormResult] = useState('');
   const [formSubmitting, setFormSubmitting] = useState(false);
 
+  // H-02: inert background when modal open (prevent keyboard navigation escape)
+  useEffect(() => {
+    const appShell = document.querySelector('.app-shell');
+    if (!appShell) return;
+    if (showForm) {
+      appShell.setAttribute('inert', '');
+    } else {
+      appShell.removeAttribute('inert');
+    }
+  }, [showForm]);
+
   const openForm = (id: number) => {
     setSelectedId(id);
     setFormDecision('PENDING');
