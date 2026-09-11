@@ -446,7 +446,7 @@ export default function Phase2() {
                 <div className="mt-3 p-3 rounded" style={{ background: formResult.startsWith('✅') ? 'rgba(212,255,63,.06)' : 'rgba(255,92,92,.06)', border: `1px solid ${formResult.startsWith('✅') ? 'var(--lime)' : 'var(--red)'}` }}>
                   <pre className="mb-0" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{formResult}</pre>
                 </div>
-              ))}
+              )}
             </div>
           </motion.div>
           </Dialog.Content>
