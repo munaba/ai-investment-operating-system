@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import * as Dialog from '@radix-ui/react-dialog';
 import type { FinalReviewRecord, ObservationWindow, OperatorFeedback } from '../api/types';
 import { getPhase2Feedback, getPhase2Review, getPhase2Windows, submitDecision } from '../api/client';
 import { usePolling } from '../hooks/usePolling';
@@ -91,55 +92,6 @@ export default function Phase2() {
     setFormNote(''); setFormBy(''); setFormConfirmed(false); setFormResult('');
     setShowForm(true);
   };
-
-  // ---- Modal a11y (effect 1): save opener, initial focus, restore on close ----
-  // Depends ONLY on showForm so it never re-runs while formSubmitting toggles
-  // (otherwise focus would jump back to the opener mid-submit).
-  const modalRef = useRef<HTMLDivElement>(null);
-  const openerRef = useRef<Element | null>(null);
-
-  useEffect(() => {
-    if (!showForm) return;
-    // Save the element that opened the modal so we can restore focus on close.
-    openerRef.current = document.activeElement;
-    // Move focus into the modal (first interactive control: the Decision select).
-    const firstField = modalRef.current?.querySelector<HTMLElement>(
-      'select, textarea, input, button',
-    );
-    firstField?.focus();
-    return () => {
-      // Restore focus to the opener when the modal closes.
-      (openerRef.current as HTMLElement | null)?.focus?.();
-    };
-  }, [showForm]);
-
-  // ---- Modal a11y (effect 2): Escape-to-close + focus trap ----
-  useEffect(() => {
-    if (!showForm) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !formSubmitting) {
-        e.preventDefault();
-        setShowForm(false);
-        return;
-      }
-      // ponytail: focus trap — fewest lines, no dep; upgrade to focus-trap-react if dialog gains nested portals
-      if (e.key === 'Tab') {
-        const nodes = modalRef.current?.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        );
-        if (!nodes || nodes.length === 0) { e.preventDefault(); return; }
-        const first = nodes[0], last = nodes[nodes.length - 1];
-        const active = document.activeElement as HTMLElement | null;
-        if (e.shiftKey) {
-          if (active === first) { e.preventDefault(); last.focus(); }
-        } else {
-          if (active === last) { e.preventDefault(); first.focus(); }
-        }
-      }
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [showForm, formSubmitting]);
 
   const submit = async () => {
     if (!formConfirmed) { setFormResult('❌ Please confirm the submission by checking the checkbox.'); return; }
@@ -429,32 +381,35 @@ export default function Phase2() {
         </div>
       )}
 
-      {showForm && selected && (
-        <AnimatePresence>
-          <motion.div
-            className="modal-overlay"
-            onClick={() => { if (!formSubmitting) setShowForm(false); }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-          >
+      {/* Decision dialog — Radix replaces 45-LOC manual focus trap */}
+      <Dialog.Root open={showForm} onOpenChange={setShowForm}>
+        <Dialog.Portal>
+          <Dialog.Overlay asChild>
+            <motion.div
+              className="modal-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+            />
+          </Dialog.Overlay>
+          <Dialog.Content asChild>
             <motion.div
               className="modal"
-              ref={modalRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="decisionModalTitle"
               onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, scale: 0.96, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.97, y: 8 }}
               transition={{ duration: 0.22, ease: EASE_OUT }}
             >
-            <div className="modal-header">
-              <h5 className="font-display font-bold" id="decisionModalTitle">Set Human Decision — Window #{selected.windowId}</h5>
-              <button className="btn btn-sm" onClick={() => setShowForm(false)} disabled={formSubmitting} aria-label="Tutup dialog">✕</button>
-            </div>
+              <div className="modal-header">
+                <Dialog.Title className="font-display font-bold">
+                  Set Human Decision — Window #{selected?.windowId}
+                </Dialog.Title>
+                <Dialog.Close asChild>
+                  <button className="btn btn-sm" disabled={formSubmitting} aria-label="Tutup dialog">✕</button>
+                </Dialog.Close>
+              </div>
             <div className="modal-body">
               <div className="alert alert-warning">
                 <strong>Konfirmasi Wajib:</strong> Form ini akan menjalankan command CLI <code>python main.py sustained-use-final decide</code> dari <code>F:\My Son</code>.
@@ -491,12 +446,12 @@ export default function Phase2() {
                 <div className="mt-3 p-3 rounded" style={{ background: formResult.startsWith('✅') ? 'rgba(212,255,63,.06)' : 'rgba(255,92,92,.06)', border: `1px solid ${formResult.startsWith('✅') ? 'var(--lime)' : 'var(--red)'}` }}>
                   <pre className="mb-0" style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{formResult}</pre>
                 </div>
-              )}
+              ))}
             </div>
           </motion.div>
-        </motion.div>
-        </AnimatePresence>
-      )}
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </PageReveal>
   );
 }
