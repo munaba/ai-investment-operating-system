@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { AuthProvider, RequireAuth } from './auth/AuthContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -41,7 +41,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path="/arc" element={<StaticFrame src="/static/arc.html" title="AIOS — Arc" />} />
             <Route path="/materi" element={<StaticFrame src="/static/materi.html" title="AIOS — Materi" />} />
             <Route path="/jejak" element={<StaticFrame src="/static/jejak.html" title="AIOS — Jejak" />} />
-            <Route path="/ime" element={<StaticFrame src="/static/ikhtisar.html" title="AIOS — Ikhtisar" />} />
+            <Route path="/ime" element={<Navigate to="/ikhtisar" replace />} />
             <Route path="/ikhtisar" element={<StaticFrame src="/static/ikhtisar.html" title="AIOS — Ikhtisar" />} />
             <Route path="/profil" element={<StaticFrame src="/static/profil.html" title="AIOS — Profil" />} />
           </Route>
