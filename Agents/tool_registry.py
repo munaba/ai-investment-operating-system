@@ -1,17 +1,4 @@
-"""Thread-safe singleton registry for agent tools.
 
-Important: this registry only stores tools. It never executes them; running
-a tool is the responsibility of :class:`Agents.executor.Executor`.
-
-Architecture Notes:
-    ``Core.exceptions`` only defines a generic ``ToolError``. To let callers
-    distinguish *why* a tool operation failed without touching the
-    (finished) ``Core`` layer, this module adds two specific subclasses of
-    ``ToolError`` -- ``ToolAlreadyRegisteredError`` and
-    ``ToolNotFoundError``. This is purely additive: both are still instances
-    of ``Core.exceptions.ToolError``, so any existing ``except ToolError``
-    handler keeps working unchanged.
-"""
 
 from __future__ import annotations
 

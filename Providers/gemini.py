@@ -1,5 +1,3 @@
-
-
 from __future__ import annotations
 
 import time
@@ -8,10 +6,32 @@ from Core.config import config
 from Core.exceptions import ProviderError
 from Core.logger import get_logger
 from .base_provider import BaseProvider
+from .capabilities import ProviderCapabilities
 from .message import Message, MessageRole
 from .response import ProviderResponse, Usage
 
 logger = get_logger(__name__)
+
+#: Stage L2 addition -- static capability metadata, declared once here
+#: rather than checked via provider-name comparisons elsewhere. This
+#: reflects what *this implementation* currently does (e.g.
+#: supports_stream=False because GeminiProvider.stream() still raises
+#: NotImplementedError -- see stream() below), not the Gemini API's
+#: theoretical ceiling. Flip a field to True only once the matching
+#: method is actually wired up.
+#: Stage L3 addition: is_local=False -- GeminiProvider talks to a
+#: remote Google API over the network, never a local server.
+_GEMINI_CAPABILITIES = ProviderCapabilities(
+    supports_stream=False,
+    supports_tools=False,
+    supports_json=True,
+    supports_images=True,
+    supports_reasoning=True,
+    supports_embeddings=False,
+    max_context_tokens=1_000_000,
+    max_output_tokens=8_192,
+    is_local=False,
+)
 
 _ROLE_MAP: Dict[MessageRole, str] = {
     MessageRole.USER: "user",
@@ -49,6 +69,18 @@ class GeminiProvider(BaseProvider):
             The string ``"gemini"``.
         """
         return "gemini"
+
+    @property
+    def capabilities(self) -> ProviderCapabilities:
+        """Return this provider's static capability metadata.
+
+        See module-level ``_GEMINI_CAPABILITIES`` for the declared
+        values and the reasoning behind each one.
+
+        Returns:
+            This provider's :class:`ProviderCapabilities`.
+        """
+        return _GEMINI_CAPABILITIES
 
     def connect(self) -> None:
         """Create the underlying Gemini SDK client.
