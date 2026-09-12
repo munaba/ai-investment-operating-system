@@ -1,4 +1,5 @@
 @page "/login"
+@rendermode InteractiveServer
 @using aios_dashboard_csharp.Services
 @using Microsoft.JSInterop
 @inject IAuthService AuthService
@@ -14,6 +15,10 @@
             @if (loginError)
             {
                 <div class="alert alert-danger py-2">Username atau password salah.</div>
+            }
+            @if (rateLimited)
+            {
+                <div class="alert alert-warning py-2">Terlalu banyak percobaan — tunggu 1 menit.</div>
             }
 
             <EditForm Model="model" OnValidSubmit="HandleLogin" FormName="loginForm">
@@ -40,6 +45,7 @@
 @code {
     private LoginModel model = new();
     private bool loginError;
+    private bool rateLimited;
     private bool isBusy;
 
     protected override void OnInitialized()
@@ -52,6 +58,7 @@
         if (isBusy) return;
         isBusy = true;
         loginError = false;
+        rateLimited = false;
 
         try
         {
@@ -59,17 +66,22 @@
             // POST /api/auth/login sets the same HttpOnly/Lax/Secure cookie (M-09)
             // and is rate-limited (M-02). JS fetch ensures the cookie is attached
             // by the browser; forceLoad reload then sends it on the next request.
-            var ok = false;
+            var result = "bad";
             try
             {
-                ok = await JS.InvokeAsync<bool>("aiosLogin", model.Username ?? string.Empty, model.Password ?? string.Empty);
+                result = await JS.InvokeAsync<string>("aiosLogin", model.Username ?? string.Empty, model.Password ?? string.Empty);
             }
             catch
             {
-                ok = false;
+                result = "bad";
             }
 
-            if (!ok)
+            if (result == "rate_limited")
+            {
+                rateLimited = true;
+                return;
+            }
+            if (result != "ok")
             {
                 loginError = true;
                 return;
