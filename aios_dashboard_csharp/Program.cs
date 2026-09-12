@@ -154,6 +154,7 @@ app.Use(async (context, next) =>
         path.StartsWith("/arc") ||
         path.StartsWith("/materi") ||
         path.StartsWith("/jejak") ||
+        path.StartsWith("/profil") ||
         path.StartsWith("/_blazor") ||
         path.StartsWith("/_framework") ||
         path.StartsWith("/css") ||
