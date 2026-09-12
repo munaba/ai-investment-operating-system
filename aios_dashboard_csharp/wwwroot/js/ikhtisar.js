@@ -294,6 +294,24 @@ try{var lenis=new Lenis({duration:1.15,easing:function(t){return 1-Math.pow(1-t,
 
 addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});
     
-    function initIkhtisar() {}
+    function initIkhtisar() {
+        if (window.__ikhtisarInit) return;
+        window.__ikhtisarInit = true;
+        try{
+          var LenisCtor = window.Lenis || window.lenis;
+          if(!LenisCtor) return;
+          var lenis=new LenisCtor({duration:1.15,easing:function(t){return 1-Math.pow(1-t,3)},smoothWheel:true,smoothTouch:false});
+          function raf(time){lenis.raf(time);requestAnimationFrame(raf)}
+          requestAnimationFrame(raf);
+          document.addEventListener('visibilitychange',function(){if(document.hidden)try{lenis.stop()}catch(e){}else try{lenis.start()}catch(e){}});
+          console.log('Ikhtisar initialized (Lenis)');
+        }catch(e){ console.warn('Ikhtisar Lenis failed', e); }
+    }
+    // Auto-init fallback for non-Blazor load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function(){ try{ initIkhtisar(); }catch(e){} });
+    } else {
+        try{ initIkhtisar(); }catch(e){}
+    }
     return initIkhtisar;
 }));
