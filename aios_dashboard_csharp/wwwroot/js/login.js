@@ -7,9 +7,10 @@ window.aiosLogin = async function (username, password) {
             body: JSON.stringify({ Username: username, Password: password }),
             credentials: "same-origin"
         });
+        if (r.status === 429) return "rate_limited";
         var j = await r.json().catch(function () { return {}; });
-        return j && j.success === true;
+        return j && j.success === true ? "ok" : "bad";
     } catch (e) {
-        return false;
+        return "bad";
     }
 };
