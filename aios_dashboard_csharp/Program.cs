@@ -149,7 +149,11 @@ app.Use(async (context, next) =>
         path.StartsWith("/login") ||            // Blazor login page (GET /login-direct removed)
         path.StartsWith("/api/auth/login") ||   // SPA login endpoint (must be reachable pre-auth)
         path.StartsWith("/logout") ||
-        path.StartsWith("/atrium") ||           // NEW: Allow public access to Atrium (marketing/foyer)
+        path.StartsWith("/atrium") ||           // Public: marketing/foyer pages
+        path.StartsWith("/atlas") ||
+        path.StartsWith("/arc") ||
+        path.StartsWith("/materi") ||
+        path.StartsWith("/jejak") ||
         path.StartsWith("/_blazor") ||
         path.StartsWith("/_framework") ||
         path.StartsWith("/css") ||
