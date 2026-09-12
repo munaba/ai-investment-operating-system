@@ -1,0 +1,260 @@
+@page "/profil"
+@layout EmptyLayout
+@inject IJSRuntime JSRuntime
+
+<PageTitle>AIOS · Profil</PageTitle>
+
+<a href="#main" class="skip">Skip to content</a>
+
+<header class="site-header">
+  <nav class="nav-left" aria-label="Primary"><a href="aios-atrium.html">Atrium</a><a href="aios-atlas.html">Atlas</a><a href="aios-arc.html">Arc</a><a href="aios-materi.html">Materi</a><a href="aios-jejak.html">Jejak</a><a href="aios-ikhtisar.html">Ikhtisar</a></nav>
+  <a class="brand-center" translate="no" href="aios-atrium.html" aria-label="AIOS — beranda"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/></svg> AIOS · Profil</a>
+  <div class="nav-right"><button class="book-link" id="bookHeader">Atur Notifikasi</button><button class="burger" id="burger" aria-label="Open menu"><span class="burger-bars"><i></i><i></i></span></button></div>
+</header>
+
+<div id="mnav">
+  <div style="display:flex;justify-content:space-between;align-items:center"><b>PROFIL</b><button id="closeNav" style="border:1px solid rgba(255,255,255,.2);border-radius:9999px;padding:.4rem .8rem;font-size:.75rem">Tutup ✕</button></div>
+  <nav aria-label="Mobile"><a href="aios-atrium.html">Atrium</a><a href="aios-atlas.html">Atlas</a><a href="aios-arc.html">Arc</a><a href="aios-materi.html">Materi</a><a href="aios-jejak.html">Jejak</a><a href="aios-profil.html" class="on">Profil</a></nav>
+  <p>Arsitek sistem &amp; proses AI-directed development. Angka dari <code>data/investment_platform.db</code>.</p>
+</div>
+
+<div class="ghost" aria-hidden="true"><span>PROFIL</span> <b>— ARSITEK</b> <em>sistem</em></div>
+<div class="ghost-sub"><span translate="no">Nabil · <strong>arsitek sistem AIOS</strong> · bukan pemberi sinyal</span><span class="tag">Phase A–G selesai · H diobservasi</span><span class="tag">IDX · paper · read-only copilot</span></div>
+
+<main id="main" tabindex="-1" class="wrap">
+
+  <section class="hero in">
+    <canvas id="blueprint" aria-hidden="true"></canvas>
+    <h1>Saya yang merancang <i>batasnya,</i><br>bukan yang menebak arahnya.</h1>
+    <p>AIOS dibangun dengan satu keyakinan: <b>mesin boleh menghitung, tapi tidak boleh mengarang</b>. Kalau data tidak ada, tertulis <b>tidak ada</b>. Kalau rencana belum layak, ia ditahan — lengkap dengan alasannya. Halaman ini menjelaskan siapa yang memegang garis itu, dan bagaimana proses pengembangannya diarahkan.</p>
+    <div class="hero-stats">
+      <div><div class="n">249.833</div><div class="l">Baris Python · 712 file</div></div>
+      <div><div class="n">170.503</div><div class="l">Baris pengujian · 387 file</div></div>
+      <div><div class="n">23</div><div class="l">Tabel · 28 migrasi</div></div>
+      <div><div class="n">0</div><div class="l">Order riil terkirim</div></div>
+    </div>
+  </section>
+
+  <div class="hr"></div>
+
+  <!-- ARSITEK -->
+  <section class="shead in" aria-labelledby="arsitekTitle">
+    <div class="eyebrow"><span class="dot"></span> Peran — arsitek sistem</div>
+    <h2 id="arsitekTitle">Lima keputusan yang saya pegang <span>sebelum satu baris kode ditulis.</span></h2>
+    <p>Arsitek di sini bukan gelar — ia urutan keputusan. Semua tertulis di <code style="font-family:var(--mono);font-size:.78rem">AGENTS.md</code> dan mengikat tiap fase, termasuk fase yang saya kerjakan sendiri.</p>
+  </section>
+
+  <div class="grid three">
+    <article class="card in" data-num="01"><div class="beam"></div>
+      <div class="card-top"><span class="num blue">Keputusan 01</span></div>
+      <h3>Bukan broker</h3>
+      <p>Tidak ada akun broker, API key, pengiriman order live, atau rekonsiliasi broker di mana pun di basis kode ini. Eksekusi riil <b>hanya manusia</b>, di broker miliknya sendiri.</p>
+      <p class="why">Alasannya sederhana: begitu sistem bisa menekan tombol beli, semua kehati-hatian lain jadi ornamen.</p>
+    </article>
+
+    <article class="card in" data-num="02"><div class="beam teal"></div>
+      <div class="card-top"><span class="num blue">Keputusan 02</span></div>
+      <h3>Bukti dulu, rencana kemudian</h3>
+      <p>Sebuah rencana butuh bukti bersumber dan ber-stempel waktu. Input yang hilang, basi, bertentangan, atau gagal menghasilkan <b>status non-aksi yang eksplisit</b> — bukan rekomendasi arah.</p>
+      <p class="why">Di 5 brief yang tercatat, 2 berstatus <b>POLICY_BLOCKED</b> karena parameter risiko tidak diberikan. Sistem menolak mengarang entry/stop/target.</p>
+    </article>
+
+    <article class="card in" data-num="03"><div class="beam"></div>
+      <div class="card-top"><span class="num blue">Keputusan 03</span></div>
+      <h3>Gagal = tertutup</h3>
+      <p>Kegagalan provider, scheduler, notifikasi, izin, atau persistensi muncul di catatan health/audit dan <b>tidak pernah memicu aksi finansial</b>.</p>
+      <p class="why">12 audit event tersimpan — termasuk satu notifikasi yang justru <b>ditahan</b> karena signature-nya tidak berubah sejak kirim terakhir.</p>
+    </article>
+
+    <article class="card in" data-num="04"><div class="beam teal"></div>
+      <div class="card-top"><span class="num blue">Keputusan 04</span></div>
+      <h3>Paper terpisah</h3>
+      <p>Keputusan jurnal tidak pernah otomatis menjadi order paper. Eksekusi paper butuh <b>perintah atau persetujuan eksplisit</b> dari operator.</p>
+      <p class="why">Satu akun tercatat: <b>paper · Munaba · IDR · 100.000.000</b>. Mode paper, bukan mode nyata.</p>
+    </article>
+
+    <article class="card in" data-num="05"><div class="beam amber"></div>
+      <div class="card-top"><span class="num blue">Keputusan 05</span></div>
+      <h3>Hak paling sedikit</h3>
+      <p>Tool bersifat <b>read-only secara bawaan</b>. Yang menulis pun ter-scope, bisa diaudit, dan digate oleh izin. Copilot berjalan <b>READ_ONLY</b>.</p>
+      <p class="why">US, kripto, dan forex sengaja diparkir. IDX satu-satunya pasar aktif — bukan karena malas, tapi karena fokus adalah fitur.</p>
+    </article>
+  </div>
+
+  <div class="hr"></div>
+
+  <!-- PROSES -->
+  <section class="shead in" aria-labelledby="prosesTitle">
+    <div class="eyebrow"><span class="dot"></span> Metode — AI-directed development</div>
+    <h2 id="prosesTitle">Enam langkah yang sama, <span>diulang sampai fase tutup.</span></h2>
+    <p>AI dipakai sebagai pelaksana yang cepat, bukan sebagai sumber kebenaran. Karena itu tiap langkah punya <b>keluaran yang bisa diperiksa</b> — bukan sekadar "sudah dikerjakan".</p>
+  </section>
+
+  <div class="flow">
+    <article class="step in"><div class="beam"></div><div class="step-n">01</div><h3>Brief</h3><p>Maksud, batas, dan gate ditulis dulu. Kalau brief tidak menyebut gate, pekerjaan belum mulai.</p></article>
+    <article class="step in"><div class="beam teal"></div><div class="step-n">02</div><h3>Inspect</h3><p>Baca sumber, migrasi, composition root, dan tes terkait. <code>verify</code> nama method dan model data — jangan menebak.</p></article>
+    <article class="step in"><div class="beam"></div><div class="step-n">03</div><h3>Additive</h3><p>Perubahan terkecil yang menjawab brief. Perilaku yang sudah ada tidak diubah tanpa instruksi.</p></article>
+    <article class="step in"><div class="beam teal"></div><div class="step-n">04</div><h3>Test</h3><p>File uji mandiri di <code>Tests/</code> ditambah regresi yang relevan dijalankan ulang.</p></article>
+    <article class="step in"><div class="beam"></div><div class="step-n">05</div><h3>Proof</h3><p>Laporan terstruktur: <code>FILES READ</code> · <code>FILES CHANGED</code> · <code>CONTRACTS FOUND</code> · <code>TESTS</code> · <code>CLI/RESTART PROOF</code> · <code>ACCEPTANCE</code> · <code>EXTERNAL BLOCKER</code>.</p></article>
+    <article class="step in"><div class="beam amber"></div><div class="step-n">06</div><h3>Gate</h3><p>Fase berikutnya tidak dimulai sebelum gate fase ini <b>didemonstrasikan</b>. Blocker dilaporkan, tidak dilampaui.</p></article>
+  </div>
+
+  <div class="quote in">
+    <p>Jangan pernah mengklaim sebuah file diubah kalau <em>benar-benar belum diubah</em>. Kalau data tidak tersedia, kembalikan status sentinel yang jujur — <em>bukan nilai default yang terlihat masuk akal</em>.</p>
+  </div>
+
+  <div class="hr"></div>
+
+  <!-- ANGKA -->
+  <section class="shead in" aria-labelledby="angkaTitle">
+    <div class="eyebrow"><span class="dot"></span> Keadaan sistem — dibaca dari DB</div>
+    <h2 id="angkaTitle">Angka yang bisa diaudit, <span>bukan yang terlihat bagus.</span></h2>
+    <p>Semua nilai di bawah dibaca langsung dari <code style="font-family:var(--mono);font-size:.78rem">F:/My Son/data/investment_platform.db</code> dan hitungan berkas di repositori ini. Tidak ada yang dibulatkan jadi cerita.</p>
+  </section>
+
+  <div class="kpis in">
+    <div class="kpi"><strong>70</strong><span>Snapshot peringkat</span><em>10 emiten × 7 · status success 70</em></div>
+    <div class="kpi"><strong>68 / 2</strong><span>Confidence MEDIUM / LOW</span><em>0 HIGH — belum ada yang layak</em></div>
+    <div class="kpi"><strong>37 / 33</strong><span>Rekomendasi BUY / WAIT</span><em>bukan sinyal, catatan observasi</em></div>
+    <div class="kpi"><strong>5</strong><span>Brief keputusan</span><em>3 SUCCESS · 2 POLICY_BLOCKED</em></div>
+    <div class="kpi"><strong>3</strong><span>Posisi ditutup</span><em>realized 1.900.000 · 0 open</em></div>
+    <div class="kpi"><strong>2</strong><span>Job scheduler</span><em>session_scan · data_health_check</em></div>
+    <div class="kpi"><strong>1</strong><span>Jendela observasi aktif</span><em>24 Agt — 23 Sep 2026 · Asia/Jakarta</em></div>
+    <div class="kpi"><strong>0</strong><span>Entri jurnal</span><em>kosong, dan itu ditulis apa adanya</em></div>
+  </div>
+
+  <div class="hr"></div>
+
+  <!-- STATUS + EVIDENSI -->
+  <section class="shead in" aria-labelledby="statusTitle">
+    <div class="eyebrow"><span class="dot"></span> Disiplin — status tidak boleh diplaster</div>
+    <h2 id="statusTitle">Delapan status keputusan, <span>satu yang boleh bawa rencana.</span></h2>
+    <p>Hanya <b>SUCCESS</b> yang boleh membawa rencana bersyarat. Sisanya adalah cara sistem mengatakan "belum" dengan alasan yang bisa dibaca — bukan "coba lagi nanti".</p>
+  </section>
+
+  <div class="review in">
+    <div class="rv-top">
+      <span class="chip"><i style="background:var(--brand-light)"></i> SUCCESS</span>
+      <span class="chip"><i style="background:var(--gray)"></i> NO_TRADE</span>
+      <span class="chip"><i style="background:var(--gray)"></i> DATA_STALE</span>
+      <span class="chip"><i style="background:var(--gray)"></i> DATA_ERROR</span>
+      <span class="chip"><i style="background:var(--gray)"></i> INSUFFICIENT_DATA</span>
+      <span class="chip"><i style="background:var(--gray)"></i> ANALYSIS_FAILED</span>
+      <span class="chip"><i style="background:var(--gray)"></i> RISK_REJECTED</span>
+      <span class="chip"><i style="background:var(--amber)"></i> POLICY_BLOCKED</span>
+    </div>
+    <h3>Token evidensi — dipakai apa adanya</h3>
+    <p style="margin-top:.5rem;font-size:.82rem;line-height:1.7;color:var(--ink-soft)">Empat token berikut mengikuti konvensi warna yang sudah ditetapkan di frontend roadmap. Halaman ini menampilkannya, <b>tidak mengubahnya</b>.</p>
+    <div class="legend">
+      <span class="chip ok"><i></i> AVAILABLE</span>
+      <span class="chip no"><i></i> NO_DATA</span>
+      <span class="chip mid"><i></i> INSUFFICIENT_DATA</span>
+      <span class="chip dim"><i></i> NOT_VERIFIABLE</span>
+    </div>
+    <div class="rv-list" style="margin-top:1.4rem">
+      <p style="font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.6rem">Tinjauan akhir #1 · 5 Sep 2026 · PARTIAL_EVIDENCE · human_decision PENDING</p>
+      <ul class="rv-list">
+        <li><b class="na">NOT_AVAILABLE</b><span>data_freshness · plan_journal_adherence · paper_reconciliation · drawdown_process · strategy_regime — kolaborator dan/atau account_id tidak di-supply.</span></li>
+        <li><b class="ex">EXTERNAL_BLOCKED</b><span>broker_live_market_investigation — investigasi broker/market riil di luar scope Phase H Task 2 by design; keputusan manusia di masa depan.</span></li>
+        <li><b class="av">AVAILABLE</b><span>methodology — filter timestamp pakai perbandingan string ISO-8601 inklusif; breakdown strategy/regime memakai history se-akun, bukan ter-scope jendela.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="hr"></div>
+
+  <!-- ATURAN KERJA -->
+  <section class="shead in" aria-labelledby="aturTitle">
+    <div class="eyebrow"><span class="dot"></span> Cara kerja — mengikat tiap tugas</div>
+    <h2 id="aturTitle">Yang tidak pernah saya lakukan <span>ke sistem ini.</span></h2>
+  </section>
+
+  <div class="rules in">
+    <div class="rule"><i>01</i><div><b>Mengarang data</b><p>Kalau evidensi hilang atau kolaborator belum tersambung, balasannya status sentinel yang eksplisit — bukan angka yang kelihatannya masuk akal.</p></div></div>
+    <div class="rule"><i>02</i><div><b>Melompati gate fase</b><p>Tiap fase A–H punya gate penerimaan. Blocker atau batas yang ambigu = berhenti dan lapor, bukan improvisasi.</p></div></div>
+    <div class="rule"><i>03</i><div><b>Menghapus perilaku lama diam-diam</b><p>Perubahan bersifat aditif. Perubahan yang belum ter-commit di working tree tetap dijaga.</p></div></div>
+    <div class="rule"><i>04</i><div><b>Melewatkan regresi</b><p>Layanan atau policy baru wajib membawa berkas ujinya sendiri plus pembuktian bahwa regresi lama masih lolos.</p></div></div>
+    <div class="rule"><i>05</i><div><b>Mengutak-atik jendela observasi aktif</b><p>Jendela 24 Agt — 23 Sep 2026 berstatus <b>ACTIVE</b> dan tidak diubah. Migrasi dijalankan manual dan domain-spesifik.</p></div></div>
+  </div>
+
+  <p class="foot-note">Sumber: data/investment_platform.db · AGENTS.md · IDEA.md · hitungan berkas repositori. Provider aktif: Ollama Qwen3 8B. 9Router terpasang, belum jadi primer. Halaman ini read-only — tidak menulis apa pun ke sistem.</p>
+</main>
+
+<footer id="contact">
+  <div class="footer-cta">
+    <div><div class="eyebrow light"><span class="dot"></span> Mulai pakai</div><h2 style="margin-top:1rem"><span class="clip"><span>Siap baca</span></span><br><span class="clip"><span>pasar?</span></span></h2></div>
+    <button class="pill light" id="footerCta">Atur Notifikasi <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  </div>
+  <div class="footer-cols">
+    <div class="footer-brand"><div class="footer-brand-title" translate="no"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg> AIOS · Profil</div><p style="margin-top:1rem;font-size:.875rem;color:rgba(255,255,255,.65)">Bukti ditulis, rencana ditahan, alasan disimpan. Bukan sinyal.</p><address style="margin-top:1.5rem;font-style:normal;font-size:.875rem;color:rgba(255,255,255,.8)"><a href="mailto:hello@aios.app">hello@aios.app</a></address></div>
+    <div><p class="mono-s" style="margin-bottom:.9rem">Halaman</p><ul style="font-size:.875rem;color:rgba(255,255,255,.7);display:grid;gap:.55rem"><li><a href="aios-atrium.html">Atrium</a></li><li><a href="aios-atlas.html">Atlas</a></li><li><a href="aios-arc.html">Arc</a></li><li><a href="aios-materi.html">Materi</a></li><li><a href="aios-jejak.html">Jejak</a></li><li><a href="aios-ikhtisar.html">Ikhtisar</a></li></ul></div>
+    <div><p class="mono-s" style="margin-bottom:.9rem">Proses</p><ul style="font-size:.875rem;color:rgba(255,255,255,.7);display:grid;gap:.55rem"><li>6 langkah · brief → gate</li><li>7 bagian laporan</li><li>8 status keputusan</li><li>4 token evidensi</li></ul></div>
+    <div><p class="mono-s" style="margin-bottom:.9rem">Data</p><ul style="font-size:.875rem;color:rgba(255,255,255,.7);display:grid;gap:.55rem"><li>23 tabel · 28 migrasi</li><li>70 snapshot</li><li>5 brief keputusan</li><li>1 jendela aktif</li></ul></div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,.15);margin-top:2.5rem;padding-top:1.5rem;display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;font-size:.75rem;color:rgba(255,255,255,.6)"><p>© 2026 AIOS</p><p>Phase H · 24 Agt — 23 Sep 2026 · Asia/Jakarta</p></div>
+</footer>
+
+<script>
+// scroll reveal
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.in').forEach(el=>io.observe(el));
+// border-beam rotate
+let a=0;const beams=document.querySelectorAll('.beam');
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let tickVisible=true, tickRaf=0;
+try{ new IntersectionObserver(function(e){ tickVisible=e[0].isIntersecting; if(tickVisible&&!tickRaf&&!reduce) tickRaf=requestAnimationFrame(tick); },{threshold:0}).observe(beams[0]||document.body); }catch(e){}
+function tick(){ tickRaf=0; if(!tickVisible){ tickRaf=requestAnimationFrame(tick); return; } a=(a+0.32)%360;beams.forEach(b=>b.style.setProperty('--a',a+'deg'));tickRaf=requestAnimationFrame(tick); }
+if(!reduce) tickRaf=requestAnimationFrame(tick);
+document.addEventListener('visibilitychange', function(){ if(document.hidden){ if(tickRaf)cancelAnimationFrame(tickRaf); tickRaf=0; } else if(tickVisible&&!tickRaf&&!reduce) tickRaf=requestAnimationFrame(tick); });
+// mobile nav — identik aios-atlas.html
+const mnav=document.getElementById('mnav');
+document.getElementById('burger').onclick=()=>mnav.classList.add('open');
+document.getElementById('closeNav').onclick=()=>mnav.classList.remove('open');
+mnav.querySelectorAll('a').forEach(x=>x.addEventListener('click',()=>mnav.classList.remove('open')));
+// smooth anchor
+document.querySelectorAll('a[href^="#"]').forEach(x=>x.addEventListener('click',e=>{const el=document.getElementById(x.getAttribute('href').slice(1));if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'})}}));
+// blueprint lattice
+(function(){
+  const cv=document.getElementById('blueprint');if(!cv)return;
+  const ctx=cv.getContext('2d');let w,h,dpr,pts=[];
+  function size(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    const r=cv.getBoundingClientRect();w=r.width;h=r.height;
+    cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    const cols=Math.max(4,Math.round(w/120)),rows=Math.max(3,Math.round(h/120));
+    pts=[];
+    for(let i=0;i<cols;i++)for(let j=0;j<rows;j++){
+      pts.push({bx:(i+.5)*(w/cols)+((j%2)?w/cols/2:0),by:(j+.5)*(h/rows),px:0,py:0,ph:Math.random()*6.283});
+    }
+  }
+  size();addEventListener('resize',size);
+  function draw(t){
+    ctx.clearRect(0,0,w,h);
+    const T=reduce?0:t/2600;
+    pts.forEach(p=>{p.px=p.bx+Math.sin(T+p.ph)*9;p.py=p.by+Math.cos(T*0.8+p.ph)*7});
+    ctx.strokeStyle='rgba(87,144,230,.16)';ctx.lineWidth=1;
+    for(let i=0;i<pts.length;i++){
+      const A=pts[i];
+      for(let j=i+1;j<pts.length;j++){
+        const B=pts[j],dx=A.px-B.px,dy=A.py-B.py,d=Math.hypot(dx,dy);
+        if(d<135){ctx.globalAlpha=1-d/135;ctx.beginPath();ctx.moveTo(A.px,A.py);ctx.lineTo(B.px,B.py);ctx.stroke()}
+      }
+    }
+    ctx.globalAlpha=1;ctx.fillStyle='rgba(87,144,230,.5)';
+    pts.forEach(p=>{ctx.beginPath();ctx.arc(p.px,p.py,1.6,0,6.283);ctx.fill()});
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
+<script>addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});</script>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initProfil");
+        }
+    }
+}
