@@ -1,12 +1,9 @@
 @page "/login"
 @using aios_dashboard_csharp.Services
-@using Microsoft.AspNetCore.Authentication
-@using Microsoft.AspNetCore.Authentication.Cookies
-@using System.Security.Claims
+@using Microsoft.JSInterop
 @inject IAuthService AuthService
-@inject Microsoft.AspNetCore.Components.NavigationManager NavManager
-@inject IHttpContextAccessor HttpContextAccessor
-@inject Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage.ProtectedLocalStorage ProtectedLocalStorage
+@inject NavigationManager NavManager
+@inject IJSRuntime JS
 
 <div class="container" style="max-width: 420px; margin-top: 12vh;">
     <div class="card shadow-sm">
@@ -58,36 +55,27 @@
 
         try
         {
-            if (!AuthService.ValidateCredentials(model.Username ?? string.Empty, model.Password ?? string.Empty))
+            // Blazor Server circuit has no HttpContext — use the verified POST endpoint
+            // POST /api/auth/login sets the same HttpOnly/Lax/Secure cookie (M-09)
+            // and is rate-limited (M-02). JS fetch ensures the cookie is attached
+            // by the browser; forceLoad reload then sends it on the next request.
+            var ok = false;
+            try
+            {
+                ok = await JS.InvokeAsync<bool>("aiosLogin", model.Username ?? string.Empty, model.Password ?? string.Empty);
+            }
+            catch
+            {
+                ok = false;
+            }
+
+            if (!ok)
             {
                 loginError = true;
-                isBusy = false;
                 return;
             }
 
-            var httpContext = HttpContextAccessor.HttpContext;
-            if (httpContext is null)
-            {
-                // No HttpContext (prerender) — fall back to the SPA POST endpoint path.
-                NavManager.NavigateTo("/login?error=1", forceLoad: true);
-                return;
-            }
-
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, AuthService.Username) };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            await httpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(identity),
-                new AuthenticationProperties
-                {
-                    IsPersistent = false,
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(AuthService.SessionTimeoutMinutes),
-                });
-
-            // Clear credentials from memory immediately after use.
             model.Password = string.Empty;
-
             NavManager.NavigateTo("/", forceLoad: true);
         }
         finally
