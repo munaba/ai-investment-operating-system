@@ -1,0 +1,352 @@
+// Arc — Three.js wireframe scene + OrbitControls + scramble animation
+export async function initArc() {
+if(window.__arcInit)return;window.__arcInit=true;
+
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const REDUCE=matchMedia('(prefers-reduced-motion:reduce)').matches;
+/* 2) scramble — magic/hyper-text-01.html */
+const CHARS='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+function scrambleTo(el,target){
+  if(!el) return;
+  if(REDUCE){ el.textContent=target; return; }
+  if(el._sc) clearInterval(el._sc);
+  let iter=0;
+  el._sc=setInterval(()=>{
+    el.textContent=target.split('').map((c,i)=>{
+      if(i<iter) return target[i];
+      if(c===' ') return ' ';
+      return CHARS[Math.floor(Math.random()*26)];
+    }).join('');
+    if(iter>=target.length){ clearInterval(el._sc); el._sc=null; el.textContent=target; }
+    iter+=1/3;
+  },28);
+}
+/* M-07: data di file ini literal const (bukan URL/API). esc() kunci sink bila sumber berubah; tanpa ubah visual. */
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+const cv=document.getElementById('cv');
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0x060608); scene.fog=new THREE.Fog(0x060608,8,18);
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:false}); renderer.setPixelRatio(Math.min(devicePixelRatio,1.85));
+const camera=new THREE.PerspectiveCamera(44,1,0.1,100); camera.position.set(0,1.35,7.2);
+scene.add(new THREE.AmbientLight(0xffffff,.92)); const dl=new THREE.DirectionalLight(0xffffff,1); dl.position.set(3,5,4); scene.add(dl);
+scene.add(new THREE.HemisphereLight(0xffffff,0x1a1a22,.45));
+// grid ground
+const grid=new THREE.GridHelper(14,14,0x2a2a33,0x1e1e28); grid.position.y=-1.05; grid.material.transparent=true; grid.material.opacity=.28; scene.add(grid);
+
+function mkPoints(seed,n=70){
+  let s=seed; const a=[]; for(let i=0;i<n;i++){ s=Math.sin(s*9301+49297)*233280; let r=s-Math.floor(s); let v=Math.sin(i*.18+r*.9)*.75 + Math.cos(i*.34)*.22 + (r-.5)*.35; a.push(Math.max(-1.15,Math.min(1.15,v))); } return a;
+}
+const pts=mkPoints(11,70);
+const briefs=[
+  {k:'BR-01',nm:'Konsentrasi Inti',tg:'ok',d:'12 Mei · keyakinan tinggi',v:pts.slice(0,14)},
+  {k:'BR-02',nm:'Ekspansi Selektif',tg:'ok',d:'19 Mei · dua cabang',v:pts.slice(14,28)},
+  {k:'BR-03',nm:'Koreksi Terukur',tg:'no',d:'26 Mei · diblokir risiko',v:pts.slice(28,42)},
+  {k:'BR-04',nm:'Konsolidasi',tg:'ok',d:'02 Jun · pita menyempit',v:pts.slice(42,56)},
+  {k:'BR-05',nm:'Divergensi',tg:'no',d:'09 Jun · anomali terdeteksi',v:pts.slice(56,70)},
+];
+const ARCS=[
+  {id:'band',name:'Pita Keyakinan',short:'PITA',desc:'Pita melebar saat ketidakpastian naik. Garis tengah = konsensus 70 titik; translusensi = rentang keyakinan. Bukan prediksi harga — jarak pita = ruang tafsir.',col:'#d8c9b6',mode:'band + line + dots'},
+  {id:'pulse',name:'Pulsa Anomali',short:'PULSA',desc:'Cincin berdenyut menandai titik yang menyimpang dari pita. Tiga pulsa = tiga anomali pada minggu 5, 9, 11. Sisanya tetap di jalur.',col:'#ef4444',mode:'line + ring pulse'},
+  {id:'branch',name:'Cabang Skenario',short:'CABANG',desc:'Satu batang lalu bercabang tiga: Inti, Elastis, Kritis. Cabang berhenti ketika asumsi tidak terpenuhi — jejak, bukan ramalan.',col:'#8fd1a8',mode:'branch lines'},
+  {id:'scan',name:'Pemindai Horizon',short:'PEMINDAI',desc:'Sapu radial menyisir horizon 70 titik. Titik jauh = horizon panjang, titik dekat = pembacaan kini. Sapuan melambat di zona padat.',col:'#60a5fa',mode:'polar sweep + dots'},
+  {id:'neural',name:'Jejak Neural',short:'NEURAL',desc:'Lapisan titik terhubung seperti jejak pembacaan berlapis. Tidak ada otak di sini — hanya gema 70 titik yang saling menguatkan.',col:'#c4b5fd',mode:'layered dots + links'},
+  {id:'cone',name:'Kerucut Waktu',short:'KERUCUT',desc:'Kerucut melebar ke depan: semakin jauh, semakin lebar kemungkinan. Ujung sempit = kini yang paling pasti.',col:'#fbbf24',mode:'cone + center line'},
+  {id:'matrix',name:'Matriks Keputusan',short:'MATRIKS',desc:'Kotak 7×10 = 70 titik. Warna = posisi relatif terhadap median. Baris = minggu, kolom = brief. Baca seperti papan editorial.',col:'#a78bfa',mode:'grid dots'},
+  {id:'traj',name:'Lintasan',short:'LINTASAN',desc:'Tiga lintasan paralel dari data yang sama: Konservatif, Tengah, Agresif. Jarak antar lintasan = toleransi narasi.',col:'#f0abfc',mode:'3 trajectories'},
+];
+
+const tabs=document.getElementById('tabs');
+ARCS.forEach((a,i)=>{
+  const b=document.createElement('button'); b.className='tab'+(i===0?' on':''); b.setAttribute('role','tab'); b.setAttribute('aria-selected',i===0?'true':'false');
+  b.innerHTML=esc(a.short)+' <small>'+esc(a.id)+'</small>'; b.onclick=()=>{load(i); scrambleTo(document.getElementById('acName'), a.name);}; tabs.appendChild(b);
+});
+const list=document.getElementById('briefList');
+briefs.forEach(b=>{
+  const d=document.createElement('div'); d.className='brief';
+  const w=Math.round(Math.max(6,Math.min(100, (b.v.reduce((s,x)=>s+(x+1.15)/2.3,0)/b.v.length)*100)));
+  d.innerHTML='<span style="flex:1;min-width:0"><b>'+esc(b.k)+'</b> · '+esc(b.nm)+'<br><span style="color:#8b90a0;font-family:monospace;font-size:10px">'+esc(b.d)+'</span><span class="pbar"><i data-w="'+w+'" style="background:'+(b.tg==='ok'?'#8fd1a8':'#c9a87c')+'"></i></span></span><span class="tag '+(b.tg==='ok'?'ok':'no')+'" style="align-self:flex-start">'+(b.tg==='ok'?'terbuka':'tertahan')+'</span>';
+  list.appendChild(d);
+});
+
+let group=new THREE.Group(); scene.add(group);
+function clearGroup(){ while(group.children.length) group.remove(group.children[0]); group.children.length=0; }
+
+function lineFrom(arr,col,y0=0,op=1,offZ=0){
+  const g=new THREE.BufferGeometry(); const p=[];
+  for(let i=0;i<arr.length;i++){ const x=(i/(arr.length-1)-.5)*12; p.push(x, y0+arr[i]*.62, offZ + Math.sin(i*.12)*.04); }
+  g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));
+  const l=new THREE.Line(g,new THREE.LineBasicMaterial({color:col,transparent:true,opacity:op})); group.add(l); return l;
+}
+function band(arr,col){
+  const n=arr.length, geo=new THREE.PlaneGeometry(12,1.8, n-1, 1);
+  const pos=geo.attributes.position;
+  for(let i=0;i<pos.count;i++){
+    const ix=Math.floor(i/2), t=ix/(n-1), v=arr[ix];
+    const isTop=i%2===0, w=.42 + Math.abs(v)*.18 + (t>.6 ? (t-.6)*.9 : 0);
+    const y=v*.62 + (isTop? w: -w)*.62;
+    const x=(t-.5)*12;
+    pos.setXYZ(i,x,y,0);
+  }
+  geo.computeVertexNormals();
+  const m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:col,transparent:true,opacity:.16,side:THREE.DoubleSide}));
+  m.position.y=0; group.add(m);
+}
+function dots(arr,col,y0=0){
+  for(let i=0;i<arr.length;i+=7){
+    const x=(i/(arr.length-1)-.5)*12, y=y0+arr[i]*.62;
+    const s=new THREE.Mesh(new THREE.SphereGeometry(.06,8,8), new THREE.MeshStandardMaterial({color:'#fff',emissive:col,emissiveIntensity:.6}));
+    s.position.set(x,y,.12); group.add(s);
+  }
+}
+
+function buildBand(){ band(pts,ARCS[0].col); lineFrom(pts,ARCS[0].col,.01,1,.02); dots(pts,ARCS[0].col,.01); }
+function buildPulse(){
+  lineFrom(pts,ARCS[1].col,0,1,0);
+  const anomalyIdx=[18,38,52];
+  anomalyIdx.forEach((idx,i)=>{
+    const x=(idx/69-.5)*12, y=pts[idx]*.62;
+    for(let r=0;r<3;r++){
+      const g=new THREE.RingGeometry(.22+r*.22,.24+r*.22,28);
+      const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:ARCS[1].col,transparent:true,opacity:.18 - r*.045,side:THREE.DoubleSide}));
+      m.position.set(x,y,.04); m.rotation.z=.2; m.userData.pulse=1+i*.2; group.add(m);
+    }
+    const s=new THREE.Mesh(new THREE.SphereGeometry(.09,10,10),new THREE.MeshStandardMaterial({color:'#fff',emissive:ARCS[1].col,emissiveIntensity:1}));
+    s.position.set(x,y,.14); group.add(s);
+  });
+}
+function buildBranch(){
+  const main=pts.slice(0,28);
+  lineFrom(main,ARCS[2].col,0,1,0);
+  const tails=[ pts.slice(28,70).map((v,i)=> v*.92 + Math.sin(i*.22)*.18 ), pts.slice(28,70).map((v,i)=> v*.72 + Math.cos(i*.2)*.22 ), pts.slice(28,70).map((v,i)=> v*.55 + Math.sin(i*.3)*.12 )];
+  const cols=['#8fd1a8','#c9a87c','#7d7d92']; const offs=[.28,-.08,-.32];
+  tails.forEach((t,i)=>{
+    const arr=main.slice(-1).concat(t);
+    const g=new THREE.BufferGeometry(); const p=[];
+    for(let k=0;k<arr.length;k++){ const x=( (28+k)/(70-1)-.5)*12; p.push(x, arr[k]*.62 + offs[i]* (k/arr.length), (i-1)*.18); }
+    g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));
+    group.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:cols[i],transparent:true,opacity:.95 - i*.2})));
+  });
+  // nodes
+  [[0,0],[27,main[27]*.62],[52,pts[52]*.62+.12]].forEach(([ix,y])=>{
+    const x=(ix/69-.5)*12; const m=new THREE.Mesh(new THREE.SphereGeometry(.07,10,10),new THREE.MeshStandardMaterial({color:ARCS[2].col,emissive:ARCS[2].col,emissiveIntensity:.7}));
+    m.position.set(x,y,.15); group.add(m);
+  });
+}
+function buildScan(){
+  const R=1.35;
+  const sweep=new THREE.Mesh(new THREE.RingGeometry(.02,R,42,1,0,.18), new THREE.MeshBasicMaterial({color:ARCS[3].col,transparent:true,opacity:.18,side:THREE.DoubleSide}));
+  sweep.rotation.z=-.4; group.add(sweep);
+  const sweep2=new THREE.Mesh(new THREE.PlaneGeometry(.015,R), new THREE.MeshBasicMaterial({color:ARCS[3].col,transparent:true,opacity:.55,side:THREE.DoubleSide}));
+  sweep2.position.set(0,R/2,.02); sweep2.rotation.z=-.4; group.add(sweep2);
+  sweep.userData.tick=(dt)=>{ sweep.rotation.z+=dt*.55; sweep2.rotation.z+=dt*.55; };
+  // polar dots from pts
+  for(let i=0;i<pts.length;i++){
+    const ang=(i/pts.length)*Math.PI*2 - .4;
+    const r=.35 + (pts[i]+1.15)/2.3 * .95;
+    const x=Math.cos(ang)*r, y=Math.sin(ang)*r*.62 + .15;
+    const c=pts[i]>.35?ARCS[3].col: pts[i]<-.35?'#c9a87c':'#d5d5e2';
+    const s=new THREE.Mesh(new THREE.SphereGeometry(i%7===0?.065:.038,7,7), new THREE.MeshStandardMaterial({color:c,emissive:c,emissiveIntensity:.5}));
+    s.position.set(x,y,(Math.random()-.5)*.18); group.add(s);
+  }
+  const ring=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(Array.from({length:64},(_,i)=>{const a=i/64*Math.PI*2;return new THREE.Vector3(Math.cos(a)*R,Math.sin(a)*R*.62+.15,0)})), new THREE.LineBasicMaterial({color:ARCS[3].col,transparent:true,opacity:.28}));
+  group.add(ring);
+}
+function buildNeural(){
+  const layers=4;
+  for(let ly=0;ly<layers;ly++){
+    const y0=-.45+ly*.32;
+    for(let i=0;i<14;i++){
+      const x=(i/13-.5)*11, v=pts[ly*14+i]||0;
+      const z=Math.sin(i*.9+ly)*.12;
+      const s=new THREE.Mesh(new THREE.SphereGeometry(.05,7,7), new THREE.MeshStandardMaterial({color:ARCS[4].col,emissive:ARCS[4].col,emissiveIntensity:.55}));
+      s.position.set(x, y0+v*.22, z); group.add(s);
+      if(i<13){ const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,y0+v*.22,z), new THREE.Vector3(( (i+1)/13-.5)*11, y0+(pts[ly*14+i+1]||0)*.22, Math.sin((i+1)*.9+ly)*.12 )]); group.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:ARCS[4].col,transparent:true,opacity:.22}))); }
+      if(ly<layers-1){ const nx=(i/13-.5)*11, ny=-.45+(ly+1)*.32+(pts[(ly+1)*14+i]||0)*.22; const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x,y0+v*.22,z),new THREE.Vector3(nx,ny,Math.sin(i*.9+ly+1)*.12)]); group.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:ARCS[4].col,transparent:true,opacity:.13}))); }
+    }
+  }
+}
+function buildCone(){
+  const n=70, col=ARCS[5].col;
+  lineFrom(pts,col,0,1,.06);
+  const geo=new THREE.CylinderGeometry(.02,1.35,12,28,1,true);
+  const m=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:col,transparent:true,opacity:.11,side:THREE.DoubleSide}));
+  m.rotation.z=Math.PI/2; m.position.set(0,.02,.02); group.add(m);
+  const edge=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-6,.02,.02),new THREE.Vector3(6,1.0,.02),new THREE.Vector3(6,-.96,.02),new THREE.Vector3(-6,.02,.02)]), new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.32}));
+  // two cone edges as lines
+  const top=[], bot=[];
+  for(let i=0;i<n;i++){ const t=i/(n-1), x=(t-.5)*12, w=.02 + t*1.33; top.push(new THREE.Vector3(x, w*.62, .02)); bot.push(new THREE.Vector3(x, -w*.62, .02)); }
+  group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(top), new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.32})));
+  group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(bot), new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.32})));
+}
+function buildMatrix(){
+  const cols=10, rows=7;
+  for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){
+    const i=r*cols+c, v=pts[i];
+    const x=(c/(cols-1)-.5)*10.5, y=( (rows-1-r)/(rows-1)-.5)*1.9 + .1;
+    const col=v>.35?ARCS[6].col: v<-.2?'#c9a87c':'#d5d5e2';
+    const h=.14 + (v+1.15)/2.3*.18;
+    const box=new THREE.Mesh(new THREE.BoxGeometry(.62,h,.08), new THREE.MeshStandardMaterial({color:col,transparent:true,opacity:.92}));
+    box.position.set(x,y,0); group.add(box);
+    if(Math.abs(v)>.7){ const s=new THREE.Mesh(new THREE.SphereGeometry(.04,6,6), new THREE.MeshBasicMaterial({color:'#fff'})); s.position.set(x,y+h/2+.05,0); group.add(s); }
+  }
+}
+function buildTraj(){
+  const base=pts;
+  const t1=base.map(v=> v*.62), t2=base.map((v,i)=> v*.62 + Math.sin(i*.18)*.14), t3=base.map((v,i)=> v*.62 - Math.cos(i*.2)*.16);
+  [ [t1,'#f0abfc',.14,0], [t2,'#8fd1a8',.08,.09], [t3,'#c9a87c',.06,-.09] ].forEach(([arr,col,sz,z])=>{
+    const g=new THREE.BufferGeometry(); const p=[];
+    for(let i=0;i<arr.length;i++){ p.push((i/69-.5)*12, arr[i], z); }
+    g.setAttribute('position',new THREE.Float32BufferAttribute(p,3));
+    group.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:col,transparent:true,opacity:.95})));
+    for(let i=0;i<arr.length;i+=9){ const s=new THREE.Mesh(new THREE.SphereGeometry(sz,7,7), new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.6})); s.position.set((i/69-.5)*12,arr[i],z+.06); group.add(s); }
+  });
+}
+
+const builders=[buildBand,buildPulse,buildBranch,buildScan,buildNeural,buildCone,buildMatrix,buildTraj];
+function load(i){
+  document.querySelectorAll('.tab').forEach((t,k)=>{ t.classList.toggle('on',k===i); t.setAttribute('aria-selected',k===i?'true':'false'); });
+  const a=ARCS[i];
+  document.getElementById('arcTitle').textContent=a.name+' — '+a.short;
+  document.getElementById('arcDesc').textContent=a.desc;
+  document.getElementById('arcMode').textContent='mode: '+a.mode;
+  document.getElementById('acName').textContent=a.name;
+  document.getElementById('ovLabel').textContent=a.short+' · drag orbit · scroll zoom';
+  document.getElementById('acDot').style.background=a.col; document.getElementById('acDot').style.boxShadow='0 0 8px '+a.col;
+  document.getElementById('ovDot').style.background=a.col; document.getElementById('ovDot').style.boxShadow='0 0 8px '+a.col;
+  clearGroup(); builders[i]();
+  // subtle y offset per mode so camera framing fits matrix vs default
+  group.position.y= a.id==='matrix' ? .15 : a.id==='neural' ? .05 : 0;
+}
+load(0);
+
+// controls
+const controls=new OrbitControls(camera, renderer.domElement);
+controls.enableDamping=true; controls.dampingFactor=.06; controls.target.set(0,.15,0);
+controls.minDistance=2.2; controls.maxDistance=11; controls.maxPolarAngle=Math.PI*.48; controls.minPolarAngle=.12;
+controls.update();
+function onResize(){
+  const w=cv.clientWidth,h=cv.clientHeight; if(!w||!h) return;
+  renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+}
+addEventListener('resize',onResize); onResize();
+let raf=0; const clock=new THREE.Clock();
+(function loop(){
+  raf=requestAnimationFrame(loop);
+  const dt=clock.getDelta();
+  group.traverse(o=>{ if(o.userData && o.userData.tick) o.userData.tick(dt); if(o.userData && o.userData.pulse){ const sc=1+Math.sin(performance.now()*.0015*o.userData.pulse)*.06; o.scale.set(sc,sc,1); } });
+  controls.update(); renderer.render(scene,camera);
+})();
+ // ponytail: single canvas + group swap keeps <80KB; upgrade = split to 8 canvases when per-arc persistence needed.
+
+// ══════════ threeui polish ══════════
+// 1) Flickering grid — magic/flickering-grid-01.html, adapted to hero (dark, low-alpha)
+(function(){
+  const c=document.getElementById('heroGrid'); if(!c) return;
+  const ctx=c.getContext('2d'); if(!ctx) return;
+  let cells=[],W=0,H=0,S=26,raf=0,vis=true;
+  function init(){
+    const dpr=Math.min(devicePixelRatio||1,2);
+    W=c.width=Math.max(1,Math.floor(c.clientWidth*dpr));
+    H=c.height=Math.max(1,Math.floor(c.clientHeight*dpr));
+    const cols=Math.ceil(W/S/dpr), rows=Math.ceil(H/S/dpr);
+    cells=[]; for(let y=0;y<rows;y++) for(let x=0;x<cols;x++) cells.push({x,y,v:Math.random()});
+  }
+  function draw(){
+    if(!REDUCE) raf=requestAnimationFrame(draw);
+    if(!vis) return;
+    const dpr=Math.min(devicePixelRatio||1,2), s=S*dpr;
+    ctx.clearRect(0,0,W,H);
+    for(let k=0;k<cells.length;k++){
+      const cc=cells[k];
+      if(Math.random()<0.02) cc.v=Math.random();
+      ctx.fillStyle='rgba(216,201,182,'+(0.02+cc.v*0.055).toFixed(3)+')';
+      ctx.fillRect(cc.x*s+dpr, cc.y*s+dpr, s-2*dpr, s-2*dpr);
+    }
+  }
+  init(); addEventListener('resize',init);
+  if(REDUCE){ draw(); cancelAnimationFrame(raf); return; }
+  new IntersectionObserver(e=>{vis=e[0].isIntersecting;},{threshold:0}).observe(c);
+  draw();
+})();
+
+// 3) Ripples — magic/ripple-01.html, auto-pulse + click on footer
+(function(){
+  const wrap=document.getElementById('contact'), holder=document.getElementById('ripples');
+  if(!wrap||!holder) return;
+  function ripple(x,y){
+    const d=document.createElement('div');
+    d.style.cssText='position:absolute;left:'+x+'px;top:'+y+'px;width:20px;height:20px;margin:-10px;border-radius:50%;border:1.5px solid rgba(255,255,255,.28);pointer-events:none';
+    holder.appendChild(d);
+    d.animate([{transform:'scale(1)',opacity:.85},{transform:'scale(18)',opacity:0}],{duration:1800,easing:'cubic-bezier(.16,1,.3,1)'}).onfinish=()=>d.remove();
+  }
+  if(REDUCE) return;
+  let vis2=true;
+  new IntersectionObserver(e=>{vis2=e[0].isIntersecting;},{threshold:0}).observe(wrap);
+  setInterval(()=>{ if(!vis2) return; ripple(wrap.clientWidth*(0.3+Math.random()*0.4), wrap.clientHeight*(0.3+Math.random()*0.4)); },2600);
+  wrap.addEventListener('click',e=>{
+    const r=wrap.getBoundingClientRect();
+    ripple(e.clientX-r.left, e.clientY-r.top);
+  });
+})();
+
+// 4) Grid tape — 3D section divider lines
+(function(){
+  document.querySelectorAll('.vl[data-tape]').forEach(el=>{
+    const t=document.createElement('span'); t.className='tape';
+    t.style.height=el.dataset.tape+'vh';
+    t.style.animationDelay=(parseInt(el.dataset.tape,10)*37%5000)+'ms';
+    el.appendChild(t);
+  });
+})();
+
+// 5) Shine border on 3D stage — magic/shine-border-01.html
+(function(){
+  const s=document.getElementById('stageShine'); if(!s) return;
+  s.style.willChange='transform';
+  if(REDUCE){ s.style.transform='translateX(20%)'; return; }
+  let x=-100, vis3=true;
+  new IntersectionObserver(e=>{vis3=e[0].isIntersecting;},{threshold:0}).observe(s);
+  (function loop(){ requestAnimationFrame(loop); if(!vis3) return; x+=0.45; if(x>200) x=-100; s.style.transform='translateX('+x+'%)'; })();
+})();
+
+// 6) Progress bars on brief rows — drive width from data-w
+(function(){
+  const bars=[...document.querySelectorAll('.pbar i')];
+  if(!bars.length) return;
+  const set=()=>bars.forEach(b=>b.style.width=b.dataset.w+'%');
+  if(REDUCE){ set(); return; }
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){ e.target.style.width=e.target.dataset.w+'%'; io.unobserve(e.target); }
+  }),{threshold:.4});
+  bars.forEach(b=>io.observe(b));
+})();
+
+// 7) Shimmer button — magic/shimmer-button-01.html
+(function(){
+  const g=document.getElementById('shimmerGlare'), btn=document.getElementById('footerCta');
+  if(!g||!btn) return;
+  btn.style.overflow='hidden';
+  if(REDUCE){ g.style.display='none'; return; }
+  let x=-60, vis4=true;
+  new IntersectionObserver(e=>{vis4=e[0].isIntersecting;},{threshold:0}).observe(btn);
+  (function loop(){ requestAnimationFrame(loop); if(!vis4) return; x+=0.55; if(x>160) x=-60; g.style.transform='translateX('+x+'%)'; })();
+  btn.addEventListener('pointerenter',()=>btn.style.background='#e8e8ec');
+  btn.addEventListener('pointerleave',()=>btn.style.background='');
+})();
+
+// 8) Number ticker — magic/number-ticker-01.html
+(function(){
+  const el=document.getElementById('ticker70'); if(!el) return;
+  if(REDUCE){ el.textContent='70'; return; }
+  const target=70, dur=1400; let start=0;
+  function f(now){
+    if(!start) start=now;
+    const p=Math.min(1,(now-start)/dur), e=1-Math.pow(1-p,3);
+    el.textContent=Math.floor(target*e);
+    if(p<1) requestAnimationFrame(f);
+  }
+  requestAnimationFrame(f);
+})();
+
+console.log('Arc initialized');
+}
