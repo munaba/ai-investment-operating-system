@@ -1,0 +1,140 @@
+@page "/atrium"
+@layout EmptyLayout
+@inject IJSRuntime JSRuntime
+
+<PageTitle>AIOS · Atrium</PageTitle>
+
+<!-- UMD libraries loaded globally before module init -->
+<script src="/lib/atrium/lenis.min.js"></script>
+<script src="/lib/atrium/three.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<a href="#main" class="skip">Skip to content</a>
+<div id="loader" aria-hidden="false">
+  <div class="loader-mark" id="loaderMark"><svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/></svg> AIOS</div>
+  <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+</div>
+<main id="main" tabindex="-1">
+<section id="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-bg-inner" id="heroParallax"><canvas id="auroraHero" aria-hidden="true"></canvas><canvas id="meteorHero" aria-hidden="true"></canvas><img id="heroImg" width="1200" height="800" alt="Gradien abstrak merepresentasikan pergerakan pasar" fetchpriority="high" style="display:block" decoding="async"></div>
+    <div class="hero-gradient"></div>
+    <div id="heroGlare" aria-hidden="true"></div>
+  </div>
+  <header class="site-header">
+    <nav class="nav-left" aria-label="Primary"><a href="aios-atrium.html" class="active" aria-current="page">Atrium</a><a href="aios-atlas.html">Atlas</a><a href="aios-arc.html">Arc</a><a href="aios-materi.html">Materi</a><a href="aios-jejak.html">Jejak</a><a href="aios-ikhtisar.html">Ikhtisar</a></nav>
+    <a class="brand-center" translate="no" href="aios-atrium.html" aria-label="AIOS — beranda"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/></svg> AIOS · Atrium</a>
+    <div class="nav-right"><button class="book-link" id="bookHeader">Atur Notifikasi</button><button class="burger" id="burger" aria-label="Open menu"><span class="burger-bars"><i></i><i></i></span></button></div>
+  </header>
+  <div class="hero-title-wrap"><h1 id="hero-title"></h1></div>
+  <div class="hero-bottom">
+    <p class="hero-tagline" id="hero-tagline"><span class="clip"><span>Baca Pasar,</span></span><br><span class="clip"><span>Bukan Tebak</span></span></p>
+    <div class="hero-right">
+      <div class="collection-slider inview" id="collectionSlider">
+        <div class="collection-card" id="collectionCard"></div>
+        <div class="dots" id="collectionDots"></div>
+      </div>
+      <article class="membership-card inview" id="membershipCard">
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;min-width:0">
+          <div style="font-size:1.875rem;font-weight:500;line-height:1">5</div>
+          <div><div class="members-dots"><i style="background:#5790e6"></i><i style="background:#c2e029"></i><i style="background:#0b6e97"></i><i style="background:#fff"></i></div><div style="font-size:.65rem;color:rgba(255,255,255,.8);margin-top:.35rem">Keputusan tercatat</div></div>
+        </div>
+        <img id="memberImg" alt="Simbol AIOS Atrium" loading="lazy">
+      </article>
+    </div>
+  </div>
+</section>
+<section id="trust"><canvas id="constellationTrust" aria-hidden="true"></canvas>
+  <div class="trust-top">
+    <div class="percent-badge inview"><div><div style="font-size:1.5rem;font-weight:500">24/7</div><div style="font-size:.6rem;color:#595959;max-width:7em;margin:.25rem auto 0">Narasi dibaca ulang tiap ada perubahan</div></div></div>
+    <article class="trust-card inview"><div style="background:#fff;border-radius:.75rem;padding:.5rem 1rem;font-size:1.25rem;font-weight:500;align-self:flex-start">#01</div><div><div style="font-size:1.125rem;font-weight:500">Dipercaya buat baca kondisi harian</div><p style="font-size:.75rem;color:#595959;line-height:1.6;margin-top:.5rem">Dari pemula sampai trader aktif, AIOS dipakai buat nangkep konteks sebelum ambil keputusan — bukan gantiin keputusannya.</p></div></article>
+  </div>
+  <h2 class="ghost-heading" id="ghostHeading"></h2>
+  <figure class="coach-figure inview" id="coachFigure"><img id="coachImg" alt=""><figcaption class="coach-caption"><div style="font-size:.875rem;font-weight:500" id="coachName"></div><div style="font-size:.65rem;opacity:.8" id="coachRole"></div></figcaption></figure>
+  <div class="orbit-wrap" id="orbitWrap" aria-hidden="true"></div>
+  <div class="trust-controls">
+    <button class="arrow-btn outline" id="trustPrev" aria-label="Previous"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    <div class="dots" id="trustDots"></div>
+    <button class="arrow-btn solid" id="trustNext" aria-label="Next"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  </div>
+</section>
+<section id="programs">
+  <div class="eyebrow dark"><span class="dot"></span> Cara AIOS bekerja</div>
+  <h2 id="programs-title"><span class="clip"><span>Dari data</span></span><br><span class="clip"><span>jadi cerita</span></span></h2>
+  <ul class="program-list" id="programList"></ul>
+</section>
+<section id="facilities" style="position:relative;overflow:hidden">
+  <canvas id="facDots" aria-hidden="true"></canvas>
+  <div class="fac-grid">
+    <div class="fac-intro">
+      <div class="fac-icon inview" id="facIcon"><img id="facIconImg" alt="Orb sumber data amber" loading="lazy"></div>
+      <h2 id="facilities-title"><span class="clip"><span>Dari Mana</span></span><br><span class="clip"><span>AIOS</span></span><br><span class="clip"><span>Menimbang</span></span></h2>
+      <p class="fac-body" id="facBody"></p>
+    </div>
+    <div class="fac-cards">
+      <figure class="fac-card inview"><img id="facImg1" alt="Gradien abstrak merepresentasikan data bursa" loading="lazy"><figcaption class="fac-caption clay"><div style="font-size:.875rem;font-weight:500">70 Ranking</div><div style="font-size:.65rem;opacity:.85">Skor 38 MEDIUM — bullish trend, undervalued, quality strong. Belum ada HIGH.</div></figcaption></figure>
+      <figure class="fac-card inview"><img id="facImg2" alt="Gradien abstrak merepresentasikan sentimen berita" loading="lazy"><figcaption class="fac-caption blue"><div style="font-size:.875rem;font-weight:500">5 Keputusan</div><div style="font-size:.65rem;opacity:.85">2 POLICY_BLOCKED tanpa risk param · 3 SUCCESS dengan entry/stop/target.</div></figcaption></figure>
+    </div>
+  </div>
+</section>
+<section id="stats">
+  <div class="eyebrow light"><span class="dot"></span> Dalam angka</div>
+  <h2 id="stats-title"><span class="clip"><span>Narasi yang</span></span><br><span class="clip"><span>bisa diaudit</span></span></h2>
+  <dl class="stats-grid" id="statsGrid"></dl>
+
+</section>
+<section id="testimonials">
+  <div class="eyebrow dark"><span class="dot"></span> Kata pengguna</div>
+  <h2 style="margin-top:1rem;font-size:3rem;font-weight:500;line-height:.95;letter-spacing:-.02em"><span class="clip"><span>Dipakai buat</span></span><br><span class="clip"><span>mikir, bukan ikut</span></span></h2>
+  <ul class="test-grid" id="testGrid"></ul>
+</section>
+<footer id="contact">
+  <div class="footer-cta">
+    <div><div class="eyebrow light"><span class="dot"></span> Mulai pakai</div><h2 style="margin-top:1rem"><span class="clip"><span>Siap baca</span></span><br><span class="clip"><span>pasar?</span></span></h2></div>
+    <button class="pill light inview" id="footerCta"><span class="shimmer-glare" aria-hidden="true"></span>Atur Notifikasi <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  </div>
+  <div class="footer-cols">
+    <div class="footer-brand"><div class="footer-brand-title" translate="no"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg> AIOS · Atrium</div><p style="margin-top:1rem;font-size:.875rem;color:rgba(255,255,255,.65)">Foyer personal AIOS. Lima pintu, masing-masing satu keluarga tiga dimensi.</p><address style="margin-top:1.5rem;font-style:normal;font-size:.875rem;color:rgba(255,255,255,.8)"><a href="mailto:hello@aios.app">hello@aios.app</a><br><span style="color:rgba(255,255,255,.55)">Bagian dari AIOS — Observasi Pasar &amp; Trading Personal</span></address></div>
+    <nav><div class="col-heading">Modul</div><ul class="col-links"><li><a href="aios-atrium.html">Beranda</a></li><li><a href="aios-jejak.html">Decision Journal</a></li><li><a href="aios-jejak.html">Risk Ledger</a></li><li><a href="aios-atrium.html">AIOS · Atrium</a></li></ul></nav>
+    <nav><div class="col-heading">Fitur</div><ul class="col-links"><li><a href="aios-ikhtisar.html">Ringkasan Harian</a></li><li><a href="aios-atlas.html">Deteksi Tensi</a></li><li><a href="aios-arc.html">Arus Modal</a></li><li><a href="aios-ikhtisar.html">Outlook Mingguan</a></li></ul></nav>
+    <nav><div class="col-heading">Lainnya</div><ul class="col-links"><li><a href="aios-profil.html">Tentang AIOS</a></li><li><a href="aios-atrium.html#programs">Cara Kerja</a></li><li><a href="aios-profil.html">FAQ</a></li><li><a href="aios-ikhtisar.html">Kontak</a></li></ul></nav>
+  </div>
+  <div class="footer-bottom"><span>© 2026 AIOS · Atrium.</span><nav><a href="https://x.com/AIOS">X</a><a href="https://x.com/AIOS">Telegram</a></nav><nav><a href="aios-profil.html">Privasi</a><a href="aios-profil.html">Ketentuan</a></nav></div>
+</footer>
+</main>
+<div id="menu" aria-hidden="true" inert>
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+  <div class="menu-panel"><div class="menu-inner">
+    <div class="menu-top"><span style="display:flex;align-items:center;gap:.5rem;font-weight:500;text-transform:uppercase;letter-spacing:.2em;color:#fff"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/></svg> AIOS</span><button class="menu-close" id="menuClose" aria-label="Close"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <nav class="menu-links" id="menuLinks"><a href="aios-atrium.html" class="active" aria-current="page">Atrium</a><a href="aios-atlas.html">Atlas</a><a href="aios-arc.html">Arc</a><a href="aios-materi.html">Materi</a><a href="aios-jejak.html">Jejak</a></nav>
+    <div class="menu-bottom"><button class="pill light" id="menuBook"><span class="shimmer-glare" aria-hidden="true"></span>Atur Notifikasi <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><nav style="display:flex;gap:1rem;font-size:.875rem;color:rgba(255,255,255,.7)"><a href="https://x.com/AIOS">X</a><a href="https://x.com/AIOS">Telegram</a></nav></div>
+  </div></div>
+</div>
+<div id="modal" aria-hidden="true" inert>
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-label="Book a visit">
+    <div class="modal-head"><div><div class="eyebrow dark"><span class="dot"></span> Atur notifikasi</div><h2 style="margin-top:.75rem;font-size:1.875rem;font-weight:500;line-height:.95;letter-spacing:-.02em" id="modalTitle"><span class="clip"><span>Kabari aku</span></span><br><span class="clip"><span>kalau ada apa-apa</span></span></h2></div><button class="menu-close" id="modalClose" aria-label="Close" style="background:#f4f4f4;color:#0a0a0a"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <form id="contactForm" novalidate>
+      <div class="field"><label for="f-name">Nama</label><input id="f-name" name="name" type="text" placeholder="Alex Rivera" autocomplete="name"></div>
+      <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" placeholder="kamu@email.com" autocomplete="email"></div>
+      <div class="field"><label for="f-msg">Aset apa yang mau dipantau?</label><textarea id="f-msg" name="msg" rows="3" placeholder="Contoh: BBCA, TLKM, ASII — kabari kalau ada perubahan tensi atau arus modal…"></textarea></div>
+      <button type="submit" class="modal-submit" id="modalSubmit"><span class="shimmer-glare" aria-hidden="true"></span>Aktifkan notifikasi</button>
+    </form>
+    <div class="success-panel" id="successPanel" style="display:none"><div style="width:3rem;height:3rem;border-radius:62.5rem;background:#2563c9;display:grid;place-items:center;margin:0 auto;color:#fff"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div><div style="margin-top:.75rem;font-size:1.125rem;font-weight:500">Request received</div><p style="margin-top:.5rem;font-size:.875rem;color:#595959" id="successText"></p><button class="pill solid" id="successDone" style="margin-top:1rem">Done</button></div>
+  </div>
+</div>
+
+
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/atrium.js");
+            await module.InvokeVoidAsync("initAtrium");
+        }
+    }
+}
