@@ -155,6 +155,7 @@ app.Use(async (context, next) =>
         path.StartsWith("/materi") ||
         path.StartsWith("/jejak") ||
         path.StartsWith("/profil") ||
+        path.StartsWith("/ikhtisar") ||
         path.StartsWith("/_blazor") ||
         path.StartsWith("/_framework") ||
         path.StartsWith("/css") ||
