@@ -1,0 +1,288 @@
+@page "/jejak"
+@layout EmptyLayout
+@inject IJSRuntime JSRuntime
+
+<PageTitle>AIOS · Jejak</PageTitle>
+
+<a href="#main" class="skip">Skip to content</a>
+<header class="site-header">
+    <nav class="nav-left" aria-label="Primary"><a href="aios-atrium.html">Atrium</a><a href="aios-atlas.html">Atlas</a><a href="aios-arc.html">Arc</a><a href="aios-materi.html">Materi</a><a href="aios-jejak.html" class="active" aria-current="page">Jejak</a><a href="aios-ikhtisar.html">Ikhtisar</a></nav>
+    <a class="brand-center" translate="no" href="aios-atrium.html" aria-label="AIOS — beranda"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M4.8 5.6A9 9 0 0 0 4.8 18.4"/><path d="M19.2 5.6a9 9 0 0 1 0 12.8"/></svg> AIOS · Jejak</a>
+    <div class="nav-right"><button class="book-link" id="bookHeader">Atur Notifikasi</button><button class="burger" id="burger" aria-label="Open menu"><span class="burger-bars"><i></i><i></i></span></button></div>
+  </header>
+
+<div style="position:relative">
+<canvas id="tuHeroGrid" class="tu-layer" style="height:9rem" aria-hidden="true"></canvas>
+<div class="ghost" aria-hidden="true"><span>JEJAK</span> <b>— LEDGER</b> <em>editorial</em></div>
+<div class="ghost-sub"><span class="tu-live"><i></i>ledger live</span><span>5 briefs · <strong>70 snapshots</strong> · 3 closed · <strong>0 journal</strong> — bukan tabel, tapi jejak keputusan</span><span class="tag">read-only ledger</span><span class="tag">AN TM · BBCA · TLKM</span></div>
+</div>
+<div class="tu-marquee" aria-hidden="true"><div class="tu-mq-track" id="tuMqTrack">
+<span class="tu-mq-item"><i class=""></i><b>70</b> SNAPSHOT</span>
+<span class="tu-mq-item"><i class=""></i><b>5</b> BRIEF KEPUTUSAN</span>
+<span class="tu-mq-item"><i class="amber"></i><b>2</b> POLICY_BLOCKED</span>
+<span class="tu-mq-item"><i class="emerald"></i><b>3</b> SUCCESS</span>
+<span class="tu-mq-item"><i class="emerald"></i><b>3</b> POSISI CLOSED</span>
+<span class="tu-mq-item"><i class=""></i><b>0</b> JOURNAL</span>
+</div></div>
+
+<main id="main" tabindex="-1" class="wrap">
+  <section class="hero in">
+    <h1>Jejak keputusan, <i>bukan ringkasan angka.</i></h1>
+    <p>Setiap brief di sini dicatat apa adanya — kalau <b>POLICY_BLOCKED</b> ya dikutip alasannya, kalau <b>SUCCESS</b> ya terlihat entry/stop/target-nya. 70 snapshots semua <b>MEDIUM</b>, 3 posisi sudah closed. Tidak ada jurnal yang mengada-ada.</p>
+  </section>
+
+  <div class="hr"></div>
+
+  <section aria-labelledby="briefTitle">
+    <div class="ey"><i></i> 5 briefs — narasi keputusan</div>
+    <h2 id="briefTitle" class="sr">Briefs</h2>
+    <div class="stack" style="margin-top:1rem">
+
+      <!-- 1 BLOCKED -->
+      <article class="card in">
+        <div class="beam amber"></div>
+        <div class="card-top"><span class="num">#01 · 2026-08-22 08:06 UTC</span><span class="st blocked">POLICY_BLOCKED</span><span class="meta">ANTM · —</span></div>
+        <h3>ANTM — ditahan, bukan ditolak <span>· no risk params</span></h3>
+        <div class="quote"><p>Snapshot is actionable <em>(BUY, fresh data)</em> but <em>no risk parameters were supplied</em> — entry/stop/target/position-size are <em>never invented</em>. Supply <em>--stop-loss-pct / --take-profit-pct / --risk-pct / --balance</em> to price a plan.</p></div>
+        <div class="plan"><span>entry <b>—</b></span><span>stop <b>—</b></span><span>target <b>—</b></span><span>R/R <b>—</b></span></div>
+        <p class="why">Artinya: sinyal ada, tapi AIOS menolak mengarang angka. Disiplin ini yang bikin ledger ini bisa diaudit — tidak ada harga khayalan.</p>
+      </article>
+
+      <!-- 2 SUCCESS -->
+      <article class="card in">
+        <div class="beam emerald"></div>
+        <div class="card-top"><span class="num">#02 · 2026-08-22 08:07 UTC</span><span class="st success">SUCCESS · ratio 2.0</span><span class="meta">ANTM · 3 170</span></div>
+        <h3>ANTM — rencana terharga penuh <span>· 3 170 → 3 296.8</span></h3>
+        <div class="quote"><p>Brief #2 di-price setelah risk params di-supply. Entry <em>3 170</em>, stop <em>3 106.6</em> (-2%), target <em>3 296.8</em>, <em>risk/reward 2.0</em>. Tidak ada kutipan reason — memang SUCCESS.</p></div>
+        <div class="plan"><span>entry <b>3 170</b></span><span>stop <b>3 106.6</b></span><span>target <b>3 296.8</b></span><span>R/R <b>2.0</b></span></div>
+        <p class="why">Kontras dengan #01: sekali param lengkap, mesin langsung keluarkan plan yang konsisten — jarak stop dan target simetris 1:2.</p>
+      </article>
+
+      <!-- 3 BLOCKED -->
+      <article class="card in">
+        <div class="beam amber"></div>
+        <div class="card-top"><span class="num">#03 · 2026-08-22 08:08 UTC</span><span class="st blocked">POLICY_BLOCKED</span><span class="meta">ANTM · —</span></div>
+        <h3>ANTM — ditahan lagi <span>· no risk params</span></h3>
+        <div class="quote"><p>Snapshot is actionable <em>(BUY, fresh data)</em> but <em>no risk parameters were supplied</em> — entry/stop/target/position-size are <em>never invented</em>. Supply <em>--stop-loss-pct / --take-profit-pct / --risk-pct / --balance</em> to price a plan.</p></div>
+        <div class="plan"><span>entry <b>—</b></span><span>stop <b>—</b></span><span>target <b>—</b></span><span>R/R <b>—</b></span></div>
+        <p class="why">Brief #03 mengulang disiplin yang sama — bukan error, tapi gate. Tanpa param, tidak ada plan. Ledger jujur soal itu.</p>
+      </article>
+
+      <!-- 4 SUCCESS -->
+      <article class="card in">
+        <div class="beam emerald"></div>
+        <div class="card-top"><span class="num">#04 · 2026-08-22 08:13 UTC</span><span class="st success">SUCCESS · ratio 2.0</span><span class="meta">ANTM · 3 170</span></div>
+        <h3>ANTM — konsistensi plan <span>· 3 170 → 3 296.8</span></h3>
+        <div class="quote"><p>Brief #4 kembali <em>SUCCESS</em> dengan angka identik: entry <em>3 170</em>, stop <em>3 106.6</em>, target <em>3 296.8</em>, <em>R/R 2.0</em>. Tidak ada drift.</p></div>
+        <div class="plan"><span>entry <b>3 170</b></span><span>stop <b>3 106.6</b></span><span>target <b>3 296.8</b></span><span>R/R <b>2.0</b></span></div>
+        <p class="why">Dua SUCCESS berurutan dengan harga sama = validasi bahwa kalkulasi deterministik, bukan tebak-tebakan tiap run.</p>
+      </article>
+
+      <!-- 5 SUCCESS -->
+      <article class="card in">
+        <div class="beam emerald"></div>
+        <div class="card-top"><span class="num">#05 · 2026-08-22 08:14 UTC</span><span class="st success">SUCCESS · ratio 2.0</span><span class="meta">ANTM · 3 170</span></div>
+        <h3>ANTM — penutup sesi <span>· 3 170 → 3 296.8</span></h3>
+        <div class="quote"><p>Brief #5 — <em>SUCCESS</em> ketiga: entry <em>3 170</em>, stop <em>3 106.6</em>, target <em>3 296.8</em>, <em>R/R 2.0</em>. Sesi 5 brief ditutup tanpa anomali.</p></div>
+        <div class="plan"><span>entry <b>3 170</b></span><span>stop <b>3 106.6</b></span><span>target <b>3 296.8</b></span><span>R/R <b>2.0</b></span></div>
+        <p class="why">Total: 2 BLOCKED karena disiplin param + 3 SUCCESS yang ter-price rapi. Tidak ada yang disembunyikan di ledger ini.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="snap in grain" aria-labelledby="snapTitle">
+<canvas id="tuSnapParticles" class="tu-layer" aria-hidden="true"></canvas>
+    <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap"><span class="ey light"><i></i> Snapshots</span><span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.18);padding:.28rem .55rem;border-radius:var(--pill)">70 · status success 100%</span></div>
+    <h2 id="snapTitle" style="margin-top:.85rem">70 observasi — <br><span style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400">semua MEDIUM, belum HIGH.</span></h2>
+    <div class="snap-grid">
+      <div class="snap-card">
+        <h3>Apa artinya MEDIUM</h3>
+        <p>Bukan sinyal lemah — tapi <b>belum cukup tensi untuk HIGH</b>. Dari 70 snapshot, <b>70 MEDIUM (100%)</b>, 0 HIGH, 0 LOW menonjol. Pasar observasi, bukan eksekusi — konsisten dengan 2 brief yang di-BLOCK karena gate risiko.</p>
+        <div class="kpi">
+          <div><strong>70</strong><span>total snapshots</span></div>
+          <div><strong>70</strong><span>MEDIUM</span></div>
+          <div><strong>0</strong><span>HIGH</span></div>
+        </div>
+      </div>
+      <div class="snap-card">
+        <h3>Cara baca ledger ini</h3>
+        <p>Bukan tabel skor — ini jejak. Skor 38-ish (MEDIUM) dengan <b>bullish trend + undervalued + quality strong</b> menahan diri jadi HIGH. Ledger tidak memoles: kalau belum HIGH, ya ditulis belum.</p>
+        <p style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.55)">success 70 · confidence LOW 2 · MEDIUM 68 · HIGH 0 — sumber: ranking_snapshots</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="closed in grain" aria-labelledby="closedTitle">
+    <div class="ey"><i></i> Closed positions</div>
+    <h2 id="closedTitle" style="margin-top:.6rem">3 posisi sudah ditutup — <span style="color:var(--muted);font-weight:400">BBCA ×2, TLKM ×1</span></h2>
+    <p style="margin-top:.5rem;font-size:.82rem;line-height:1.65;color:var(--muted)">Bukan open floating — sudah realized. Ledger mencatat quantity, avg price, dan realized PnL apa adanya.</p>
+    <div class="list">
+      <article class="pos"><div class="beam"></div><div class="pos-top"><strong>BBCA</strong><em>closed</em></div><div class="pos-mid"><span>qty <b>100</b></span><span>avg <b>9 500</b></span></div><div class="pnl">+500.000<small>realized</small></div></article>
+      <article class="pos"><div class="beam emerald"></div><div class="pos-top"><strong>BBCA</strong><em>closed</em></div><div class="pos-mid"><span>qty <b>100</b></span><span>avg <b>9 500</b></span></div><div class="pnl">+800.000<small>realized</small></div></article>
+      <article class="pos"><div class="beam amber"></div><div class="pos-top"><strong>TLKM</strong><em>closed</em></div><div class="pos-mid"><span>qty <b>100</b></span><span>avg <b>9 500</b></span></div><div class="pnl">+600.000<small>realized</small></div></article>
+    </div>
+    <p style="margin-top:.9rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">total realized 1.900.000 · 0 open · 0 journal — positions status='closed'</p>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="footer-cta">
+    <div><div class="eyebrow light"><span class="dot"></span> Mulai pakai</div><h2 style="margin-top:1rem"><span class="clip"><span>Siap baca</span></span><br><span class="clip"><span>pasar?</span></span></h2></div>
+    <button class="pill light" id="footerCta">Atur Notifikasi <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  </div>
+  <div class="footer-cols">
+    <div class="footer-brand"><div class="footer-brand-title" translate="no"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg> AIOS · Jejak</div><p style="margin-top:1rem;font-size:.875rem;color:rgba(255,255,255,.65)">Bukti ditulis, rencana ditahan, alasan disimpan. Bukan sinyal.</p><address style="margin-top:1.5rem;font-style:normal;font-size:.875rem;color:rgba(255,255,255,.8)"><a href="mailto:hello@aios.app">hello@aios.app</a></address></div>
+    <div><p class="mono-s" style="margin-bottom:.9rem">Halaman</p><ul style="font-size:.875rem;color:rgba(255,255,255,.7);display:grid;gap:.55rem"><li><a href="aios-atrium.html">Atrium</a></li><li><a href="aios-atlas.html">Atlas</a></li><li><a href="aios-arc.html">Arc</a></li><li><a href="aios-materi.html">Materi</a></li><li><a href="aios-ikhtisar.html">Ikhtisar</a></li></ul></div>
+    <div><p class="mono-s" style="margin-bottom:.9rem">Data</p><ul style="font-size:.875rem;color:rgba(255,255,255,.7);display:grid;gap:.55rem"><li>70 snapshot</li><li>5 brief keputusan</li><li>1 jendela aktif</li><li>3 posisi ditutup</li></ul></div>
+  </div>
+  <div style="border-top:1px solid rgba(255,255,255,.15);margin-top:2.5rem;padding-top:1.5rem;display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;font-size:.75rem;color:rgba(255,255,255,.6)"><p>© 2026 AIOS</p><p>Phase H · 24 Agt — 23 Sep 2026 · Asia/Jakarta</p></div>
+</footer>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.in').forEach(el=>io.observe(el));
+
+/* ===== threeui components ===== */
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* 1. animated grid pattern — header */
+  var hg = document.getElementById('tuHeroGrid');
+  if(hg){
+    var g = hg.getContext('2d'), goff = 0, gridVisible=true, gridRaf=0;
+    try{ new IntersectionObserver(function(e){ gridVisible=e[0].isIntersecting; if(gridVisible&&!gridRaf&&!reduce) gridRaf=requestAnimationFrame(drawGrid); },{threshold:0}).observe(hg); }catch(e){}
+    function drawGrid(){
+      gridRaf=0;
+      if(!gridVisible){ gridRaf=requestAnimationFrame(drawGrid); return; }
+      var dpr = Math.min(devicePixelRatio||1, 2);
+      var W = hg.width = Math.max(1, hg.clientWidth*dpr), H = hg.height = Math.max(1, hg.clientHeight*dpr);
+      g.clearRect(0,0,W,H);
+      var sp = 26*dpr;
+      g.strokeStyle = 'rgba(37,99,201,.16)'; g.lineWidth = 1*dpr;
+      g.setLineDash([5*dpr, 9*dpr]); g.lineDashOffset = -goff*dpr;
+      for(var x=0;x<W;x+=sp){ g.beginPath(); g.moveTo(x,0); g.lineTo(x,H); g.stroke(); }
+      for(var y=0;y<H;y+=sp){ g.beginPath(); g.moveTo(0,y); g.lineTo(W,y); g.stroke(); }
+      if(!reduce){ goff += 0.45; gridRaf=requestAnimationFrame(drawGrid); }
+    }
+    if(reduce){ drawGrid(); addEventListener('resize', drawGrid, {passive:true}); } else { gridRaf=requestAnimationFrame(drawGrid); document.addEventListener('visibilitychange', function(){ if(document.hidden){ if(gridRaf)cancelAnimationFrame(gridRaf); gridRaf=0; } else if(gridVisible&&!gridRaf) gridRaf=requestAnimationFrame(drawGrid); }); }
+  }
+
+  /* 2. marquee — infinite horizontal */
+  var track = document.getElementById('tuMqTrack');
+  if(track && !reduce){
+    var seq = track.innerHTML;
+    for(var k=0;k<3;k++) track.insertAdjacentHTML('beforeend', seq);
+    var mx = 0, third = 0;
+    function measure(){ third = track.scrollWidth/4 || 1; }
+    measure(); addEventListener('resize', measure, {passive:true});
+    function mqLoop(){
+      mx -= 0.45;
+      if(third>0 && mx <= -third) mx = 0;
+      track.style.transform = 'translateX('+mx+'px)';
+      requestAnimationFrame(mqLoop);
+    }
+    requestAnimationFrame(mqLoop);
+  }
+
+  /* 3. particles — ledger snapshot panel */
+  var pc = document.getElementById('tuSnapParticles');
+  if(pc){
+    var q = pc.getContext('2d'), pts = [], Wp=0, Hp=0;
+    function initPts(){
+      var dpr = Math.min(devicePixelRatio||1, 2);
+      Wp = pc.width = Math.max(1, pc.clientWidth*dpr); Hp = pc.height = Math.max(1, pc.clientHeight*dpr);
+      var n = Math.min(56, Math.round(Wp*Hp/26000));
+      pts = [];
+      for(var i=0;i<n;i++) pts.push({x:Math.random()*Wp, y:Math.random()*Hp,
+        vx:(Math.random()-0.5)*0.35*dpr, vy:(Math.random()-0.5)*0.35*dpr, r:(0.8+Math.random()*1.4)*dpr});
+    }
+    initPts(); addEventListener('resize', initPts, {passive:true});
+    function drawPts(){
+      q.clearRect(0,0,Wp,Hp);
+      for(var i=0;i<pts.length;i++){
+        var p = pts[i];
+        p.x += p.vx; p.y += p.vy;
+        if(p.x<0||p.x>Wp) p.vx*=-1;
+        if(p.y<0||p.y>Hp) p.vy*=-1;
+        q.fillStyle = 'rgba(255,255,255,.5)';
+        q.beginPath(); q.arc(p.x,p.y,p.r,0,Math.PI*2); q.fill();
+      }
+      q.strokeStyle = 'rgba(255,255,255,.10)'; q.lineWidth = 1;
+      for(var a=0;a<pts.length;a++) for(var b=a+1;b<pts.length;b++){
+        var dx=pts[a].x-pts[b].x, dy=pts[a].y-pts[b].y, d=Math.hypot(dx,dy);
+        if(d < 90*(devicePixelRatio||1)){
+          q.globalAlpha = 1 - d/(90*(devicePixelRatio||1));
+          q.beginPath(); q.moveTo(pts[a].x,pts[a].y); q.lineTo(pts[b].x,pts[b].y); q.stroke();
+        }
+      }
+      q.globalAlpha = 1;
+      if(!reduce) requestAnimationFrame(drawPts);
+    }
+    drawPts();
+  }
+
+  /* 4. magic card spotlight — brief cards */
+  if(!reduce){
+    document.querySelectorAll('.card, .pos').forEach(function(card){
+      if(card.querySelector('.tu-spot')) return;
+      var spot = document.createElement('div');
+      spot.className = 'tu-spot';
+      card.insertBefore(spot, card.firstChild);
+      card.addEventListener('pointermove', function(e){
+        var r = card.getBoundingClientRect();
+        spot.style.opacity = '1';
+        spot.style.background = 'radial-gradient(340px 220px at '+(e.clientX-r.left)+'px '+(e.clientY-r.top)+'px, rgba(37,99,201,.13), transparent 62%)';
+      });
+      card.addEventListener('pointerleave', function(){ spot.style.opacity = '0'; });
+    });
+  }
+
+  /* 5. number ticker — KPI snapshot + realized total */
+  function ticker(el, target, fmt, dur){
+    if(!el) return;
+    if(reduce){ el.textContent = fmt ? fmt(target) : String(target); return; }
+    var start = performance.now(); dur = dur || 1300;
+    (function f(now){
+      var t = Math.min(1, (now-start)/dur);
+      var e = 1 - Math.pow(1-t, 3);
+      el.textContent = fmt ? fmt(target*e) : Math.round(target*e).toLocaleString('id-ID');
+      if(t < 1) requestAnimationFrame(f); else el.textContent = fmt ? fmt(target) : String(target);
+    })(start);
+  }
+  var kpis = document.querySelectorAll('.kpi strong');
+  if(kpis.length){
+    var vals = [70, 70, 0];
+    var kio = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(!e.isIntersecting) return;
+        var idx = [].indexOf.call(kpis, e.target);
+        ticker(e.target, vals[idx] != null ? vals[idx] : parseFloat(e.target.textContent.replace(/\D/g,'')) || 0);
+        kio.unobserve(e.target);
+      });
+    }, {threshold:.4});
+    kpis.forEach(function(k){ kio.observe(k); });
+  }
+})();
+
+// border-beam rotate
+let a=0; const beams=document.querySelectorAll('.beam');
+const reduceTick=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let tickVisible=true, tickRaf=0;
+try{ new IntersectionObserver(function(e){ tickVisible=e[0].isIntersecting; if(tickVisible&&!tickRaf&&!reduceTick) tickRaf=requestAnimationFrame(tick); },{threshold:0}).observe(beams[0]||document.body); }catch(e){}
+function tick(){ tickRaf=0; if(reduceTick||!tickVisible){ tickRaf=requestAnimationFrame(tick); return; } a=(a+0.32)%360; beams.forEach(b=>b.style.setProperty('--a',a+'deg')); tickRaf=requestAnimationFrame(tick); }
+if(!reduceTick) tickRaf=requestAnimationFrame(tick);
+document.addEventListener('visibilitychange', function(){ if(document.hidden){ if(tickRaf)cancelAnimationFrame(tickRaf); tickRaf=0; } else if(tickVisible&&!tickRaf&&!reduceTick) tickRaf=requestAnimationFrame(tick); });
+</script>
+<script>addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});</script>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jejak.js");
+            await module.InvokeVoidAsync("initJejak");
+        }
+    }
+}
