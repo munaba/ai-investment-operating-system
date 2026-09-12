@@ -507,7 +507,7 @@ else
     [Inject] public IJSRuntime JSRuntime { get; set; } = default!;
     [Inject] public IHumanDecisionService HumanDecisionService { get; set; } = default!;
 
-    private void OpenDecisionForm(long windowId)
+    private async Task OpenDecisionForm(long windowId)
     {
         DecisionForm_WindowId = windowId;
         DecisionForm_Decision = "PENDING";
@@ -516,11 +516,15 @@ else
         DecisionForm_Confirmed = false;
         DecisionForm_Result = "";
         ShowDecisionForm = true;
+        await InvokeAsync(StateHasChanged);
+        await JSRuntime.InvokeVoidAsync("modalA11y.open", ".modal.show");
     }
 
-    private void CloseDecisionForm()
+    private async Task CloseDecisionForm()
     {
+        await JSRuntime.InvokeVoidAsync("modalA11y.close", ".modal.show");
         ShowDecisionForm = false;
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task SubmitDecisionAsync()
