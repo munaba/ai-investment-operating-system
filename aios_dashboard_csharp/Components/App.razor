@@ -22,42 +22,6 @@
 
 <body>
     <div class="app-container">
-        <nav class="navbar navbar-expand-lg mb-4">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">AIOS<span style="color:var(--lime)">.</span></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <NavLink class="nav-link" href="/phase0" Match="NavLinkMatch.All">
-                                <svg class="ico"><use href="/icons/_sprite.svg#i-terminal"/></svg> Phase 0 · Setup
-                            </NavLink>
-                        </li>
-                        <li class="nav-item">
-                            <NavLink class="nav-link" href="/phase1" Match="NavLinkMatch.All">
-                                <svg class="ico"><use href="/icons/_sprite.svg#i-book-open"/></svg> Phase 1 · Journal
-                            </NavLink>
-                        </li>
-                        <li class="nav-item">
-                            <NavLink class="nav-link" href="/phase2" Match="NavLinkMatch.All">
-                                <svg class="ico"><use href="/icons/_sprite.svg#i-circle-dot"/></svg> Phase 2 · Windows
-                            </NavLink>
-                        </li>
-                        <li class="nav-item">
-                            <NavLink class="nav-link" href="/phase3" Match="NavLinkMatch.All">
-                                <svg class="ico"><use href="/icons/_sprite.svg#i-activity"/></svg> Phase 3 · Book
-                            </NavLink>
-                        </li>
-                    </ul>
-                    <span class="navbar-text text-white me-3">
-                        <span class="ro-plate">🔒 Read-only</span> <span class="badge bg-secondary" title="SQLite via mode=ro — verified at startup">mode=ro</span>
-                    </span>
-                </div>
-            </div>
-        </nav>
-
         <main class="container-fluid">
             <Routes />
         </main>
