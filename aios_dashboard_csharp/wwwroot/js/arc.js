@@ -1,9 +1,10 @@
 // Arc — Three.js wireframe scene + OrbitControls + scramble animation
+import * as THREE from '../lib/three/three.module.js';
+import {OrbitControls} from '../lib/three/controls/OrbitControls.js';
+
 export async function initArc() {
 if(window.__arcInit)return;window.__arcInit=true;
 
-import * as THREE from 'three';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 const REDUCE=matchMedia('(prefers-reduced-motion:reduce)').matches;
 /* 2) scramble — magic/hyper-text-01.html */
 const CHARS='ABCDEFGHIJKLMNOPQRSTUVWXYZ';

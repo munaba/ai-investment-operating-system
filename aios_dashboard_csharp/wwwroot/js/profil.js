@@ -10,6 +10,9 @@
 }(typeof self !== 'undefined' ? self : this, function() {
     'use strict';
     
+    function initProfil() {
+        if (window.__profilInit) return;
+        window.__profilInit = true;
 // scroll reveal
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.in').forEach(el=>io.observe(el));
@@ -63,12 +66,14 @@ document.querySelectorAll('a[href^="#"]').forEach(x=>x.addEventListener('click',
 })();
 
 addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});
+        console.log('Profil initialized');
+    }
     
-    // Auto-init on DOM ready
+    // Auto-init fallback for non-Blazor load
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initProfil);
+        document.addEventListener('DOMContentLoaded', function(){ try{ initProfil(); }catch(e){} });
     } else {
-        initProfil();
+        try{ initProfil(); }catch(e){}
     }
     
     return initProfil;

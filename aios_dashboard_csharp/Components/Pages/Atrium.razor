@@ -1,11 +1,9 @@
 @page "/atrium"
+@rendermode InteractiveServer
 @layout EmptyLayout
 @inject IJSRuntime JSRuntime
 
 <PageTitle>AIOS · Atrium</PageTitle>
-
-<!-- UMD libraries loaded globally before module init -->
-<script src="/lib/atrium/lenis.min.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -125,8 +123,6 @@
     <div class="success-panel" id="successPanel" style="display:none"><div style="width:3rem;height:3rem;border-radius:62.5rem;background:#2563c9;display:grid;place-items:center;margin:0 auto;color:#fff"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div><div style="margin-top:.75rem;font-size:1.125rem;font-weight:500">Request received</div><p style="margin-top:.5rem;font-size:.875rem;color:#595959" id="successText"></p><button class="pill solid" id="successDone" style="margin-top:1rem">Done</button></div>
   </div>
 </div>
-
-
 
 @code {
     protected override async Task OnAfterRenderAsync(bool firstRender)
