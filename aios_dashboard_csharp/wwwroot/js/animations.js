@@ -1,4 +1,4 @@
-/* AIOS Animations — anime.js helpers for Blazor Server interop */
+/* AIOS Animations — GSAP helpers for Blazor Server interop */
 /* ponytail: scoped to window.aiosAnim to avoid global pollution. */
 /* Upgrade path: replace with Blazor lifecycle-based animation when Blazor supports it natively. */
 
@@ -21,29 +21,28 @@ window.aiosAnim = {
 
         // Cancel any running animation on this element
         if (this._activeCounts[elementId]) {
-            this._activeCounts[elementId].pause();
+            this._activeCounts[elementId].kill();
         }
 
         var el = document.getElementById(elementId);
         if (!el) return;
 
         var obj = { val: from };
-        // ponytail: easeOutExpo for snappy feel, no overshoot on linear numeric values
-        var anim = anime({
-            targets: obj,
+        // ponytail: expo.out for snappy feel, no overshoot on linear numeric values
+        var tween = gsap.to(obj, {
             val: to,
-            duration: duration,
-            easing: 'easeOutExpo',
-            update: function () {
+            duration: duration / 1000,
+            ease: 'expo.out',
+            onUpdate: function () {
                 el.textContent = prefix + Math.round(obj.val).toLocaleString('id-ID') + suffix;
             },
-            complete: function () {
+            onComplete: function () {
                 el.textContent = prefix + Math.round(to).toLocaleString('id-ID') + suffix;
                 el.setAttribute('aria-label', prefix + Math.round(to).toLocaleString('id-ID') + suffix);
                 delete window.aiosAnim._activeCounts[elementId];
             }
         });
-        this._activeCounts[elementId] = anim;
+        this._activeCounts[elementId] = tween;
     },
 
     /**
@@ -58,17 +57,12 @@ window.aiosAnim = {
         var offsetX = direction === 'right' ? 20 : -20;
 
         // Set initial state
-        pane.style.opacity = '0';
-        pane.style.transform = 'translateX(' + offsetX + 'px)';
         pane.classList.add('show', 'active');
 
-        anime({
-            targets: pane,
-            opacity: [0, 1],
-            translateX: [offsetX, 0],
-            duration: 250,
-            easing: 'easeOutCubic'
-        });
+        gsap.fromTo(pane,
+            { opacity: 0, x: offsetX },
+            { opacity: 1, x: 0, duration: 0.25, ease: 'power2.out' }
+        );
     },
 
     /**
@@ -78,20 +72,10 @@ window.aiosAnim = {
      */
     rowHover: function (row, event) {
         if (event === 'enter') {
-            anime({
-                targets: row,
-                translateX: 4,
-                duration: 200,
-                easing: 'easeOutCubic'
-            });
+            gsap.to(row, { x: 4, duration: 0.2, ease: 'power2.out' });
             row.style.borderLeft = '2px solid var(--lime)';
         } else {
-            anime({
-                targets: row,
-                translateX: 0,
-                duration: 200,
-                easing: 'easeOutCubic'
-            });
+            gsap.to(row, { x: 0, duration: 0.2, ease: 'power2.out' });
             row.style.borderLeft = '2px solid transparent';
         }
     },
