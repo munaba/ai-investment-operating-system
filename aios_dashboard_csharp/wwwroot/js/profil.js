@@ -16,14 +16,16 @@
 // scroll reveal
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.in').forEach(el=>io.observe(el));
-// border-beam rotate
+// border-beam rotate — GSAP ticker (was rAF)
 let a=0;const beams=document.querySelectorAll('.beam');
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-let tickVisible=true, tickRaf=0;
-try{ new IntersectionObserver(function(e){ tickVisible=e[0].isIntersecting; if(tickVisible&&!tickRaf&&!reduce) tickRaf=requestAnimationFrame(tick); },{threshold:0}).observe(beams[0]||document.body); }catch(e){}
-function tick(){ tickRaf=0; if(!tickVisible){ tickRaf=requestAnimationFrame(tick); return; } a=(a+0.32)%360;beams.forEach(b=>b.style.setProperty('--a',a+'deg'));tickRaf=requestAnimationFrame(tick); }
-if(!reduce) tickRaf=requestAnimationFrame(tick);
-document.addEventListener('visibilitychange', function(){ if(document.hidden){ if(tickRaf)cancelAnimationFrame(tickRaf); tickRaf=0; } else if(tickVisible&&!tickRaf&&!reduce) tickRaf=requestAnimationFrame(tick); });
+let tickVisible=true;
+function tickBeam(){ if(!tickVisible||reduce) return; a=(a+0.32)%360;beams.forEach(b=>b.style.setProperty('--a',a+'deg')); }
+if(!reduce){
+    gsap.ticker.add(tickBeam);
+    try{ new IntersectionObserver(function(e){ tickVisible=e[0].isIntersecting; if(!tickVisible) gsap.ticker.remove(tickBeam); else gsap.ticker.add(tickBeam); },{threshold:0}).observe(beams[0]||document.body); }catch(e){}
+    document.addEventListener('visibilitychange', function(){ if(document.hidden) gsap.ticker.remove(tickBeam); else if(tickVisible) gsap.ticker.add(tickBeam); });
+}
 // mobile nav — identik aios-atlas.html
 const mnav=document.getElementById('mnav');
 document.getElementById('burger').onclick=()=>mnav.classList.add('open');
@@ -31,7 +33,7 @@ document.getElementById('closeNav').onclick=()=>mnav.classList.remove('open');
 mnav.querySelectorAll('a').forEach(x=>x.addEventListener('click',()=>mnav.classList.remove('open')));
 // smooth anchor
 document.querySelectorAll('a[href^="#"]').forEach(x=>x.addEventListener('click',e=>{const el=document.getElementById(x.getAttribute('href').slice(1));if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'})}}));
-// blueprint lattice
+// blueprint lattice — GSAP ticker (was rAF)
 (function(){
   const cv=document.getElementById('blueprint');if(!cv)return;
   const ctx=cv.getContext('2d');let w,h,dpr,pts=[];
@@ -46,9 +48,9 @@ document.querySelectorAll('a[href^="#"]').forEach(x=>x.addEventListener('click',
     }
   }
   size();addEventListener('resize',size);
-  function draw(t){
+  function draw(){
     ctx.clearRect(0,0,w,h);
-    const T=reduce?0:t/2600;
+    const T=reduce?0:gsap.ticker.time/2.6;
     pts.forEach(p=>{p.px=p.bx+Math.sin(T+p.ph)*9;p.py=p.by+Math.cos(T*0.8+p.ph)*7});
     ctx.strokeStyle='rgba(87,144,230,.16)';ctx.lineWidth=1;
     for(let i=0;i<pts.length;i++){
@@ -60,9 +62,8 @@ document.querySelectorAll('a[href^="#"]').forEach(x=>x.addEventListener('click',
     }
     ctx.globalAlpha=1;ctx.fillStyle='rgba(87,144,230,.5)';
     pts.forEach(p=>{ctx.beginPath();ctx.arc(p.px,p.py,1.6,0,6.283);ctx.fill()});
-    requestAnimationFrame(draw);
   }
-  requestAnimationFrame(draw);
+  gsap.ticker.add(draw);
 })();
 
 addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});
