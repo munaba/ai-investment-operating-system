@@ -4,20 +4,31 @@ if(window.__materiInit)return;window.__materiInit=true;
 
 // ponytail: shader via Canvas2D fragment emulation (no Three import) - ceiling: true ShaderMaterial, upgrade: import three + ShaderMaterial per panel if GPU weave needed.
 const $=s=>document.querySelector(s);
-// GSAP intro
+// GSAP intro — already GSAP, keep as-is
 gsap.from('#t1',{y:22,opacity:0,duration:.7,ease:'power2.out'});
 gsap.from('.spec-card',{y:16,opacity:0,duration:.6,stagger:.08,delay:.15});
 gsap.from('.phone-hero',{y:20,opacity:0,scale:.98,duration:.8,delay:.2,ease:'back.out(1.2)'});
-// hero tilt
+// hero tilt — rAF → gsap.ticker (demand-driven)
 const stage=document.getElementById('heroCenter'), phone=document.getElementById('phoneHero');
-let tx=0,ty=0,rx=0,ry=0,raf=0;
+let tx=0,ty=0,rx=0,ry=0;
+let tiltActive=false;
+function tickTilt(){
+  rx+=(tx-rx)*.09; ry+=(ty-ry)*.09;
+  phone.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`;
+  if(Math.abs(rx-tx)<.05&&Math.abs(ry-ty)<.05){
+    gsap.ticker.remove(tickTilt);
+    tiltActive=false;
+  }
+}
+function ensureTilt(){
+  if(!tiltActive){ tiltActive=true; gsap.ticker.add(tickTilt); }
+}
 stage.addEventListener('mousemove',e=>{
   const r=stage.getBoundingClientRect();
   const x=(e.clientX-(r.left+r.width/2))/r.width, y=(e.clientY-(r.top+r.height/2))/r.height;
-  tx=y*-10; ty=x*14; if(!raf) raf=requestAnimationFrame(tick);
+  tx=y*-10; ty=x*14; ensureTilt();
 });
-stage.addEventListener('mouseleave',()=>{tx=0;ty=0; if(!raf) raf=requestAnimationFrame(tick)});
-function tick(){raf=0;rx+=(tx-rx)*.09; ry+=(ty-ry)*.09; phone.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`; if(Math.abs(rx-tx)>.05||Math.abs(ry-ty)>.05) raf=requestAnimationFrame(tick);}
+stage.addEventListener('mouseleave',()=>{tx=0;ty=0; ensureTilt()});
 // canvases - fragment-like paint
 function paintSilk(c,t,boost){
   const w=c.width,h=c.height,g=c.getContext('2d'); g.clearRect(0,0,w,h);
@@ -41,8 +52,7 @@ function paintLinen(c,t){
     let v=.92+weave+slub+dark; v=Math.min(1,v);
     const r=v*242, gg=v*225, b=v*198;
     g.fillStyle=`rgb(${r|0},${gg|0},${b|0})`; g.fillRect(x,y,1,1);
-  }
-}
+  }}
 function paintTartan(c){
   const w=c.width,h=c.height,g=c.getContext('2d');
   for(let y=0;y<h;y++) for(let x=0;x<w;x++){
@@ -55,8 +65,7 @@ function paintTartan(c){
     const wX=(rx>.49&&rx<.51)?1:0, wY=(ry>.49&&ry<.51)?1:0; if(wX||wY){r=r*.3+242*.7; g2=g2*.3+242*.7; b=b*.3+235*.7}
     const twill=Math.sin((uvx-uvy)*44)*10+10; r+=twill; g2+=twill; b+=twill;
     g.fillStyle=`rgb(${r|0},${g2|0},${b|0})`; g.fillRect(x,y,1,1);
-  }
-}
+  }}
 function paintBamboo(c,t){
   const w=c.width,h=c.height,g=c.getContext('2d'); g.fillStyle='#141210'; g.fillRect(0,0,w,h);
   const slats=12;
@@ -72,13 +81,14 @@ function paintBamboo(c,t){
 const cvS=document.getElementById('cv-silk'), cvL=document.getElementById('cv-linen'), cvT=document.getElementById('cv-tartan'), cvB=document.getElementById('cv-bamboo');
 let t=0, silkBoost=1;
 let lastSilk=0;
-function loop(now){
-  if(now&&now-lastSilk<33){requestAnimationFrame(loop);return} if(now)lastSilk=now;
+function loopSilk(time){
+  if(time&&time-lastSilk<33) return;
+  if(time) lastSilk=time;
   t+=0.016*silkBoost;
   paintSilk(cvS,t,silkBoost); if(t%2<0.02){paintLinen(cvL,t); paintTartan(cvT); paintBamboo(cvB,t);}
-  requestAnimationFrame(loop);
 }
-paintLinen(cvL,0); paintTartan(cvT); paintBamboo(cvB,0); loop();
+paintLinen(cvL,0); paintTartan(cvT); paintBamboo(cvB,0);
+gsap.ticker.add(loopSilk);
 document.querySelectorAll('.woven').forEach(el=>{
   el.addEventListener('mouseenter',()=>silkBoost=1.7);
   el.addEventListener('mouseleave',()=>silkBoost=1);
@@ -146,14 +156,16 @@ document.querySelectorAll('.woven').forEach(card=>{
   card.addEventListener('pointerleave',()=>spot.style.opacity='0');
 });
 
-/* border-beam - tepi menyala pada panel woven */
+/* border-beam - tepi menyala pada panel woven · rAF → gsap.ticker */
 (function(){
   if(REDUCE)return;
   const beams=[...document.querySelectorAll('.woven .beam')];
   if(!beams.length)return;
   let a=0;
   let lastBeam=0;
-  (function frame(now){ if(now&&now-lastBeam<33){requestAnimationFrame(frame);return} if(now)lastBeam=now;
+  function frameBeam(time){
+    if(time&&time-lastBeam<33) return;
+    if(time) lastBeam=time;
     a=(a+0.5)%360;
     beams.forEach((el,i)=>{
       const ang=(a+i*90)%360;
@@ -163,11 +175,11 @@ document.querySelectorAll('.woven').forEach(card=>{
       el.style.maskComposite='exclude'; el.style.webkitMaskComposite='xor';
       el.style.padding='1.5px';
     });
-    requestAnimationFrame(frame);
-  })();
+  }
+  gsap.ticker.add(frameBeam);
 })();
 
-/* marquee - magic/marquee-01, nama material */
+/* marquee - magic/marquee-01, nama material · rAF → gsap.ticker */
 (function(){
   const track=document.getElementById('marqMat');if(!track)return;
   const names=orbNames.slice(0,12);
@@ -176,16 +188,18 @@ document.querySelectorAll('.woven').forEach(card=>{
   if(REDUCE)return;
   let x=0,dir=-1;
   let lastMarqM=0;
-  (function loop(now){ if(now&&now-lastMarqM<33){requestAnimationFrame(loop);return} if(now)lastMarqM=now;
+  function loopMarq(time){
+    if(time&&time-lastMarqM<33) return;
+    if(time) lastMarqM=time;
     x+=dir*.7;
     const w=track.scrollWidth/4;
     if(x<-w)x=0; if(x>0)x=-w;
     track.style.transform='translateX('+x+'px)';
-    requestAnimationFrame(loop);
-  })();
+  }
+  gsap.ticker.add(loopMarq);
 })();
 
-/* animated-dock - etalase material */
+/* animated-dock - etalase material · rAF → gsap.ticker */
 (function(){
   const dock=document.getElementById('mDock');if(!dock)return;
   const icons=['◐','⬢','⬣','◆','✦','◎','▣','⬔'];
@@ -203,7 +217,7 @@ document.querySelectorAll('.woven').forEach(card=>{
       {duration:520,easing:'cubic-bezier(.34,1.56,.64,1)'});
   }));
   if(REDUCE)return;
-  (function frame(){
+  function frameDock(){
     if(mx>=0){
       const dr=dock.getBoundingClientRect();
       apps.forEach(el=>{
@@ -212,11 +226,11 @@ document.querySelectorAll('.woven').forEach(card=>{
         el.style.transform='scale('+(1+mag*.8)+') translateY('+(-mag*16)+'px)';
       });
     }
-    requestAnimationFrame(frame);
-  })();
+  }
+  gsap.ticker.add(frameDock);
 })();
 
-/* particles-01 - bidang tolak kursor */
+/* particles-01 - bidang tolak kursor · rAF → gsap.ticker */
 (function(){
   const cv=document.getElementById('mPart');if(!cv)return;
   const ctx=cv.getContext('2d');
@@ -231,7 +245,9 @@ document.querySelectorAll('.woven').forEach(card=>{
   cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top});
   cv.addEventListener('pointerleave',()=>{mouse.x=mouse.y=-999});
   let lastMp=0;
-  function draw(now){ if(now&&now-lastMp<33){requestAnimationFrame(draw);return} if(now)lastMp=now;
+  function drawMp(time){
+    if(time&&time-lastMp<33) return;
+    if(time) lastMp=time;
     ctx.clearRect(0,0,W,H);
     ps.forEach(p=>{
       p.x+=p.vx;p.y+=p.vy;
@@ -245,12 +261,11 @@ document.querySelectorAll('.woven').forEach(card=>{
       if(d<70){ctx.strokeStyle='rgba(251,207,232,'+(0.18*(1-d/70))+')';ctx.lineWidth=1;
         ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.stroke()}
     }
-    requestAnimationFrame(draw);
   }
-  if(!REDUCE) draw();
+  if(!REDUCE) gsap.ticker.add(drawMp);
 })();
 
-/* laser-01 - sweep / pulse / split */
+/* laser-01 - sweep / pulse / split · rAF → gsap.ticker */
 (function(){
   const cv=document.getElementById('mLaser');if(!cv)return;
   const ctx=cv.getContext('2d');
@@ -263,8 +278,10 @@ document.querySelectorAll('.woven').forEach(card=>{
   cv.addEventListener('click',()=>{mode=(mode+1)%3});
   cv.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();mode=(mode+1)%3}});
   let lastLaser=0;
-  function drawL(now){ if(now&&now-lastLaser<33){requestAnimationFrame(drawL);return} if(now)lastLaser=now;
-    if(!W){requestAnimationFrame(drawL);return}
+  function drawL(time){
+    if(time&&time-lastLaser<33) return;
+    if(time) lastLaser=time;
+    if(!W) return;
     if(!REDUCE)tL+=0.02;
     ctx.fillStyle='#0a0a0f';ctx.fillRect(0,0,W,H);
     ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;
@@ -296,24 +313,19 @@ document.querySelectorAll('.woven').forEach(card=>{
         ctx.stroke();ctx.shadowBlur=0;
       }
     }
-    requestAnimationFrame(drawL);
   }
-  drawL();
+  gsap.ticker.add(drawL);
 })();
 
-/* number-ticker - magic/number-ticker-01 */
+/* number-ticker - magic/number-ticker-01 · rAF → gsap.to (already GSAP-friendly) */
 (function(){
   function runTicker(){
     const pairs=[['tk1',4],['tk2',orbNames.length],['tk3',devices.length],['tk4',8]];
     pairs.forEach(([id,target])=>{
       const el=document.getElementById(id);if(!el)return;
       if(REDUCE){el.textContent=target;return}
-      const start=performance.now(),dur=1300;
-      (function f(now){
-        const p=Math.min(1,(now-start)/dur),e=1-Math.pow(1-p,3);
-        el.textContent=Math.floor(target*e);
-        if(p<1)requestAnimationFrame(f);
-      })(start);
+      const obj={v:0};
+      gsap.to(obj,{v:target,duration:1.3,ease:'power3.out',onUpdate:()=>{el.textContent=Math.floor(obj.v)}});
     });
   }
   const sec=document.getElementById('angka');
@@ -346,5 +358,6 @@ document.querySelectorAll('.orb').forEach(o=>{
 
 
 addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});
+
 console.log('Materi initialized');
 }
