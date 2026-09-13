@@ -24,7 +24,7 @@ function scrambleTo(el,target){
   },28);
 }
 /* M-07: data di file ini literal const (bukan URL/API). esc() kunci sink bila sumber berubah; tanpa ubah visual. */
-function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&gt;','>':'&gt;','"':'&quot;',"'":'&#39'}[c]})}
 const cv=document.getElementById('cv');
 const scene=new THREE.Scene(); scene.background=new THREE.Color(0x060608); scene.fog=new THREE.Fog(0x060608,8,18);
 const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:false}); renderer.setPixelRatio(Math.min(devicePixelRatio,1.85));
@@ -129,7 +129,7 @@ function buildBranch(){
   });
   // nodes
   [[0,0],[27,main[27]*.62],[52,pts[52]*.62+.12]].forEach(([ix,y])=>{
-    const x=(ix/69-.5)*12; const m=new THREE.Mesh(new THREE.SphereGeometry(.07,10,10),new THREE.MeshStandardMaterial({color:ARCS[2].col,emissive:ARCS[2].col,emissiveIntensity:.7}));
+    const x=(ix/69-.5)*12; const m=new THREE.Mesh(new THREE.SphereGeometry(.07,10,10), new THREE.MeshStandardMaterial({color:ARCS[2].col,emissive:ARCS[2].col,emissiveIntensity:.7}));
     m.position.set(x,y,.15); group.add(m);
   });
 }
@@ -230,13 +230,23 @@ function onResize(){
   renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
 }
 addEventListener('resize',onResize); onResize();
-let raf=0; const clock=new THREE.Clock();
-(function loop(){
-  raf=requestAnimationFrame(loop);
+
+// GSAP ticker for Three.js render loop
+const clock=new THREE.Clock();
+function renderLoop(){
   const dt=clock.getDelta();
   group.traverse(o=>{ if(o.userData && o.userData.tick) o.userData.tick(dt); if(o.userData && o.userData.pulse){ const sc=1+Math.sin(performance.now()*.0015*o.userData.pulse)*.06; o.scale.set(sc,sc,1); } });
   controls.update(); renderer.render(scene,camera);
-})();
+}
+if(!REDUCE){
+  gsap.ticker.add(renderLoop);
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden) gsap.ticker.remove(renderLoop);
+    else gsap.ticker.add(renderLoop);
+  });
+} else {
+  renderLoop(); // single frame for reduced motion
+}
  // ponytail: single canvas + group swap keeps <80KB; upgrade = split to 8 canvases when per-arc persistence needed.
 
 // ══════════ threeui polish ══════════
@@ -244,7 +254,7 @@ let raf=0; const clock=new THREE.Clock();
 (function(){
   const c=document.getElementById('heroGrid'); if(!c) return;
   const ctx=c.getContext('2d'); if(!ctx) return;
-  let cells=[],W=0,H=0,S=26,raf=0,vis=true;
+  let cells=[],W=0,H=0,S=26,vis=true;
   function init(){
     const dpr=Math.min(devicePixelRatio||1,2);
     W=c.width=Math.max(1,Math.floor(c.clientWidth*dpr));
@@ -253,7 +263,6 @@ let raf=0; const clock=new THREE.Clock();
     cells=[]; for(let y=0;y<rows;y++) for(let x=0;x<cols;x++) cells.push({x,y,v:Math.random()});
   }
   function draw(){
-    if(!REDUCE) raf=requestAnimationFrame(draw);
     if(!vis) return;
     const dpr=Math.min(devicePixelRatio||1,2), s=S*dpr;
     ctx.clearRect(0,0,W,H);
@@ -265,9 +274,10 @@ let raf=0; const clock=new THREE.Clock();
     }
   }
   init(); addEventListener('resize',init);
-  if(REDUCE){ draw(); cancelAnimationFrame(raf); return; }
+  if(REDUCE){ draw(); return; }
   new IntersectionObserver(e=>{vis=e[0].isIntersecting;},{threshold:0}).observe(c);
-  draw();
+  gsap.ticker.add(draw);
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) gsap.ticker.remove(draw); else gsap.ticker.add(draw); });
 })();
 
 // 3) Ripples — magic/ripple-01.html, auto-pulse + click on footer
@@ -283,7 +293,7 @@ let raf=0; const clock=new THREE.Clock();
   if(REDUCE) return;
   let vis2=true;
   new IntersectionObserver(e=>{vis2=e[0].isIntersecting;},{threshold:0}).observe(wrap);
-  setInterval(()=>{ if(!vis2) return; ripple(wrap.clientWidth*(0.3+Math.random()*0.4), wrap.clientHeight*(0.3+Math.random()*0.4)); },2600);
+  gsap.ticker.add(()=>{ if(!vis2) return; if(Math.random()<0.008) ripple(wrap.clientWidth*(0.3+Math.random()*0.4), wrap.clientHeight*(0.3+Math.random()*0.4)); });
   wrap.addEventListener('click',e=>{
     const r=wrap.getBoundingClientRect();
     ripple(e.clientX-r.left, e.clientY-r.top);
@@ -307,7 +317,11 @@ let raf=0; const clock=new THREE.Clock();
   if(REDUCE){ s.style.transform='translateX(20%)'; return; }
   let x=-100, vis3=true;
   new IntersectionObserver(e=>{vis3=e[0].isIntersecting;},{threshold:0}).observe(s);
-  (function loop(){ requestAnimationFrame(loop); if(!vis3) return; x+=0.45; if(x>200) x=-100; s.style.transform='translateX('+x+'%)'; })();
+  gsap.ticker.add(()=>{
+    if(!vis3) return;
+    x+=0.45; if(x>200) x=-100;
+    s.style.transform='translateX('+x+'%)';
+  });
 })();
 
 // 6) Progress bars on brief rows — drive width from data-w
@@ -330,23 +344,21 @@ let raf=0; const clock=new THREE.Clock();
   if(REDUCE){ g.style.display='none'; return; }
   let x=-60, vis4=true;
   new IntersectionObserver(e=>{vis4=e[0].isIntersecting;},{threshold:0}).observe(btn);
-  (function loop(){ requestAnimationFrame(loop); if(!vis4) return; x+=0.55; if(x>160) x=-60; g.style.transform='translateX('+x+'%)'; })();
+  gsap.ticker.add(()=>{
+    if(!vis4) return;
+    x+=0.55; if(x>160) x=-60;
+    g.style.transform='translateX('+x+'%)';
+  });
   btn.addEventListener('pointerenter',()=>btn.style.background='#e8e8ec');
   btn.addEventListener('pointerleave',()=>btn.style.background='');
 })();
 
-// 8) Number ticker — magic/number-ticker-01.html
+// 8) Number ticker — magic/number-ticker-01.html (GSAP version)
 (function(){
   const el=document.getElementById('ticker70'); if(!el) return;
   if(REDUCE){ el.textContent='70'; return; }
-  const target=70, dur=1400; let start=0;
-  function f(now){
-    if(!start) start=now;
-    const p=Math.min(1,(now-start)/dur), e=1-Math.pow(1-p,3);
-    el.textContent=Math.floor(target*e);
-    if(p<1) requestAnimationFrame(f);
-  }
-  requestAnimationFrame(f);
+  const target=70;
+  gsap.fromTo(el, {textContent:0}, {textContent:target, duration:1.4, ease:'power3.out', snap:{textContent:1}});
 })();
 
 console.log('Arc initialized');
