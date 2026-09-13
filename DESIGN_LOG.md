@@ -86,9 +86,44 @@ tidak masuk entri ini.)
 
 ---
 
+---
+
+## 2026-09-13 — GSAP migration penutup: Atlas tetap native rAF (keputusan sadar)
+
+**Commit terkait:** `632d50d` (materi), `ff422b5` (atlas, gagal) →
+`9b18552` (revert atlas), `191c0d4` (ikhtisar), `795b2b3` (atrium).
+
+GSAP migration: 6/7 halaman selesai (animations.js, Profil, Jejak, Arc,
+Materi, Ikhtisar, Atrium — kecuali Atlas). Atlas sengaja dipertahankan
+native requestAnimationFrame — 3 canvas sync ketat (throttle 33ms) +
+percobaan migrasi pertama (ff422b5) terbukti bikin regresi runtime
+(syntax error "Malformed arrow function parameter list" /
+"Invalid or unexpected token" di Atlas.razor:190 JSInterop, sempat
+ke-push ke remote sebelum di-revert 9b18552). Risiko lebih besar dari
+manfaat konsistensi; keputusan sadar, bukan item terbengkalai. Sama
+prinsipnya dengan WebGL aurora (Atrium, `gl.drawArrays(gl.TRIANGLE_STRIP)`
++ `requestAnimationFrame(loop)`) dan Lenis (`lenis.raf(time)` di
+Ikhtisar/Atrium) yang juga sengaja tetap native.
+
+Status akhir per halaman:
+
+| Halaman | Status | Bukti |
+|---|---|---|
+| Materi (`632d50d`) | GSAP penuh — 16 rAF → 0, 21 gsap call | `grep -c` before/after |
+| Atlas (`9b18552` revert ke `e72a611`) | Native — 16 rAF, 0 gsap | browser-check errs=0 |
+| Ikhtisar (`191c0d4`) | Hybrid — 5 loop → gsap.ticker + fallback; Lenis + barsInterval native | line 209 `new Lenis` utuh |
+| Atrium (`795b2b3`) | Hybrid — 6 gsap call; WebGL aurora + Lenis native; loader tick masih rAF (pending approval) | `TRIANGLE_STRIP` native |
+
+`node --check` TIDAK VALID untuk materi/atlas/atrium (pakai
+`export function init*` → false-positive "Unexpected token 'export'");
+hanya ikhtisar (UMD wrapper) yang lolos. Ground truth = browser-check
+Playwright (`domcontentloaded` + 2.5s, 0 console/page error).
+
+---
+
 ## 2026-09-11 — Revert Jejak ke grid 3 kolom (TASK 5)
 
-Jejak dikecualikan dari keputusan design arc/profil/atlas/materi, direvert kembali ke grid 3 kolom karena audit ANTISLOP menyatakan "Pristine — paling kuat anti-slop" (skor 0.8/10).
+Jejak dikecualikan dari keputusan design arc/profil/atlas/materi, direvert kembali ke grid 3 kolom karena audit ANTISLOP menyatakan "Pristine — paling kuat anti-slop" (skor 0.8/10)。
 
 - `git revert e187bca --no-edit` → `b16c348`, `git revert b9263ca --no-edit` → `900dd54` (tanpa conflict; histori utuh).
 - Verifikasi: `git diff b9263ca^ -- aios-jejak.html aios_dashboard_react/public/static/jejak.html` = 0 baris; byte-identical setelah `tr -d '\r'` (SOURCE+MIRROR); `receipt` 0 hit; grid kembali `repeat(3,1fr)`.
