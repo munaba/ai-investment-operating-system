@@ -315,11 +315,12 @@ form.addEventListener('submit',e=>{
   let pts=[];
   function rs(){ const rect=cv.getBoundingClientRect(); W=rect.width; H=rect.height; cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); if(!pts.length) pts=[...Array(N)].map((_,i)=>({x:26+Math.random()*(W-52),y:26+Math.random()*(H-52),vx:(Math.random()-.5)*0.11,vy:(Math.random()-.5)*0.11,r:20+Math.random()*7,gi:i%GROUPS.length})); }
   addEventListener('resize',rs); rs();
-  let last2=0, visible2=true;
+  let visible2=true;
   const io2=new IntersectionObserver(es=> visible2=es[0].isIntersecting,{threshold:0}); io2.observe(cv);
-  function draw(now){
-    requestAnimationFrame(draw); if(!visible2) return; if(now-last2 < 42) return; last2=now;
+  function drawConstellation(){
+    if(!visible2) return;
     ctx.clearRect(0,0,W,H);
+    const now=performance.now();
     const liBase=Math.floor(now/2200)%4;
     pts.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<24||p.x>W-24) p.vx*=-1; if(p.y<24||p.y>H-24) p.vy*=-1; p.x=Math.max(24,Math.min(W-24,p.x)); p.y=Math.max(24,Math.min(H-24,p.y)); });
     for(let i=0;i<N;i++){
@@ -340,7 +341,7 @@ form.addEventListener('submit',e=>{
       ctx.restore();
     });
   }
-  draw(performance.now());
+  gsap.ticker.add(drawConstellation);
 })();
 
 // 3) Border beam — magic/border-beam-01.html conic-gradient on cards
@@ -350,7 +351,9 @@ form.addEventListener('submit',e=>{
   cards.forEach(el=>{
     const beam=document.createElement('div'); beam.className='border-beam'; beam.setAttribute('aria-hidden','true'); el.appendChild(beam);
   });
-  let a=0; function frame(){ a+=0.45; document.querySelectorAll('.border-beam').forEach(b=> b.style.setProperty('--a',a+'deg')); requestAnimationFrame(frame); } frame();
+  let a=0; 
+  function frameBeam(){ a+=0.45; document.querySelectorAll('.border-beam').forEach(b=> b.style.setProperty('--a',a+'deg')); }
+  gsap.ticker.add(frameBeam);
 })();
 if(reduceMotion){
   document.querySelectorAll('.inview').forEach(el=>el.classList.add('show'));
@@ -379,8 +382,7 @@ function whenVisible(el,fn){ const io=new IntersectionObserver(e=>{fn(e[0].isInt
   }
   rs(); addEventListener('resize',rs);
   whenVisible(c,v=>{vis=v;});
-  function draw(){
-    if(!reduceMotion) requestAnimationFrame(draw);
+  function drawMeteors(){
     if(!vis) return;
     ctx.clearRect(0,0,W,H);
     for(let i=0;i<meteors.length;i++){
@@ -399,16 +401,15 @@ function whenVisible(el,fn){ const io=new IntersectionObserver(e=>{fn(e[0].isInt
     if(meteors.length<5 && Math.random()<0.035) spawn();
   }
   if(reduceMotion){
-    // static streaks placed inside the viewport (no motion, still visible)
     for(let i=0;i<4;i++){
       meteors.push({x:(0.15+Math.random()*0.75)*W, y:(0.08+Math.random()*0.5)*H,
         vx:0, vy:0, len:(70+Math.random()*110)*dpr, life:1});
     }
-    draw();
+    drawMeteors();
     return;
   }
   for(let i=0;i<5;i++) spawn();
-  draw();
+  gsap.ticker.add(drawMeteors);
 })();
 
 // 2) Dot pattern — magic/dot-pattern-01.html, pointer-reactive on #facilities
@@ -431,8 +432,7 @@ function whenVisible(el,fn){ const io=new IntersectionObserver(e=>{fn(e[0].isInt
     });
     sec.addEventListener('pointerleave',()=>{mx=-9999;my=-9999;});
   }
-  function draw(){
-    if(!reduceMotion) requestAnimationFrame(draw);
+  function drawDots(){
     if(!vis) return;
     ctx.clearRect(0,0,W,H);
     const gap=17*dpr, rad=1.3*dpr;
@@ -443,8 +443,8 @@ function whenVisible(el,fn){ const io=new IntersectionObserver(e=>{fn(e[0].isInt
       ctx.beginPath(); ctx.arc(x,y,rad,0,Math.PI*2); ctx.fill();
     }
   }
-  if(reduceMotion){ draw(); return; }
-  draw();
+  if(reduceMotion){ drawDots(); return; }
+  gsap.ticker.add(drawDots);
 })();
 
 // 3) Orbiting circles — magic/orbiting-circles-01.html, 5 tags around coach figure
@@ -488,12 +488,8 @@ function whenVisible(el,fn){ const io=new IntersectionObserver(e=>{fn(e[0].isInt
     const host=g.parentElement;
     let x=-60, vis=true;
     whenVisible(host,v=>{vis=v;});
-    (function loop(){
-      requestAnimationFrame(loop);
-      if(!vis) return;
-      x+=0.55; if(x>170) x=-60;
-      g.style.transform='translateX('+x+'%)';
-    })();
+    function loopShimmer(){ if(!vis) return; x+=0.55; if(x>170) x=-60; g.style.transform='translateX('+x+'%)'; }
+    gsap.ticker.add(loopShimmer);
   });
 })();
 
@@ -504,14 +500,8 @@ function whenVisible(el,fn){ const io=new IntersectionObserver(e=>{fn(e[0].isInt
   function tick(el){
     const target=parseFloat(el.dataset.n)||0;
     if(reduceMotion){ el.textContent=String(target); return; }
-    const dur=1400; let start=0;
-    function f(now){
-      if(!start) start=now;
-      const p=Math.min(1,(now-start)/dur), e=1-Math.pow(1-p,3);
-      el.textContent=Math.floor(target*e);
-      if(p<1) requestAnimationFrame(f); else el.textContent=String(target);
-    }
-    requestAnimationFrame(f);
+    var o={v:0};
+    gsap.to(o,{v:target,duration:1.4,ease:"power3.out",onUpdate:function(){el.textContent=Math.floor(o.v)},onComplete:function(){el.textContent=String(target)}});
   }
   const io=new IntersectionObserver(es=>es.forEach(e=>{
     if(e.isIntersecting){ tick(e.target); io.unobserve(e.target); }
