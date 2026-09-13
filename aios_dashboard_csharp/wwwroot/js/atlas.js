@@ -228,16 +228,21 @@ try{new IntersectionObserver(es=>heroVisible=es[0].isIntersecting,{threshold:0})
   const card=document.querySelector('[data-mod="marq"]');
   if(card) card.addEventListener('pointerdown',()=>{d2*=-1});
   let lastMq=0;
-  function loop(now){ if(now&&now-lastMq<33){requestAnimationFrame(loop);return} if(now)lastMq=now;
-    x1+=d1*.55; x2+=d2*.7;
+  function loopMq(time, deltaMS){
+    if(time&&time-lastMq<33) return;
+    if(time)lastMq=time;
+    var dt = deltaMS ? deltaMS/16.667 : 1; // normalize ke step 60fps
+    x1+=d1*.55*dt; x2+=d2*.7*dt;
     const w1=t1.scrollWidth/3, w2=t2.scrollWidth/4;
     if(x1<-w1)x1=0; if(x1>0)x1=-w1;
     if(x2<-w2)x2=0; if(x2>0)x2=-w2;
     t1.style.transform='translateX('+x1+'px)';
     t2.style.transform='translateX('+x2+'px)';
-    requestAnimationFrame(loop);
   }
-  if(!REDUCE) loop();
+  if(!REDUCE){
+    if(window.gsap&&gsap.ticker) gsap.ticker.add(loopMq);
+    else { (function loop(now){ if(now&&now-lastMq<33){requestAnimationFrame(loop);return} if(now)lastMq=now; loopMq(now,16.667); requestAnimationFrame(loop); })(); }
+  }
 })();
 
 /* gauge-01 - radial progress */
@@ -366,11 +371,11 @@ try{new IntersectionObserver(es=>heroVisible=es[0].isIntersecting,{threshold:0})
   const b2=mk('M555 86 C 610 86, 605 86, 670 86','url(#beamG)','10 14');
   wrap.appendChild(svg);
   if(REDUCE)return;
-  let off=0, dashVisible=true, dashRaf=0;
-  try{ new IntersectionObserver(function(e){ dashVisible=e[0].isIntersecting; if(dashVisible&&!dashRaf) dashRaf=requestAnimationFrame(anim); },{threshold:0}).observe(wrap); }catch(e){}
-  function anim(){ dashRaf=0; if(!dashVisible){ dashRaf=requestAnimationFrame(anim); return; } off-=1.1;b1.style.strokeDashoffset=off;b2.style.strokeDashoffset=-off;dashRaf=requestAnimationFrame(anim); }
-  dashRaf=requestAnimationFrame(anim);
-  document.addEventListener('visibilitychange', function(){ if(document.hidden){ if(dashRaf)cancelAnimationFrame(dashRaf); dashRaf=0; } else if(dashVisible&&!dashRaf) dashRaf=requestAnimationFrame(anim); });
+  let off=0, dashVisible=true;
+  try{ new IntersectionObserver(function(e){ dashVisible=e[0].isIntersecting; },{threshold:0}).observe(wrap); }catch(e){}
+  function animBeam(){ if(!dashVisible) return; off-=1.1; b1.style.strokeDashoffset=off; b2.style.strokeDashoffset=-off; }
+  if(window.gsap&&gsap.ticker) gsap.ticker.add(animBeam);
+  else { let dashRaf=0; (function anim(){ dashRaf=0; if(!dashVisible){ dashRaf=requestAnimationFrame(anim); return; } off-=1.1;b1.style.strokeDashoffset=off;b2.style.strokeDashoffset=-off;dashRaf=requestAnimationFrame(anim); })(); }
 })();
 
 /* word-rotate - magic/word-rotate-01 di footer CTA */
