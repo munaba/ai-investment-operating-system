@@ -12,11 +12,10 @@ document.querySelectorAll('.in').forEach(el=>io.observe(el));
   /* 1. animated grid pattern — header */
   var hg = document.getElementById('tuHeroGrid');
   if(hg){
-    var g = hg.getContext('2d'), goff = 0, gridVisible=true, gridRaf=0;
-    try{ new IntersectionObserver(function(e){ gridVisible=e[0].isIntersecting; if(gridVisible&&!gridRaf&&!reduce) gridRaf=requestAnimationFrame(drawGrid); },{threshold:0}).observe(hg); }catch(e){}
+    var g = hg.getContext('2d'), goff = 0, gridVisible=true;
+    try{ new IntersectionObserver(function(e){ gridVisible=e[0].isIntersecting; },{threshold:0}).observe(hg); }catch(e){}
     function drawGrid(){
-      gridRaf=0;
-      if(!gridVisible){ gridRaf=requestAnimationFrame(drawGrid); return; }
+      if(!gridVisible) return;
       var dpr = Math.min(devicePixelRatio||1, 2);
       var W = hg.width = Math.max(1, hg.clientWidth*dpr), H = hg.height = Math.max(1, hg.clientHeight*dpr);
       g.clearRect(0,0,W,H);
@@ -25,9 +24,9 @@ document.querySelectorAll('.in').forEach(el=>io.observe(el));
       g.setLineDash([5*dpr, 9*dpr]); g.lineDashOffset = -goff*dpr;
       for(var x=0;x<W;x+=sp){ g.beginPath(); g.moveTo(x,0); g.lineTo(x,H); g.stroke(); }
       for(var y=0;y<H;y+=sp){ g.beginPath(); g.moveTo(0,y); g.lineTo(W,y); g.stroke(); }
-      if(!reduce){ goff += 0.45; gridRaf=requestAnimationFrame(drawGrid); }
+      if(!reduce) goff += 0.45;
     }
-    if(reduce){ drawGrid(); addEventListener('resize', drawGrid, {passive:true}); } else { gridRaf=requestAnimationFrame(drawGrid); document.addEventListener('visibilitychange', function(){ if(document.hidden){ if(gridRaf)cancelAnimationFrame(gridRaf); gridRaf=0; } else if(gridVisible&&!gridRaf) gridRaf=requestAnimationFrame(drawGrid); }); }
+    if(reduce){ drawGrid(); addEventListener('resize', drawGrid, {passive:true}); } else { gsap.ticker.add(drawGrid); document.addEventListener('visibilitychange', function(){ if(document.hidden) gsap.ticker.remove(drawGrid); else gsap.ticker.add(drawGrid); }); }
   }
 
   /* 2. marquee — infinite horizontal */
@@ -42,9 +41,8 @@ document.querySelectorAll('.in').forEach(el=>io.observe(el));
       mx -= 0.45;
       if(third>0 && mx <= -third) mx = 0;
       track.style.transform = 'translateX('+mx+'px)';
-      requestAnimationFrame(mqLoop);
     }
-    requestAnimationFrame(mqLoop);
+    gsap.ticker.add(mqLoop);
   }
 
   /* 3. particles — ledger snapshot panel */
@@ -79,9 +77,9 @@ document.querySelectorAll('.in').forEach(el=>io.observe(el));
         }
       }
       q.globalAlpha = 1;
-      if(!reduce) requestAnimationFrame(drawPts);
     }
-    drawPts();
+    if(!reduce) gsap.ticker.add(drawPts);
+    else drawPts();
   }
 
   /* 4. magic card spotlight — brief cards */
@@ -104,13 +102,11 @@ document.querySelectorAll('.in').forEach(el=>io.observe(el));
   function ticker(el, target, fmt, dur){
     if(!el) return;
     if(reduce){ el.textContent = fmt ? fmt(target) : String(target); return; }
-    var start = performance.now(); dur = dur || 1300;
-    (function f(now){
-      var t = Math.min(1, (now-start)/dur);
-      var e = 1 - Math.pow(1-t, 3);
-      el.textContent = fmt ? fmt(target*e) : Math.round(target*e).toLocaleString('id-ID');
-      if(t < 1) requestAnimationFrame(f); else el.textContent = fmt ? fmt(target) : String(target);
-    })(start);
+    var obj = { val: 0 };
+    gsap.to(obj, { val: target, duration: (dur||1300)/1000, ease: 'power3.out',
+      onUpdate: function(){ el.textContent = fmt ? fmt(obj.val) : Math.round(obj.val).toLocaleString('id-ID'); },
+      onComplete: function(){ el.textContent = fmt ? fmt(target) : String(target); }
+    });
   }
   var kpis = document.querySelectorAll('.kpi strong');
   if(kpis.length){
@@ -127,14 +123,16 @@ document.querySelectorAll('.in').forEach(el=>io.observe(el));
   }
 })();
 
-// border-beam rotate
+// border-beam rotate — GSAP ticker
 let a=0; const beams=document.querySelectorAll('.beam');
 const reduceTick=matchMedia('(prefers-reduced-motion:reduce)').matches;
-let tickVisible=true, tickRaf=0;
-try{ new IntersectionObserver(function(e){ tickVisible=e[0].isIntersecting; if(tickVisible&&!tickRaf&&!reduceTick) tickRaf=requestAnimationFrame(tick); },{threshold:0}).observe(beams[0]||document.body); }catch(e){}
-function tick(){ tickRaf=0; if(reduceTick||!tickVisible){ tickRaf=requestAnimationFrame(tick); return; } a=(a+0.32)%360; beams.forEach(b=>b.style.setProperty('--a',a+'deg')); tickRaf=requestAnimationFrame(tick); }
-if(!reduceTick) tickRaf=requestAnimationFrame(tick);
-document.addEventListener('visibilitychange', function(){ if(document.hidden){ if(tickRaf)cancelAnimationFrame(tickRaf); tickRaf=0; } else if(tickVisible&&!tickRaf&&!reduceTick) tickRaf=requestAnimationFrame(tick); });
+let tickVisible=true;
+function tick(){ if(!tickVisible||reduceTick) return; a=(a+0.32)%360; beams.forEach(b=>b.style.setProperty('--a',a+'deg')); }
+if(!reduceTick){
+    gsap.ticker.add(tick);
+    try{ new IntersectionObserver(function(e){ tickVisible=e[0].isIntersecting; if(!tickVisible) gsap.ticker.remove(tick); else gsap.ticker.add(tick); },{threshold:0}).observe(beams[0]||document.body); }catch(e){}
+    document.addEventListener('visibilitychange', function(){ if(document.hidden) gsap.ticker.remove(tick); else if(tickVisible) gsap.ticker.add(tick); });
+}
 
 
 addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.skip"),m=document.getElementById("main");if(s&&m){s.addEventListener("click",function(e){try{m.focus({preventScroll:true});}catch(_){m.focus();}});}});
