@@ -55,12 +55,12 @@ builder.Services
     });
 builder.Services.AddAuthorization();
 
-// M-06: CORS whitelist for React SPA dev (5173) + prod self-host (5000)
+// M-06: CORS whitelist for Blazor self-host (LAN 5000; legacy React SPA dev 5173 removed)
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "http://192.168.44.47:5000")
+        policy.WithOrigins("http://192.168.44.47:5000")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
