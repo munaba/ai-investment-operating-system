@@ -9,16 +9,34 @@
 
 @((MarkupString)System.IO.File.ReadAllText(System.IO.Path.Combine("wwwroot", "ikhtisar_body_part1.html")))
 
-@((MarkupString)System.IO.File.ReadAllText(System.IO.Path.Combine("wwwroot", "ikhtisar_body_part2.html")))
+@((MarkupString)System.IO.File.ReadAllText(System.IO.Path.Combine("wwwroot", "ikhtisar_body_part2a.html")))
+
+@if (!string.IsNullOrEmpty(WindowSummaryHtml))
+{
+    @((MarkupString)WindowSummaryHtml)
+}
+
+@((MarkupString)System.IO.File.ReadAllText(System.IO.Path.Combine("wwwroot", "ikhtisar_body_part2b.html")))
 
 @((MarkupString)System.IO.File.ReadAllText(System.IO.Path.Combine("wwwroot", "ikhtisar_body_part3.html")))
 
 @code {
+    private string WindowSummaryHtml { get; set; } = "";
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            WindowSummaryHtml = await BuildWindowSummaryAsync();
+            StateHasChanged();
             await JSRuntime.InvokeVoidAsync("initIkhtisar");
         }
+    }
+
+    private async Task<string> BuildWindowSummaryAsync()
+    {
+        // This will be wired in ITEM 1 to use live DB data
+        // For now, return the static HTML (with comments)
+        return "<p class=\"text-sm sm:text-base text-white/70 italic md:text-xl leading-relaxed max-w-xl\">24 Agt – 23 Sep 2026 · ACTIVE · 70 snapshot · 5 brief (3 BLOCKED · 2 SUCCESS) · 3 closed Rp 1,9 jt. Window ini tidak mengeksekusi — hanya mengamati.</p>";
     }
 }
