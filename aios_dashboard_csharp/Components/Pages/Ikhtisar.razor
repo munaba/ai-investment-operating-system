@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @layout EmptyLayout
 @inject IJSRuntime JSRuntime
+@inject aios_dashboard_csharp.Services.IDatabaseService DatabaseService
 
 <PageTitle>AIOS · Ikhtisar</PageTitle>
 
@@ -35,8 +36,44 @@
 
     private async Task<string> BuildWindowSummaryAsync()
     {
-        // This will be wired in ITEM 1 to use live DB data
-        // For now, return the static HTML (with comments)
-        return "<p class=\"text-sm sm:text-base text-white/70 italic md:text-xl leading-relaxed max-w-xl\">24 Agt – 23 Sep 2026 · ACTIVE · 70 snapshot · 5 brief (3 BLOCKED · 2 SUCCESS) · 3 closed Rp 1,9 jt. Window ini tidak mengeksekusi — hanya mengamati.</p>";
+        try
+        {
+            var windows = await DatabaseService.GetObservationWindowsAsync();
+            var activeWindow = windows.FirstOrDefault(w => w.Status == "ACTIVE");
+
+            var briefs = await DatabaseService.GetDecisionBriefsAsync();
+            var blocked = briefs.Count(b => b.Status == "POLICY_BLOCKED");
+            var success = briefs.Count(b => b.Status == "SUCCESS");
+
+            var positions = await DatabaseService.GetPositionsAsync();
+            var closedCount = positions.Count(p => p.Status == "CLOSED");
+            var realizedPnl = positions
+                .Where(p => p.Status == "CLOSED")
+                .Sum(p => p.RealizedPnl);
+
+            string windowDates;
+            string windowStatus;
+            if (activeWindow != null && DateTime.TryParse(activeWindow.StartAt, out var startDate) && DateTime.TryParse(activeWindow.EndAt, out var endDate))
+            {
+                var start = startDate.ToString("d MMM", new System.Globalization.CultureInfo("id-ID"));
+                var end = endDate.ToString("d MMM yyyy", new System.Globalization.CultureInfo("id-ID"));
+                windowDates = $"{start} – {end}";
+                windowStatus = activeWindow.Status;
+            }
+            else
+            {
+                windowDates = "—";
+                windowStatus = "NO_WINDOW";
+            }
+
+            var pnlText = closedCount > 0 ? $"Rp {realizedPnl:N0}" : "Rp 0";
+            var briefTotal = blocked + success;
+
+            return $@"<p class=""text-sm sm:text-base text-white/70 italic md:text-xl leading-relaxed max-w-xl"">{windowDates} · {windowStatus} · 70 snapshot · {briefTotal} brief ({blocked} BLOCKED · {success} SUCCESS) · {closedCount} closed {pnlText}. Window ini tidak mengeksekusi — hanya mengamati.</p>";
+        }
+        catch (Exception)
+        {
+            return @"<p class=""text-sm sm:text-base text-white/70 italic md:text-xl leading-relaxed max-w-xl"">— · ERROR · — snapshot · — brief · — closed Rp —. Window tidak tersedia.</p>";
+        }
     }
 }
