@@ -31,6 +31,10 @@
             WindowSummaryHtml = await BuildWindowSummaryAsync();
             StateHasChanged();
             await JSRuntime.InvokeVoidAsync("initIkhtisar");
+
+            // Wait for re-render after StateHasChanged, then update dynamic cards
+            await Task.Delay(200);
+            await UpdateDynamicCardsAsync();
         }
     }
 
@@ -73,7 +77,83 @@
         }
         catch (Exception)
         {
-            return @"<p class=""text-sm sm:text-base text-white/70 italic md:text-xl leading-relaxed max-w-xl"">— · ERROR · — snapshot · — brief · — closed Rp —. Window tidak tersedia.</p>";
+            return @"<p class=""text-sm sm:text-base text-white/70 italic md:text-xl leading-relaxed max-w-xl"">— · ERROR · — snapshot · — brief — closed Rp —. Window tidak tersedia.</p>";
+        }
+    }
+
+    private async Task UpdateDynamicCardsAsync()
+    {
+        try
+        {
+            var positions = await DatabaseService.GetPositionsAsync();
+            var closedCount = positions.Count(p => p.Status == "CLOSED");
+            var realizedPnl = positions
+                .Where(p => p.Status == "CLOSED")
+                .Sum(p => p.RealizedPnl);
+
+            var briefs = await DatabaseService.GetDecisionBriefsAsync();
+            var blocked = briefs.Count(b => b.Status == "POLICY_BLOCKED");
+
+            var windows = await DatabaseService.GetObservationWindowsAsync();
+            var activeWindow = windows.FirstOrDefault(w => w.Status == "ACTIVE");
+
+            var journalEntries = await DatabaseService.GetJournalEntriesAsync();
+            var journalCount = journalEntries.Count;
+
+            // Build breakdown string
+            var closedBySymbol = positions
+                .Where(p => p.Status == "CLOSED")
+                .GroupBy(p => p.Symbol)
+                .ToDictionary(g => g.Key, g => g.Count());
+            var breakdown = closedCount > 0
+                ? string.Join(", ", closedBySymbol.Select(kvp => $"{kvp.Key} ×{kvp.Value}"))
+                : "—";
+
+            // Window status text
+            string windowStatusText = "—";
+            if (activeWindow != null && DateTime.TryParse(activeWindow.StartAt, out var startDate) && DateTime.TryParse(activeWindow.EndAt, out var endDate))
+            {
+                var start = startDate.ToString("d MMM", new System.Globalization.CultureInfo("id-ID"));
+                var end = endDate.ToString("d MMM yyyy", new System.Globalization.CultureInfo("id-ID"));
+                windowStatusText = $"{start} – {end}";
+            }
+
+            var pnlText = closedCount > 0 ? $"Rp {realizedPnl:N0}" : "Rp 0";
+
+            // Update all slots via JS
+            await JSRuntime.InvokeVoidAsync("updateSlot", "closed-card-1", $"{closedCount} Closed");
+            await JSRuntime.InvokeVoidAsync("updateSlot", "closed-card-2", $"{closedCount} Closed");
+            await JSRuntime.InvokeVoidAsync("updateSlot", "closed-card-3", $"{closedCount} Closed");
+
+            // ITEM 4: window status card
+            await JSRuntime.InvokeVoidAsync("updateSlot", "item4-window-status", $"{windowStatusText}, Asia/Jakarta. Fail-closed.");
+
+            // ITEM 5: closed count + PnL
+            await JSRuntime.InvokeVoidAsync("updateSlot", "item5-closed-count", $"{closedCount} Closed");
+            await JSRuntime.InvokeVoidAsync("updateSlot", "item5-pnl", pnlText);
+            await JSRuntime.InvokeVoidAsync("updateSlot", "item5-breakdown", $"({breakdown})");
+
+            // ITEM 6: journal count
+            await JSRuntime.InvokeVoidAsync("updateSlot", "item6-journal-count", $"Jurnal {journalCount}");
+
+            // ITEM 7: gate policy count
+            await JSRuntime.InvokeVoidAsync("updateSlot", "item7-gate-count", blocked.ToString());
+            
+            // ITEM 9: carousel
+            var successBriefs = briefs.Count(b => b.Status == "SUCCESS");
+            await JSRuntime.InvokeVoidAsync("updateSlot", "item9-brief-count", $"{blocked + successBriefs} brief");
+            await JSRuntime.InvokeVoidAsync("updateSlot", "item9-closed-count", $"{closedCount} closed");
+            
+            if (activeWindow != null && DateTime.TryParse(activeWindow.StartAt, out var carouselStart) && DateTime.TryParse(activeWindow.EndAt, out var carouselEnd))
+            {
+                var carouselStartStr = carouselStart.ToString("d MMM", new System.Globalization.CultureInfo("id-ID"));
+                var carouselEndStr = carouselEnd.ToString("d MMM", new System.Globalization.CultureInfo("id-ID"));
+                await JSRuntime.InvokeVoidAsync("updateSlot", "item9-window-dates", $"{carouselStartStr}–{carouselEndStr}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Ikhtisar] Dynamic card update failed: {ex.Message}");
         }
     }
 }
