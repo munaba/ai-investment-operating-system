@@ -312,3 +312,11 @@ addEventListener("DOMContentLoaded",function(){var s=document.querySelector("a.s
     }
     return initIkhtisar;
 }));
+
+// Blazor JS interop — update dynamic data-slot elements after render
+if (typeof window !== 'undefined') {
+    window.updateSlot = function(slotId, value) {
+        var el = document.querySelector('[data-slot="' + slotId + '"]');
+        if (el) el.textContent = value;
+    };
+}
