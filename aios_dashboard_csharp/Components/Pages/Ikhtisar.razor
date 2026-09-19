@@ -7,7 +7,11 @@
 
 <GateStrip />
 
-@((MarkupString)System.IO.File.ReadAllText(System.IO.Path.Combine("wwwroot", "ikhtisar_body.html")))
+@((MarkupString)System.IO.File.ReadAllText(System.IO.Path.Combine("wwwroot", "ikhtisar_body_part1.html")))
+
+@((MarkupString)System.IO.File.ReadAllText(System.IO.Path.Combine("wwwroot", "ikhtisar_body_part2.html")))
+
+@((MarkupString)System.IO.File.ReadAllText(System.IO.Path.Combine("wwwroot", "ikhtisar_body_part3.html")))
 
 @code {
     protected override async Task OnAfterRenderAsync(bool firstRender)
