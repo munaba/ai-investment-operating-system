@@ -141,7 +141,27 @@
             
             // ITEM 9: carousel
             var successBriefs = briefs.Count(b => b.Status == "SUCCESS");
-            await JSRuntime.InvokeVoidAsync("updateSlot", "item9-brief-count", $"{blocked + successBriefs} brief");
+            var briefTotal = blocked + successBriefs;
+
+            // Part3 hero banner: "5 BRIEF · 2/5 DISETUJUI · 3 POSISI"
+            await JSRuntime.InvokeVoidAsync("updateSlot", "hero-brief-count", $"{briefTotal} BRIEF");
+            await JSRuntime.InvokeVoidAsync("updateSlot", "hero-approval", $"{successBriefs}/{briefTotal} DISETUJUI");
+            await JSRuntime.InvokeVoidAsync("updateSlot", "hero-closed-count", $"{closedCount} POSISI");
+
+            // Part1 CTA: "5 brief · jejak audit · 0 closed"
+            await JSRuntime.InvokeVoidAsync("updateSlot", "cta-brief-count", $"{briefTotal} brief");
+            await JSRuntime.InvokeVoidAsync("updateSlot", "cta-closed-count", $"{closedCount} closed");
+
+            // Part1 hero subtext: "0 posisi (—) Rp 0"
+            await JSRuntime.InvokeVoidAsync("updateSlot", "hero-subtext-closed", $"{closedCount} posisi");
+            await JSRuntime.InvokeVoidAsync("updateSlot", "hero-subtext-breakdown", $"({breakdown})");
+            await JSRuntime.InvokeVoidAsync("updateSlot", "hero-subtext-pnl", pnlText);
+
+            // Part2a stats banner: "0 Posisi"
+            await JSRuntime.InvokeVoidAsync("updateSlot", "stats-closed-count", closedCount.ToString());
+
+            // Part1/3: brief count + PnL
+            await JSRuntime.InvokeVoidAsync("updateSlot", "item9-brief-count", $"{briefTotal} brief");
             await JSRuntime.InvokeVoidAsync("updateSlot", "item9-closed-count", $"{closedCount} closed");
             await JSRuntime.InvokeVoidAsync("updateSlot", "item9-card-title", $"Positions — {closedCount} Closed · {pnlText}");
 
