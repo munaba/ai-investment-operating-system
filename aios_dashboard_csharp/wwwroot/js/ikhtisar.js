@@ -319,4 +319,12 @@ if (typeof window !== 'undefined') {
         var el = document.querySelector('[data-slot="' + slotId + '"]');
         if (el) el.textContent = value;
     };
+    // ponytail: separate function needed because textContent setter cannot
+    // modify element attributes (alt, aria-label, etc).
+    // Add more attribute names here as needed; no general-purpose version
+    // since Blazor IJSRuntime is the single caller.
+    window.updateSlotAttribute = function(slotId, attrName, value) {
+        var el = document.querySelector('[data-slot="' + slotId + '"]');
+        if (el) el.setAttribute(attrName, value);
+    };
 }
