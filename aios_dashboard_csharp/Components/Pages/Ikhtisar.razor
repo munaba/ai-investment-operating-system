@@ -161,8 +161,6 @@
             await JSRuntime.InvokeVoidAsync("updateSlot", "stats-closed-count", closedCount.ToString());
 
             // Part1/3: brief count + PnL
-            await JSRuntime.InvokeVoidAsync("updateSlot", "item9-brief-count", $"{briefTotal} brief");
-            await JSRuntime.InvokeVoidAsync("updateSlot", "item9-closed-count", $"{closedCount} closed");
             await JSRuntime.InvokeVoidAsync("updateSlot", "item9-card-title", $"Positions — {closedCount} Closed · {pnlText}");
 
             // Carousel cards 02/03: brief count BLOCKED·SUCCESS (text content)
@@ -174,13 +172,6 @@
             // Carousel cards 03/05: attributes (alt, aria-label) — needs setAttribute JS
             await JSRuntime.InvokeVoidAsync("updateSlotAttribute", "card03-gate-alt", "alt", $"Gate: {blockedSuccessText}");
             await JSRuntime.InvokeVoidAsync("updateSlotAttribute", "card05-positions-aria", "aria-label", $"Positions — {closedCount} Closed");
-            
-            if (activeWindow != null && DateTime.TryParse(activeWindow.StartAt, out var carouselStart) && DateTime.TryParse(activeWindow.EndAt, out var carouselEnd))
-            {
-                var carouselStartStr = carouselStart.ToString("d MMM", new System.Globalization.CultureInfo("id-ID"));
-                var carouselEndStr = carouselEnd.ToString("d MMM", new System.Globalization.CultureInfo("id-ID"));
-                await JSRuntime.InvokeVoidAsync("updateSlot", "item9-window-dates", $"{carouselStartStr}–{carouselEndStr}");
-            }
         }
         catch (Exception ex)
         {
