@@ -116,7 +116,7 @@ class DecisionCopilotSkill(BaseSkill):
             "symbol_count": len(symbols),
             "decision_counts": dict(decision_counts),
             "distinct_decisions": distinct_decisions,
-            "filter_semantics": "in-memory filter over JournalRepository.list_all(); repository exposes no account_id/since/until parameters",
+            "filter_semantics": "in-memory filter over JournalRepository.list_all() by decided_at range only; account_id is validated and echoed but NOT used to filter rows \u2014 JournalEntry has no account_id column, and this system is single-account by design (AGENTS.md)",
             "read_only": True,
         }
 
