@@ -15,13 +15,34 @@ the lockdown on Orchestration/capability.py.
 import json
 from typing import Any, List, Set, Dict, Optional
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 
 from Orchestration.base_skill import BaseSkill
 from Orchestration.skill_result import SkillResult
 from Repository.persistence.journal_repository import JournalRepository
 from Repository.persistence.performance_repository import PerformanceRepository
 from Database.models import JournalEntry, RankingSnapshot
+
+
+def _parse_utc_aware(raw: Any) -> datetime:
+    """Parse an ISO-8601 value into a **tz-aware UTC** datetime.
+
+    Database timestamps (``scan_time``, ``decided_at``) are UTC-aware ISO
+    strings carrying an explicit offset. A bound supplied without one (e.g.
+    ``"2026-09-01"`` or ``"2026-09-01 00:00:00"``) parses to a *naive*
+    datetime, and comparing naive against aware always raises ``TypeError``.
+
+    Naive input is therefore interpreted as UTC, which is exactly what every
+    writer in this codebase already does
+    (``datetime.now(timezone.utc).isoformat()``).
+
+    Raises ``ValueError``/``TypeError`` on unparseable input; every caller
+    already converts those into an explicit ``DATA_ERROR``.
+    """
+    dt = datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
 
 
 class DecisionCopilotSkill(BaseSkill):
@@ -77,8 +98,8 @@ class DecisionCopilotSkill(BaseSkill):
             return SkillResult(success=False, error="INSUFFICIENT_DATA")
 
         try:
-            since_dt = datetime.fromisoformat(str(since).replace("Z", "+00:00"))
-            until_dt = datetime.fromisoformat(str(until).replace("Z", "+00:00"))
+            since_dt = _parse_utc_aware(since)
+            until_dt = _parse_utc_aware(until)
             if since_dt > until_dt:
                 return SkillResult(success=False, error="DATA_ERROR")
         except (ValueError, TypeError):
@@ -97,7 +118,7 @@ class DecisionCopilotSkill(BaseSkill):
         filtered_entries: List[JournalEntry] = []
         for entry in all_entries:
             try:
-                decided_dt = datetime.fromisoformat(entry.decided_at.replace("Z", "+00:00"))
+                decided_dt = _parse_utc_aware(entry.decided_at)
                 if since_dt <= decided_dt <= until_dt:
                     filtered_entries.append(entry)
             except (ValueError, TypeError, AttributeError):
@@ -155,13 +176,13 @@ class DecisionCopilotSkill(BaseSkill):
 
         if since is not None:
             try:
-                since_dt = datetime.fromisoformat(str(since).replace("Z", "+00:00"))
+                since_dt = _parse_utc_aware(since)
             except (ValueError, TypeError):
                 return SkillResult(success=False, error="DATA_ERROR")
 
         if until is not None:
             try:
-                until_dt = datetime.fromisoformat(str(until).replace("Z", "+00:00"))
+                until_dt = _parse_utc_aware(until)
             except (ValueError, TypeError):
                 return SkillResult(success=False, error="DATA_ERROR")
 
@@ -177,7 +198,7 @@ class DecisionCopilotSkill(BaseSkill):
         filtered: List[RankingSnapshot] = []
         for snap in all_snapshots:
             try:
-                scan_dt = datetime.fromisoformat(str(snap.scan_time).replace("Z", "+00:00"))
+                scan_dt = _parse_utc_aware(snap.scan_time)
             except (ValueError, TypeError, AttributeError):
                 continue
             if since_dt is not None and scan_dt < since_dt:
@@ -224,7 +245,7 @@ class DecisionCopilotSkill(BaseSkill):
 
             # scan_time min/max
             try:
-                dt = datetime.fromisoformat(str(snap.scan_time).replace("Z", "+00:00"))
+                dt = _parse_utc_aware(snap.scan_time)
                 if scan_time_min is None or dt < scan_time_min:
                     scan_time_min = dt
                 if scan_time_max is None or dt > scan_time_max:
