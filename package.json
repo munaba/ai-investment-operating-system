@@ -1,0 +1,25 @@
+{
+  "name": "my-son",
+  "version": "1.0.0",
+  "description": "A modular AI Agent Framework built with SOLID architecture.",
+  "main": "check-alt.js",
+  "dependencies": {
+    "axe-core": "^4.13.0",
+    "playwright": "^1.63.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/munaba/ai-investment-operating-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/munaba/ai-investment-operating-system/issues"
+  },
+  "homepage": "https://github.com/munaba/ai-investment-operating-system#readme"
+}
