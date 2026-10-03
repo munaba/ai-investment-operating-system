@@ -2174,6 +2174,9 @@ def _build_idx_daily_scheduler(
     Runs no migration: applying ``Database.migrations_scheduler`` to a
     real database remains a separate, manual operator step
     (``run_scheduler_migrations.py``).
+    
+    Gate 4 Phase I: builds evidence_adapter (if performance_repository
+    exists) for JOB_EVIDENCE_PROFILE_ANALYSIS.
     """
     scheduler_state_repository = SchedulerStateRepository(database_manager)
     notification_dedup_repository = NotificationDedupRepository(database_manager)
@@ -2181,6 +2184,26 @@ def _build_idx_daily_scheduler(
     idx_market_calendar = load_idx_market_calendar()
     data_freshness_policy = load_data_freshness_policy()
     notification_dedup_policy = load_notification_dedup_policy()
+
+    # Gate 4 Phase I: evidence_adapter for job #6
+    evidence_adapter = None
+    try:
+        from Repository.persistence.journal_repository import JournalRepository
+        from Repository.persistence.performance_repository import PerformanceRepository
+        from Orchestration.decision_copilot import DecisionCopilotSkill
+        from Orchestration.evidence_profile_job_adapter import EvidenceProfileJobAdapter
+        from Core.logger import get_logger
+
+        logger = get_logger(__name__)
+
+        journal_repository = JournalRepository(database_manager)
+        performance_repository = PerformanceRepository(database_manager)
+        skill = DecisionCopilotSkill(journal_repository, performance_repository)
+        evidence_adapter = EvidenceProfileJobAdapter(skill)
+    except Exception:
+        from Core.logger import get_logger
+        logger = get_logger(__name__)
+        logger.warning("evidence_adapter wiring failed; job #6 disabled", exc_info=True)
 
     return IDXDailyScheduler(
         idx_market_calendar=idx_market_calendar,
@@ -2193,6 +2216,7 @@ def _build_idx_daily_scheduler(
         daily_report_orchestrator=daily_report_orchestrator,
         notification_manager=notification_manager,
         account_id=account_id,
+        evidence_adapter=evidence_adapter,
     )
 
 
