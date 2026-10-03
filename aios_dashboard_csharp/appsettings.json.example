@@ -6,13 +6,13 @@
     }
   },
   "AllowedHosts": "*",
-  "ConnectionStrings": {
-    "Default": "F:\\My Son\\data\\investment_platform.db"
-  },
   "DashboardAuth": {
-    "Username": "REPLACE_WITH_USERNAME",
-    "PasswordHash": "REPLACE_WITH_BCRYPT_HASH__GENERATE_VIA_reset-password",
+    "Username": "your-username",
+    "PasswordHash": "$2a$11$EXAMPLE_BCRYPT_HASH_REPLACE_ME",
     "SessionTimeoutMinutes": 60
+  },
+  "ConnectionStrings": {
+    "Default": "path/to/investment_platform.db"
   },
   "Kestrel": {
     "Endpoints": {
