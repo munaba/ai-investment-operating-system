@@ -1,0 +1,116 @@
+@inject IAlertService AlertService
+@implements IDisposable
+
+@if (Alerts.Count > 0)
+{
+    <div class="alert-banner-container">
+        @foreach (var alert in Alerts)
+        {
+            <div class="alert @GetAlertClass(alert.Severity) alert-dismissible fade show m-3 shadow-sm" role="alert">
+                <div class="d-flex align-items-start">
+                    <span class="me-2">@((MarkupString)GetAlertIcon(alert.Type))</span>
+                    <div class="flex-grow-1">
+                        <strong>@GetAlertTitle(alert.Type)</strong>
+                        <div class="small">@alert.Message</div>
+                    </div>
+                    <button type="button" class="btn-close" @onclick="() => DismissAlert(alert)" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<AlertBannerItem> Alerts = new();
+    private System.Threading.PeriodicTimer? _refreshTimer;
+    private bool _disposed = false;
+    private const int RefreshIntervalSeconds = 60; // Check alerts less frequently
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshAlertsAsync();
+        StartAutoRefresh();
+    }
+
+    private void StartAutoRefresh()
+    {
+        _refreshTimer = new System.Threading.PeriodicTimer(TimeSpan.FromSeconds(RefreshIntervalSeconds));
+        _ = AutoRefreshLoop();
+    }
+
+    private async Task AutoRefreshLoop()
+    {
+        try
+        {
+            while (await _refreshTimer!.WaitForNextTickAsync() && !_disposed)
+            {
+                var logLine = $"[refresh] {DateTime.Now:HH:mm:ss.fff} AlertBanner.RefreshAlertsAsync";
+                Console.WriteLine(logLine);
+                try { System.IO.File.AppendAllText(@"F:\My Son\aios_dashboard_csharp\refresh_log.txt", logLine + Environment.NewLine); } catch (Exception ex) { Console.WriteLine($"[refresh] file write error: {ex.Message}"); }
+                await RefreshAlertsAsync();
+            }
+        }
+        catch (OperationCanceledException) { }
+        catch (ObjectDisposedException) { }
+    }
+
+    private async Task RefreshAlertsAsync()
+    {
+        try
+        {
+            var newAlerts = await AlertService.GetActiveAlertsAsync();
+            Alerts = newAlerts;
+            await InvokeAsync(StateHasChanged);
+        }
+catch (Exception ex)
+        {
+            Console.Error.WriteLine($"[alertbanner] RefreshAlertsAsync failed: {ex}");
+        }
+    }
+
+    private void DismissAlert(AlertBannerItem alert)
+    {
+        Alerts.Remove(alert);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        _disposed = true;
+        _refreshTimer?.Dispose();
+        _refreshTimer = null;
+    }
+
+    private string GetAlertClass(AlertSeverity severity)
+    {
+        return severity switch
+        {
+            AlertSeverity.Error => "alert-danger",
+            AlertSeverity.Warning => "alert-warning",
+            AlertSeverity.Info => "alert-info",
+            _ => "alert-secondary"
+        };
+    }
+
+    private string GetAlertIcon(AlertType type)
+    {
+        return type switch
+        {
+            AlertType.PendingDecisionNearDeadline => "<svg class=\"ico ico-sm ico-amber\"><use href=\"/icons/_sprite.svg#i-clock\"/></svg>",
+            AlertType.ExternalBlockedEvidence => "<svg class=\"ico ico-sm\" style=\"color:var(--red)\"><use href=\"/icons/_sprite.svg#i-shield-check\"/></svg>",
+            AlertType.SchedulerJobFailed => "<svg class=\"ico ico-sm\" style=\"color:var(--red)\"><use href=\"/icons/_sprite.svg#i-settings\"/></svg>",
+            _ => "<svg class=\"ico ico-sm\"><use href=\"/icons/_sprite.svg#i-circle-dot\"/></svg>"
+        };
+    }
+
+    private string GetAlertTitle(AlertType type)
+    {
+        return type switch
+        {
+            AlertType.PendingDecisionNearDeadline => "Keputusan Mendekati Batas Waktu",
+            AlertType.ExternalBlockedEvidence => "Evidence Terblokir Eksternal",
+            AlertType.SchedulerJobFailed => "Scheduler Job Gagal",
+            _ => "Peringatan"
+        };
+    }
+}

@@ -1,0 +1,48 @@
+﻿@page "/"
+@inject NavigationManager Nav
+
+<PageTitle>AIOS Dashboard</PageTitle>
+
+<div class="home-gate">
+    <div class="hg-inner">
+        <div class="hg-brand">AIOS<span style="color:var(--lime)">.</span></div>
+        <p class="hg-sub">Personal IDX decision &amp; support agent — read-only dashboard.</p>
+        <div class="hg-links">
+            <button class="hg-btn" @onclick='() => Nav.NavigateTo("/phase0")'>
+                <svg class="ico"><use href="/icons/_sprite.svg#i-terminal"/></svg> System integrity
+            </button>
+            <button class="hg-btn" @onclick='() => Nav.NavigateTo("/phase1")'>
+                <svg class="ico"><use href="/icons/_sprite.svg#i-book-open"/></svg> Journal &amp; briefs
+            </button>
+            <button class="hg-btn" @onclick='() => Nav.NavigateTo("/phase2")'>
+                <svg class="ico"><use href="/icons/_sprite.svg#i-circle-dot"/></svg> Observation window
+            </button>
+            <button class="hg-btn" @onclick='() => Nav.NavigateTo("/phase3")'>
+                <svg class="ico"><use href="/icons/_sprite.svg#i-activity"/></svg> Paper book
+            </button>
+        </div>
+        <div class="ro-pill">🔒 read-only · human-gated decisions only</div>
+    </div>
+</div>
+
+<style>
+    .home-gate { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
+    .hg-inner { text-align: center; }
+    .hg-brand { font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 2.6rem; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .hg-sub { color: var(--gray); margin-bottom: 28px; }
+    .hg-links { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
+    .hg-btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: transparent; border: 1px solid var(--edge); color: var(--white);
+        font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem;
+        padding: 10px 18px; border-radius: 7px; cursor: pointer;
+        transition: border-color .15s, background .15s, transform .1s;
+    }
+    .hg-btn:hover { border-color: var(--lime); color: var(--lime); background: rgba(212,255,63,.04); }
+    .hg-btn:active { transform: scale(.97); }
+    .ro-pill { font-family: 'IBM Plex Mono'; font-size: 0.68rem; color: var(--gray); letter-spacing: .12em; text-transform: uppercase; }
+</style>
+
+@code {
+    protected override void OnInitialized() => Nav.NavigateTo("/phase0", false);
+}
