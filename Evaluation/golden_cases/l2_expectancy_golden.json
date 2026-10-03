@@ -1,0 +1,74 @@
+[
+  {
+    "input": {
+      "winning_positions": 7,
+      "losing_positions": 3,
+      "breakeven_positions": 0,
+      "average_win": 100.0,
+      "average_loss": 50.0
+    },
+    "expected": {
+      "expectancy": 55.0
+    }
+  },
+  {
+    "input": {
+      "winning_positions": 0,
+      "losing_positions": 5,
+      "breakeven_positions": 0,
+      "average_win": 0.0,
+      "average_loss": 100.0
+    },
+    "expected": {
+      "expectancy": -100.0
+    }
+  },
+  {
+    "input": {
+      "winning_positions": 5,
+      "losing_positions": 5,
+      "breakeven_positions": 0,
+      "average_win": 100.0,
+      "average_loss": 100.0
+    },
+    "expected": {
+      "expectancy": 0.0
+    }
+  },
+  {
+    "input": {
+      "winning_positions": 0,
+      "losing_positions": 0,
+      "breakeven_positions": 0,
+      "average_win": 0.0,
+      "average_loss": 0.0
+    },
+    "expected": {
+      "expectancy": 0.0
+    }
+  },
+  {
+    "input": {
+      "winning_positions": 100,
+      "losing_positions": 50,
+      "breakeven_positions": 0,
+      "average_win": 150.0,
+      "average_loss": 50.0
+    },
+    "expected": {
+      "expectancy": 83.33333333333334
+    }
+  },
+  {
+    "input": {
+      "winning_positions": 1,
+      "losing_positions": 1,
+      "breakeven_positions": 8,
+      "average_win": 1000.0,
+      "average_loss": 400.0
+    },
+    "expected": {
+      "expectancy": 60.0
+    }
+  }
+]

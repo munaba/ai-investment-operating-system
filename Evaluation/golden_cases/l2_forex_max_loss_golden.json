@@ -1,0 +1,68 @@
+[
+  {
+    "input": {
+      "pair": "EUR/USD",
+      "entry_price": 1.1,
+      "stop_loss": 1.095,
+      "quantity": 10000.0
+    },
+    "expected": {
+      "max_loss": "50.0000"
+    }
+  },
+  {
+    "input": {
+      "pair": "EUR/USD",
+      "entry_price": 1.1,
+      "stop_loss": 1.09,
+      "quantity": 100000.0
+    },
+    "expected": {
+      "max_loss": "1000.000"
+    }
+  },
+  {
+    "input": {
+      "pair": "GBP/USD",
+      "entry_price": 1.25,
+      "stop_loss": 1.246,
+      "quantity": 25000.0
+    },
+    "expected": {
+      "max_loss": "100.0000"
+    }
+  },
+  {
+    "input": {
+      "pair": "GBP/USD",
+      "entry_price": 1.3,
+      "stop_loss": 1.29,
+      "quantity": 50000.0
+    },
+    "expected": {
+      "max_loss": "500.000"
+    }
+  },
+  {
+    "input": {
+      "pair": "EUR/USD",
+      "entry_price": 1.1,
+      "stop_loss": 1.105,
+      "quantity": 10000.0
+    },
+    "expected": {
+      "max_loss": "50.0000"
+    }
+  },
+  {
+    "input": {
+      "pair": "eurusd",
+      "entry_price": 1.05,
+      "stop_loss": 1.045,
+      "quantity": 10000.0
+    },
+    "expected": {
+      "max_loss": "50.0000"
+    }
+  }
+]

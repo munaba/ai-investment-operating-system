@@ -1,0 +1,27 @@
+[
+  {
+    "llm_output": "Trade plan for ANTM: entry 3170, stop-loss 3106.6, take-profit 3296.8, risk-reward 2.0",
+    "source_data": {"symbol": "ANTM", "entry_price": 3170.0, "stop_loss_price": 3106.6, "take_profit_price": 3296.8, "risk_reward_ratio": 2.0},
+    "numeric_claims": [
+      {"value": 3170.0, "grounded": true},
+      {"value": 3106.6, "grounded": true},
+      {"value": 3296.8, "grounded": true},
+      {"value": 2.0, "grounded": true}
+    ]
+  },
+  {
+    "llm_output": "ANTM menunjukkan momentum positif dengan harga 3200 dan volume tinggi",
+    "source_data": {"symbol": "ANTM", "last_price": 3170.0, "volume": 12500000},
+    "numeric_claims": [
+      {"value": 3200.0, "grounded": false, "reason": "source says 3170"}
+    ]
+  },
+  {
+    "llm_output": "Risiko 2% dari modal dengan potensi profit 4%",
+    "source_data": {"risk_percent": 2.0, "reward_percent": 4.0},
+    "numeric_claims": [
+      {"value": 2.0, "grounded": true},
+      {"value": 4.0, "grounded": true}
+    ]
+  }
+]

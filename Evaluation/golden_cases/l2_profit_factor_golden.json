@@ -1,0 +1,56 @@
+[
+  {
+    "input": {
+      "gross_profit": 1500.0,
+      "gross_loss": 500.0
+    },
+    "expected": {
+      "profit_factor": 3.0
+    }
+  },
+  {
+    "input": {
+      "gross_profit": 0.0,
+      "gross_loss": 500.0
+    },
+    "expected": {
+      "profit_factor": 0.0
+    }
+  },
+  {
+    "input": {
+      "gross_profit": 500.0,
+      "gross_loss": 0.0
+    },
+    "expected": {
+      "profit_factor": 0.0
+    }
+  },
+  {
+    "input": {
+      "gross_profit": 0.0,
+      "gross_loss": 0.0
+    },
+    "expected": {
+      "profit_factor": 0.0
+    }
+  },
+  {
+    "input": {
+      "gross_profit": 1e-09,
+      "gross_loss": 1e-09
+    },
+    "expected": {
+      "profit_factor": 1.0
+    }
+  },
+  {
+    "input": {
+      "gross_profit": 1000000000000.0,
+      "gross_loss": 1.0
+    },
+    "expected": {
+      "profit_factor": 1000000000000.0
+    }
+  }
+]

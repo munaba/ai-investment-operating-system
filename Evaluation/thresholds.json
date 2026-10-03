@@ -1,0 +1,25 @@
+{
+  "L1_data": {
+    "validation_pass_rate": 0.999,
+    "duplicate_count": 0,
+    "undetected_gap_count": 0
+  },
+  "L2_engine": {
+    "reference_match_rate": 1.0,
+    "numeric_tolerance": 1e-9
+  },
+  "L3_signals": {
+    "minimum_samples_per_class": 200,
+    "expected_calibration_error": 0.05,
+    "brier_score_improvement_vs_baseline": 0.0
+  },
+  "L4_llm": {
+    "grounded_numeric_claim_rate": 0.99,
+    "unsourced_number_count": 0,
+    "minimum_output_samples": 30
+  },
+  "L5_orchestration": {
+    "job_completion_rate": 0.99,
+    "idempotency_violation_count": 0
+  }
+}
