@@ -2173,11 +2173,14 @@ def _build_idx_daily_scheduler(
 
     Runs no migration: applying ``Database.migrations_scheduler`` to a
     real database remains a separate, manual operator step
-    (``run_scheduler_migrations.py``).
-    
-    Gate 4 Phase I: builds evidence_adapter (if performance_repository
-    exists) for JOB_EVIDENCE_PROFILE_ANALYSIS.
-    """
+        (``run_scheduler_migrations.py``).
+
+        Gate 4 Phase I: also builds an evidence_adapter (DecisionCopilotSkill
+        wrapped by ``EvidenceProfileJobAdapter``) so the scheduler can run
+        JOB_EVIDENCE_PROFILE_ANALYSIS. If skill wiring fails for any
+        reason, job #6 is silently disabled and a warning is logged --
+        the other five jobs continue unaffected.
+        """
     scheduler_state_repository = SchedulerStateRepository(database_manager)
     notification_dedup_repository = NotificationDedupRepository(database_manager)
     audit_event_repository = AuditEventRepository(database_manager)

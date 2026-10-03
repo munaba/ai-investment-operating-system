@@ -209,9 +209,9 @@ class IDXDailyScheduler:
         daily_report_orchestrator: DailyReportOrchestrator,
         notification_manager: NotificationManager,
         account_id: str,
+        evidence_adapter=None,
         retry_base_seconds: float = DEFAULT_RETRY_BASE_SECONDS,
         retry_max_seconds: float = DEFAULT_RETRY_MAX_SECONDS,
-        evidence_adapter=None,
     ) -> None:
         self._calendar = idx_market_calendar
         self._state_repo = scheduler_state_repository
@@ -223,9 +223,9 @@ class IDXDailyScheduler:
         self._daily_report_orchestrator = daily_report_orchestrator
         self._notification_manager = notification_manager
         self._account_id = account_id
+        self._evidence_adapter = evidence_adapter
         self._retry_base_seconds = retry_base_seconds
         self._retry_max_seconds = retry_max_seconds
-        self._evidence_adapter = evidence_adapter
 
     # ------------------------------------------------------------------
     # Public API
@@ -317,11 +317,7 @@ class IDXDailyScheduler:
 
             # evidence_profile_analysis: once per day, only after market close
             # (SESSION_2_CLOSE). No dependency on market_close_recap success.
-            if (
-                self._evidence_adapter is not None
-                and local_time >= SESSION_2_CLOSE
-                and self._may_attempt(JOB_EVIDENCE_PROFILE_ANALYSIS, trading_date, now)
-            ):
+            if self._evidence_adapter is not None and self._may_attempt(JOB_EVIDENCE_PROFILE_ANALYSIS, trading_date, now):
                 outcomes.append(
                     self._run_once(
                         JOB_EVIDENCE_PROFILE_ANALYSIS,
@@ -690,59 +686,6 @@ class IDXDailyScheduler:
         )
         return "SENT"
 
-            # evidence_profile_analysis: once per day, only after market close
-            # (SESSION_2_CLOSE). No dependency on market_close_recap success.
-            if self._evidence_adapter is not None and self._may_attempt(JOB_EVIDENCE_PROFILE_ANALYSIS, trading_date, now):
-                outcomes.append(
-                    self._run_once(
-                        JOB_EVIDENCE_PROFILE_ANALYSIS,
-                        trading_date,
-                        now,
-                        lambda: self._job_evidence_profile_analysis(trading_date),
-                    )
-                )
-
-        return TickResult(
-            now=now.isoformat(),
-            trading_date=trading_date,
-            session=session,
-            jobs=tuple(outcomes),
-        )
-
-    # ------------------------------------------------------------------
-    # Idempotency / retry-backoff gating
-    # ------------------------------------------------------------------
-
-    def _may_attempt(self, job_type: str, trading_date: str, now: datetime) -> bool:
-        """Return True if this job is allowed to execute on this tick."""
-        if self._state_repo.has_succeeded(job_type, trading_date):
-            return False
-
-        last_attempt = self._state_repo.get_last_attempt(job_type, trading_date)
-        if not last_attempt:
-            return True
-
-        backoff_seconds = min(
-            self._retry_base_seconds * (2 ** last_attempt.failure_count),
-            self._retry_max_seconds,
-        )
-        next_attempt = last_attempt.timestamp + timedelta(seconds=backoff_seconds)
-        return now >= next_attempt
-
-    # ------------------------------------------------------------------
-    # Internal job runners
-    # ------------------------------------------------------------------
-
-    def _job_evidence_profile_analysis(self, trading_date: str) -> Dict[str, Any]:
-        """Run the evidence profile analysis for ``trading_date`` and
-        return a flat detail payload.
-
-        The adapter is optional: ``None`` means the job is never
-        attempted (the ``tick()`` gate skips it entirely). Called with
-        a single argument (``trading_date``) -- no ``now`` parameter.
-        """
-        return self._evidence_adapter.analyze_for_trading_date(trading_date)
-
     def _load_last_good_session_scan_observation(self) -> Optional[Observation]:
         """Reconstruct the most recent successful ``session_scan``
         observation from the append-only audit log -- restart-safe by
@@ -767,6 +710,17 @@ class IDXDailyScheduler:
                 continue
             return Observation(value=payload, observed_at=generated_at, source=JOB_SESSION_SCAN)
         return None
+
+    def _job_evidence_profile_analysis(self, trading_date: str) -> Dict[str, Any]:
+        """Run the evidence profile analysis for ``trading_date`` via
+        the injected adapter and return a flat detail payload.
+
+        ``INSUFFICIENT_DATA`` (no snapshots that day) is already
+        normalized by the adapter into ``status="no_data"`` -- a
+        SUCCESS, not a failure, so a non-trading day or a day with no
+        scan data never triggers a retry.
+        """
+        return self._evidence_adapter.analyze_for_trading_date(trading_date)
 
 
 def _report_signature(report) -> str:

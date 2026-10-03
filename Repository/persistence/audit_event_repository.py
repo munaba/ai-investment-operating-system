@@ -12,6 +12,7 @@ serialized), never parsed by this repository.
 from __future__ import annotations
 
 import json
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 from Database.models import AuditEvent
@@ -97,8 +98,6 @@ class AuditEventRepository(BasePersistenceRepository):
 
     def list_evidence_analysis_history(self, days: int = 30, limit: int = 100) -> List[AuditEvent]:
         """Return evidence profile analysis audit events from the last ``days`` days."""
-        from datetime import datetime, timedelta, timezone
-
         cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
         result = self._execute(
             "SELECT * FROM audit_events WHERE created_at >= ? AND event_type = 'job_succeeded' "
