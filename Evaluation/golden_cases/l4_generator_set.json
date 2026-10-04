@@ -1,0 +1,6402 @@
+[
+  {
+    "id": 200,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "643.03",
+    "source_data": {
+      "val": 643.03
+    },
+    "holdout": true
+  },
+  {
+    "id": 201,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "34.76",
+    "source_data": {
+      "val": 34.76
+    },
+    "holdout": true
+  },
+  {
+    "id": 202,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "282.28",
+    "source_data": {
+      "val": 282.28
+    },
+    "holdout": true
+  },
+  {
+    "id": 203,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "230.98",
+    "source_data": {
+      "val": 230.98
+    },
+    "holdout": true
+  },
+  {
+    "id": 204,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "739.11",
+    "source_data": {
+      "val": 739.11
+    },
+    "holdout": true
+  },
+  {
+    "id": 205,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "679.93",
+    "source_data": {
+      "val": 679.93
+    },
+    "holdout": true
+  },
+  {
+    "id": 206,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "893.26",
+    "source_data": {
+      "val": 893.26
+    },
+    "holdout": true
+  },
+  {
+    "id": 207,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "96.07",
+    "source_data": {
+      "val": 96.07
+    },
+    "holdout": true
+  },
+  {
+    "id": 208,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "427.7",
+    "source_data": {
+      "val": 427.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 209,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "39.5",
+    "source_data": {
+      "val": 39.5
+    },
+    "holdout": true
+  },
+  {
+    "id": 210,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "226.45",
+    "source_data": {
+      "val": 226.45
+    },
+    "holdout": true
+  },
+  {
+    "id": 211,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "510.3",
+    "source_data": {
+      "val": 510.3
+    },
+    "holdout": true
+  },
+  {
+    "id": 212,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "36.27",
+    "source_data": {
+      "val": 36.27
+    },
+    "holdout": true
+  },
+  {
+    "id": 213,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "206.85",
+    "source_data": {
+      "val": 206.85
+    },
+    "holdout": true
+  },
+  {
+    "id": 214,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "653.39",
+    "source_data": {
+      "val": 653.39
+    },
+    "holdout": true
+  },
+  {
+    "id": 215,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "549.49",
+    "source_data": {
+      "val": 549.49
+    },
+    "holdout": true
+  },
+  {
+    "id": 216,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "228.24",
+    "source_data": {
+      "val": 228.24
+    },
+    "holdout": true
+  },
+  {
+    "id": 217,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "593.37",
+    "source_data": {
+      "val": 593.37
+    },
+    "holdout": true
+  },
+  {
+    "id": 218,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "811.34",
+    "source_data": {
+      "val": 811.34
+    },
+    "holdout": true
+  },
+  {
+    "id": 219,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "16.43",
+    "source_data": {
+      "val": 16.43
+    },
+    "holdout": true
+  },
+  {
+    "id": 220,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "807.76",
+    "source_data": {
+      "val": 807.76
+    },
+    "holdout": true
+  },
+  {
+    "id": 221,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "701.16",
+    "source_data": {
+      "val": 701.16
+    },
+    "holdout": true
+  },
+  {
+    "id": 222,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "346.85",
+    "source_data": {
+      "val": 346.85
+    },
+    "holdout": true
+  },
+  {
+    "id": 223,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "163.92",
+    "source_data": {
+      "val": 163.92
+    },
+    "holdout": true
+  },
+  {
+    "id": 224,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "957.64",
+    "source_data": {
+      "val": 957.64
+    },
+    "holdout": true
+  },
+  {
+    "id": 225,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "343.23",
+    "source_data": {
+      "val": 343.23
+    },
+    "holdout": true
+  },
+  {
+    "id": 226,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "101.82",
+    "source_data": {
+      "val": 101.82
+    },
+    "holdout": true
+  },
+  {
+    "id": 227,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "105.75",
+    "source_data": {
+      "val": 105.75
+    },
+    "holdout": true
+  },
+  {
+    "id": 228,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "849.02",
+    "source_data": {
+      "val": 849.02
+    },
+    "holdout": true
+  },
+  {
+    "id": 229,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "607.69",
+    "source_data": {
+      "val": 607.69
+    },
+    "holdout": true
+  },
+  {
+    "id": 230,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "809.06",
+    "source_data": {
+      "val": 809.06
+    },
+    "holdout": true
+  },
+  {
+    "id": 231,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "732.43",
+    "source_data": {
+      "val": 732.43
+    },
+    "holdout": true
+  },
+  {
+    "id": 232,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "540.87",
+    "source_data": {
+      "val": 540.87
+    },
+    "holdout": true
+  },
+  {
+    "id": 233,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "973.38",
+    "source_data": {
+      "val": 973.38
+    },
+    "holdout": true
+  },
+  {
+    "id": 234,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "384.75",
+    "source_data": {
+      "val": 384.75
+    },
+    "holdout": true
+  },
+  {
+    "id": 235,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "556.52",
+    "source_data": {
+      "val": 556.52
+    },
+    "holdout": true
+  },
+  {
+    "id": 236,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "831.11",
+    "source_data": {
+      "val": 831.11
+    },
+    "holdout": true
+  },
+  {
+    "id": 237,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "622.33",
+    "source_data": {
+      "val": 622.33
+    },
+    "holdout": true
+  },
+  {
+    "id": 238,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "863.09",
+    "source_data": {
+      "val": 863.09
+    },
+    "holdout": true
+  },
+  {
+    "id": 239,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "581.58",
+    "source_data": {
+      "val": 581.58
+    },
+    "holdout": true
+  },
+  {
+    "id": 240,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "708.53",
+    "source_data": {
+      "val": 707.53
+    },
+    "holdout": true
+  },
+  {
+    "id": 241,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "56.37",
+    "source_data": {
+      "val": 55.37
+    },
+    "holdout": true
+  },
+  {
+    "id": 242,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "236.62",
+    "source_data": {
+      "val": 235.62
+    },
+    "holdout": true
+  },
+  {
+    "id": 243,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "297.49",
+    "source_data": {
+      "val": 296.49
+    },
+    "holdout": true
+  },
+  {
+    "id": 244,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "89.99",
+    "source_data": {
+      "val": 88.99
+    },
+    "holdout": true
+  },
+  {
+    "id": 245,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "241.46",
+    "source_data": {
+      "val": 240.46
+    },
+    "holdout": true
+  },
+  {
+    "id": 246,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "110.99",
+    "source_data": {
+      "val": 109.99
+    },
+    "holdout": true
+  },
+  {
+    "id": 247,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "286.19",
+    "source_data": {
+      "val": 285.19
+    },
+    "holdout": true
+  },
+  {
+    "id": 248,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "640.33",
+    "source_data": {
+      "val": 639.33
+    },
+    "holdout": true
+  },
+  {
+    "id": 249,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "372.18",
+    "source_data": {
+      "val": 371.18
+    },
+    "holdout": true
+  },
+  {
+    "id": 250,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "377.48",
+    "source_data": {
+      "val": 376.48
+    },
+    "holdout": true
+  },
+  {
+    "id": 251,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "218.41",
+    "source_data": {
+      "val": 217.41
+    },
+    "holdout": true
+  },
+  {
+    "id": 252,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "275.31",
+    "source_data": {
+      "val": 274.31
+    },
+    "holdout": true
+  },
+  {
+    "id": 253,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "938.29",
+    "source_data": {
+      "val": 937.29
+    },
+    "holdout": true
+  },
+  {
+    "id": 254,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "652.56",
+    "source_data": {
+      "val": 651.56
+    },
+    "holdout": true
+  },
+  {
+    "id": 255,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "614.04",
+    "source_data": {
+      "val": 613.04
+    },
+    "holdout": true
+  },
+  {
+    "id": 256,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "180.43",
+    "source_data": {
+      "val": 179.43
+    },
+    "holdout": true
+  },
+  {
+    "id": 257,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "732.84",
+    "source_data": {
+      "val": 731.84
+    },
+    "holdout": true
+  },
+  {
+    "id": 258,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "172.77",
+    "source_data": {
+      "val": 171.77
+    },
+    "holdout": true
+  },
+  {
+    "id": 259,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "386.66",
+    "source_data": {
+      "val": 385.66
+    },
+    "holdout": true
+  },
+  {
+    "id": 260,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "990.63",
+    "source_data": {
+      "val": 989.63
+    },
+    "holdout": true
+  },
+  {
+    "id": 261,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "644.6",
+    "source_data": {
+      "val": 643.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 262,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "562.38",
+    "source_data": {
+      "val": 561.38
+    },
+    "holdout": true
+  },
+  {
+    "id": 263,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "688.77",
+    "source_data": {
+      "val": 687.77
+    },
+    "holdout": true
+  },
+  {
+    "id": 264,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "845.42",
+    "source_data": {
+      "val": 844.42
+    },
+    "holdout": true
+  },
+  {
+    "id": 265,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "779.24",
+    "source_data": {
+      "val": 778.24
+    },
+    "holdout": true
+  },
+  {
+    "id": 266,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "237.76",
+    "source_data": {
+      "val": 236.76
+    },
+    "holdout": true
+  },
+  {
+    "id": 267,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "42.78",
+    "source_data": {
+      "val": 41.78
+    },
+    "holdout": true
+  },
+  {
+    "id": 268,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "323.3",
+    "source_data": {
+      "val": 322.3
+    },
+    "holdout": true
+  },
+  {
+    "id": 269,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "276.06",
+    "source_data": {
+      "val": 275.06
+    },
+    "holdout": true
+  },
+  {
+    "id": 270,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "219.87",
+    "source_data": {
+      "val": 218.87
+    },
+    "holdout": true
+  },
+  {
+    "id": 271,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "944.48",
+    "source_data": {
+      "val": 943.48
+    },
+    "holdout": true
+  },
+  {
+    "id": 272,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "878.6",
+    "source_data": {
+      "val": 877.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 273,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "322.53",
+    "source_data": {
+      "val": 321.53
+    },
+    "holdout": true
+  },
+  {
+    "id": 274,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "659.88",
+    "source_data": {
+      "val": 658.88
+    },
+    "holdout": true
+  },
+  {
+    "id": 275,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "402.68",
+    "source_data": {
+      "val": 401.68
+    },
+    "holdout": true
+  },
+  {
+    "id": 276,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "916.4",
+    "source_data": {
+      "val": 915.4
+    },
+    "holdout": true
+  },
+  {
+    "id": 277,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "465.26",
+    "source_data": {
+      "val": 464.26
+    },
+    "holdout": true
+  },
+  {
+    "id": 278,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "273.23",
+    "source_data": {
+      "val": 272.23
+    },
+    "holdout": true
+  },
+  {
+    "id": 279,
+    "category": "exact",
+    "label": "hallucination",
+    "llm_output": "255.16",
+    "source_data": {
+      "val": 254.16
+    },
+    "holdout": true
+  },
+  {
+    "id": 280,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "565.8",
+    "source_data": {
+      "val": 565.7544528215193
+    },
+    "holdout": true
+  },
+  {
+    "id": 281,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "270.1",
+    "source_data": {
+      "val": 270.1141924377059
+    },
+    "holdout": true
+  },
+  {
+    "id": 282,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "588.7",
+    "source_data": {
+      "val": 588.7401303213051
+    },
+    "holdout": true
+  },
+  {
+    "id": 283,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "898.8",
+    "source_data": {
+      "val": 898.8446547664522
+    },
+    "holdout": true
+  },
+  {
+    "id": 284,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "405.4",
+    "source_data": {
+      "val": 405.4065000889933
+    },
+    "holdout": true
+  },
+  {
+    "id": 285,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "227.1",
+    "source_data": {
+      "val": 227.1275515657105
+    },
+    "holdout": true
+  },
+  {
+    "id": 286,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "997.6",
+    "source_data": {
+      "val": 997.5622304301592
+    },
+    "holdout": true
+  },
+  {
+    "id": 287,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "514.4",
+    "source_data": {
+      "val": 514.4310307396998
+    },
+    "holdout": true
+  },
+  {
+    "id": 288,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "100.0",
+    "source_data": {
+      "val": 100.00031805205595
+    },
+    "holdout": true
+  },
+  {
+    "id": 289,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "56.6",
+    "source_data": {
+      "val": 56.64521167048722
+    },
+    "holdout": true
+  },
+  {
+    "id": 290,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "118.6",
+    "source_data": {
+      "val": 118.55263904715257
+    },
+    "holdout": true
+  },
+  {
+    "id": 291,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "631.2",
+    "source_data": {
+      "val": 631.1715812860591
+    },
+    "holdout": true
+  },
+  {
+    "id": 292,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "794.2",
+    "source_data": {
+      "val": 794.1585707193344
+    },
+    "holdout": true
+  },
+  {
+    "id": 293,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "427.9",
+    "source_data": {
+      "val": 427.9383671316872
+    },
+    "holdout": true
+  },
+  {
+    "id": 294,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "72.9",
+    "source_data": {
+      "val": 72.89242909043756
+    },
+    "holdout": true
+  },
+  {
+    "id": 295,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "387.8",
+    "source_data": {
+      "val": 387.8030936414714
+    },
+    "holdout": true
+  },
+  {
+    "id": 296,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "996.2",
+    "source_data": {
+      "val": 996.1601664376958
+    },
+    "holdout": true
+  },
+  {
+    "id": 297,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "533.8",
+    "source_data": {
+      "val": 533.8232016481456
+    },
+    "holdout": true
+  },
+  {
+    "id": 298,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "971.4",
+    "source_data": {
+      "val": 971.367593837482
+    },
+    "holdout": true
+  },
+  {
+    "id": 299,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "862.2",
+    "source_data": {
+      "val": 862.1719052121531
+    },
+    "holdout": true
+  },
+  {
+    "id": 300,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "21.4",
+    "source_data": {
+      "val": 21.366211723391437
+    },
+    "holdout": true
+  },
+  {
+    "id": 301,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "723.5",
+    "source_data": {
+      "val": 723.5146011665927
+    },
+    "holdout": true
+  },
+  {
+    "id": 302,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "684.9",
+    "source_data": {
+      "val": 684.893265336309
+    },
+    "holdout": true
+  },
+  {
+    "id": 303,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "541.6",
+    "source_data": {
+      "val": 541.6006271047072
+    },
+    "holdout": true
+  },
+  {
+    "id": 304,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "274.2",
+    "source_data": {
+      "val": 274.15693805301737
+    },
+    "holdout": true
+  },
+  {
+    "id": 305,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "644.6",
+    "source_data": {
+      "val": 644.55218059401
+    },
+    "holdout": true
+  },
+  {
+    "id": 306,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "120.4",
+    "source_data": {
+      "val": 120.43665185991767
+    },
+    "holdout": true
+  },
+  {
+    "id": 307,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "440.4",
+    "source_data": {
+      "val": 440.4175981624139
+    },
+    "holdout": true
+  },
+  {
+    "id": 308,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "459.2",
+    "source_data": {
+      "val": 459.18646926591435
+    },
+    "holdout": true
+  },
+  {
+    "id": 309,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "954.3",
+    "source_data": {
+      "val": 954.2777682458693
+    },
+    "holdout": true
+  },
+  {
+    "id": 310,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "877.1",
+    "source_data": {
+      "val": 877.0944109744121
+    },
+    "holdout": true
+  },
+  {
+    "id": 311,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "270.8",
+    "source_data": {
+      "val": 270.75516024357984
+    },
+    "holdout": true
+  },
+  {
+    "id": 312,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "505.6",
+    "source_data": {
+      "val": 505.58025191979533
+    },
+    "holdout": true
+  },
+  {
+    "id": 313,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "186.9",
+    "source_data": {
+      "val": 186.86536172483005
+    },
+    "holdout": true
+  },
+  {
+    "id": 314,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "913.5",
+    "source_data": {
+      "val": 913.5015609513723
+    },
+    "holdout": true
+  },
+  {
+    "id": 315,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "871.8",
+    "source_data": {
+      "val": 871.8133841383992
+    },
+    "holdout": true
+  },
+  {
+    "id": 316,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "305.5",
+    "source_data": {
+      "val": 305.46034353414655
+    },
+    "holdout": true
+  },
+  {
+    "id": 317,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "642.6",
+    "source_data": {
+      "val": 642.5599999173451
+    },
+    "holdout": true
+  },
+  {
+    "id": 318,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "612.9",
+    "source_data": {
+      "val": 612.8805093237906
+    },
+    "holdout": true
+  },
+  {
+    "id": 319,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "161.3",
+    "source_data": {
+      "val": 161.31087586413847
+    },
+    "holdout": true
+  },
+  {
+    "id": 320,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "765.1",
+    "source_data": {
+      "val": 764.8856920743998
+    },
+    "holdout": true
+  },
+  {
+    "id": 321,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "544.2",
+    "source_data": {
+      "val": 543.9852398184295
+    },
+    "holdout": true
+  },
+  {
+    "id": 322,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "781.0",
+    "source_data": {
+      "val": 780.8402138442526
+    },
+    "holdout": true
+  },
+  {
+    "id": 323,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "535.3000000000001",
+    "source_data": {
+      "val": 535.0501354732257
+    },
+    "holdout": true
+  },
+  {
+    "id": 324,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "10.799999999999999",
+    "source_data": {
+      "val": 10.56617716666407
+    },
+    "holdout": true
+  },
+  {
+    "id": 325,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "331.09999999999997",
+    "source_data": {
+      "val": 330.91449643462636
+    },
+    "holdout": true
+  },
+  {
+    "id": 326,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "29.5",
+    "source_data": {
+      "val": 29.28197496197398
+    },
+    "holdout": true
+  },
+  {
+    "id": 327,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "930.0",
+    "source_data": {
+      "val": 929.807630101971
+    },
+    "holdout": true
+  },
+  {
+    "id": 328,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "880.1",
+    "source_data": {
+      "val": 879.9346590449524
+    },
+    "holdout": true
+  },
+  {
+    "id": 329,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "833.5",
+    "source_data": {
+      "val": 833.3488740675676
+    },
+    "holdout": true
+  },
+  {
+    "id": 330,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "314.59999999999997",
+    "source_data": {
+      "val": 314.4389841486348
+    },
+    "holdout": true
+  },
+  {
+    "id": 331,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "67.5",
+    "source_data": {
+      "val": 67.34591482924569
+    },
+    "holdout": true
+  },
+  {
+    "id": 332,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "879.4000000000001",
+    "source_data": {
+      "val": 879.2295032120002
+    },
+    "holdout": true
+  },
+  {
+    "id": 333,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "947.7",
+    "source_data": {
+      "val": 947.4799508450142
+    },
+    "holdout": true
+  },
+  {
+    "id": 334,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "95.0",
+    "source_data": {
+      "val": 94.7969175472
+    },
+    "holdout": true
+  },
+  {
+    "id": 335,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "491.3",
+    "source_data": {
+      "val": 491.13055868344765
+    },
+    "holdout": true
+  },
+  {
+    "id": 336,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "78.7",
+    "source_data": {
+      "val": 78.52039328369978
+    },
+    "holdout": true
+  },
+  {
+    "id": 337,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "763.2",
+    "source_data": {
+      "val": 762.9961436046592
+    },
+    "holdout": true
+  },
+  {
+    "id": 338,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "768.4000000000001",
+    "source_data": {
+      "val": 768.1760850139178
+    },
+    "holdout": true
+  },
+  {
+    "id": 339,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "137.29999999999998",
+    "source_data": {
+      "val": 137.10754985476518
+    },
+    "holdout": true
+  },
+  {
+    "id": 340,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "480.7",
+    "source_data": {
+      "val": 480.529554317744
+    },
+    "holdout": true
+  },
+  {
+    "id": 341,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "554.5",
+    "source_data": {
+      "val": 554.3055575599944
+    },
+    "holdout": true
+  },
+  {
+    "id": 342,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "272.59999999999997",
+    "source_data": {
+      "val": 272.4060626506585
+    },
+    "holdout": true
+  },
+  {
+    "id": 343,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "873.9000000000001",
+    "source_data": {
+      "val": 873.7087106744049
+    },
+    "holdout": true
+  },
+  {
+    "id": 344,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "429.09999999999997",
+    "source_data": {
+      "val": 428.90656079887805
+    },
+    "holdout": true
+  },
+  {
+    "id": 345,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "219.89999999999998",
+    "source_data": {
+      "val": 219.68022338766124
+    },
+    "holdout": true
+  },
+  {
+    "id": 346,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "544.1",
+    "source_data": {
+      "val": 543.9031278916638
+    },
+    "holdout": true
+  },
+  {
+    "id": 347,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "732.8000000000001",
+    "source_data": {
+      "val": 732.6317583990764
+    },
+    "holdout": true
+  },
+  {
+    "id": 348,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "209.29999999999998",
+    "source_data": {
+      "val": 209.13955275579895
+    },
+    "holdout": true
+  },
+  {
+    "id": 349,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "318.8",
+    "source_data": {
+      "val": 318.599128387886
+    },
+    "holdout": true
+  },
+  {
+    "id": 350,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "995.4000000000001",
+    "source_data": {
+      "val": 995.1978630942857
+    },
+    "holdout": true
+  },
+  {
+    "id": 351,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "653.6",
+    "source_data": {
+      "val": 653.3792770630589
+    },
+    "holdout": true
+  },
+  {
+    "id": 352,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "443.9",
+    "source_data": {
+      "val": 443.71908307535904
+    },
+    "holdout": true
+  },
+  {
+    "id": 353,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "522.6",
+    "source_data": {
+      "val": 522.4000826252347
+    },
+    "holdout": true
+  },
+  {
+    "id": 354,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "130.0",
+    "source_data": {
+      "val": 129.79415390958306
+    },
+    "holdout": true
+  },
+  {
+    "id": 355,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "232.7",
+    "source_data": {
+      "val": 232.4503636612418
+    },
+    "holdout": true
+  },
+  {
+    "id": 356,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "344.9",
+    "source_data": {
+      "val": 344.7047065259808
+    },
+    "holdout": true
+  },
+  {
+    "id": 357,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "592.6",
+    "source_data": {
+      "val": 592.425631272661
+    },
+    "holdout": true
+  },
+  {
+    "id": 358,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "238.0",
+    "source_data": {
+      "val": 237.81358527061124
+    },
+    "holdout": true
+  },
+  {
+    "id": 359,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "228.2",
+    "source_data": {
+      "val": 228.01521060704388
+    },
+    "holdout": true
+  },
+  {
+    "id": 360,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "707.4 juta",
+    "source_data": {
+      "val": 707400000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 361,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "229.5 ribu",
+    "source_data": {
+      "val": 229500.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 362,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "858.9 ribu",
+    "source_data": {
+      "val": 858900.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 363,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "514.1 juta",
+    "source_data": {
+      "val": 514100000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 364,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "668.6 thousand",
+    "source_data": {
+      "val": 668600.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 365,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "539.2 triliun",
+    "source_data": {
+      "val": 539200000000000.06
+    },
+    "holdout": true
+  },
+  {
+    "id": 366,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "243.5 trillion",
+    "source_data": {
+      "val": 243500000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 367,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "806.9 trillion",
+    "source_data": {
+      "val": 806900000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 368,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "95.1 triliun",
+    "source_data": {
+      "val": 95100000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 369,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "354.6 billion",
+    "source_data": {
+      "val": 354600000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 370,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "467.1 billion",
+    "source_data": {
+      "val": 467100000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 371,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "673.0 ribu",
+    "source_data": {
+      "val": 673000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 372,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "61.5 juta",
+    "source_data": {
+      "val": 61500000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 373,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "800.0 million",
+    "source_data": {
+      "val": 800000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 374,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "249.2 juta",
+    "source_data": {
+      "val": 249200000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 375,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "536.2 triliun",
+    "source_data": {
+      "val": 536200000000000.06
+    },
+    "holdout": true
+  },
+  {
+    "id": 376,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "422.0 miliar",
+    "source_data": {
+      "val": 422000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 377,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "462.7 thousand",
+    "source_data": {
+      "val": 462700.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 378,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "443.2 juta",
+    "source_data": {
+      "val": 443200000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 379,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "51.5 juta",
+    "source_data": {
+      "val": 51500000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 380,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "968.1 ribu",
+    "source_data": {
+      "val": 968100.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 381,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "167.0 triliun",
+    "source_data": {
+      "val": 167000000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 382,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "481.4 trillion",
+    "source_data": {
+      "val": 481400000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 383,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "901.6 billion",
+    "source_data": {
+      "val": 901600000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 384,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "379.2 miliar",
+    "source_data": {
+      "val": 379200000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 385,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "265.7 billion",
+    "source_data": {
+      "val": 265700000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 386,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "285.7 trillion",
+    "source_data": {
+      "val": 285700000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 387,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "155.5 trillion",
+    "source_data": {
+      "val": 155500000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 388,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "218.3 thousand",
+    "source_data": {
+      "val": 218300.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 389,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "579.0 ribu",
+    "source_data": {
+      "val": 579000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 390,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "747.5 ribu",
+    "source_data": {
+      "val": 747500.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 391,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "51.0 ribu",
+    "source_data": {
+      "val": 51000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 392,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "502.8 trillion",
+    "source_data": {
+      "val": 502800000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 393,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "57.8 miliar",
+    "source_data": {
+      "val": 57800000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 394,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "850.6 juta",
+    "source_data": {
+      "val": 850600000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 395,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "594.8 juta",
+    "source_data": {
+      "val": 594800000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 396,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "404.0 triliun",
+    "source_data": {
+      "val": 404000000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 397,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "578.8 triliun",
+    "source_data": {
+      "val": 578800000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 398,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "619.1 ribu",
+    "source_data": {
+      "val": 619100.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 399,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "657.1 billion",
+    "source_data": {
+      "val": 657100000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 400,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "938.8 million",
+    "source_data": {
+      "val": 933800000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 401,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "674.4 triliun",
+    "source_data": {
+      "val": 669400000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 402,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "244.2 million",
+    "source_data": {
+      "val": 239200000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 403,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "136.6 billion",
+    "source_data": {
+      "val": 131600000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 404,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "462.3 thousand",
+    "source_data": {
+      "val": 457300.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 405,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "15.3 juta",
+    "source_data": {
+      "val": 10300000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 406,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "79.1 juta",
+    "source_data": {
+      "val": 74100000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 407,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "510.9 triliun",
+    "source_data": {
+      "val": 505900000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 408,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "937.4 miliar",
+    "source_data": {
+      "val": 932400000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 409,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "883.5 juta",
+    "source_data": {
+      "val": 878500000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 410,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "290.4 million",
+    "source_data": {
+      "val": 285400000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 411,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "838.1 trillion",
+    "source_data": {
+      "val": 833100000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 412,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "616.5 thousand",
+    "source_data": {
+      "val": 611500.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 413,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "672.5 ribu",
+    "source_data": {
+      "val": 667500.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 414,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "935.9 thousand",
+    "source_data": {
+      "val": 930900.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 415,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "943.1 juta",
+    "source_data": {
+      "val": 938100000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 416,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "269.9 miliar",
+    "source_data": {
+      "val": 264899999999.99997
+    },
+    "holdout": true
+  },
+  {
+    "id": 417,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "746.9 juta",
+    "source_data": {
+      "val": 741900000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 418,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "277.8 miliar",
+    "source_data": {
+      "val": 272800000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 419,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "722.2 triliun",
+    "source_data": {
+      "val": 717200000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 420,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "692.1 triliun",
+    "source_data": {
+      "val": 687100000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 421,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "510.4 thousand",
+    "source_data": {
+      "val": 505400.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 422,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "909.5 thousand",
+    "source_data": {
+      "val": 904500.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 423,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "98.1 ribu",
+    "source_data": {
+      "val": 93100.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 424,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "833.7 billion",
+    "source_data": {
+      "val": 828700000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 425,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "9.5 ribu",
+    "source_data": {
+      "val": 4500.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 426,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "641.8 miliar",
+    "source_data": {
+      "val": 636800000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 427,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "167.3 thousand",
+    "source_data": {
+      "val": 162300.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 428,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "556.6 trillion",
+    "source_data": {
+      "val": 551600000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 429,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "565.8 billion",
+    "source_data": {
+      "val": 560800000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 430,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "81.1 juta",
+    "source_data": {
+      "val": 76100000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 431,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "550.5 miliar",
+    "source_data": {
+      "val": 545500000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 432,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "587.3 million",
+    "source_data": {
+      "val": 582300000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 433,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "434.9 miliar",
+    "source_data": {
+      "val": 429900000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 434,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "313.6 ribu",
+    "source_data": {
+      "val": 308600.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 435,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "903.1 ribu",
+    "source_data": {
+      "val": 898100.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 436,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "686.7 triliun",
+    "source_data": {
+      "val": 681700000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 437,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "359.0 juta",
+    "source_data": {
+      "val": 354000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 438,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "977.9 billion",
+    "source_data": {
+      "val": 972900000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 439,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "929.9 miliar",
+    "source_data": {
+      "val": 924900000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 440,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "24.2%",
+    "source_data": {
+      "val": 0.242
+    },
+    "holdout": true
+  },
+  {
+    "id": 441,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "16.93%",
+    "source_data": {
+      "val": 0.1693
+    },
+    "holdout": true
+  },
+  {
+    "id": 442,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "79.39%",
+    "source_data": {
+      "val": 0.7939
+    },
+    "holdout": true
+  },
+  {
+    "id": 443,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "18.35%",
+    "source_data": {
+      "val": 0.1835
+    },
+    "holdout": true
+  },
+  {
+    "id": 444,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "41.4%",
+    "source_data": {
+      "val": 0.414
+    },
+    "holdout": true
+  },
+  {
+    "id": 445,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "18.58%",
+    "source_data": {
+      "val": 0.1858
+    },
+    "holdout": true
+  },
+  {
+    "id": 446,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "91.6%",
+    "source_data": {
+      "val": 0.916
+    },
+    "holdout": true
+  },
+  {
+    "id": 447,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "77.67%",
+    "source_data": {
+      "val": 0.7767
+    },
+    "holdout": true
+  },
+  {
+    "id": 448,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "41.35%",
+    "source_data": {
+      "val": 0.4135
+    },
+    "holdout": true
+  },
+  {
+    "id": 449,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "66.65%",
+    "source_data": {
+      "val": 0.6665
+    },
+    "holdout": true
+  },
+  {
+    "id": 450,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "73.04%",
+    "source_data": {
+      "val": 0.7304
+    },
+    "holdout": true
+  },
+  {
+    "id": 451,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "25.32%",
+    "source_data": {
+      "val": 0.2532
+    },
+    "holdout": true
+  },
+  {
+    "id": 452,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "16.6%",
+    "source_data": {
+      "val": 0.166
+    },
+    "holdout": true
+  },
+  {
+    "id": 453,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "69.73%",
+    "source_data": {
+      "val": 0.6973
+    },
+    "holdout": true
+  },
+  {
+    "id": 454,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "38.49%",
+    "source_data": {
+      "val": 0.3849
+    },
+    "holdout": true
+  },
+  {
+    "id": 455,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "4.8%",
+    "source_data": {
+      "val": 0.048
+    },
+    "holdout": true
+  },
+  {
+    "id": 456,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "47.13%",
+    "source_data": {
+      "val": 0.4713
+    },
+    "holdout": true
+  },
+  {
+    "id": 457,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "20.56%",
+    "source_data": {
+      "val": 0.2056
+    },
+    "holdout": true
+  },
+  {
+    "id": 458,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "91.01%",
+    "source_data": {
+      "val": 0.9101
+    },
+    "holdout": true
+  },
+  {
+    "id": 459,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "35.27%",
+    "source_data": {
+      "val": 0.3527
+    },
+    "holdout": true
+  },
+  {
+    "id": 460,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "81.41%",
+    "source_data": {
+      "val": 0.8141
+    },
+    "holdout": true
+  },
+  {
+    "id": 461,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "86.39%",
+    "source_data": {
+      "val": 0.8639
+    },
+    "holdout": true
+  },
+  {
+    "id": 462,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "22.85%",
+    "source_data": {
+      "val": 0.2285
+    },
+    "holdout": true
+  },
+  {
+    "id": 463,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "65.68%",
+    "source_data": {
+      "val": 0.6568
+    },
+    "holdout": true
+  },
+  {
+    "id": 464,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "40.05%",
+    "source_data": {
+      "val": 0.4005
+    },
+    "holdout": true
+  },
+  {
+    "id": 465,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "28.3%",
+    "source_data": {
+      "val": 0.283
+    },
+    "holdout": true
+  },
+  {
+    "id": 466,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "7.8%",
+    "source_data": {
+      "val": 0.078
+    },
+    "holdout": true
+  },
+  {
+    "id": 467,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "76.79%",
+    "source_data": {
+      "val": 0.7679
+    },
+    "holdout": true
+  },
+  {
+    "id": 468,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "35.41%",
+    "source_data": {
+      "val": 0.3541
+    },
+    "holdout": true
+  },
+  {
+    "id": 469,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "50.92%",
+    "source_data": {
+      "val": 0.5092
+    },
+    "holdout": true
+  },
+  {
+    "id": 470,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "67.59%",
+    "source_data": {
+      "val": 0.6759
+    },
+    "holdout": true
+  },
+  {
+    "id": 471,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "83.68%",
+    "source_data": {
+      "val": 0.8368
+    },
+    "holdout": true
+  },
+  {
+    "id": 472,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "33.45%",
+    "source_data": {
+      "val": 0.3345
+    },
+    "holdout": true
+  },
+  {
+    "id": 473,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "3.7%",
+    "source_data": {
+      "val": 0.037
+    },
+    "holdout": true
+  },
+  {
+    "id": 474,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "86.95%",
+    "source_data": {
+      "val": 0.8695
+    },
+    "holdout": true
+  },
+  {
+    "id": 475,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "26.6%",
+    "source_data": {
+      "val": 0.266
+    },
+    "holdout": true
+  },
+  {
+    "id": 476,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "57.9%",
+    "source_data": {
+      "val": 0.579
+    },
+    "holdout": true
+  },
+  {
+    "id": 477,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "97.39%",
+    "source_data": {
+      "val": 0.9739
+    },
+    "holdout": true
+  },
+  {
+    "id": 478,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "4.75%",
+    "source_data": {
+      "val": 0.0475
+    },
+    "holdout": true
+  },
+  {
+    "id": 479,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "59.46%",
+    "source_data": {
+      "val": 0.5946
+    },
+    "holdout": true
+  },
+  {
+    "id": 480,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "35.88%",
+    "source_data": {
+      "val": 0.3488
+    },
+    "holdout": true
+  },
+  {
+    "id": 481,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "79.07%",
+    "source_data": {
+      "val": 0.7807
+    },
+    "holdout": true
+  },
+  {
+    "id": 482,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "44.77%",
+    "source_data": {
+      "val": 0.4377
+    },
+    "holdout": true
+  },
+  {
+    "id": 483,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "98.46%",
+    "source_data": {
+      "val": 0.9746
+    },
+    "holdout": true
+  },
+  {
+    "id": 484,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "13.33%",
+    "source_data": {
+      "val": 0.1233
+    },
+    "holdout": true
+  },
+  {
+    "id": 485,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "90.15%",
+    "source_data": {
+      "val": 0.8915
+    },
+    "holdout": true
+  },
+  {
+    "id": 486,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "20.63%",
+    "source_data": {
+      "val": 0.1963
+    },
+    "holdout": true
+  },
+  {
+    "id": 487,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "6.35%",
+    "source_data": {
+      "val": 0.0535
+    },
+    "holdout": true
+  },
+  {
+    "id": 488,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "44.73%",
+    "source_data": {
+      "val": 0.4373
+    },
+    "holdout": true
+  },
+  {
+    "id": 489,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "52.95%",
+    "source_data": {
+      "val": 0.5195
+    },
+    "holdout": true
+  },
+  {
+    "id": 490,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "81.04%",
+    "source_data": {
+      "val": 0.8004
+    },
+    "holdout": true
+  },
+  {
+    "id": 491,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "69.31%",
+    "source_data": {
+      "val": 0.6831
+    },
+    "holdout": true
+  },
+  {
+    "id": 492,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "94.15%",
+    "source_data": {
+      "val": 0.9315
+    },
+    "holdout": true
+  },
+  {
+    "id": 493,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "74.23%",
+    "source_data": {
+      "val": 0.7323
+    },
+    "holdout": true
+  },
+  {
+    "id": 494,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "21.31%",
+    "source_data": {
+      "val": 0.2031
+    },
+    "holdout": true
+  },
+  {
+    "id": 495,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "44.27%",
+    "source_data": {
+      "val": 0.4327
+    },
+    "holdout": true
+  },
+  {
+    "id": 496,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "94.99%",
+    "source_data": {
+      "val": 0.9399
+    },
+    "holdout": true
+  },
+  {
+    "id": 497,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "92.24%",
+    "source_data": {
+      "val": 0.9124
+    },
+    "holdout": true
+  },
+  {
+    "id": 498,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "63.07%",
+    "source_data": {
+      "val": 0.6207
+    },
+    "holdout": true
+  },
+  {
+    "id": 499,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "67.01%",
+    "source_data": {
+      "val": 0.6601
+    },
+    "holdout": true
+  },
+  {
+    "id": 500,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "14.21%",
+    "source_data": {
+      "val": 0.1321
+    },
+    "holdout": true
+  },
+  {
+    "id": 501,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "90.2%",
+    "source_data": {
+      "val": 0.892
+    },
+    "holdout": true
+  },
+  {
+    "id": 502,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "51.7%",
+    "source_data": {
+      "val": 0.507
+    },
+    "holdout": true
+  },
+  {
+    "id": 503,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "67.36%",
+    "source_data": {
+      "val": 0.6636
+    },
+    "holdout": true
+  },
+  {
+    "id": 504,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "33.97%",
+    "source_data": {
+      "val": 0.3297
+    },
+    "holdout": true
+  },
+  {
+    "id": 505,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "70.33%",
+    "source_data": {
+      "val": 0.6933
+    },
+    "holdout": true
+  },
+  {
+    "id": 506,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "56.33%",
+    "source_data": {
+      "val": 0.5533
+    },
+    "holdout": true
+  },
+  {
+    "id": 507,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "20.8%",
+    "source_data": {
+      "val": 0.198
+    },
+    "holdout": true
+  },
+  {
+    "id": 508,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "67.16%",
+    "source_data": {
+      "val": 0.6616
+    },
+    "holdout": true
+  },
+  {
+    "id": 509,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "39.16%",
+    "source_data": {
+      "val": 0.3816
+    },
+    "holdout": true
+  },
+  {
+    "id": 510,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "75.32%",
+    "source_data": {
+      "val": 0.7432
+    },
+    "holdout": true
+  },
+  {
+    "id": 511,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "19.05%",
+    "source_data": {
+      "val": 0.1805
+    },
+    "holdout": true
+  },
+  {
+    "id": 512,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "57.77%",
+    "source_data": {
+      "val": 0.5677
+    },
+    "holdout": true
+  },
+  {
+    "id": 513,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "41.8%",
+    "source_data": {
+      "val": 0.408
+    },
+    "holdout": true
+  },
+  {
+    "id": 514,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "83.71%",
+    "source_data": {
+      "val": 0.8271
+    },
+    "holdout": true
+  },
+  {
+    "id": 515,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "31.78%",
+    "source_data": {
+      "val": 0.3078
+    },
+    "holdout": true
+  },
+  {
+    "id": 516,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "22.6%",
+    "source_data": {
+      "val": 0.216
+    },
+    "holdout": true
+  },
+  {
+    "id": 517,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "79.0%",
+    "source_data": {
+      "val": 0.78
+    },
+    "holdout": true
+  },
+  {
+    "id": 518,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "61.45%",
+    "source_data": {
+      "val": 0.6045
+    },
+    "holdout": true
+  },
+  {
+    "id": 519,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "33.58%",
+    "source_data": {
+      "val": 0.3258
+    },
+    "holdout": true
+  },
+  {
+    "id": 520,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "462.000",
+    "source_data": {
+      "val": 462000
+    },
+    "holdout": true
+  },
+  {
+    "id": 521,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "462.000",
+    "source_data": {
+      "val": 462000
+    },
+    "holdout": true
+  },
+  {
+    "id": 522,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "701.000",
+    "source_data": {
+      "val": 701000
+    },
+    "holdout": true
+  },
+  {
+    "id": 523,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "228.000",
+    "source_data": {
+      "val": 228000
+    },
+    "holdout": true
+  },
+  {
+    "id": 524,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "533.000",
+    "source_data": {
+      "val": 533000
+    },
+    "holdout": true
+  },
+  {
+    "id": 525,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "494.000",
+    "source_data": {
+      "val": 494000
+    },
+    "holdout": true
+  },
+  {
+    "id": 526,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "822.000",
+    "source_data": {
+      "val": 822000
+    },
+    "holdout": true
+  },
+  {
+    "id": 527,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "932.000",
+    "source_data": {
+      "val": 932000
+    },
+    "holdout": true
+  },
+  {
+    "id": 528,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "992.000",
+    "source_data": {
+      "val": 992000
+    },
+    "holdout": true
+  },
+  {
+    "id": 529,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "825.000",
+    "source_data": {
+      "val": 825000
+    },
+    "holdout": true
+  },
+  {
+    "id": 530,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "763.000",
+    "source_data": {
+      "val": 763000
+    },
+    "holdout": true
+  },
+  {
+    "id": 531,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "183.000",
+    "source_data": {
+      "val": 183000
+    },
+    "holdout": true
+  },
+  {
+    "id": 532,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "684.000",
+    "source_data": {
+      "val": 684000
+    },
+    "holdout": true
+  },
+  {
+    "id": 533,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "96.000",
+    "source_data": {
+      "val": 96000
+    },
+    "holdout": true
+  },
+  {
+    "id": 534,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "300.000",
+    "source_data": {
+      "val": 300000
+    },
+    "holdout": true
+  },
+  {
+    "id": 535,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "537.000",
+    "source_data": {
+      "val": 537000
+    },
+    "holdout": true
+  },
+  {
+    "id": 536,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "689.000",
+    "source_data": {
+      "val": 689000
+    },
+    "holdout": true
+  },
+  {
+    "id": 537,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "658.000",
+    "source_data": {
+      "val": 658000
+    },
+    "holdout": true
+  },
+  {
+    "id": 538,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "644.000",
+    "source_data": {
+      "val": 644000
+    },
+    "holdout": true
+  },
+  {
+    "id": 539,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "353.000",
+    "source_data": {
+      "val": 353000
+    },
+    "holdout": true
+  },
+  {
+    "id": 540,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "105.000",
+    "source_data": {
+      "val": 105000
+    },
+    "holdout": true
+  },
+  {
+    "id": 541,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "848.000",
+    "source_data": {
+      "val": 848000
+    },
+    "holdout": true
+  },
+  {
+    "id": 542,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "984.000",
+    "source_data": {
+      "val": 984000
+    },
+    "holdout": true
+  },
+  {
+    "id": 543,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "779.000",
+    "source_data": {
+      "val": 779000
+    },
+    "holdout": true
+  },
+  {
+    "id": 544,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "250.000",
+    "source_data": {
+      "val": 250000
+    },
+    "holdout": true
+  },
+  {
+    "id": 545,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "698.000",
+    "source_data": {
+      "val": 698000
+    },
+    "holdout": true
+  },
+  {
+    "id": 546,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "327.000",
+    "source_data": {
+      "val": 327000
+    },
+    "holdout": true
+  },
+  {
+    "id": 547,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "240.000",
+    "source_data": {
+      "val": 240000
+    },
+    "holdout": true
+  },
+  {
+    "id": 548,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "835.000",
+    "source_data": {
+      "val": 835000
+    },
+    "holdout": true
+  },
+  {
+    "id": 549,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "213.000",
+    "source_data": {
+      "val": 213000
+    },
+    "holdout": true
+  },
+  {
+    "id": 550,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "160.000",
+    "source_data": {
+      "val": 160000
+    },
+    "holdout": true
+  },
+  {
+    "id": 551,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "35.000",
+    "source_data": {
+      "val": 35000
+    },
+    "holdout": true
+  },
+  {
+    "id": 552,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "57.000",
+    "source_data": {
+      "val": 57000
+    },
+    "holdout": true
+  },
+  {
+    "id": 553,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "260.000",
+    "source_data": {
+      "val": 260000
+    },
+    "holdout": true
+  },
+  {
+    "id": 554,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "496.000",
+    "source_data": {
+      "val": 496000
+    },
+    "holdout": true
+  },
+  {
+    "id": 555,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "635.000",
+    "source_data": {
+      "val": 635000
+    },
+    "holdout": true
+  },
+  {
+    "id": 556,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "880.000",
+    "source_data": {
+      "val": 880000
+    },
+    "holdout": true
+  },
+  {
+    "id": 557,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "796.000",
+    "source_data": {
+      "val": 796000
+    },
+    "holdout": true
+  },
+  {
+    "id": 558,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "84.000",
+    "source_data": {
+      "val": 84000
+    },
+    "holdout": true
+  },
+  {
+    "id": 559,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "476.000",
+    "source_data": {
+      "val": 476000
+    },
+    "holdout": true
+  },
+  {
+    "id": 560,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "435.000",
+    "source_data": {
+      "val": 434000
+    },
+    "holdout": true
+  },
+  {
+    "id": 561,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "918.000",
+    "source_data": {
+      "val": 917000
+    },
+    "holdout": true
+  },
+  {
+    "id": 562,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "655.000",
+    "source_data": {
+      "val": 654000
+    },
+    "holdout": true
+  },
+  {
+    "id": 563,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "600.000",
+    "source_data": {
+      "val": 599000
+    },
+    "holdout": true
+  },
+  {
+    "id": 564,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "210.000",
+    "source_data": {
+      "val": 209000
+    },
+    "holdout": true
+  },
+  {
+    "id": 565,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "746.000",
+    "source_data": {
+      "val": 745000
+    },
+    "holdout": true
+  },
+  {
+    "id": 566,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "724.000",
+    "source_data": {
+      "val": 723000
+    },
+    "holdout": true
+  },
+  {
+    "id": 567,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "404.000",
+    "source_data": {
+      "val": 403000
+    },
+    "holdout": true
+  },
+  {
+    "id": 568,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "517.000",
+    "source_data": {
+      "val": 516000
+    },
+    "holdout": true
+  },
+  {
+    "id": 569,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "420.000",
+    "source_data": {
+      "val": 419000
+    },
+    "holdout": true
+  },
+  {
+    "id": 570,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "260.000",
+    "source_data": {
+      "val": 259000
+    },
+    "holdout": true
+  },
+  {
+    "id": 571,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "162.000",
+    "source_data": {
+      "val": 161000
+    },
+    "holdout": true
+  },
+  {
+    "id": 572,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "682.000",
+    "source_data": {
+      "val": 681000
+    },
+    "holdout": true
+  },
+  {
+    "id": 573,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "715.000",
+    "source_data": {
+      "val": 714000
+    },
+    "holdout": true
+  },
+  {
+    "id": 574,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "16.000",
+    "source_data": {
+      "val": 15000
+    },
+    "holdout": true
+  },
+  {
+    "id": 575,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "925.000",
+    "source_data": {
+      "val": 924000
+    },
+    "holdout": true
+  },
+  {
+    "id": 576,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "779.000",
+    "source_data": {
+      "val": 778000
+    },
+    "holdout": true
+  },
+  {
+    "id": 577,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "892.000",
+    "source_data": {
+      "val": 891000
+    },
+    "holdout": true
+  },
+  {
+    "id": 578,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "799.000",
+    "source_data": {
+      "val": 798000
+    },
+    "holdout": true
+  },
+  {
+    "id": 579,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "917.000",
+    "source_data": {
+      "val": 916000
+    },
+    "holdout": true
+  },
+  {
+    "id": 580,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "120.000",
+    "source_data": {
+      "val": 119000
+    },
+    "holdout": true
+  },
+  {
+    "id": 581,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "808.000",
+    "source_data": {
+      "val": 807000
+    },
+    "holdout": true
+  },
+  {
+    "id": 582,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "446.000",
+    "source_data": {
+      "val": 445000
+    },
+    "holdout": true
+  },
+  {
+    "id": 583,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "235.000",
+    "source_data": {
+      "val": 234000
+    },
+    "holdout": true
+  },
+  {
+    "id": 584,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "191.000",
+    "source_data": {
+      "val": 190000
+    },
+    "holdout": true
+  },
+  {
+    "id": 585,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "834.000",
+    "source_data": {
+      "val": 833000
+    },
+    "holdout": true
+  },
+  {
+    "id": 586,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "991.000",
+    "source_data": {
+      "val": 990000
+    },
+    "holdout": true
+  },
+  {
+    "id": 587,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "723.000",
+    "source_data": {
+      "val": 722000
+    },
+    "holdout": true
+  },
+  {
+    "id": 588,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "541.000",
+    "source_data": {
+      "val": 540000
+    },
+    "holdout": true
+  },
+  {
+    "id": 589,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "486.000",
+    "source_data": {
+      "val": 485000
+    },
+    "holdout": true
+  },
+  {
+    "id": 590,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "62.000",
+    "source_data": {
+      "val": 61000
+    },
+    "holdout": true
+  },
+  {
+    "id": 591,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "581.000",
+    "source_data": {
+      "val": 580000
+    },
+    "holdout": true
+  },
+  {
+    "id": 592,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "266.000",
+    "source_data": {
+      "val": 265000
+    },
+    "holdout": true
+  },
+  {
+    "id": 593,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "950.000",
+    "source_data": {
+      "val": 949000
+    },
+    "holdout": true
+  },
+  {
+    "id": 594,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "879.000",
+    "source_data": {
+      "val": 878000
+    },
+    "holdout": true
+  },
+  {
+    "id": 595,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "135.000",
+    "source_data": {
+      "val": 134000
+    },
+    "holdout": true
+  },
+  {
+    "id": 596,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "478.000",
+    "source_data": {
+      "val": 477000
+    },
+    "holdout": true
+  },
+  {
+    "id": 597,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "147.000",
+    "source_data": {
+      "val": 146000
+    },
+    "holdout": true
+  },
+  {
+    "id": 598,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "831.000",
+    "source_data": {
+      "val": 830000
+    },
+    "holdout": true
+  },
+  {
+    "id": 599,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "486.000",
+    "source_data": {
+      "val": 485000
+    },
+    "holdout": true
+  },
+  {
+    "id": 600,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "693,000",
+    "source_data": {
+      "val": 693000
+    },
+    "holdout": true
+  },
+  {
+    "id": 601,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "553,000",
+    "source_data": {
+      "val": 553000
+    },
+    "holdout": true
+  },
+  {
+    "id": 602,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "582,000",
+    "source_data": {
+      "val": 582000
+    },
+    "holdout": true
+  },
+  {
+    "id": 603,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "619,000",
+    "source_data": {
+      "val": 619000
+    },
+    "holdout": true
+  },
+  {
+    "id": 604,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "334,000",
+    "source_data": {
+      "val": 334000
+    },
+    "holdout": true
+  },
+  {
+    "id": 605,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "982,000",
+    "source_data": {
+      "val": 982000
+    },
+    "holdout": true
+  },
+  {
+    "id": 606,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "783,000",
+    "source_data": {
+      "val": 783000
+    },
+    "holdout": true
+  },
+  {
+    "id": 607,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "922,000",
+    "source_data": {
+      "val": 922000
+    },
+    "holdout": true
+  },
+  {
+    "id": 608,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "463,000",
+    "source_data": {
+      "val": 463000
+    },
+    "holdout": true
+  },
+  {
+    "id": 609,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "637,000",
+    "source_data": {
+      "val": 637000
+    },
+    "holdout": true
+  },
+  {
+    "id": 610,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "844,000",
+    "source_data": {
+      "val": 844000
+    },
+    "holdout": true
+  },
+  {
+    "id": 611,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "746,000",
+    "source_data": {
+      "val": 746000
+    },
+    "holdout": true
+  },
+  {
+    "id": 612,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "923,000",
+    "source_data": {
+      "val": 923000
+    },
+    "holdout": true
+  },
+  {
+    "id": 613,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "526,000",
+    "source_data": {
+      "val": 526000
+    },
+    "holdout": true
+  },
+  {
+    "id": 614,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "446,000",
+    "source_data": {
+      "val": 446000
+    },
+    "holdout": true
+  },
+  {
+    "id": 615,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "860,000",
+    "source_data": {
+      "val": 860000
+    },
+    "holdout": true
+  },
+  {
+    "id": 616,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "938,000",
+    "source_data": {
+      "val": 938000
+    },
+    "holdout": true
+  },
+  {
+    "id": 617,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "571,000",
+    "source_data": {
+      "val": 571000
+    },
+    "holdout": true
+  },
+  {
+    "id": 618,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "466,000",
+    "source_data": {
+      "val": 466000
+    },
+    "holdout": true
+  },
+  {
+    "id": 619,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "928,000",
+    "source_data": {
+      "val": 928000
+    },
+    "holdout": true
+  },
+  {
+    "id": 620,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "172,000",
+    "source_data": {
+      "val": 172000
+    },
+    "holdout": true
+  },
+  {
+    "id": 621,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "771,000",
+    "source_data": {
+      "val": 771000
+    },
+    "holdout": true
+  },
+  {
+    "id": 622,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "892,000",
+    "source_data": {
+      "val": 892000
+    },
+    "holdout": true
+  },
+  {
+    "id": 623,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "496,000",
+    "source_data": {
+      "val": 496000
+    },
+    "holdout": true
+  },
+  {
+    "id": 624,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "470,000",
+    "source_data": {
+      "val": 470000
+    },
+    "holdout": true
+  },
+  {
+    "id": 625,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "275,000",
+    "source_data": {
+      "val": 275000
+    },
+    "holdout": true
+  },
+  {
+    "id": 626,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "779,000",
+    "source_data": {
+      "val": 779000
+    },
+    "holdout": true
+  },
+  {
+    "id": 627,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "263,000",
+    "source_data": {
+      "val": 263000
+    },
+    "holdout": true
+  },
+  {
+    "id": 628,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "870,000",
+    "source_data": {
+      "val": 870000
+    },
+    "holdout": true
+  },
+  {
+    "id": 629,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "662,000",
+    "source_data": {
+      "val": 662000
+    },
+    "holdout": true
+  },
+  {
+    "id": 630,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "293,000",
+    "source_data": {
+      "val": 293000
+    },
+    "holdout": true
+  },
+  {
+    "id": 631,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "794,000",
+    "source_data": {
+      "val": 794000
+    },
+    "holdout": true
+  },
+  {
+    "id": 632,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "806,000",
+    "source_data": {
+      "val": 806000
+    },
+    "holdout": true
+  },
+  {
+    "id": 633,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "543,000",
+    "source_data": {
+      "val": 543000
+    },
+    "holdout": true
+  },
+  {
+    "id": 634,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "506,000",
+    "source_data": {
+      "val": 506000
+    },
+    "holdout": true
+  },
+  {
+    "id": 635,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "651,000",
+    "source_data": {
+      "val": 651000
+    },
+    "holdout": true
+  },
+  {
+    "id": 636,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "254,000",
+    "source_data": {
+      "val": 254000
+    },
+    "holdout": true
+  },
+  {
+    "id": 637,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "291,000",
+    "source_data": {
+      "val": 291000
+    },
+    "holdout": true
+  },
+  {
+    "id": 638,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "460,000",
+    "source_data": {
+      "val": 460000
+    },
+    "holdout": true
+  },
+  {
+    "id": 639,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "89,000",
+    "source_data": {
+      "val": 89000
+    },
+    "holdout": true
+  },
+  {
+    "id": 640,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "741,000",
+    "source_data": {
+      "val": 740000
+    },
+    "holdout": true
+  },
+  {
+    "id": 641,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "303,000",
+    "source_data": {
+      "val": 302000
+    },
+    "holdout": true
+  },
+  {
+    "id": 642,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "251,000",
+    "source_data": {
+      "val": 250000
+    },
+    "holdout": true
+  },
+  {
+    "id": 643,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "289,000",
+    "source_data": {
+      "val": 288000
+    },
+    "holdout": true
+  },
+  {
+    "id": 644,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "354,000",
+    "source_data": {
+      "val": 353000
+    },
+    "holdout": true
+  },
+  {
+    "id": 645,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "338,000",
+    "source_data": {
+      "val": 337000
+    },
+    "holdout": true
+  },
+  {
+    "id": 646,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "925,000",
+    "source_data": {
+      "val": 924000
+    },
+    "holdout": true
+  },
+  {
+    "id": 647,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "564,000",
+    "source_data": {
+      "val": 563000
+    },
+    "holdout": true
+  },
+  {
+    "id": 648,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "93,000",
+    "source_data": {
+      "val": 92000
+    },
+    "holdout": true
+  },
+  {
+    "id": 649,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "152,000",
+    "source_data": {
+      "val": 151000
+    },
+    "holdout": true
+  },
+  {
+    "id": 650,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "165,000",
+    "source_data": {
+      "val": 164000
+    },
+    "holdout": true
+  },
+  {
+    "id": 651,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "247,000",
+    "source_data": {
+      "val": 246000
+    },
+    "holdout": true
+  },
+  {
+    "id": 652,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "403,000",
+    "source_data": {
+      "val": 402000
+    },
+    "holdout": true
+  },
+  {
+    "id": 653,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "721,000",
+    "source_data": {
+      "val": 720000
+    },
+    "holdout": true
+  },
+  {
+    "id": 654,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "167,000",
+    "source_data": {
+      "val": 166000
+    },
+    "holdout": true
+  },
+  {
+    "id": 655,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "734,000",
+    "source_data": {
+      "val": 733000
+    },
+    "holdout": true
+  },
+  {
+    "id": 656,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "230,000",
+    "source_data": {
+      "val": 229000
+    },
+    "holdout": true
+  },
+  {
+    "id": 657,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "76,000",
+    "source_data": {
+      "val": 75000
+    },
+    "holdout": true
+  },
+  {
+    "id": 658,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "435,000",
+    "source_data": {
+      "val": 434000
+    },
+    "holdout": true
+  },
+  {
+    "id": 659,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "428,000",
+    "source_data": {
+      "val": 427000
+    },
+    "holdout": true
+  },
+  {
+    "id": 660,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "349,000",
+    "source_data": {
+      "val": 348000
+    },
+    "holdout": true
+  },
+  {
+    "id": 661,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "566,000",
+    "source_data": {
+      "val": 565000
+    },
+    "holdout": true
+  },
+  {
+    "id": 662,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "488,000",
+    "source_data": {
+      "val": 487000
+    },
+    "holdout": true
+  },
+  {
+    "id": 663,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "436,000",
+    "source_data": {
+      "val": 435000
+    },
+    "holdout": true
+  },
+  {
+    "id": 664,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "74,000",
+    "source_data": {
+      "val": 73000
+    },
+    "holdout": true
+  },
+  {
+    "id": 665,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "222,000",
+    "source_data": {
+      "val": 221000
+    },
+    "holdout": true
+  },
+  {
+    "id": 666,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "863,000",
+    "source_data": {
+      "val": 862000
+    },
+    "holdout": true
+  },
+  {
+    "id": 667,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "441,000",
+    "source_data": {
+      "val": 440000
+    },
+    "holdout": true
+  },
+  {
+    "id": 668,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "409,000",
+    "source_data": {
+      "val": 408000
+    },
+    "holdout": true
+  },
+  {
+    "id": 669,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "937,000",
+    "source_data": {
+      "val": 936000
+    },
+    "holdout": true
+  },
+  {
+    "id": 670,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "799,000",
+    "source_data": {
+      "val": 798000
+    },
+    "holdout": true
+  },
+  {
+    "id": 671,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "609,000",
+    "source_data": {
+      "val": 608000
+    },
+    "holdout": true
+  },
+  {
+    "id": 672,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "979,000",
+    "source_data": {
+      "val": 978000
+    },
+    "holdout": true
+  },
+  {
+    "id": 673,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "723,000",
+    "source_data": {
+      "val": 722000
+    },
+    "holdout": true
+  },
+  {
+    "id": 674,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "31,000",
+    "source_data": {
+      "val": 30000
+    },
+    "holdout": true
+  },
+  {
+    "id": 675,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "888,000",
+    "source_data": {
+      "val": 887000
+    },
+    "holdout": true
+  },
+  {
+    "id": 676,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "912,000",
+    "source_data": {
+      "val": 911000
+    },
+    "holdout": true
+  },
+  {
+    "id": 677,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "794,000",
+    "source_data": {
+      "val": 793000
+    },
+    "holdout": true
+  },
+  {
+    "id": 678,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "600,000",
+    "source_data": {
+      "val": 599000
+    },
+    "holdout": true
+  },
+  {
+    "id": 679,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "400,000",
+    "source_data": {
+      "val": 399000
+    },
+    "holdout": true
+  },
+  {
+    "id": 680,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "52.9",
+    "source_data": {
+      "other": 52.9
+    },
+    "holdout": true
+  },
+  {
+    "id": 681,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "94.8",
+    "source_data": {
+      "other": 94.8
+    },
+    "holdout": true
+  },
+  {
+    "id": 682,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "36.9",
+    "source_data": {
+      "other": 36.9
+    },
+    "holdout": true
+  },
+  {
+    "id": 683,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "45.1",
+    "source_data": {
+      "other": 45.1
+    },
+    "holdout": true
+  },
+  {
+    "id": 684,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "90.2",
+    "source_data": {
+      "other": 90.2
+    },
+    "holdout": true
+  },
+  {
+    "id": 685,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "85.2",
+    "source_data": {
+      "other": 85.2
+    },
+    "holdout": true
+  },
+  {
+    "id": 686,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "58.4",
+    "source_data": {
+      "other": 58.4
+    },
+    "holdout": true
+  },
+  {
+    "id": 687,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "76.1",
+    "source_data": {
+      "other": 76.1
+    },
+    "holdout": true
+  },
+  {
+    "id": 688,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "82.0",
+    "source_data": {
+      "other": 82.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 689,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "90.8",
+    "source_data": {
+      "other": 90.8
+    },
+    "holdout": true
+  },
+  {
+    "id": 690,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "53.9",
+    "source_data": {
+      "other": 53.9
+    },
+    "holdout": true
+  },
+  {
+    "id": 691,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "34.6",
+    "source_data": {
+      "other": 34.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 692,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "53.7",
+    "source_data": {
+      "other": 53.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 693,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "45.0",
+    "source_data": {
+      "other": 45.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 694,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "70.2",
+    "source_data": {
+      "other": 70.2
+    },
+    "holdout": true
+  },
+  {
+    "id": 695,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "81.8",
+    "source_data": {
+      "other": 81.8
+    },
+    "holdout": true
+  },
+  {
+    "id": 696,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "75.2",
+    "source_data": {
+      "other": 75.2
+    },
+    "holdout": true
+  },
+  {
+    "id": 697,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "85.6",
+    "source_data": {
+      "other": 85.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 698,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "92.8",
+    "source_data": {
+      "other": 92.8
+    },
+    "holdout": true
+  },
+  {
+    "id": 699,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "98.3",
+    "source_data": {
+      "other": 98.3
+    },
+    "holdout": true
+  },
+  {
+    "id": 700,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "58.1",
+    "source_data": {
+      "other": 58.1
+    },
+    "holdout": true
+  },
+  {
+    "id": 701,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "91.6",
+    "source_data": {
+      "other": 91.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 702,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "63.3",
+    "source_data": {
+      "other": 63.3
+    },
+    "holdout": true
+  },
+  {
+    "id": 703,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "69.7",
+    "source_data": {
+      "other": 69.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 704,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "17.6",
+    "source_data": {
+      "other": 17.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 705,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "48.6",
+    "source_data": {
+      "other": 48.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 706,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "88.0",
+    "source_data": {
+      "other": 88.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 707,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "26.4",
+    "source_data": {
+      "other": 26.4
+    },
+    "holdout": true
+  },
+  {
+    "id": 708,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "33.4",
+    "source_data": {
+      "other": 33.4
+    },
+    "holdout": true
+  },
+  {
+    "id": 709,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "39.5",
+    "source_data": {
+      "other": 39.5
+    },
+    "holdout": true
+  },
+  {
+    "id": 710,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "50.9",
+    "source_data": {
+      "other": 50.9
+    },
+    "holdout": true
+  },
+  {
+    "id": 711,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "40.4",
+    "source_data": {
+      "other": 40.4
+    },
+    "holdout": true
+  },
+  {
+    "id": 712,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "89.2",
+    "source_data": {
+      "other": 89.2
+    },
+    "holdout": true
+  },
+  {
+    "id": 713,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "35.0",
+    "source_data": {
+      "other": 35.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 714,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "95.6",
+    "source_data": {
+      "other": 95.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 715,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "47.9",
+    "source_data": {
+      "other": 47.9
+    },
+    "holdout": true
+  },
+  {
+    "id": 716,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "85.1",
+    "source_data": {
+      "other": 85.1
+    },
+    "holdout": true
+  },
+  {
+    "id": 717,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "52.3",
+    "source_data": {
+      "other": 52.3
+    },
+    "holdout": true
+  },
+  {
+    "id": 718,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "77.4",
+    "source_data": {
+      "other": 77.4
+    },
+    "holdout": true
+  },
+  {
+    "id": 719,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "14.7",
+    "source_data": {
+      "other": 14.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 720,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "95.7",
+    "source_data": {
+      "other": 95.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 721,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "30.2",
+    "source_data": {
+      "other": 30.2
+    },
+    "holdout": true
+  },
+  {
+    "id": 722,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "16.2",
+    "source_data": {
+      "other": 16.2
+    },
+    "holdout": true
+  },
+  {
+    "id": 723,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "96.2",
+    "source_data": {
+      "other": 96.2
+    },
+    "holdout": true
+  },
+  {
+    "id": 724,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "13.6",
+    "source_data": {
+      "other": 13.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 725,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "12.8",
+    "source_data": {
+      "other": 12.8
+    },
+    "holdout": true
+  },
+  {
+    "id": 726,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "32.3",
+    "source_data": {
+      "other": 32.3
+    },
+    "holdout": true
+  },
+  {
+    "id": 727,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "85.5",
+    "source_data": {
+      "other": 85.5
+    },
+    "holdout": true
+  },
+  {
+    "id": 728,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "65.9",
+    "source_data": {
+      "other": 65.9
+    },
+    "holdout": true
+  },
+  {
+    "id": 729,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "31.5",
+    "source_data": {
+      "other": 31.5
+    },
+    "holdout": true
+  },
+  {
+    "id": 730,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "52.6",
+    "source_data": {
+      "other": 52.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 731,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "20.3",
+    "source_data": {
+      "other": 20.3
+    },
+    "holdout": true
+  },
+  {
+    "id": 732,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "95.3",
+    "source_data": {
+      "other": 95.3
+    },
+    "holdout": true
+  },
+  {
+    "id": 733,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "51.9",
+    "source_data": {
+      "other": 51.9
+    },
+    "holdout": true
+  },
+  {
+    "id": 734,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "33.1",
+    "source_data": {
+      "other": 33.1
+    },
+    "holdout": true
+  },
+  {
+    "id": 735,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "43.2",
+    "source_data": {
+      "other": 43.2
+    },
+    "holdout": true
+  },
+  {
+    "id": 736,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "64.5",
+    "source_data": {
+      "other": 64.5
+    },
+    "holdout": true
+  },
+  {
+    "id": 737,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "96.7",
+    "source_data": {
+      "other": 96.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 738,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "74.7",
+    "source_data": {
+      "other": 74.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 739,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "80.0",
+    "source_data": {
+      "other": 80.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 740,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "24.7",
+    "source_data": {
+      "other": 24.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 741,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "38.0",
+    "source_data": {
+      "other": 38.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 742,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "62.1",
+    "source_data": {
+      "other": 62.1
+    },
+    "holdout": true
+  },
+  {
+    "id": 743,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "93.6",
+    "source_data": {
+      "other": 93.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 744,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "61.8",
+    "source_data": {
+      "other": 61.8
+    },
+    "holdout": true
+  },
+  {
+    "id": 745,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "91.7",
+    "source_data": {
+      "other": 91.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 746,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "43.8",
+    "source_data": {
+      "other": 43.8
+    },
+    "holdout": true
+  },
+  {
+    "id": 747,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "94.7",
+    "source_data": {
+      "other": 94.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 748,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "27.8",
+    "source_data": {
+      "other": 27.8
+    },
+    "holdout": true
+  },
+  {
+    "id": 749,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "63.3",
+    "source_data": {
+      "other": 63.3
+    },
+    "holdout": true
+  },
+  {
+    "id": 750,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "84.8",
+    "source_data": {
+      "other": 84.8
+    },
+    "holdout": true
+  },
+  {
+    "id": 751,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "31.9",
+    "source_data": {
+      "other": 31.9
+    },
+    "holdout": true
+  },
+  {
+    "id": 752,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "72.7",
+    "source_data": {
+      "other": 72.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 753,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "37.1",
+    "source_data": {
+      "other": 37.1
+    },
+    "holdout": true
+  },
+  {
+    "id": 754,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "71.6",
+    "source_data": {
+      "other": 71.6
+    },
+    "holdout": true
+  },
+  {
+    "id": 755,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "82.5",
+    "source_data": {
+      "other": 82.5
+    },
+    "holdout": true
+  },
+  {
+    "id": 756,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "81.7",
+    "source_data": {
+      "other": 81.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 757,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "60.9",
+    "source_data": {
+      "other": 60.9
+    },
+    "holdout": true
+  },
+  {
+    "id": 758,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "13.7",
+    "source_data": {
+      "other": 13.7
+    },
+    "holdout": true
+  },
+  {
+    "id": 759,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "57.9",
+    "source_data": {
+      "other": 57.9
+    },
+    "holdout": true
+  },
+  {
+    "id": 760,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "69.5",
+    "source_data": {
+      "val": 82.25826946078561
+    },
+    "holdout": true
+  },
+  {
+    "id": 761,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "68.3",
+    "source_data": {
+      "val": 78.80608600663412
+    },
+    "holdout": true
+  },
+  {
+    "id": 762,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "47.8",
+    "source_data": {
+      "val": 77.40806819961632
+    },
+    "holdout": true
+  },
+  {
+    "id": 763,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "49.0",
+    "source_data": {
+      "val": 73.48752153980288
+    },
+    "holdout": true
+  },
+  {
+    "id": 764,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "90.2",
+    "source_data": {
+      "val": 118.58957390406985
+    },
+    "holdout": true
+  },
+  {
+    "id": 765,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "23.8",
+    "source_data": {
+      "val": 40.845478443442374
+    },
+    "holdout": true
+  },
+  {
+    "id": 766,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "57.0",
+    "source_data": {
+      "val": 93.01829656066965
+    },
+    "holdout": true
+  },
+  {
+    "id": 767,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "65.4",
+    "source_data": {
+      "val": 112.18470627611069
+    },
+    "holdout": true
+  },
+  {
+    "id": 768,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "79.7",
+    "source_data": {
+      "val": 108.29495086538032
+    },
+    "holdout": true
+  },
+  {
+    "id": 769,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "84.3",
+    "source_data": {
+      "val": 117.99898476254806
+    },
+    "holdout": true
+  },
+  {
+    "id": 770,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "39.0",
+    "source_data": {
+      "val": 58.819806763747636
+    },
+    "holdout": true
+  },
+  {
+    "id": 771,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "94.1",
+    "source_data": {
+      "val": 115.2571299676988
+    },
+    "holdout": true
+  },
+  {
+    "id": 772,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "50.6",
+    "source_data": {
+      "val": 90.61905127308026
+    },
+    "holdout": true
+  },
+  {
+    "id": 773,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "61.3",
+    "source_data": {
+      "val": 98.02753881781973
+    },
+    "holdout": true
+  },
+  {
+    "id": 774,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "40.3",
+    "source_data": {
+      "val": 70.07226014463689
+    },
+    "holdout": true
+  },
+  {
+    "id": 775,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "39.3",
+    "source_data": {
+      "val": 68.80199729565376
+    },
+    "holdout": true
+  },
+  {
+    "id": 776,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "41.9",
+    "source_data": {
+      "val": 62.234096354347116
+    },
+    "holdout": true
+  },
+  {
+    "id": 777,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "35.2",
+    "source_data": {
+      "val": 69.04620031749718
+    },
+    "holdout": true
+  },
+  {
+    "id": 778,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "89.2",
+    "source_data": {
+      "val": 121.43164111678335
+    },
+    "holdout": true
+  },
+  {
+    "id": 779,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "56.5",
+    "source_data": {
+      "val": 74.14225694108396
+    },
+    "holdout": true
+  },
+  {
+    "id": 780,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "31.7",
+    "source_data": {
+      "val": 57.95712498682077
+    },
+    "holdout": true
+  },
+  {
+    "id": 781,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "60.0",
+    "source_data": {
+      "val": 79.61295744496863
+    },
+    "holdout": true
+  },
+  {
+    "id": 782,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "52.8",
+    "source_data": {
+      "val": 91.2736962589089
+    },
+    "holdout": true
+  },
+  {
+    "id": 783,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "50.3",
+    "source_data": {
+      "val": 60.989730373934904
+    },
+    "holdout": true
+  },
+  {
+    "id": 784,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "36.5",
+    "source_data": {
+      "val": 62.67604514711712
+    },
+    "holdout": true
+  },
+  {
+    "id": 785,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "31.9",
+    "source_data": {
+      "val": 68.45840086387264
+    },
+    "holdout": true
+  },
+  {
+    "id": 786,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "43.2",
+    "source_data": {
+      "val": 75.33891820040999
+    },
+    "holdout": true
+  },
+  {
+    "id": 787,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "40.9",
+    "source_data": {
+      "val": 90.76525855837328
+    },
+    "holdout": true
+  },
+  {
+    "id": 788,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "59.5",
+    "source_data": {
+      "val": 83.57242110456673
+    },
+    "holdout": true
+  },
+  {
+    "id": 789,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "50.8",
+    "source_data": {
+      "val": 73.06491965395321
+    },
+    "holdout": true
+  },
+  {
+    "id": 790,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "30.7",
+    "source_data": {
+      "val": 69.55137325304278
+    },
+    "holdout": true
+  },
+  {
+    "id": 791,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "38.4",
+    "source_data": {
+      "val": 78.11524254556416
+    },
+    "holdout": true
+  },
+  {
+    "id": 792,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "95.6",
+    "source_data": {
+      "val": 133.20654216562207
+    },
+    "holdout": true
+  },
+  {
+    "id": 793,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "27.2",
+    "source_data": {
+      "val": 66.74418614035802
+    },
+    "holdout": true
+  },
+  {
+    "id": 794,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "34.9",
+    "source_data": {
+      "val": 68.48347623843163
+    },
+    "holdout": true
+  },
+  {
+    "id": 795,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "78.4",
+    "source_data": {
+      "val": 112.27162962049208
+    },
+    "holdout": true
+  },
+  {
+    "id": 796,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "98.2",
+    "source_data": {
+      "val": 141.50513453308272
+    },
+    "holdout": true
+  },
+  {
+    "id": 797,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "36.7",
+    "source_data": {
+      "val": 61.13524276597546
+    },
+    "holdout": true
+  },
+  {
+    "id": 798,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "37.2",
+    "source_data": {
+      "val": 75.52073942844126
+    },
+    "holdout": true
+  },
+  {
+    "id": 799,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "21.4",
+    "source_data": {
+      "val": 33.22062803932873
+    },
+    "holdout": true
+  },
+  {
+    "id": 800,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 801,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 802,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 803,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 804,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 805,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 806,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 807,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 808,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 809,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 810,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 811,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 812,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 813,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 814,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 815,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 816,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 817,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 818,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 819,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 820,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 821,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 822,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 823,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 824,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 825,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 826,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 827,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 828,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 829,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 830,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 831,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 832,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 833,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 834,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 835,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 836,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 837,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 838,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  },
+  {
+    "id": 839,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Profit 150",
+    "source_data": {
+      "revenue": 150
+    },
+    "holdout": true
+  }
+]
