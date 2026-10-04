@@ -1605,7 +1605,7 @@
     "label": "grounded",
     "llm_output": "Value 707.4 juta",
     "source_data": {
-      "val": 707400000.0
+      "val": 707400000
     },
     "holdout": true
   },
@@ -1615,7 +1615,7 @@
     "label": "grounded",
     "llm_output": "Value 229.5 ribu",
     "source_data": {
-      "val": 229500.0
+      "val": 229500
     },
     "holdout": true
   },
@@ -1625,7 +1625,7 @@
     "label": "grounded",
     "llm_output": "Value 858.9 ribu",
     "source_data": {
-      "val": 858900.0
+      "val": 858900
     },
     "holdout": true
   },
@@ -1635,7 +1635,7 @@
     "label": "grounded",
     "llm_output": "Value 514.1 juta",
     "source_data": {
-      "val": 514100000.0
+      "val": 514100000
     },
     "holdout": true
   },
@@ -1645,7 +1645,7 @@
     "label": "grounded",
     "llm_output": "Value 668.6 thousand",
     "source_data": {
-      "val": 668600.0
+      "val": 668600
     },
     "holdout": true
   },
@@ -1655,7 +1655,7 @@
     "label": "grounded",
     "llm_output": "Value 539.2 triliun",
     "source_data": {
-      "val": 539200000000000.06
+      "val": 539200000000000
     },
     "holdout": true
   },
@@ -1665,7 +1665,7 @@
     "label": "grounded",
     "llm_output": "Value 243.5 trillion",
     "source_data": {
-      "val": 243500000000000.0
+      "val": 243500000000000
     },
     "holdout": true
   },
@@ -1675,7 +1675,7 @@
     "label": "grounded",
     "llm_output": "Value 806.9 trillion",
     "source_data": {
-      "val": 806900000000000.0
+      "val": 806900000000000
     },
     "holdout": true
   },
@@ -1685,7 +1685,7 @@
     "label": "grounded",
     "llm_output": "Value 95.1 triliun",
     "source_data": {
-      "val": 95100000000000.0
+      "val": 95100000000000
     },
     "holdout": true
   },
@@ -1695,7 +1695,7 @@
     "label": "grounded",
     "llm_output": "Value 354.6 billion",
     "source_data": {
-      "val": 354600000000.0
+      "val": 354600000000
     },
     "holdout": true
   },
@@ -1705,7 +1705,7 @@
     "label": "grounded",
     "llm_output": "Value 467.1 billion",
     "source_data": {
-      "val": 467100000000.0
+      "val": 467100000000
     },
     "holdout": true
   },
@@ -1715,7 +1715,7 @@
     "label": "grounded",
     "llm_output": "Value 673.0 ribu",
     "source_data": {
-      "val": 673000.0
+      "val": 673000
     },
     "holdout": true
   },
@@ -1725,7 +1725,7 @@
     "label": "grounded",
     "llm_output": "Value 61.5 juta",
     "source_data": {
-      "val": 61500000.0
+      "val": 61500000
     },
     "holdout": true
   },
@@ -1735,7 +1735,7 @@
     "label": "grounded",
     "llm_output": "Value 800.0 million",
     "source_data": {
-      "val": 800000000.0
+      "val": 800000000
     },
     "holdout": true
   },
@@ -1745,7 +1745,7 @@
     "label": "grounded",
     "llm_output": "Value 249.2 juta",
     "source_data": {
-      "val": 249200000.0
+      "val": 249200000
     },
     "holdout": true
   },
@@ -1755,7 +1755,7 @@
     "label": "grounded",
     "llm_output": "Value 536.2 triliun",
     "source_data": {
-      "val": 536200000000000.06
+      "val": 536200000000000
     },
     "holdout": true
   },
@@ -1765,7 +1765,7 @@
     "label": "grounded",
     "llm_output": "Value 422.0 miliar",
     "source_data": {
-      "val": 422000000000.0
+      "val": 422000000000
     },
     "holdout": true
   },
@@ -1775,7 +1775,7 @@
     "label": "grounded",
     "llm_output": "Value 462.7 thousand",
     "source_data": {
-      "val": 462700.0
+      "val": 462700
     },
     "holdout": true
   },
@@ -1785,7 +1785,7 @@
     "label": "grounded",
     "llm_output": "Value 443.2 juta",
     "source_data": {
-      "val": 443200000.0
+      "val": 443200000
     },
     "holdout": true
   },
@@ -1795,7 +1795,7 @@
     "label": "grounded",
     "llm_output": "Value 51.5 juta",
     "source_data": {
-      "val": 51500000.0
+      "val": 51500000
     },
     "holdout": true
   },
@@ -1805,7 +1805,7 @@
     "label": "grounded",
     "llm_output": "Value 968.1 ribu",
     "source_data": {
-      "val": 968100.0
+      "val": 968100
     },
     "holdout": true
   },
@@ -1815,7 +1815,7 @@
     "label": "grounded",
     "llm_output": "Value 167.0 triliun",
     "source_data": {
-      "val": 167000000000000.0
+      "val": 167000000000000
     },
     "holdout": true
   },
@@ -1825,7 +1825,7 @@
     "label": "grounded",
     "llm_output": "Value 481.4 trillion",
     "source_data": {
-      "val": 481400000000000.0
+      "val": 481400000000000
     },
     "holdout": true
   },
@@ -1835,7 +1835,7 @@
     "label": "grounded",
     "llm_output": "Value 901.6 billion",
     "source_data": {
-      "val": 901600000000.0
+      "val": 901600000000
     },
     "holdout": true
   },
@@ -1845,7 +1845,7 @@
     "label": "grounded",
     "llm_output": "Value 379.2 miliar",
     "source_data": {
-      "val": 379200000000.0
+      "val": 379200000000
     },
     "holdout": true
   },
@@ -1855,7 +1855,7 @@
     "label": "grounded",
     "llm_output": "Value 265.7 billion",
     "source_data": {
-      "val": 265700000000.0
+      "val": 265700000000
     },
     "holdout": true
   },
@@ -1865,7 +1865,7 @@
     "label": "grounded",
     "llm_output": "Value 285.7 trillion",
     "source_data": {
-      "val": 285700000000000.0
+      "val": 285700000000000
     },
     "holdout": true
   },
@@ -1875,7 +1875,7 @@
     "label": "grounded",
     "llm_output": "Value 155.5 trillion",
     "source_data": {
-      "val": 155500000000000.0
+      "val": 155500000000000
     },
     "holdout": true
   },
@@ -1885,7 +1885,7 @@
     "label": "grounded",
     "llm_output": "Value 218.3 thousand",
     "source_data": {
-      "val": 218300.0
+      "val": 218300
     },
     "holdout": true
   },
@@ -1895,7 +1895,7 @@
     "label": "grounded",
     "llm_output": "Value 579.0 ribu",
     "source_data": {
-      "val": 579000.0
+      "val": 579000
     },
     "holdout": true
   },
@@ -1905,7 +1905,7 @@
     "label": "grounded",
     "llm_output": "Value 747.5 ribu",
     "source_data": {
-      "val": 747500.0
+      "val": 747500
     },
     "holdout": true
   },
@@ -1915,7 +1915,7 @@
     "label": "grounded",
     "llm_output": "Value 51.0 ribu",
     "source_data": {
-      "val": 51000.0
+      "val": 51000
     },
     "holdout": true
   },
@@ -1925,7 +1925,7 @@
     "label": "grounded",
     "llm_output": "Value 502.8 trillion",
     "source_data": {
-      "val": 502800000000000.0
+      "val": 502800000000000
     },
     "holdout": true
   },
@@ -1935,7 +1935,7 @@
     "label": "grounded",
     "llm_output": "Value 57.8 miliar",
     "source_data": {
-      "val": 57800000000.0
+      "val": 57800000000
     },
     "holdout": true
   },
@@ -1945,7 +1945,7 @@
     "label": "grounded",
     "llm_output": "Value 850.6 juta",
     "source_data": {
-      "val": 850600000.0
+      "val": 850600000
     },
     "holdout": true
   },
@@ -1955,7 +1955,7 @@
     "label": "grounded",
     "llm_output": "Value 594.8 juta",
     "source_data": {
-      "val": 594800000.0
+      "val": 594800000
     },
     "holdout": true
   },
@@ -1965,7 +1965,7 @@
     "label": "grounded",
     "llm_output": "Value 404.0 triliun",
     "source_data": {
-      "val": 404000000000000.0
+      "val": 404000000000000
     },
     "holdout": true
   },
@@ -1975,7 +1975,7 @@
     "label": "grounded",
     "llm_output": "Value 578.8 triliun",
     "source_data": {
-      "val": 578800000000000.0
+      "val": 578800000000000
     },
     "holdout": true
   },
@@ -1985,7 +1985,7 @@
     "label": "grounded",
     "llm_output": "Value 619.1 ribu",
     "source_data": {
-      "val": 619100.0
+      "val": 619100
     },
     "holdout": true
   },
@@ -1995,7 +1995,7 @@
     "label": "grounded",
     "llm_output": "Value 657.1 billion",
     "source_data": {
-      "val": 657100000000.0
+      "val": 657100000000
     },
     "holdout": true
   },
@@ -2005,7 +2005,7 @@
     "label": "hallucination",
     "llm_output": "Value 934.0 million",
     "source_data": {
-      "val": 933800000.0
+      "val": 933800000
     },
     "holdout": true
   },
@@ -2015,7 +2015,7 @@
     "label": "hallucination",
     "llm_output": "Value 669.6 triliun",
     "source_data": {
-      "val": 669400000000000.0
+      "val": 669400000000000
     },
     "holdout": true
   },
@@ -2025,7 +2025,7 @@
     "label": "hallucination",
     "llm_output": "Value 239.39999999999998 million",
     "source_data": {
-      "val": 239200000.0
+      "val": 239200000
     },
     "holdout": true
   },
@@ -2035,7 +2035,7 @@
     "label": "hallucination",
     "llm_output": "Value 131.79999999999998 billion",
     "source_data": {
-      "val": 131600000000.0
+      "val": 131600000000
     },
     "holdout": true
   },
@@ -2045,7 +2045,7 @@
     "label": "hallucination",
     "llm_output": "Value 457.5 thousand",
     "source_data": {
-      "val": 457300.0
+      "val": 457300
     },
     "holdout": true
   },
@@ -2055,7 +2055,7 @@
     "label": "hallucination",
     "llm_output": "Value 10.5 juta",
     "source_data": {
-      "val": 10300000.0
+      "val": 10300000
     },
     "holdout": true
   },
@@ -2065,7 +2065,7 @@
     "label": "hallucination",
     "llm_output": "Value 74.3 juta",
     "source_data": {
-      "val": 74100000.0
+      "val": 74100000
     },
     "holdout": true
   },
@@ -2075,7 +2075,7 @@
     "label": "hallucination",
     "llm_output": "Value 506.09999999999997 triliun",
     "source_data": {
-      "val": 505900000000000.0
+      "val": 505900000000000
     },
     "holdout": true
   },
@@ -2085,7 +2085,7 @@
     "label": "hallucination",
     "llm_output": "Value 932.6 miliar",
     "source_data": {
-      "val": 932400000000.0
+      "val": 932400000000
     },
     "holdout": true
   },
@@ -2095,7 +2095,7 @@
     "label": "hallucination",
     "llm_output": "Value 878.7 juta",
     "source_data": {
-      "val": 878500000.0
+      "val": 878500000
     },
     "holdout": true
   },
@@ -2105,7 +2105,7 @@
     "label": "hallucination",
     "llm_output": "Value 285.59999999999997 million",
     "source_data": {
-      "val": 285400000.0
+      "val": 285400000
     },
     "holdout": true
   },
@@ -2115,7 +2115,7 @@
     "label": "hallucination",
     "llm_output": "Value 833.3000000000001 trillion",
     "source_data": {
-      "val": 833100000000000.0
+      "val": 833100000000000
     },
     "holdout": true
   },
@@ -2125,7 +2125,7 @@
     "label": "hallucination",
     "llm_output": "Value 611.7 thousand",
     "source_data": {
-      "val": 611500.0
+      "val": 611500
     },
     "holdout": true
   },
@@ -2135,7 +2135,7 @@
     "label": "hallucination",
     "llm_output": "Value 667.7 ribu",
     "source_data": {
-      "val": 667500.0
+      "val": 667500
     },
     "holdout": true
   },
@@ -2145,7 +2145,7 @@
     "label": "hallucination",
     "llm_output": "Value 931.1 thousand",
     "source_data": {
-      "val": 930900.0
+      "val": 930900
     },
     "holdout": true
   },
@@ -2155,7 +2155,7 @@
     "label": "hallucination",
     "llm_output": "Value 938.3000000000001 juta",
     "source_data": {
-      "val": 938100000.0
+      "val": 938100000
     },
     "holdout": true
   },
@@ -2165,7 +2165,7 @@
     "label": "hallucination",
     "llm_output": "Value 265.09999999999997 miliar",
     "source_data": {
-      "val": 264899999999.99997
+      "val": 264900000000
     },
     "holdout": true
   },
@@ -2175,7 +2175,7 @@
     "label": "hallucination",
     "llm_output": "Value 742.1 juta",
     "source_data": {
-      "val": 741900000.0
+      "val": 741900000
     },
     "holdout": true
   },
@@ -2185,7 +2185,7 @@
     "label": "hallucination",
     "llm_output": "Value 273.0 miliar",
     "source_data": {
-      "val": 272800000000.0
+      "val": 272800000000
     },
     "holdout": true
   },
@@ -2195,7 +2195,7 @@
     "label": "hallucination",
     "llm_output": "Value 717.4000000000001 triliun",
     "source_data": {
-      "val": 717200000000000.0
+      "val": 717200000000000
     },
     "holdout": true
   },
@@ -2205,7 +2205,7 @@
     "label": "hallucination",
     "llm_output": "Value 687.3000000000001 triliun",
     "source_data": {
-      "val": 687100000000000.0
+      "val": 687100000000000
     },
     "holdout": true
   },
@@ -2215,7 +2215,7 @@
     "label": "hallucination",
     "llm_output": "Value 505.59999999999997 thousand",
     "source_data": {
-      "val": 505400.0
+      "val": 505400
     },
     "holdout": true
   },
@@ -2225,7 +2225,7 @@
     "label": "hallucination",
     "llm_output": "Value 904.7 thousand",
     "source_data": {
-      "val": 904500.0
+      "val": 904500
     },
     "holdout": true
   },
@@ -2235,7 +2235,7 @@
     "label": "hallucination",
     "llm_output": "Value 93.3 ribu",
     "source_data": {
-      "val": 93100.0
+      "val": 93100
     },
     "holdout": true
   },
@@ -2245,7 +2245,7 @@
     "label": "hallucination",
     "llm_output": "Value 828.9000000000001 billion",
     "source_data": {
-      "val": 828700000000.0
+      "val": 828700000000
     },
     "holdout": true
   },
@@ -2255,7 +2255,7 @@
     "label": "hallucination",
     "llm_output": "Value 4.7 ribu",
     "source_data": {
-      "val": 4500.0
+      "val": 4500
     },
     "holdout": true
   },
@@ -2265,7 +2265,7 @@
     "label": "hallucination",
     "llm_output": "Value 637.0 miliar",
     "source_data": {
-      "val": 636800000000.0
+      "val": 636800000000
     },
     "holdout": true
   },
@@ -2275,7 +2275,7 @@
     "label": "hallucination",
     "llm_output": "Value 162.5 thousand",
     "source_data": {
-      "val": 162300.0
+      "val": 162300
     },
     "holdout": true
   },
@@ -2285,7 +2285,7 @@
     "label": "hallucination",
     "llm_output": "Value 551.8000000000001 trillion",
     "source_data": {
-      "val": 551600000000000.0
+      "val": 551600000000000
     },
     "holdout": true
   },
@@ -2295,7 +2295,7 @@
     "label": "hallucination",
     "llm_output": "Value 561.0 billion",
     "source_data": {
-      "val": 560800000000.0
+      "val": 560800000000
     },
     "holdout": true
   },
@@ -2305,7 +2305,7 @@
     "label": "hallucination",
     "llm_output": "Value 76.3 juta",
     "source_data": {
-      "val": 76100000.0
+      "val": 76100000
     },
     "holdout": true
   },
@@ -2315,7 +2315,7 @@
     "label": "hallucination",
     "llm_output": "Value 545.7 miliar",
     "source_data": {
-      "val": 545500000000.0
+      "val": 545500000000
     },
     "holdout": true
   },
@@ -2325,7 +2325,7 @@
     "label": "hallucination",
     "llm_output": "Value 582.5 million",
     "source_data": {
-      "val": 582300000.0
+      "val": 582300000
     },
     "holdout": true
   },
@@ -2335,7 +2335,7 @@
     "label": "hallucination",
     "llm_output": "Value 430.09999999999997 miliar",
     "source_data": {
-      "val": 429900000000.0
+      "val": 429900000000
     },
     "holdout": true
   },
@@ -2345,7 +2345,7 @@
     "label": "hallucination",
     "llm_output": "Value 308.8 ribu",
     "source_data": {
-      "val": 308600.0
+      "val": 308600
     },
     "holdout": true
   },
@@ -2355,7 +2355,7 @@
     "label": "hallucination",
     "llm_output": "Value 898.3000000000001 ribu",
     "source_data": {
-      "val": 898100.0
+      "val": 898100
     },
     "holdout": true
   },
@@ -2365,7 +2365,7 @@
     "label": "hallucination",
     "llm_output": "Value 681.9000000000001 triliun",
     "source_data": {
-      "val": 681700000000000.0
+      "val": 681700000000000
     },
     "holdout": true
   },
@@ -2375,7 +2375,7 @@
     "label": "hallucination",
     "llm_output": "Value 354.2 juta",
     "source_data": {
-      "val": 354000000.0
+      "val": 354000000
     },
     "holdout": true
   },
@@ -2385,7 +2385,7 @@
     "label": "hallucination",
     "llm_output": "Value 973.1 billion",
     "source_data": {
-      "val": 972900000000.0
+      "val": 972900000000
     },
     "holdout": true
   },
@@ -2395,7 +2395,7 @@
     "label": "hallucination",
     "llm_output": "Value 925.1 miliar",
     "source_data": {
-      "val": 924900000000.0
+      "val": 924900000000
     },
     "holdout": true
   },
