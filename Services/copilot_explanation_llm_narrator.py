@@ -48,6 +48,11 @@ from Providers.base_provider import BaseProvider
 from Providers.message import Message, MessageRole
 from Services.copilot_explanation_service import CopilotExplanationResult
 
+try:
+    from Services.llm_output_audit_hook import record_llm_output as _record_llm_output
+except Exception:  # hook optional until migrations run
+    _record_llm_output = None  # type: ignore[assignment]
+
 #: Fixed system instruction. Deliberately explicit about all four
 #: constraints this task requires -- rephrase only, no new decision,
 #: no alternative action, no fabricated numbers/evidence -- so the
@@ -113,6 +118,9 @@ def narrate_explanation(
     *,
     temperature: float = _DEFAULT_TEMPERATURE,
     max_output_tokens: int = _DEFAULT_MAX_OUTPUT_TOKENS,
+    audit_repository: Optional[Any] = None,
+    source_data: str = "",
+    model_name: Optional[str] = None,
 ) -> str:
     """Rephrase ``result`` via ``provider``, falling back to
     ``result.summary`` on any failure or empty output.
@@ -168,5 +176,16 @@ def narrate_explanation(
     text = getattr(response, "text", None)
     if not isinstance(text, str) or text.strip() == "":
         return result.summary
+
+    if _record_llm_output is not None and audit_repository is not None:
+        usage = getattr(response, "usage", None)
+        _record_llm_output(
+            audit_repository,
+            model=model_name or provider.name,
+            messages=messages,
+            response_text=text,
+            source_data=source_data or result.summary,
+            tokens=usage.total_tokens if usage else None,
+        )
 
     return text
