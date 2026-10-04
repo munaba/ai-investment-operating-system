@@ -1669,6 +1669,7 @@ def _build_paper_execution_tool_resolver(
 
 def _build_copilot_tool_resolver(
     permission_context: PermissionContext,
+    database_manager: DatabaseManager,
 ) -> ToolResolver:
     """Construct the ONE production ``ToolResolver`` exposing Phase F,
     Task 8's ``Orchestration.copilot_tool.CopilotTool`` under its
@@ -1719,10 +1720,13 @@ def _build_copilot_tool_resolver(
     could not use such a grant even if one existed, since it never
     declares any permission other than READ_ONLY.
     """
+    from Repository.persistence.llm_output_audit_repository import LlmOutputAuditRepository
+    audit_repository = LlmOutputAuditRepository(database_manager)
+
     tool_registry = OrchestrationToolRegistry()
     tool_registry.register(
         "copilot",
-        PermissionedTool(CopilotTool(), permission_context),
+        PermissionedTool(CopilotTool(audit_repository=audit_repository), permission_context),
     )
     return ToolResolver(tool_registry)
 
@@ -4115,7 +4119,7 @@ def build_application(
     # here, alongside market_tool_resolver. See
     # _build_copilot_tool_resolver() and
     # ApplicationGraph.copilot_tool_resolver.
-    copilot_tool_resolver = _build_copilot_tool_resolver(permission_context)
+    copilot_tool_resolver = _build_copilot_tool_resolver(permission_context, database_manager)
     # Phase F, Task 9: also expose the same capability through the
     # legacy Agents.tool_registry path, mirroring Activation 12.8's own
     # AgentsToolPermissionAdapter wiring for paper_execution below --

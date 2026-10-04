@@ -158,6 +158,20 @@ class CopilotTool(BaseTool):
     #: never anything other than ``READ_ONLY``.
     permission = ToolPermission.READ_ONLY
 
+    def __init__(
+        self,
+        audit_repository: Optional[Any] = None,
+    ) -> None:
+        """Phase H Item 2: optional LLM audit repository.
+
+        Args:
+            audit_repository: Optional ``LlmOutputAuditRepository``
+                injected by the composition root. Defaults to ``None``
+                (no audit persistence) to preserve existing
+                construction semantics.
+        """
+        self._audit_repository = audit_repository
+
     @property
     def name(self) -> str:
         """This Tool's stable name.
@@ -223,6 +237,7 @@ class CopilotTool(BaseTool):
             provider=parameters.get("provider"),
             portfolio_summary=parameters.get("portfolio_summary"),
             status_text=parameters.get("status_text"),
+            audit_repository=parameters.get("audit_repository") or self._audit_repository,
         )
 
         response = CopilotService().handle(utterance, request_context)

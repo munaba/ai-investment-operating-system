@@ -81,6 +81,7 @@ from Orchestration.copilot_intent_classifier import CopilotIntentClassifier
 from Orchestration.memory import MemoryStore
 from Providers.base_provider import BaseProvider
 from Services.copilot_explanation_llm_narrator import narrate_explanation
+from Repository.persistence.llm_output_audit_repository import LlmOutputAuditRepository
 from Services.copilot_explanation_service import (
     CopilotExplanationResult,
     CopilotExplanationService,
@@ -166,6 +167,7 @@ class CopilotRequestContext:
     provider: Optional[BaseProvider] = None
     portfolio_summary: Optional[str] = None
     status_text: Optional[str] = None
+    audit_repository: Optional[LlmOutputAuditRepository] = None
 
 
 @dataclass(frozen=True)
@@ -302,7 +304,10 @@ class CopilotService:
         if context.provider is not None:
             healthy = self._provider_is_healthy(context.provider)
             if healthy:
-                narrated = narrate_explanation(explanation, context.provider)
+                narrated = narrate_explanation(
+                    explanation, context.provider,
+                    audit_repository=context.audit_repository,
+                )
                 if narrated != explanation.summary:
                     text = narrated
                     source = "llm"

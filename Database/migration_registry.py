@@ -44,7 +44,8 @@ MIGRATION_MODULES: Sequence[Tuple[str, str, str]] = (
     ("idempotency", "Database.migrations_idempotency", "IDEMPOTENCY_MIGRATIONS"),
     ("portfolio_snapshots", "Database.migrations_portfolio_snapshots", "PORTFOLIO_SNAPSHOTS_MIGRATIONS"),
     ("order_approvals", "Database.migrations_order_approvals", "ORDER_APPROVALS_MIGRATIONS"),
-)
+        ("llm_output_audit", "Database.migrations_llm_output_audit", "LLM_OUTPUT_AUDIT_MIGRATIONS"),
+    )
 
 
 def all_migrations() -> List[Tuple[Migration, str]]:

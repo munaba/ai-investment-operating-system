@@ -41,12 +41,16 @@ behind a copilot-facing entry point.
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, Any
+import logging
 
 from Core.exceptions import ProviderError
+from Evaluation.numeric_grounding_verifier import verify_against_source
 from Providers.base_provider import BaseProvider
 from Providers.message import Message, MessageRole
 from Services.copilot_explanation_service import CopilotExplanationResult
+
+logger = logging.getLogger(__name__)
 
 try:
     from Services.llm_output_audit_hook import record_llm_output as _record_llm_output
@@ -176,6 +180,15 @@ def narrate_explanation(
     text = getattr(response, "text", None)
     if not isinstance(text, str) or text.strip() == "":
         return result.summary
+
+    # Numeric grounding verification (Phase H Item 2)
+    verification_result = verify_against_source(text, {})
+    if verification_result.unverified:
+        logger.warning(
+            "LLM output contains %d unverified numeric claim(s): %s",
+            len(verification_result.unverified),
+            verification_result.unverified,
+        )
 
     if _record_llm_output is not None and audit_repository is not None:
         usage = getattr(response, "usage", None)
