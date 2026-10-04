@@ -574,7 +574,9 @@ def eval_l1_data_baseline() -> Tuple[int, int]:
 
     cal = load_idx_market_calendar(env_get=lambda _k, _d: "")
 
-    cur.execute("SELECT DISTINCT date(scan_time) as d FROM ranking_snapshots ORDER BY d")
+    # Item 5a: normalize scan_time from UTC to WIB (UTC+7) before date extraction
+    # to prevent Friday 18:00 UTC (Sat 01:00 WIB) misclassification as Friday
+    cur.execute("SELECT DISTINCT date(datetime(scan_time, '+7 hours')) as d FROM ranking_snapshots ORDER BY d")
     dates = [r[0] for r in cur.fetchall()]
 
     trading_dates = sorted(d for d in dates if cal.is_trading_day(date.fromisoformat(d)))
