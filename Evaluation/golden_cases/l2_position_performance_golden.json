@@ -1,0 +1,129 @@
+[
+  {
+    "input": {
+      "pnls": []
+    },
+    "expected": {
+      "winning_positions": 0,
+      "losing_positions": 0,
+      "breakeven_positions": 0,
+      "gross_profit": 0.0,
+      "gross_loss": 0.0,
+      "net_profit": 0.0,
+      "average_win": 0.0,
+      "average_loss": 0.0
+    }
+  },
+  {
+    "input": {
+      "pnls": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "expected": {
+      "winning_positions": 0,
+      "losing_positions": 0,
+      "breakeven_positions": 3,
+      "gross_profit": 0.0,
+      "gross_loss": 0.0,
+      "net_profit": 0.0,
+      "average_win": 0.0,
+      "average_loss": 0.0
+    }
+  },
+  {
+    "input": {
+      "pnls": [
+        10.5,
+        20.25,
+        -5.0,
+        -10.0,
+        0.0
+      ]
+    },
+    "expected": {
+      "winning_positions": 2,
+      "losing_positions": 2,
+      "breakeven_positions": 1,
+      "gross_profit": 30.75,
+      "gross_loss": 15.0,
+      "net_profit": 15.75,
+      "average_win": 15.375,
+      "average_loss": 7.5
+    }
+  },
+  {
+    "input": {
+      "pnls": [
+        -100.0,
+        -50.0
+      ]
+    },
+    "expected": {
+      "winning_positions": 0,
+      "losing_positions": 2,
+      "breakeven_positions": 0,
+      "gross_profit": 0.0,
+      "gross_loss": 150.0,
+      "net_profit": -150.0,
+      "average_win": 0.0,
+      "average_loss": 75.0
+    }
+  },
+  {
+    "input": {
+      "pnls": [
+        100.0,
+        50.0
+      ]
+    },
+    "expected": {
+      "winning_positions": 2,
+      "losing_positions": 0,
+      "breakeven_positions": 0,
+      "gross_profit": 150.0,
+      "gross_loss": 0.0,
+      "net_profit": 150.0,
+      "average_win": 75.0,
+      "average_loss": 0.0
+    }
+  },
+  {
+    "input": {
+      "pnls": [
+        1e-09,
+        -1e-09
+      ]
+    },
+    "expected": {
+      "winning_positions": 1,
+      "losing_positions": 1,
+      "breakeven_positions": 0,
+      "gross_profit": 1e-09,
+      "gross_loss": 1e-09,
+      "net_profit": 0.0,
+      "average_win": 1e-09,
+      "average_loss": 1e-09
+    }
+  },
+  {
+    "input": {
+      "pnls": [
+        1000000000000.0,
+        -1000000000000.0
+      ]
+    },
+    "expected": {
+      "winning_positions": 1,
+      "losing_positions": 1,
+      "breakeven_positions": 0,
+      "gross_profit": 1000000000000.0,
+      "gross_loss": 1000000000000.0,
+      "net_profit": 0.0,
+      "average_win": 1000000000000.0,
+      "average_loss": 1000000000000.0
+    }
+  }
+]
