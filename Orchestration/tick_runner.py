@@ -38,10 +38,11 @@ def main() -> int:
     print(f"\nTick result:")
     print(f"  Trading date: {tick_result.trading_date}")
     print(f"  Session: {tick_result.session}")
-    print(f"  Jobs scheduled: {len(tick_result.jobs_scheduled)}")
-    for job in tick_result.jobs_scheduled:
+    print(f"  Jobs scheduled: {len(tick_result.jobs)}")
+    for job in tick_result.jobs:
         print(f"    - {job}")
-    print(f"  Reason (if none): {tick_result.reason_no_jobs or 'N/A'}")
+    # reason_no_jobs no longer exists on TickResult
+    print(f"  Reason (if none): N/A")
     
     return 0
 
