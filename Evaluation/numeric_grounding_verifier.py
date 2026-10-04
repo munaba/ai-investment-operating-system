@@ -9,9 +9,32 @@ Target: recall >= 99% on synthetic test set.
 """
 from __future__ import annotations
 
+import json
 import re
 from decimal import Decimal, InvalidOperation
+from pathlib import Path
 from typing import Any, Dict, List, Tuple, Optional
+
+_THRESHOLDS = json.loads(
+    (Path(__file__).resolve().parent / "thresholds.json").read_text(encoding="utf-8")
+)
+_L4 = _THRESHOLDS["L4_llm"]
+
+#: Relative tolerance for claims whose TEXT declares no fractional part.
+#: Rationale (thresholds.json "L4_llm.default_relative_tolerance"): an LLM
+#: writing "3170" for source 3170.4 rounds at the precision it chose to
+#: state; 1% accepts that and rejects a wrong magnitude.
+DEFAULT_RELATIVE_TOLERANCE = _L4["default_relative_tolerance"]
+
+#: Half-unit-in-last-declared-place band applied INSTEAD when the claim
+#: declares decimals. Rationale (thresholds.json "declared_precision_absolute_tolerance"):
+#: "3.1416" asserts 4-decimal precision (half-ULP = 5e-5) yet the old
+#: 1%-relative band on 3.1415 was 3.1e-2 -- 630x wider than what the text
+#: promised, which is how "3.1416 vs 3.1415" passed as verified.
+DECLARED_PRECISION_ABSOLUTE_TOLERANCE = _L4["declared_precision_absolute_tolerance"]
+
+#: Label attached to any claim that cannot be matched to a source fact.
+UNVERIFIED_LABEL = _L4["unverified_label"]
 
 
 class NumericGroundingResult:
@@ -20,6 +43,8 @@ class NumericGroundingResult:
         self.verified: List[Tuple[str, Decimal, str]] = []  # (text, value, source_key)
         self.unverified: List[Tuple[str, Decimal]] = []  # (text, value)
         self.hallucinations: List[Tuple[str, Decimal]] = []  # alias for unverified
+        #: (text, value, reason) for the audit trail, never invented.
+        self.rejections: List[Tuple[str, Decimal, str]] = []
     
     @property
     def all_verified(self) -> bool:
@@ -34,6 +59,39 @@ class NumericGroundingResult:
             "all_verified": self.all_verified,
             "unverified_numbers": [(text, float(val)) for text, val in self.unverified],
         }
+
+
+def declared_precision(raw_text: str) -> Optional[int]:
+    """Decimal places the claim's own text declares.
+
+    "3.1416" -> 4, "12,34%" -> 2, "3170" -> None (no fractional part),
+    "1.234" -> None (Indonesian/English thousands group, not precision).
+    """
+    body = raw_text.rstrip("%").strip().lstrip("-")
+    last_dot = body.rfind(".")
+    last_comma = body.rfind(",")
+    if last_dot < 0 and last_comma < 0:
+        return None
+    if last_comma > last_dot:
+        dec_pos, sep = last_comma, ","
+    else:
+        dec_pos, sep = last_dot, "."
+    trailing = body[dec_pos + 1:]
+    if len(trailing) == 3 and body.count(sep) == 1:
+        return None  # thousands group
+    if not trailing:
+        return None
+    return len(trailing)
+
+
+def _abs_tolerance_for(raw_text: str) -> Optional[Decimal]:
+    """Half-ULP band implied by the precision the claim's text declares."""
+    places = declared_precision(raw_text)
+    if places is None:
+        return None
+    return Decimal(str(DECLARED_PRECISION_ABSOLUTE_TOLERANCE)) * (
+        Decimal(10) ** -places
+    )
 
 
 def extract_numbers(text: str) -> List[Tuple[str, Decimal]]:
@@ -121,18 +179,28 @@ def _normalize_number(text: str) -> Optional[Decimal]:
 def verify_against_source(
     text: str,
     source_data: Dict[str, Any],
-    tolerance: float = 0.01,
+    tolerance: Optional[float] = None,
 ) -> NumericGroundingResult:
     """Verify numbers in text against source data.
     
     Args:
         text: LLM output text to verify.
         source_data: Dict of source facts (flat or nested).
-        tolerance: Relative tolerance for matching (default 1%).
+        tolerance: Relative tolerance for claims whose text declares no
+            fractional precision. ``None`` reads
+            ``L4_llm.default_relative_tolerance`` from thresholds.json.
+            Claims that DO declare decimals are compared against an
+            absolute band derived from the declared precision instead --
+            see DECLARED_PRECISION_ABSOLUTE_TOLERANCE.
     
     Returns:
-        NumericGroundingResult with verified/unverified numbers.
+        NumericGroundingResult with verified/unverified numbers. A claim
+        with no matching source fact is unverified, never silently
+        accepted; an empty ``source_data`` verifies nothing.
     """
+    rel_tolerance = (
+        DEFAULT_RELATIVE_TOLERANCE if tolerance is None else tolerance
+    )
     result = NumericGroundingResult()
     extracted = extract_numbers(text)
     result.extracted_numbers = extracted
@@ -141,9 +209,14 @@ def verify_against_source(
     source_numbers = _flatten_source(source_data)
     
     for raw_text, value in extracted:
+        abs_tol = _abs_tolerance_for(raw_text)
         matched = False
         for source_key, source_val in source_numbers:
-            if _numbers_match(value, source_val, tolerance):
+            if abs_tol is not None:
+                ok = abs(value - source_val) <= abs_tol
+            else:
+                ok = _numbers_match(value, source_val, rel_tolerance)
+            if ok:
                 result.verified.append((raw_text, value, source_key))
                 matched = True
                 break
@@ -151,6 +224,12 @@ def verify_against_source(
         if not matched:
             result.unverified.append((raw_text, value))
             result.hallucinations.append((raw_text, value))
+            reason = (
+                "tidak terverifikasi: tidak ada sumber angka"
+                if not source_numbers else
+                f"tidak terverifikasi ({UNVERIFIED_LABEL})"
+            )
+            result.rejections.append((raw_text, value, reason))
     
     return result
 

@@ -16,7 +16,12 @@
   "L4_llm": {
     "grounded_numeric_claim_rate": 0.99,
     "unsourced_number_count": 0,
-    "minimum_output_samples": 30
+    "minimum_output_samples": 30,
+    "default_relative_tolerance": 0.01,
+    "declared_precision_absolute_tolerance": 0.5,
+    "unverified_label": "tidak terverifikasi",
+    "recall_target": 0.99,
+    "fpr_target": 0.01
   },
   "L5_orchestration": {
     "job_completion_rate": 0.99,
