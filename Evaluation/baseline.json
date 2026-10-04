@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-10-04T10:36+07:00",
+  "commit": "ed97e53b4c50682bbbbcb678ba1a10b93faeb6b6",
+  "L2_expectancy_golden": {
+    "passed": 6,
+    "failed": 0
+  },
+  "L2_max_drawdown_golden": {
+    "passed": 7,
+    "failed": 0
+  },
+  "L2_forex_max_loss_golden": {
+    "passed": 6,
+    "failed": 0
+  },
+  "L2_position_performance_golden": {
+    "passed": 7,
+    "failed": 0
+  },
+  "L2_profit_factor_golden": {
+    "passed": 6,
+    "failed": 0
+  },
+  "L2_expectancy_property": {
+    "passed": 1000,
+    "failed": 0
+  },
+  "L2_max_drawdown_property": {
+    "passed": 1000,
+    "failed": 0
+  },
+  "L2_position_performance_property": {
+    "passed": 1000,
+    "failed": 0
+  },
+  "L2_profit_factor_property": {
+    "passed": 1000,
+    "failed": 0
+  },
+  "L1_gap_count": 1,
+  "L4_recall": null,
+  "L4_fpr": null,
+  "L3_abstain_synthetic": {
+    "passed": 15,
+    "failed": 0
+  }
+}
