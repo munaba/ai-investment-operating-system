@@ -1,0 +1,90 @@
+{
+  "run_date": "2026-10-04",
+  "total_cases": 62,
+  "non_holdout_cases": 48,
+  "holdout_cases": 14,
+  "metrics": {
+    "TP": 15,
+    "FN": 2,
+    "FP": 1,
+    "TN": 30,
+    "recall": 0.8823529411764706,
+    "fpr": 0.03225806451612903,
+    "recall_target": 0.99,
+    "fpr_target": 0.01
+  },
+  "by_category": {
+    "exact": {
+      "n": 6,
+      "TP": 0,
+      "FN": 0,
+      "FP": 0,
+      "TN": 6,
+      "recall": 0.0,
+      "fpr": 0.0
+    },
+    "near_miss": {
+      "n": 6,
+      "TP": 5,
+      "FN": 1,
+      "FP": 0,
+      "TN": 0,
+      "recall": 0.8333333333333334,
+      "fpr": 0.0
+    },
+    "no_source": {
+      "n": 6,
+      "TP": 6,
+      "FN": 0,
+      "FP": 0,
+      "TN": 0,
+      "recall": 1.0,
+      "fpr": 0.0
+    },
+    "percent_vs_decimal": {
+      "n": 6,
+      "TP": 3,
+      "FN": 0,
+      "FP": 0,
+      "TN": 3,
+      "recall": 1.0,
+      "fpr": 0.0
+    },
+    "rounded": {
+      "n": 6,
+      "TP": 0,
+      "FN": 0,
+      "FP": 0,
+      "TN": 6,
+      "recall": 0.0,
+      "fpr": 0.0
+    },
+    "thousand_separator_en": {
+      "n": 6,
+      "TP": 0,
+      "FN": 0,
+      "FP": 1,
+      "TN": 5,
+      "recall": 0.0,
+      "fpr": 0.16666666666666666
+    },
+    "thousand_separator_id": {
+      "n": 6,
+      "TP": 0,
+      "FN": 0,
+      "FP": 0,
+      "TN": 6,
+      "recall": 0.0,
+      "fpr": 0.0
+    },
+    "unit_difference": {
+      "n": 6,
+      "TP": 1,
+      "FN": 1,
+      "FP": 0,
+      "TN": 4,
+      "recall": 0.5,
+      "fpr": 0.0
+    }
+  }
+}
