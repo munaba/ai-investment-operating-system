@@ -116,18 +116,39 @@ class TestServicePipelinePlaceholder(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------
-# 3. IDXTickerExtractor — placeholder
+# 3. IDXTickerExtractor — implemented (regex + stopword filter + .JK suffix)
 # ---------------------------------------------------------------------------
 
 class TestIDXTickerExtractorPlaceholder(unittest.TestCase):
+    """The extractor is no longer a placeholder.
+
+    ``Orchestration.instrument_extractor.IDXTickerExtractor.extract`` is
+    implemented (regex ``\\b([A-Z]{4})(\\.JK)?\\b`` plus a stopword
+    filter). This class previously asserted ``NotImplementedError``, which
+    has not been raised since the implementation landed -- the test, not
+    the code, was stale. See ``Tests/test_idx_foundation_parity.py``
+    (Steps 3-5) for the parity coverage of the real behaviour.
+    """
+
     def setUp(self):
         self.extractor = IDXTickerExtractor()
 
-    def test_extract_raises_not_implemented_error(self):
-        # Intentionally not testing regex behavior yet -- this class is a
-        # placeholder and must fail loudly rather than guess at a ticker.
-        with self.assertRaises(NotImplementedError):
-            self.extractor.extract("BBCA")
+    def test_extract_returns_normalized_ticker(self):
+        self.assertEqual(self.extractor.extract("BBCA"), "BBCA.JK")
+
+    def test_extract_passes_through_existing_jk_suffix(self):
+        self.assertEqual(self.extractor.extract("BBCA.JK"), "BBCA.JK")
+
+    def test_extract_ignores_stopwords(self):
+        self.assertEqual(self.extractor.extract("BELI BBCA"), "BBCA.JK")
+
+    def test_extract_raises_value_error_when_no_ticker(self):
+        with self.assertRaises(ValueError):
+            self.extractor.extract("harga saham hari ini")
+
+    def test_extract_raises_value_error_when_ambiguous(self):
+        with self.assertRaises(ValueError):
+            self.extractor.extract("BBCA atau TLKM")
 
 
 # ---------------------------------------------------------------------------
