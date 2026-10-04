@@ -76,6 +76,7 @@ def declared_precision(raw_text: str) -> Optional[int]:
 
     "3.1416" -> 4, "12,34%" -> 2, "3170" -> None (no fractional part),
     "1.234" -> None (Indonesian/English thousands group, not precision).
+    "0,001" -> 3 (leading zero before separator means decimal, not thousands).
     """
     body = raw_text.rstrip("%").strip().lstrip("-")
     last_dot = body.rfind(".")
@@ -88,7 +89,10 @@ def declared_precision(raw_text: str) -> Optional[int]:
         dec_pos, sep = last_dot, "."
     trailing = body[dec_pos + 1:]
     if len(trailing) == 3 and body.count(sep) == 1:
-        return None  # thousands group
+        prefix = body.split(sep, 1)[0].lstrip("0")
+        if prefix != "":
+            return None  # thousands group like "1,234" or "50,000"
+        # prefix == "" means "0,001" or "0.001" -> decimal, not thousands
     if not trailing:
         return None
     return len(trailing)
@@ -149,8 +153,11 @@ def _normalize_number(text: str) -> Optional[Decimal]:
         normalized = text
     elif period_count > 0 and comma_count == 0:
         # Could be English decimal (1.23) or Indonesian thousands (1.234)
-        # Heuristic: if period is followed by 3 digits at end, it's thousands separator
-        if re.search(r'\.\d{3}$', text):
+        # A 3-digit group after the period is a thousands separator only
+        # when a non-zero prefix precedes it ("1.234" -> 1234). "0.001"
+        # has only zeros before the period, so it is the decimal 0.001.
+        has_prefix = text.split('.', 1)[0].lstrip('0') != ''
+        if re.search(r'\.\d{3}$', text) and has_prefix:
             # Indonesian thousands: 1.234 -> 1234
             normalized = text.replace('.', '')
         else:
@@ -158,10 +165,12 @@ def _normalize_number(text: str) -> Optional[Decimal]:
             normalized = text
     elif comma_count > 0 and period_count == 0:
         # Could be Indonesian decimal (1,23) or English thousands (1,234)
-        # Heuristic: a 3-digit group only makes sense as thousands when it
-        # does not start with '0' -- "0,001" is the Indonesian decimal
-        # 0.001, never English thousands of zero.
-        if re.search(r',\d{3}$', text) and not re.search(r',0\d\d$', text):
+        # A 3-digit group after the comma is a thousands separator only
+        # when a non-zero prefix precedes it ("50,000" -> 50000,
+        # "1,234" -> 1234). "0,001" has only zeros before the comma, so
+        # it is the Indonesian decimal 0.001, never thousands of zero.
+        has_prefix = text.split(',', 1)[0].lstrip('0') != ''
+        if re.search(r',\d{3}$', text) and has_prefix:
             # English thousands: 1,234 -> 1234
             normalized = text.replace(',', '')
         else:
