@@ -629,15 +629,64 @@ def eval_l1_data_baseline() -> Tuple[int, int]:
 
 
 # ---------------------------------------------------------------------------
-# L4: LLM Groundedness — DATA_TIDAK_CUKUP (no output archive)
+# L4: LLM Groundedness — MEASURABLE via Generator Set
 # ---------------------------------------------------------------------------
 
 def eval_l4_llm_grounding() -> Tuple[int, int]:
-    """L4 LLM — BLOCKED: no output archive to sample."""
-    print("L4 LLM Grounding: DATA_TIDAK_CUKUP (no llm_outputs archive in DB)")
-    print("  Reason: LLM narration output not persisted to any table or file.")
-    print("  Needed: 30-50 real LLM responses with source data references.")
-    return 0, 0
+    """L4 LLM Grounding — runs the numeric verifier over the generator set.
+    
+    Target: Recall >= 0.99 (lower bound), FPR <= 0.01 (upper bound).
+    """
+    import json
+    from Evaluation.numeric_grounding_verifier import verify_against_source, clopper_pearson
+
+    sample_path = _PROJ / "Evaluation" / "golden_cases" / "l4_generator_set.json"
+    if not sample_path.exists():
+        print("L4 LLM Grounding: DATA_TIDAK_CUKUP (no l4_generator_set.json)")
+        return 0, 0
+
+    samples = json.loads(sample_path.read_text("utf-8"))
+    
+    tp = fn = fp = tn = 0
+    for s in samples:
+        res = verify_against_source(s['llm_output'], s['source_data'])
+        is_hallucination = s['label'] in ('hallucination', 'unverified')
+        marked_unverified = len(res.unverified) > 0
+        
+        if is_hallucination and marked_unverified:
+            tp += 1
+        elif is_hallucination and not marked_unverified:
+            fn += 1
+        elif not is_hallucination and marked_unverified:
+            fp += 1
+        elif not is_hallucination and not marked_unverified:
+            tn += 1
+
+    total = tp + fn + fp + tn
+    if total == 0:
+        print("L4 LLM Grounding: DATA_TIDAK_CUKUP (0 cases in set)")
+        return 0, 0
+
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    fpr = fp / (fp + tn) if (fp + tn) > 0 else 0.0
+    
+    re_lo, re_hi = clopper_pearson(tp, tp + fn) if (tp + fn) > 0 else (0.0, 1.0)
+    fp_lo, fp_hi = clopper_pearson(fp, fp + tn) if (fp + tn) > 0 else (0.0, 1.0)
+    
+    print(f"L4 LLM Grounding Metrics:")
+    print(f"  TP: {tp}, FN: {fn} (Recall: {recall:.2%} | CI: [{re_lo:.2%}, {re_hi:.2%}])")
+    print(f"  FP: {fp}, TN: {tn} (FPR: {fpr:.2%} | CI: [{fp_lo:.2%}, {fp_hi:.2%}])")
+    
+    passed = 1
+    failed = 0
+    if re_lo < 0.99:
+        print(f"  FAIL: Recall lower bound {re_lo:.2%} < 99.00%")
+        passed = 0; failed += 1
+    if fp_hi > 0.01:
+        print(f"  FAIL: FPR upper bound {fp_hi:.2%} > 1.00%")
+        passed = 0; failed += 1
+        
+    return passed, failed
 
 
 # ---------------------------------------------------------------------------
@@ -827,7 +876,9 @@ def main() -> None:
 
     # L4
     p, f = eval_l4_llm_grounding()
-    results["L4_llm_grounding"] = {"passed": p, "failed": f, "status": "DATA_TIDAK_CUKUP"}
+    results["L4_llm_grounding"] = {"passed": p, "failed": f}
+    total_passed += p
+    total_failed += f
 
     # L3
     p, f = eval_l3_signals_baseline()
@@ -854,7 +905,6 @@ def main() -> None:
     
     blocked = []
     if results["L3_signals"]["status"] == "DATA_TIDAK_CUKUP": blocked.append("L3")
-    if results["L4_llm_grounding"]["status"] == "DATA_TIDAK_CUKUP": blocked.append("L4")
     if results.get("L5_orchestration", {}).get("status") == "DATA_TIDAK_CUKUP": blocked.append("L5")
     if blocked:
         print(f"=== DATA_TIDAK_CUKUP: {', '.join(blocked)} ===")
