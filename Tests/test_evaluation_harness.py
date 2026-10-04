@@ -54,8 +54,11 @@ def test_run_eval_executes_and_produces_report():
     # L1 should fail (gap count > 0)
     assert report["details"]["L1_data"]["failed"] > 0
     
-    # L5 should fail (completion rate < 99%)
-    assert report["details"]["L5_orchestration"]["failed"] > 0
+    # L5: fewer than 5 IDX trading days observed -> DATA_TIDAK_CUKUP, not FAIL.
+    # Rationale: completion rate over 1-2 trading days is statistical noise,
+    # so the gate reports insufficient data rather than a scheduler failure.
+    assert report["details"]["L5_orchestration"]["status"] == "DATA_TIDAK_CUKUP"
+    assert report["details"]["L5_orchestration"]["failed"] == 0
     
     # L3/L4 should be DATA_TIDAK_CUKUP (not counted as failures)
     assert report["details"]["L3_signals"]["status"] == "DATA_TIDAK_CUKUP"
