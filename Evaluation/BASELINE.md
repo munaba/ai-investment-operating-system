@@ -12,8 +12,8 @@
 | **L2 Engine** | Golden cases pass rate | 19/19 (100%) | 100% | ✓ TERCAPAI | 19 cases (3 engine) | Expectancy, MaxDrawdown, ForexMaxLoss |
 | **L2 Engine** | Property-based 1000 examples pass rate | 2000/2000 (100%) | 100% | ✓ TERCAPAI | 2000 examples | Expectancy + MaxDrawdown |
 | **L1 Data** | Duplicate count | 0 | 0 | ✓ TERCAPAI | 80 snapshots | PK constraint valid |
-| **L1 Data** | Undetected gap count | 18 | 0 | ✗ GAGAL | 3 distinct dates | Aug 24 → Sep 11 (18 hari) |
-| **L5 Orchestration** | Job completion rate | 33% (2/6 jobs) | 99% | ✗ GAGAL | 1 trading date | Hanya session_scan + data_health_check |
+| **L1 Data** | Undetected gap count | 13 | 0 | ✗ GAGAL | 3 distinct dates | (Dihitung dg libur bursa 2026) |
+| **L5 Orchestration** | Job completion rate | — | 99% | DATA_TIDAK_CUKUP | 1 trading day | Min 5 trading days observasi |
 | **L3 Signals** | Calibration / Brier score | — | ECE ≤ 0.05 | DATA_TIDAK_CUKUP | 0 journal_entries | Walk-forward tidak feasible |
 | **L4 LLM** | Numeric groundedness | — | ≥99% grounded | DATA_TIDAK_CUKUP | 0 output archive | No persisted LLM responses |
 
@@ -188,6 +188,6 @@ Reason: L1/L5 operational failures, L3/L4 data missing.
 
 ---
 
-**Laporan ditulis:** 2026-10-03 22:35 UTC+7  
-**Command untuk re-run baseline:** `cd "." && python Evaluation/run_eval.py`  
-**Exit code:** 1 (expected, L1/L5 fail)
+**Update 2026-10-04:** L5 <5 hari bursa = DATA_TIDAK_CUKUP; L1 gap dihitung terhadap kalender bursa 2026 dengan libur nasional → gap 13 (bukan 18).  
+**Command untuk re-run baseline:** `python Evaluation/run_eval.py`  
+**Exit code:** 1 (expected, L1 gap fail, L5 DATA_TIDAK_CUKUP)
