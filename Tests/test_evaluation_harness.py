@@ -60,9 +60,11 @@ def test_run_eval_executes_and_produces_report():
     assert report["details"]["L5_orchestration"]["status"] == "DATA_TIDAK_CUKUP"
     assert report["details"]["L5_orchestration"]["failed"] == 0
     
-    # L3/L4 should be DATA_TIDAK_CUKUP (not counted as failures)
+    # L3/L4 status
     assert report["details"]["L3_signals"]["status"] == "DATA_TIDAK_CUKUP"
-    assert report["details"]["L4_llm_grounding"]["status"] == "DATA_TIDAK_CUKUP"
+    # L4 is now measurable (generator set ≥600) => passed/failed counts
+    assert "passed" in report["details"]["L4_llm_grounding"]
+    assert "failed" in report["details"]["L4_llm_grounding"]
 
 
 def test_golden_cases_exist():
