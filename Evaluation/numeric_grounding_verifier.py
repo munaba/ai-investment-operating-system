@@ -198,5 +198,32 @@ def _numbers_match(a: Decimal, b: Decimal, tolerance: float) -> bool:
     return rel_diff <= Decimal(str(tolerance))
 
 
+def compute_metrics(
+    tp: int,
+    fn: int,
+    fp: int,
+    tn: int,
+) -> Dict[str, float]:
+    """Compute recall and FPR from confusion matrix.
+    
+    Args:
+        tp: True positives (hallucinations detected).
+        fn: False negatives (hallucinations missed).
+        fp: False positives (correct numbers marked unverified).
+        tn: True negatives (correct numbers accepted).
+    
+    Returns:
+        Dict with 'recall' and 'fpr' keys.
+    
+    Example:
+        tp=98, fn=2, fp=1, tn=999
+        recall = 98/(98+2) = 0.98
+        fpr = 1/(1+999) = 0.001
+    """
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    fpr = fp / (fp + tn) if (fp + tn) > 0 else 0.0
+    return {"recall": recall, "fpr": fpr}
+
+
 # ponytail: no narrate_explanation hook integration yet.
 # Hook integration requires Services/ audit.
