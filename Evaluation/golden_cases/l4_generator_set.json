@@ -3,7 +3,7 @@
     "id": 200,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "643.03",
+    "llm_output": "Value 643.03",
     "source_data": {
       "val": 643.03
     },
@@ -13,7 +13,7 @@
     "id": 201,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "34.76",
+    "llm_output": "Value 34.76",
     "source_data": {
       "val": 34.76
     },
@@ -23,7 +23,7 @@
     "id": 202,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "282.28",
+    "llm_output": "Value 282.28",
     "source_data": {
       "val": 282.28
     },
@@ -33,7 +33,7 @@
     "id": 203,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "230.98",
+    "llm_output": "Value 230.98",
     "source_data": {
       "val": 230.98
     },
@@ -43,7 +43,7 @@
     "id": 204,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "739.11",
+    "llm_output": "Value 739.11",
     "source_data": {
       "val": 739.11
     },
@@ -53,7 +53,7 @@
     "id": 205,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "679.93",
+    "llm_output": "Value 679.93",
     "source_data": {
       "val": 679.93
     },
@@ -63,7 +63,7 @@
     "id": 206,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "893.26",
+    "llm_output": "Value 893.26",
     "source_data": {
       "val": 893.26
     },
@@ -73,7 +73,7 @@
     "id": 207,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "96.07",
+    "llm_output": "Value 96.07",
     "source_data": {
       "val": 96.07
     },
@@ -83,7 +83,7 @@
     "id": 208,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "427.7",
+    "llm_output": "Value 427.7",
     "source_data": {
       "val": 427.7
     },
@@ -93,7 +93,7 @@
     "id": 209,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "39.5",
+    "llm_output": "Value 39.5",
     "source_data": {
       "val": 39.5
     },
@@ -103,7 +103,7 @@
     "id": 210,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "226.45",
+    "llm_output": "Value 226.45",
     "source_data": {
       "val": 226.45
     },
@@ -113,7 +113,7 @@
     "id": 211,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "510.3",
+    "llm_output": "Value 510.3",
     "source_data": {
       "val": 510.3
     },
@@ -123,7 +123,7 @@
     "id": 212,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "36.27",
+    "llm_output": "Value 36.27",
     "source_data": {
       "val": 36.27
     },
@@ -133,7 +133,7 @@
     "id": 213,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "206.85",
+    "llm_output": "Value 206.85",
     "source_data": {
       "val": 206.85
     },
@@ -143,7 +143,7 @@
     "id": 214,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "653.39",
+    "llm_output": "Value 653.39",
     "source_data": {
       "val": 653.39
     },
@@ -153,7 +153,7 @@
     "id": 215,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "549.49",
+    "llm_output": "Value 549.49",
     "source_data": {
       "val": 549.49
     },
@@ -163,7 +163,7 @@
     "id": 216,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "228.24",
+    "llm_output": "Value 228.24",
     "source_data": {
       "val": 228.24
     },
@@ -173,7 +173,7 @@
     "id": 217,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "593.37",
+    "llm_output": "Value 593.37",
     "source_data": {
       "val": 593.37
     },
@@ -183,7 +183,7 @@
     "id": 218,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "811.34",
+    "llm_output": "Value 811.34",
     "source_data": {
       "val": 811.34
     },
@@ -193,7 +193,7 @@
     "id": 219,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "16.43",
+    "llm_output": "Value 16.43",
     "source_data": {
       "val": 16.43
     },
@@ -203,7 +203,7 @@
     "id": 220,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "807.76",
+    "llm_output": "Value 807.76",
     "source_data": {
       "val": 807.76
     },
@@ -213,7 +213,7 @@
     "id": 221,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "701.16",
+    "llm_output": "Value 701.16",
     "source_data": {
       "val": 701.16
     },
@@ -223,7 +223,7 @@
     "id": 222,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "346.85",
+    "llm_output": "Value 346.85",
     "source_data": {
       "val": 346.85
     },
@@ -233,7 +233,7 @@
     "id": 223,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "163.92",
+    "llm_output": "Value 163.92",
     "source_data": {
       "val": 163.92
     },
@@ -243,7 +243,7 @@
     "id": 224,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "957.64",
+    "llm_output": "Value 957.64",
     "source_data": {
       "val": 957.64
     },
@@ -253,7 +253,7 @@
     "id": 225,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "343.23",
+    "llm_output": "Value 343.23",
     "source_data": {
       "val": 343.23
     },
@@ -263,7 +263,7 @@
     "id": 226,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "101.82",
+    "llm_output": "Value 101.82",
     "source_data": {
       "val": 101.82
     },
@@ -273,7 +273,7 @@
     "id": 227,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "105.75",
+    "llm_output": "Value 105.75",
     "source_data": {
       "val": 105.75
     },
@@ -283,7 +283,7 @@
     "id": 228,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "849.02",
+    "llm_output": "Value 849.02",
     "source_data": {
       "val": 849.02
     },
@@ -293,7 +293,7 @@
     "id": 229,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "607.69",
+    "llm_output": "Value 607.69",
     "source_data": {
       "val": 607.69
     },
@@ -303,7 +303,7 @@
     "id": 230,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "809.06",
+    "llm_output": "Value 809.06",
     "source_data": {
       "val": 809.06
     },
@@ -313,7 +313,7 @@
     "id": 231,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "732.43",
+    "llm_output": "Value 732.43",
     "source_data": {
       "val": 732.43
     },
@@ -323,7 +323,7 @@
     "id": 232,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "540.87",
+    "llm_output": "Value 540.87",
     "source_data": {
       "val": 540.87
     },
@@ -333,7 +333,7 @@
     "id": 233,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "973.38",
+    "llm_output": "Value 973.38",
     "source_data": {
       "val": 973.38
     },
@@ -343,7 +343,7 @@
     "id": 234,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "384.75",
+    "llm_output": "Value 384.75",
     "source_data": {
       "val": 384.75
     },
@@ -353,7 +353,7 @@
     "id": 235,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "556.52",
+    "llm_output": "Value 556.52",
     "source_data": {
       "val": 556.52
     },
@@ -363,7 +363,7 @@
     "id": 236,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "831.11",
+    "llm_output": "Value 831.11",
     "source_data": {
       "val": 831.11
     },
@@ -373,7 +373,7 @@
     "id": 237,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "622.33",
+    "llm_output": "Value 622.33",
     "source_data": {
       "val": 622.33
     },
@@ -383,7 +383,7 @@
     "id": 238,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "863.09",
+    "llm_output": "Value 863.09",
     "source_data": {
       "val": 863.09
     },
@@ -393,7 +393,7 @@
     "id": 239,
     "category": "exact",
     "label": "grounded",
-    "llm_output": "581.58",
+    "llm_output": "Value 581.58",
     "source_data": {
       "val": 581.58
     },
@@ -403,7 +403,7 @@
     "id": 240,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "708.53",
+    "llm_output": "Value 708.54",
     "source_data": {
       "val": 707.53
     },
@@ -413,7 +413,7 @@
     "id": 241,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "56.37",
+    "llm_output": "Value 56.379999999999995",
     "source_data": {
       "val": 55.37
     },
@@ -423,7 +423,7 @@
     "id": 242,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "236.62",
+    "llm_output": "Value 236.63",
     "source_data": {
       "val": 235.62
     },
@@ -433,7 +433,7 @@
     "id": 243,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "297.49",
+    "llm_output": "Value 297.5",
     "source_data": {
       "val": 296.49
     },
@@ -443,7 +443,7 @@
     "id": 244,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "89.99",
+    "llm_output": "Value 90.0",
     "source_data": {
       "val": 88.99
     },
@@ -453,7 +453,7 @@
     "id": 245,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "241.46",
+    "llm_output": "Value 241.47",
     "source_data": {
       "val": 240.46
     },
@@ -463,7 +463,7 @@
     "id": 246,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "110.99",
+    "llm_output": "Value 111.0",
     "source_data": {
       "val": 109.99
     },
@@ -473,7 +473,7 @@
     "id": 247,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "286.19",
+    "llm_output": "Value 286.2",
     "source_data": {
       "val": 285.19
     },
@@ -483,7 +483,7 @@
     "id": 248,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "640.33",
+    "llm_output": "Value 640.34",
     "source_data": {
       "val": 639.33
     },
@@ -493,7 +493,7 @@
     "id": 249,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "372.18",
+    "llm_output": "Value 372.19",
     "source_data": {
       "val": 371.18
     },
@@ -503,7 +503,7 @@
     "id": 250,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "377.48",
+    "llm_output": "Value 377.49",
     "source_data": {
       "val": 376.48
     },
@@ -513,7 +513,7 @@
     "id": 251,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "218.41",
+    "llm_output": "Value 218.42",
     "source_data": {
       "val": 217.41
     },
@@ -523,7 +523,7 @@
     "id": 252,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "275.31",
+    "llm_output": "Value 275.32",
     "source_data": {
       "val": 274.31
     },
@@ -533,7 +533,7 @@
     "id": 253,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "938.29",
+    "llm_output": "Value 938.3",
     "source_data": {
       "val": 937.29
     },
@@ -543,7 +543,7 @@
     "id": 254,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "652.56",
+    "llm_output": "Value 652.5699999999999",
     "source_data": {
       "val": 651.56
     },
@@ -553,7 +553,7 @@
     "id": 255,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "614.04",
+    "llm_output": "Value 614.05",
     "source_data": {
       "val": 613.04
     },
@@ -563,7 +563,7 @@
     "id": 256,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "180.43",
+    "llm_output": "Value 180.44",
     "source_data": {
       "val": 179.43
     },
@@ -573,7 +573,7 @@
     "id": 257,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "732.84",
+    "llm_output": "Value 732.85",
     "source_data": {
       "val": 731.84
     },
@@ -583,7 +583,7 @@
     "id": 258,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "172.77",
+    "llm_output": "Value 172.78",
     "source_data": {
       "val": 171.77
     },
@@ -593,7 +593,7 @@
     "id": 259,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "386.66",
+    "llm_output": "Value 386.67",
     "source_data": {
       "val": 385.66
     },
@@ -603,7 +603,7 @@
     "id": 260,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "990.63",
+    "llm_output": "Value 990.64",
     "source_data": {
       "val": 989.63
     },
@@ -613,7 +613,7 @@
     "id": 261,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "644.6",
+    "llm_output": "Value 644.61",
     "source_data": {
       "val": 643.6
     },
@@ -623,7 +623,7 @@
     "id": 262,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "562.38",
+    "llm_output": "Value 562.39",
     "source_data": {
       "val": 561.38
     },
@@ -633,7 +633,7 @@
     "id": 263,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "688.77",
+    "llm_output": "Value 688.78",
     "source_data": {
       "val": 687.77
     },
@@ -643,7 +643,7 @@
     "id": 264,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "845.42",
+    "llm_output": "Value 845.43",
     "source_data": {
       "val": 844.42
     },
@@ -653,7 +653,7 @@
     "id": 265,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "779.24",
+    "llm_output": "Value 779.25",
     "source_data": {
       "val": 778.24
     },
@@ -663,7 +663,7 @@
     "id": 266,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "237.76",
+    "llm_output": "Value 237.76999999999998",
     "source_data": {
       "val": 236.76
     },
@@ -673,7 +673,7 @@
     "id": 267,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "42.78",
+    "llm_output": "Value 42.79",
     "source_data": {
       "val": 41.78
     },
@@ -683,7 +683,7 @@
     "id": 268,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "323.3",
+    "llm_output": "Value 323.31",
     "source_data": {
       "val": 322.3
     },
@@ -693,7 +693,7 @@
     "id": 269,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "276.06",
+    "llm_output": "Value 276.07",
     "source_data": {
       "val": 275.06
     },
@@ -703,7 +703,7 @@
     "id": 270,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "219.87",
+    "llm_output": "Value 219.88",
     "source_data": {
       "val": 218.87
     },
@@ -713,7 +713,7 @@
     "id": 271,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "944.48",
+    "llm_output": "Value 944.49",
     "source_data": {
       "val": 943.48
     },
@@ -723,7 +723,7 @@
     "id": 272,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "878.6",
+    "llm_output": "Value 878.61",
     "source_data": {
       "val": 877.6
     },
@@ -733,7 +733,7 @@
     "id": 273,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "322.53",
+    "llm_output": "Value 322.53999999999996",
     "source_data": {
       "val": 321.53
     },
@@ -743,7 +743,7 @@
     "id": 274,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "659.88",
+    "llm_output": "Value 659.89",
     "source_data": {
       "val": 658.88
     },
@@ -753,7 +753,7 @@
     "id": 275,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "402.68",
+    "llm_output": "Value 402.69",
     "source_data": {
       "val": 401.68
     },
@@ -763,7 +763,7 @@
     "id": 276,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "916.4",
+    "llm_output": "Value 916.41",
     "source_data": {
       "val": 915.4
     },
@@ -773,7 +773,7 @@
     "id": 277,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "465.26",
+    "llm_output": "Value 465.27",
     "source_data": {
       "val": 464.26
     },
@@ -783,7 +783,7 @@
     "id": 278,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "273.23",
+    "llm_output": "Value 273.24",
     "source_data": {
       "val": 272.23
     },
@@ -793,7 +793,7 @@
     "id": 279,
     "category": "exact",
     "label": "hallucination",
-    "llm_output": "255.16",
+    "llm_output": "Value 255.17",
     "source_data": {
       "val": 254.16
     },
@@ -803,7 +803,7 @@
     "id": 280,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "565.8",
+    "llm_output": "Value 565.8",
     "source_data": {
       "val": 565.7544528215193
     },
@@ -813,7 +813,7 @@
     "id": 281,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "270.1",
+    "llm_output": "Value 270.1",
     "source_data": {
       "val": 270.1141924377059
     },
@@ -823,7 +823,7 @@
     "id": 282,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "588.7",
+    "llm_output": "Value 588.7",
     "source_data": {
       "val": 588.7401303213051
     },
@@ -833,7 +833,7 @@
     "id": 283,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "898.8",
+    "llm_output": "Value 898.8",
     "source_data": {
       "val": 898.8446547664522
     },
@@ -843,7 +843,7 @@
     "id": 284,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "405.4",
+    "llm_output": "Value 405.4",
     "source_data": {
       "val": 405.4065000889933
     },
@@ -853,7 +853,7 @@
     "id": 285,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "227.1",
+    "llm_output": "Value 227.1",
     "source_data": {
       "val": 227.1275515657105
     },
@@ -863,7 +863,7 @@
     "id": 286,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "997.6",
+    "llm_output": "Value 997.6",
     "source_data": {
       "val": 997.5622304301592
     },
@@ -873,7 +873,7 @@
     "id": 287,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "514.4",
+    "llm_output": "Value 514.4",
     "source_data": {
       "val": 514.4310307396998
     },
@@ -883,7 +883,7 @@
     "id": 288,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "100.0",
+    "llm_output": "Value 100.0",
     "source_data": {
       "val": 100.00031805205595
     },
@@ -893,7 +893,7 @@
     "id": 289,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "56.6",
+    "llm_output": "Value 56.6",
     "source_data": {
       "val": 56.64521167048722
     },
@@ -903,7 +903,7 @@
     "id": 290,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "118.6",
+    "llm_output": "Value 118.6",
     "source_data": {
       "val": 118.55263904715257
     },
@@ -913,7 +913,7 @@
     "id": 291,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "631.2",
+    "llm_output": "Value 631.2",
     "source_data": {
       "val": 631.1715812860591
     },
@@ -923,7 +923,7 @@
     "id": 292,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "794.2",
+    "llm_output": "Value 794.2",
     "source_data": {
       "val": 794.1585707193344
     },
@@ -933,7 +933,7 @@
     "id": 293,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "427.9",
+    "llm_output": "Value 427.9",
     "source_data": {
       "val": 427.9383671316872
     },
@@ -943,7 +943,7 @@
     "id": 294,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "72.9",
+    "llm_output": "Value 72.9",
     "source_data": {
       "val": 72.89242909043756
     },
@@ -953,7 +953,7 @@
     "id": 295,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "387.8",
+    "llm_output": "Value 387.8",
     "source_data": {
       "val": 387.8030936414714
     },
@@ -963,7 +963,7 @@
     "id": 296,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "996.2",
+    "llm_output": "Value 996.2",
     "source_data": {
       "val": 996.1601664376958
     },
@@ -973,7 +973,7 @@
     "id": 297,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "533.8",
+    "llm_output": "Value 533.8",
     "source_data": {
       "val": 533.8232016481456
     },
@@ -983,7 +983,7 @@
     "id": 298,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "971.4",
+    "llm_output": "Value 971.4",
     "source_data": {
       "val": 971.367593837482
     },
@@ -993,7 +993,7 @@
     "id": 299,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "862.2",
+    "llm_output": "Value 862.2",
     "source_data": {
       "val": 862.1719052121531
     },
@@ -1003,7 +1003,7 @@
     "id": 300,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "21.4",
+    "llm_output": "Value 21.4",
     "source_data": {
       "val": 21.366211723391437
     },
@@ -1013,7 +1013,7 @@
     "id": 301,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "723.5",
+    "llm_output": "Value 723.5",
     "source_data": {
       "val": 723.5146011665927
     },
@@ -1023,7 +1023,7 @@
     "id": 302,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "684.9",
+    "llm_output": "Value 684.9",
     "source_data": {
       "val": 684.893265336309
     },
@@ -1033,7 +1033,7 @@
     "id": 303,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "541.6",
+    "llm_output": "Value 541.6",
     "source_data": {
       "val": 541.6006271047072
     },
@@ -1043,7 +1043,7 @@
     "id": 304,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "274.2",
+    "llm_output": "Value 274.2",
     "source_data": {
       "val": 274.15693805301737
     },
@@ -1053,7 +1053,7 @@
     "id": 305,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "644.6",
+    "llm_output": "Value 644.6",
     "source_data": {
       "val": 644.55218059401
     },
@@ -1063,7 +1063,7 @@
     "id": 306,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "120.4",
+    "llm_output": "Value 120.4",
     "source_data": {
       "val": 120.43665185991767
     },
@@ -1073,7 +1073,7 @@
     "id": 307,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "440.4",
+    "llm_output": "Value 440.4",
     "source_data": {
       "val": 440.4175981624139
     },
@@ -1083,7 +1083,7 @@
     "id": 308,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "459.2",
+    "llm_output": "Value 459.2",
     "source_data": {
       "val": 459.18646926591435
     },
@@ -1093,7 +1093,7 @@
     "id": 309,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "954.3",
+    "llm_output": "Value 954.3",
     "source_data": {
       "val": 954.2777682458693
     },
@@ -1103,7 +1103,7 @@
     "id": 310,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "877.1",
+    "llm_output": "Value 877.1",
     "source_data": {
       "val": 877.0944109744121
     },
@@ -1113,7 +1113,7 @@
     "id": 311,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "270.8",
+    "llm_output": "Value 270.8",
     "source_data": {
       "val": 270.75516024357984
     },
@@ -1123,7 +1123,7 @@
     "id": 312,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "505.6",
+    "llm_output": "Value 505.6",
     "source_data": {
       "val": 505.58025191979533
     },
@@ -1133,7 +1133,7 @@
     "id": 313,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "186.9",
+    "llm_output": "Value 186.9",
     "source_data": {
       "val": 186.86536172483005
     },
@@ -1143,7 +1143,7 @@
     "id": 314,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "913.5",
+    "llm_output": "Value 913.5",
     "source_data": {
       "val": 913.5015609513723
     },
@@ -1153,7 +1153,7 @@
     "id": 315,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "871.8",
+    "llm_output": "Value 871.8",
     "source_data": {
       "val": 871.8133841383992
     },
@@ -1163,7 +1163,7 @@
     "id": 316,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "305.5",
+    "llm_output": "Value 305.5",
     "source_data": {
       "val": 305.46034353414655
     },
@@ -1173,7 +1173,7 @@
     "id": 317,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "642.6",
+    "llm_output": "Value 642.6",
     "source_data": {
       "val": 642.5599999173451
     },
@@ -1183,7 +1183,7 @@
     "id": 318,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "612.9",
+    "llm_output": "Value 612.9",
     "source_data": {
       "val": 612.8805093237906
     },
@@ -1193,7 +1193,7 @@
     "id": 319,
     "category": "rounded",
     "label": "grounded",
-    "llm_output": "161.3",
+    "llm_output": "Value 161.3",
     "source_data": {
       "val": 161.31087586413847
     },
@@ -1203,7 +1203,7 @@
     "id": 320,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "765.1",
+    "llm_output": "Value 765.1",
     "source_data": {
       "val": 764.8856920743998
     },
@@ -1213,7 +1213,7 @@
     "id": 321,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "544.2",
+    "llm_output": "Value 544.2",
     "source_data": {
       "val": 543.9852398184295
     },
@@ -1223,7 +1223,7 @@
     "id": 322,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "781.0",
+    "llm_output": "Value 781.0",
     "source_data": {
       "val": 780.8402138442526
     },
@@ -1233,7 +1233,7 @@
     "id": 323,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "535.3000000000001",
+    "llm_output": "Value 535.3000000000001",
     "source_data": {
       "val": 535.0501354732257
     },
@@ -1243,7 +1243,7 @@
     "id": 324,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "10.799999999999999",
+    "llm_output": "Value 10.799999999999999",
     "source_data": {
       "val": 10.56617716666407
     },
@@ -1253,7 +1253,7 @@
     "id": 325,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "331.09999999999997",
+    "llm_output": "Value 331.09999999999997",
     "source_data": {
       "val": 330.91449643462636
     },
@@ -1263,7 +1263,7 @@
     "id": 326,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "29.5",
+    "llm_output": "Value 29.5",
     "source_data": {
       "val": 29.28197496197398
     },
@@ -1273,7 +1273,7 @@
     "id": 327,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "930.0",
+    "llm_output": "Value 930.0",
     "source_data": {
       "val": 929.807630101971
     },
@@ -1283,7 +1283,7 @@
     "id": 328,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "880.1",
+    "llm_output": "Value 880.1",
     "source_data": {
       "val": 879.9346590449524
     },
@@ -1293,7 +1293,7 @@
     "id": 329,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "833.5",
+    "llm_output": "Value 833.5",
     "source_data": {
       "val": 833.3488740675676
     },
@@ -1303,7 +1303,7 @@
     "id": 330,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "314.59999999999997",
+    "llm_output": "Value 314.59999999999997",
     "source_data": {
       "val": 314.4389841486348
     },
@@ -1313,7 +1313,7 @@
     "id": 331,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "67.5",
+    "llm_output": "Value 67.5",
     "source_data": {
       "val": 67.34591482924569
     },
@@ -1323,7 +1323,7 @@
     "id": 332,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "879.4000000000001",
+    "llm_output": "Value 879.4000000000001",
     "source_data": {
       "val": 879.2295032120002
     },
@@ -1333,7 +1333,7 @@
     "id": 333,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "947.7",
+    "llm_output": "Value 947.7",
     "source_data": {
       "val": 947.4799508450142
     },
@@ -1343,7 +1343,7 @@
     "id": 334,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "95.0",
+    "llm_output": "Value 95.0",
     "source_data": {
       "val": 94.7969175472
     },
@@ -1353,7 +1353,7 @@
     "id": 335,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "491.3",
+    "llm_output": "Value 491.3",
     "source_data": {
       "val": 491.13055868344765
     },
@@ -1363,7 +1363,7 @@
     "id": 336,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "78.7",
+    "llm_output": "Value 78.7",
     "source_data": {
       "val": 78.52039328369978
     },
@@ -1373,7 +1373,7 @@
     "id": 337,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "763.2",
+    "llm_output": "Value 763.2",
     "source_data": {
       "val": 762.9961436046592
     },
@@ -1383,7 +1383,7 @@
     "id": 338,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "768.4000000000001",
+    "llm_output": "Value 768.4000000000001",
     "source_data": {
       "val": 768.1760850139178
     },
@@ -1393,7 +1393,7 @@
     "id": 339,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "137.29999999999998",
+    "llm_output": "Value 137.29999999999998",
     "source_data": {
       "val": 137.10754985476518
     },
@@ -1403,7 +1403,7 @@
     "id": 340,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "480.7",
+    "llm_output": "Value 480.7",
     "source_data": {
       "val": 480.529554317744
     },
@@ -1413,7 +1413,7 @@
     "id": 341,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "554.5",
+    "llm_output": "Value 554.5",
     "source_data": {
       "val": 554.3055575599944
     },
@@ -1423,7 +1423,7 @@
     "id": 342,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "272.59999999999997",
+    "llm_output": "Value 272.59999999999997",
     "source_data": {
       "val": 272.4060626506585
     },
@@ -1433,7 +1433,7 @@
     "id": 343,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "873.9000000000001",
+    "llm_output": "Value 873.9000000000001",
     "source_data": {
       "val": 873.7087106744049
     },
@@ -1443,7 +1443,7 @@
     "id": 344,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "429.09999999999997",
+    "llm_output": "Value 429.09999999999997",
     "source_data": {
       "val": 428.90656079887805
     },
@@ -1453,7 +1453,7 @@
     "id": 345,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "219.89999999999998",
+    "llm_output": "Value 219.89999999999998",
     "source_data": {
       "val": 219.68022338766124
     },
@@ -1463,7 +1463,7 @@
     "id": 346,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "544.1",
+    "llm_output": "Value 544.1",
     "source_data": {
       "val": 543.9031278916638
     },
@@ -1473,7 +1473,7 @@
     "id": 347,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "732.8000000000001",
+    "llm_output": "Value 732.8000000000001",
     "source_data": {
       "val": 732.6317583990764
     },
@@ -1483,7 +1483,7 @@
     "id": 348,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "209.29999999999998",
+    "llm_output": "Value 209.29999999999998",
     "source_data": {
       "val": 209.13955275579895
     },
@@ -1493,7 +1493,7 @@
     "id": 349,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "318.8",
+    "llm_output": "Value 318.8",
     "source_data": {
       "val": 318.599128387886
     },
@@ -1503,7 +1503,7 @@
     "id": 350,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "995.4000000000001",
+    "llm_output": "Value 995.4000000000001",
     "source_data": {
       "val": 995.1978630942857
     },
@@ -1513,7 +1513,7 @@
     "id": 351,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "653.6",
+    "llm_output": "Value 653.6",
     "source_data": {
       "val": 653.3792770630589
     },
@@ -1523,7 +1523,7 @@
     "id": 352,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "443.9",
+    "llm_output": "Value 443.9",
     "source_data": {
       "val": 443.71908307535904
     },
@@ -1533,7 +1533,7 @@
     "id": 353,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "522.6",
+    "llm_output": "Value 522.6",
     "source_data": {
       "val": 522.4000826252347
     },
@@ -1543,7 +1543,7 @@
     "id": 354,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "130.0",
+    "llm_output": "Value 130.0",
     "source_data": {
       "val": 129.79415390958306
     },
@@ -1553,7 +1553,7 @@
     "id": 355,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "232.7",
+    "llm_output": "Value 232.7",
     "source_data": {
       "val": 232.4503636612418
     },
@@ -1563,7 +1563,7 @@
     "id": 356,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "344.9",
+    "llm_output": "Value 344.9",
     "source_data": {
       "val": 344.7047065259808
     },
@@ -1573,7 +1573,7 @@
     "id": 357,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "592.6",
+    "llm_output": "Value 592.6",
     "source_data": {
       "val": 592.425631272661
     },
@@ -1583,7 +1583,7 @@
     "id": 358,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "238.0",
+    "llm_output": "Value 238.0",
     "source_data": {
       "val": 237.81358527061124
     },
@@ -1593,7 +1593,7 @@
     "id": 359,
     "category": "rounded",
     "label": "hallucination",
-    "llm_output": "228.2",
+    "llm_output": "Value 228.2",
     "source_data": {
       "val": 228.01521060704388
     },
@@ -1603,7 +1603,7 @@
     "id": 360,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "707.4 juta",
+    "llm_output": "Value 707.4 juta",
     "source_data": {
       "val": 707400000.0
     },
@@ -1613,7 +1613,7 @@
     "id": 361,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "229.5 ribu",
+    "llm_output": "Value 229.5 ribu",
     "source_data": {
       "val": 229500.0
     },
@@ -1623,7 +1623,7 @@
     "id": 362,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "858.9 ribu",
+    "llm_output": "Value 858.9 ribu",
     "source_data": {
       "val": 858900.0
     },
@@ -1633,7 +1633,7 @@
     "id": 363,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "514.1 juta",
+    "llm_output": "Value 514.1 juta",
     "source_data": {
       "val": 514100000.0
     },
@@ -1643,7 +1643,7 @@
     "id": 364,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "668.6 thousand",
+    "llm_output": "Value 668.6 thousand",
     "source_data": {
       "val": 668600.0
     },
@@ -1653,7 +1653,7 @@
     "id": 365,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "539.2 triliun",
+    "llm_output": "Value 539.2 triliun",
     "source_data": {
       "val": 539200000000000.06
     },
@@ -1663,7 +1663,7 @@
     "id": 366,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "243.5 trillion",
+    "llm_output": "Value 243.5 trillion",
     "source_data": {
       "val": 243500000000000.0
     },
@@ -1673,7 +1673,7 @@
     "id": 367,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "806.9 trillion",
+    "llm_output": "Value 806.9 trillion",
     "source_data": {
       "val": 806900000000000.0
     },
@@ -1683,7 +1683,7 @@
     "id": 368,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "95.1 triliun",
+    "llm_output": "Value 95.1 triliun",
     "source_data": {
       "val": 95100000000000.0
     },
@@ -1693,7 +1693,7 @@
     "id": 369,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "354.6 billion",
+    "llm_output": "Value 354.6 billion",
     "source_data": {
       "val": 354600000000.0
     },
@@ -1703,7 +1703,7 @@
     "id": 370,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "467.1 billion",
+    "llm_output": "Value 467.1 billion",
     "source_data": {
       "val": 467100000000.0
     },
@@ -1713,7 +1713,7 @@
     "id": 371,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "673.0 ribu",
+    "llm_output": "Value 673.0 ribu",
     "source_data": {
       "val": 673000.0
     },
@@ -1723,7 +1723,7 @@
     "id": 372,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "61.5 juta",
+    "llm_output": "Value 61.5 juta",
     "source_data": {
       "val": 61500000.0
     },
@@ -1733,7 +1733,7 @@
     "id": 373,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "800.0 million",
+    "llm_output": "Value 800.0 million",
     "source_data": {
       "val": 800000000.0
     },
@@ -1743,7 +1743,7 @@
     "id": 374,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "249.2 juta",
+    "llm_output": "Value 249.2 juta",
     "source_data": {
       "val": 249200000.0
     },
@@ -1753,7 +1753,7 @@
     "id": 375,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "536.2 triliun",
+    "llm_output": "Value 536.2 triliun",
     "source_data": {
       "val": 536200000000000.06
     },
@@ -1763,7 +1763,7 @@
     "id": 376,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "422.0 miliar",
+    "llm_output": "Value 422.0 miliar",
     "source_data": {
       "val": 422000000000.0
     },
@@ -1773,7 +1773,7 @@
     "id": 377,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "462.7 thousand",
+    "llm_output": "Value 462.7 thousand",
     "source_data": {
       "val": 462700.0
     },
@@ -1783,7 +1783,7 @@
     "id": 378,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "443.2 juta",
+    "llm_output": "Value 443.2 juta",
     "source_data": {
       "val": 443200000.0
     },
@@ -1793,7 +1793,7 @@
     "id": 379,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "51.5 juta",
+    "llm_output": "Value 51.5 juta",
     "source_data": {
       "val": 51500000.0
     },
@@ -1803,7 +1803,7 @@
     "id": 380,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "968.1 ribu",
+    "llm_output": "Value 968.1 ribu",
     "source_data": {
       "val": 968100.0
     },
@@ -1813,7 +1813,7 @@
     "id": 381,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "167.0 triliun",
+    "llm_output": "Value 167.0 triliun",
     "source_data": {
       "val": 167000000000000.0
     },
@@ -1823,7 +1823,7 @@
     "id": 382,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "481.4 trillion",
+    "llm_output": "Value 481.4 trillion",
     "source_data": {
       "val": 481400000000000.0
     },
@@ -1833,7 +1833,7 @@
     "id": 383,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "901.6 billion",
+    "llm_output": "Value 901.6 billion",
     "source_data": {
       "val": 901600000000.0
     },
@@ -1843,7 +1843,7 @@
     "id": 384,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "379.2 miliar",
+    "llm_output": "Value 379.2 miliar",
     "source_data": {
       "val": 379200000000.0
     },
@@ -1853,7 +1853,7 @@
     "id": 385,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "265.7 billion",
+    "llm_output": "Value 265.7 billion",
     "source_data": {
       "val": 265700000000.0
     },
@@ -1863,7 +1863,7 @@
     "id": 386,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "285.7 trillion",
+    "llm_output": "Value 285.7 trillion",
     "source_data": {
       "val": 285700000000000.0
     },
@@ -1873,7 +1873,7 @@
     "id": 387,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "155.5 trillion",
+    "llm_output": "Value 155.5 trillion",
     "source_data": {
       "val": 155500000000000.0
     },
@@ -1883,7 +1883,7 @@
     "id": 388,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "218.3 thousand",
+    "llm_output": "Value 218.3 thousand",
     "source_data": {
       "val": 218300.0
     },
@@ -1893,7 +1893,7 @@
     "id": 389,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "579.0 ribu",
+    "llm_output": "Value 579.0 ribu",
     "source_data": {
       "val": 579000.0
     },
@@ -1903,7 +1903,7 @@
     "id": 390,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "747.5 ribu",
+    "llm_output": "Value 747.5 ribu",
     "source_data": {
       "val": 747500.0
     },
@@ -1913,7 +1913,7 @@
     "id": 391,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "51.0 ribu",
+    "llm_output": "Value 51.0 ribu",
     "source_data": {
       "val": 51000.0
     },
@@ -1923,7 +1923,7 @@
     "id": 392,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "502.8 trillion",
+    "llm_output": "Value 502.8 trillion",
     "source_data": {
       "val": 502800000000000.0
     },
@@ -1933,7 +1933,7 @@
     "id": 393,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "57.8 miliar",
+    "llm_output": "Value 57.8 miliar",
     "source_data": {
       "val": 57800000000.0
     },
@@ -1943,7 +1943,7 @@
     "id": 394,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "850.6 juta",
+    "llm_output": "Value 850.6 juta",
     "source_data": {
       "val": 850600000.0
     },
@@ -1953,7 +1953,7 @@
     "id": 395,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "594.8 juta",
+    "llm_output": "Value 594.8 juta",
     "source_data": {
       "val": 594800000.0
     },
@@ -1963,7 +1963,7 @@
     "id": 396,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "404.0 triliun",
+    "llm_output": "Value 404.0 triliun",
     "source_data": {
       "val": 404000000000000.0
     },
@@ -1973,7 +1973,7 @@
     "id": 397,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "578.8 triliun",
+    "llm_output": "Value 578.8 triliun",
     "source_data": {
       "val": 578800000000000.0
     },
@@ -1983,7 +1983,7 @@
     "id": 398,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "619.1 ribu",
+    "llm_output": "Value 619.1 ribu",
     "source_data": {
       "val": 619100.0
     },
@@ -1993,7 +1993,7 @@
     "id": 399,
     "category": "unit_difference",
     "label": "grounded",
-    "llm_output": "657.1 billion",
+    "llm_output": "Value 657.1 billion",
     "source_data": {
       "val": 657100000000.0
     },
@@ -2003,7 +2003,7 @@
     "id": 400,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "938.8 million",
+    "llm_output": "Value 934.0 million",
     "source_data": {
       "val": 933800000.0
     },
@@ -2013,7 +2013,7 @@
     "id": 401,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "674.4 triliun",
+    "llm_output": "Value 669.6 triliun",
     "source_data": {
       "val": 669400000000000.0
     },
@@ -2023,7 +2023,7 @@
     "id": 402,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "244.2 million",
+    "llm_output": "Value 239.39999999999998 million",
     "source_data": {
       "val": 239200000.0
     },
@@ -2033,7 +2033,7 @@
     "id": 403,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "136.6 billion",
+    "llm_output": "Value 131.79999999999998 billion",
     "source_data": {
       "val": 131600000000.0
     },
@@ -2043,7 +2043,7 @@
     "id": 404,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "462.3 thousand",
+    "llm_output": "Value 457.5 thousand",
     "source_data": {
       "val": 457300.0
     },
@@ -2053,7 +2053,7 @@
     "id": 405,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "15.3 juta",
+    "llm_output": "Value 10.5 juta",
     "source_data": {
       "val": 10300000.0
     },
@@ -2063,7 +2063,7 @@
     "id": 406,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "79.1 juta",
+    "llm_output": "Value 74.3 juta",
     "source_data": {
       "val": 74100000.0
     },
@@ -2073,7 +2073,7 @@
     "id": 407,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "510.9 triliun",
+    "llm_output": "Value 506.09999999999997 triliun",
     "source_data": {
       "val": 505900000000000.0
     },
@@ -2083,7 +2083,7 @@
     "id": 408,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "937.4 miliar",
+    "llm_output": "Value 932.6 miliar",
     "source_data": {
       "val": 932400000000.0
     },
@@ -2093,7 +2093,7 @@
     "id": 409,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "883.5 juta",
+    "llm_output": "Value 878.7 juta",
     "source_data": {
       "val": 878500000.0
     },
@@ -2103,7 +2103,7 @@
     "id": 410,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "290.4 million",
+    "llm_output": "Value 285.59999999999997 million",
     "source_data": {
       "val": 285400000.0
     },
@@ -2113,7 +2113,7 @@
     "id": 411,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "838.1 trillion",
+    "llm_output": "Value 833.3000000000001 trillion",
     "source_data": {
       "val": 833100000000000.0
     },
@@ -2123,7 +2123,7 @@
     "id": 412,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "616.5 thousand",
+    "llm_output": "Value 611.7 thousand",
     "source_data": {
       "val": 611500.0
     },
@@ -2133,7 +2133,7 @@
     "id": 413,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "672.5 ribu",
+    "llm_output": "Value 667.7 ribu",
     "source_data": {
       "val": 667500.0
     },
@@ -2143,7 +2143,7 @@
     "id": 414,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "935.9 thousand",
+    "llm_output": "Value 931.1 thousand",
     "source_data": {
       "val": 930900.0
     },
@@ -2153,7 +2153,7 @@
     "id": 415,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "943.1 juta",
+    "llm_output": "Value 938.3000000000001 juta",
     "source_data": {
       "val": 938100000.0
     },
@@ -2163,7 +2163,7 @@
     "id": 416,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "269.9 miliar",
+    "llm_output": "Value 265.09999999999997 miliar",
     "source_data": {
       "val": 264899999999.99997
     },
@@ -2173,7 +2173,7 @@
     "id": 417,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "746.9 juta",
+    "llm_output": "Value 742.1 juta",
     "source_data": {
       "val": 741900000.0
     },
@@ -2183,7 +2183,7 @@
     "id": 418,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "277.8 miliar",
+    "llm_output": "Value 273.0 miliar",
     "source_data": {
       "val": 272800000000.0
     },
@@ -2193,7 +2193,7 @@
     "id": 419,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "722.2 triliun",
+    "llm_output": "Value 717.4000000000001 triliun",
     "source_data": {
       "val": 717200000000000.0
     },
@@ -2203,7 +2203,7 @@
     "id": 420,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "692.1 triliun",
+    "llm_output": "Value 687.3000000000001 triliun",
     "source_data": {
       "val": 687100000000000.0
     },
@@ -2213,7 +2213,7 @@
     "id": 421,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "510.4 thousand",
+    "llm_output": "Value 505.59999999999997 thousand",
     "source_data": {
       "val": 505400.0
     },
@@ -2223,7 +2223,7 @@
     "id": 422,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "909.5 thousand",
+    "llm_output": "Value 904.7 thousand",
     "source_data": {
       "val": 904500.0
     },
@@ -2233,7 +2233,7 @@
     "id": 423,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "98.1 ribu",
+    "llm_output": "Value 93.3 ribu",
     "source_data": {
       "val": 93100.0
     },
@@ -2243,7 +2243,7 @@
     "id": 424,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "833.7 billion",
+    "llm_output": "Value 828.9000000000001 billion",
     "source_data": {
       "val": 828700000000.0
     },
@@ -2253,7 +2253,7 @@
     "id": 425,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "9.5 ribu",
+    "llm_output": "Value 4.7 ribu",
     "source_data": {
       "val": 4500.0
     },
@@ -2263,7 +2263,7 @@
     "id": 426,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "641.8 miliar",
+    "llm_output": "Value 637.0 miliar",
     "source_data": {
       "val": 636800000000.0
     },
@@ -2273,7 +2273,7 @@
     "id": 427,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "167.3 thousand",
+    "llm_output": "Value 162.5 thousand",
     "source_data": {
       "val": 162300.0
     },
@@ -2283,7 +2283,7 @@
     "id": 428,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "556.6 trillion",
+    "llm_output": "Value 551.8000000000001 trillion",
     "source_data": {
       "val": 551600000000000.0
     },
@@ -2293,7 +2293,7 @@
     "id": 429,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "565.8 billion",
+    "llm_output": "Value 561.0 billion",
     "source_data": {
       "val": 560800000000.0
     },
@@ -2303,7 +2303,7 @@
     "id": 430,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "81.1 juta",
+    "llm_output": "Value 76.3 juta",
     "source_data": {
       "val": 76100000.0
     },
@@ -2313,7 +2313,7 @@
     "id": 431,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "550.5 miliar",
+    "llm_output": "Value 545.7 miliar",
     "source_data": {
       "val": 545500000000.0
     },
@@ -2323,7 +2323,7 @@
     "id": 432,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "587.3 million",
+    "llm_output": "Value 582.5 million",
     "source_data": {
       "val": 582300000.0
     },
@@ -2333,7 +2333,7 @@
     "id": 433,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "434.9 miliar",
+    "llm_output": "Value 430.09999999999997 miliar",
     "source_data": {
       "val": 429900000000.0
     },
@@ -2343,7 +2343,7 @@
     "id": 434,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "313.6 ribu",
+    "llm_output": "Value 308.8 ribu",
     "source_data": {
       "val": 308600.0
     },
@@ -2353,7 +2353,7 @@
     "id": 435,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "903.1 ribu",
+    "llm_output": "Value 898.3000000000001 ribu",
     "source_data": {
       "val": 898100.0
     },
@@ -2363,7 +2363,7 @@
     "id": 436,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "686.7 triliun",
+    "llm_output": "Value 681.9000000000001 triliun",
     "source_data": {
       "val": 681700000000000.0
     },
@@ -2373,7 +2373,7 @@
     "id": 437,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "359.0 juta",
+    "llm_output": "Value 354.2 juta",
     "source_data": {
       "val": 354000000.0
     },
@@ -2383,7 +2383,7 @@
     "id": 438,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "977.9 billion",
+    "llm_output": "Value 973.1 billion",
     "source_data": {
       "val": 972900000000.0
     },
@@ -2393,7 +2393,7 @@
     "id": 439,
     "category": "unit_difference",
     "label": "hallucination",
-    "llm_output": "929.9 miliar",
+    "llm_output": "Value 925.1 miliar",
     "source_data": {
       "val": 924900000000.0
     },
@@ -2403,9 +2403,9 @@
     "id": 440,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "24.2%",
+    "llm_output": "Rate 24.2%",
     "source_data": {
-      "val": 0.242
+      "rate": 0.242
     },
     "holdout": true
   },
@@ -2413,9 +2413,9 @@
     "id": 441,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "16.93%",
+    "llm_output": "Rate 16.93%",
     "source_data": {
-      "val": 0.1693
+      "rate": 0.1693
     },
     "holdout": true
   },
@@ -2423,9 +2423,9 @@
     "id": 442,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "79.39%",
+    "llm_output": "Rate 79.39%",
     "source_data": {
-      "val": 0.7939
+      "rate": 0.7939
     },
     "holdout": true
   },
@@ -2433,9 +2433,9 @@
     "id": 443,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "18.35%",
+    "llm_output": "Rate 18.35%",
     "source_data": {
-      "val": 0.1835
+      "rate": 0.1835
     },
     "holdout": true
   },
@@ -2443,9 +2443,9 @@
     "id": 444,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "41.4%",
+    "llm_output": "Rate 41.4%",
     "source_data": {
-      "val": 0.414
+      "rate": 0.414
     },
     "holdout": true
   },
@@ -2453,9 +2453,9 @@
     "id": 445,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "18.58%",
+    "llm_output": "Rate 18.58%",
     "source_data": {
-      "val": 0.1858
+      "rate": 0.1858
     },
     "holdout": true
   },
@@ -2463,9 +2463,9 @@
     "id": 446,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "91.6%",
+    "llm_output": "Rate 91.6%",
     "source_data": {
-      "val": 0.916
+      "rate": 0.916
     },
     "holdout": true
   },
@@ -2473,9 +2473,9 @@
     "id": 447,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "77.67%",
+    "llm_output": "Rate 77.67%",
     "source_data": {
-      "val": 0.7767
+      "rate": 0.7767
     },
     "holdout": true
   },
@@ -2483,9 +2483,9 @@
     "id": 448,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "41.35%",
+    "llm_output": "Rate 41.35%",
     "source_data": {
-      "val": 0.4135
+      "rate": 0.4135
     },
     "holdout": true
   },
@@ -2493,9 +2493,9 @@
     "id": 449,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "66.65%",
+    "llm_output": "Rate 66.65%",
     "source_data": {
-      "val": 0.6665
+      "rate": 0.6665
     },
     "holdout": true
   },
@@ -2503,9 +2503,9 @@
     "id": 450,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "73.04%",
+    "llm_output": "Rate 73.04%",
     "source_data": {
-      "val": 0.7304
+      "rate": 0.7304
     },
     "holdout": true
   },
@@ -2513,9 +2513,9 @@
     "id": 451,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "25.32%",
+    "llm_output": "Rate 25.32%",
     "source_data": {
-      "val": 0.2532
+      "rate": 0.2532
     },
     "holdout": true
   },
@@ -2523,9 +2523,9 @@
     "id": 452,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "16.6%",
+    "llm_output": "Rate 16.6%",
     "source_data": {
-      "val": 0.166
+      "rate": 0.166
     },
     "holdout": true
   },
@@ -2533,9 +2533,9 @@
     "id": 453,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "69.73%",
+    "llm_output": "Rate 69.73%",
     "source_data": {
-      "val": 0.6973
+      "rate": 0.6973
     },
     "holdout": true
   },
@@ -2543,9 +2543,9 @@
     "id": 454,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "38.49%",
+    "llm_output": "Rate 38.49%",
     "source_data": {
-      "val": 0.3849
+      "rate": 0.3849
     },
     "holdout": true
   },
@@ -2553,9 +2553,9 @@
     "id": 455,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "4.8%",
+    "llm_output": "Rate 4.8%",
     "source_data": {
-      "val": 0.048
+      "rate": 0.048
     },
     "holdout": true
   },
@@ -2563,9 +2563,9 @@
     "id": 456,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "47.13%",
+    "llm_output": "Rate 47.13%",
     "source_data": {
-      "val": 0.4713
+      "rate": 0.4713
     },
     "holdout": true
   },
@@ -2573,9 +2573,9 @@
     "id": 457,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "20.56%",
+    "llm_output": "Rate 20.56%",
     "source_data": {
-      "val": 0.2056
+      "rate": 0.2056
     },
     "holdout": true
   },
@@ -2583,9 +2583,9 @@
     "id": 458,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "91.01%",
+    "llm_output": "Rate 91.01%",
     "source_data": {
-      "val": 0.9101
+      "rate": 0.9101
     },
     "holdout": true
   },
@@ -2593,9 +2593,9 @@
     "id": 459,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "35.27%",
+    "llm_output": "Rate 35.27%",
     "source_data": {
-      "val": 0.3527
+      "rate": 0.3527
     },
     "holdout": true
   },
@@ -2603,9 +2603,9 @@
     "id": 460,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "81.41%",
+    "llm_output": "Rate 81.41%",
     "source_data": {
-      "val": 0.8141
+      "rate": 0.8141
     },
     "holdout": true
   },
@@ -2613,9 +2613,9 @@
     "id": 461,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "86.39%",
+    "llm_output": "Rate 86.39%",
     "source_data": {
-      "val": 0.8639
+      "rate": 0.8639
     },
     "holdout": true
   },
@@ -2623,9 +2623,9 @@
     "id": 462,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "22.85%",
+    "llm_output": "Rate 22.85%",
     "source_data": {
-      "val": 0.2285
+      "rate": 0.2285
     },
     "holdout": true
   },
@@ -2633,9 +2633,9 @@
     "id": 463,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "65.68%",
+    "llm_output": "Rate 65.68%",
     "source_data": {
-      "val": 0.6568
+      "rate": 0.6568
     },
     "holdout": true
   },
@@ -2643,9 +2643,9 @@
     "id": 464,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "40.05%",
+    "llm_output": "Rate 40.05%",
     "source_data": {
-      "val": 0.4005
+      "rate": 0.4005
     },
     "holdout": true
   },
@@ -2653,9 +2653,9 @@
     "id": 465,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "28.3%",
+    "llm_output": "Rate 28.3%",
     "source_data": {
-      "val": 0.283
+      "rate": 0.283
     },
     "holdout": true
   },
@@ -2663,9 +2663,9 @@
     "id": 466,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "7.8%",
+    "llm_output": "Rate 7.8%",
     "source_data": {
-      "val": 0.078
+      "rate": 0.078
     },
     "holdout": true
   },
@@ -2673,9 +2673,9 @@
     "id": 467,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "76.79%",
+    "llm_output": "Rate 76.79%",
     "source_data": {
-      "val": 0.7679
+      "rate": 0.7679
     },
     "holdout": true
   },
@@ -2683,9 +2683,9 @@
     "id": 468,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "35.41%",
+    "llm_output": "Rate 35.41%",
     "source_data": {
-      "val": 0.3541
+      "rate": 0.3541
     },
     "holdout": true
   },
@@ -2693,9 +2693,9 @@
     "id": 469,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "50.92%",
+    "llm_output": "Rate 50.92%",
     "source_data": {
-      "val": 0.5092
+      "rate": 0.5092
     },
     "holdout": true
   },
@@ -2703,9 +2703,9 @@
     "id": 470,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "67.59%",
+    "llm_output": "Rate 67.59%",
     "source_data": {
-      "val": 0.6759
+      "rate": 0.6759
     },
     "holdout": true
   },
@@ -2713,9 +2713,9 @@
     "id": 471,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "83.68%",
+    "llm_output": "Rate 83.68%",
     "source_data": {
-      "val": 0.8368
+      "rate": 0.8368
     },
     "holdout": true
   },
@@ -2723,9 +2723,9 @@
     "id": 472,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "33.45%",
+    "llm_output": "Rate 33.45%",
     "source_data": {
-      "val": 0.3345
+      "rate": 0.3345
     },
     "holdout": true
   },
@@ -2733,9 +2733,9 @@
     "id": 473,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "3.7%",
+    "llm_output": "Rate 3.7%",
     "source_data": {
-      "val": 0.037
+      "rate": 0.037
     },
     "holdout": true
   },
@@ -2743,9 +2743,9 @@
     "id": 474,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "86.95%",
+    "llm_output": "Rate 86.95%",
     "source_data": {
-      "val": 0.8695
+      "rate": 0.8695
     },
     "holdout": true
   },
@@ -2753,9 +2753,9 @@
     "id": 475,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "26.6%",
+    "llm_output": "Rate 26.6%",
     "source_data": {
-      "val": 0.266
+      "rate": 0.266
     },
     "holdout": true
   },
@@ -2763,9 +2763,9 @@
     "id": 476,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "57.9%",
+    "llm_output": "Rate 57.9%",
     "source_data": {
-      "val": 0.579
+      "rate": 0.579
     },
     "holdout": true
   },
@@ -2773,9 +2773,9 @@
     "id": 477,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "97.39%",
+    "llm_output": "Rate 97.39%",
     "source_data": {
-      "val": 0.9739
+      "rate": 0.9739
     },
     "holdout": true
   },
@@ -2783,9 +2783,9 @@
     "id": 478,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "4.75%",
+    "llm_output": "Rate 4.75%",
     "source_data": {
-      "val": 0.0475
+      "rate": 0.0475
     },
     "holdout": true
   },
@@ -2793,9 +2793,9 @@
     "id": 479,
     "category": "percent_vs_decimal",
     "label": "grounded",
-    "llm_output": "59.46%",
+    "llm_output": "Rate 59.46%",
     "source_data": {
-      "val": 0.5946
+      "rate": 0.5946
     },
     "holdout": true
   },
@@ -2803,9 +2803,9 @@
     "id": 480,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "35.88%",
+    "llm_output": "Rate 35.88%",
     "source_data": {
-      "val": 0.3488
+      "rate": 0.3488
     },
     "holdout": true
   },
@@ -2813,9 +2813,9 @@
     "id": 481,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "79.07%",
+    "llm_output": "Rate 79.07%",
     "source_data": {
-      "val": 0.7807
+      "rate": 0.7807
     },
     "holdout": true
   },
@@ -2823,9 +2823,9 @@
     "id": 482,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "44.77%",
+    "llm_output": "Rate 44.77%",
     "source_data": {
-      "val": 0.4377
+      "rate": 0.4377
     },
     "holdout": true
   },
@@ -2833,9 +2833,9 @@
     "id": 483,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "98.46%",
+    "llm_output": "Rate 98.46%",
     "source_data": {
-      "val": 0.9746
+      "rate": 0.9746
     },
     "holdout": true
   },
@@ -2843,9 +2843,9 @@
     "id": 484,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "13.33%",
+    "llm_output": "Rate 13.33%",
     "source_data": {
-      "val": 0.1233
+      "rate": 0.1233
     },
     "holdout": true
   },
@@ -2853,9 +2853,9 @@
     "id": 485,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "90.15%",
+    "llm_output": "Rate 90.15%",
     "source_data": {
-      "val": 0.8915
+      "rate": 0.8915
     },
     "holdout": true
   },
@@ -2863,9 +2863,9 @@
     "id": 486,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "20.63%",
+    "llm_output": "Rate 20.63%",
     "source_data": {
-      "val": 0.1963
+      "rate": 0.1963
     },
     "holdout": true
   },
@@ -2873,9 +2873,9 @@
     "id": 487,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "6.35%",
+    "llm_output": "Rate 6.35%",
     "source_data": {
-      "val": 0.0535
+      "rate": 0.0535
     },
     "holdout": true
   },
@@ -2883,9 +2883,9 @@
     "id": 488,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "44.73%",
+    "llm_output": "Rate 44.73%",
     "source_data": {
-      "val": 0.4373
+      "rate": 0.4373
     },
     "holdout": true
   },
@@ -2893,9 +2893,9 @@
     "id": 489,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "52.95%",
+    "llm_output": "Rate 52.95%",
     "source_data": {
-      "val": 0.5195
+      "rate": 0.5195
     },
     "holdout": true
   },
@@ -2903,9 +2903,9 @@
     "id": 490,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "81.04%",
+    "llm_output": "Rate 81.04%",
     "source_data": {
-      "val": 0.8004
+      "rate": 0.8004
     },
     "holdout": true
   },
@@ -2913,9 +2913,9 @@
     "id": 491,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "69.31%",
+    "llm_output": "Rate 69.31%",
     "source_data": {
-      "val": 0.6831
+      "rate": 0.6831
     },
     "holdout": true
   },
@@ -2923,9 +2923,9 @@
     "id": 492,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "94.15%",
+    "llm_output": "Rate 94.15%",
     "source_data": {
-      "val": 0.9315
+      "rate": 0.9315
     },
     "holdout": true
   },
@@ -2933,9 +2933,9 @@
     "id": 493,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "74.23%",
+    "llm_output": "Rate 74.23%",
     "source_data": {
-      "val": 0.7323
+      "rate": 0.7323
     },
     "holdout": true
   },
@@ -2943,9 +2943,9 @@
     "id": 494,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "21.31%",
+    "llm_output": "Rate 21.31%",
     "source_data": {
-      "val": 0.2031
+      "rate": 0.2031
     },
     "holdout": true
   },
@@ -2953,9 +2953,9 @@
     "id": 495,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "44.27%",
+    "llm_output": "Rate 44.27%",
     "source_data": {
-      "val": 0.4327
+      "rate": 0.4327
     },
     "holdout": true
   },
@@ -2963,9 +2963,9 @@
     "id": 496,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "94.99%",
+    "llm_output": "Rate 94.99%",
     "source_data": {
-      "val": 0.9399
+      "rate": 0.9399
     },
     "holdout": true
   },
@@ -2973,9 +2973,9 @@
     "id": 497,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "92.24%",
+    "llm_output": "Rate 92.24%",
     "source_data": {
-      "val": 0.9124
+      "rate": 0.9124
     },
     "holdout": true
   },
@@ -2983,9 +2983,9 @@
     "id": 498,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "63.07%",
+    "llm_output": "Rate 63.07%",
     "source_data": {
-      "val": 0.6207
+      "rate": 0.6207
     },
     "holdout": true
   },
@@ -2993,9 +2993,9 @@
     "id": 499,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "67.01%",
+    "llm_output": "Rate 67.01%",
     "source_data": {
-      "val": 0.6601
+      "rate": 0.6601
     },
     "holdout": true
   },
@@ -3003,9 +3003,9 @@
     "id": 500,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "14.21%",
+    "llm_output": "Rate 14.21%",
     "source_data": {
-      "val": 0.1321
+      "rate": 0.1321
     },
     "holdout": true
   },
@@ -3013,9 +3013,9 @@
     "id": 501,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "90.2%",
+    "llm_output": "Rate 90.2%",
     "source_data": {
-      "val": 0.892
+      "rate": 0.892
     },
     "holdout": true
   },
@@ -3023,9 +3023,9 @@
     "id": 502,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "51.7%",
+    "llm_output": "Rate 51.7%",
     "source_data": {
-      "val": 0.507
+      "rate": 0.507
     },
     "holdout": true
   },
@@ -3033,9 +3033,9 @@
     "id": 503,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "67.36%",
+    "llm_output": "Rate 67.36%",
     "source_data": {
-      "val": 0.6636
+      "rate": 0.6636
     },
     "holdout": true
   },
@@ -3043,9 +3043,9 @@
     "id": 504,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "33.97%",
+    "llm_output": "Rate 33.97%",
     "source_data": {
-      "val": 0.3297
+      "rate": 0.3297
     },
     "holdout": true
   },
@@ -3053,9 +3053,9 @@
     "id": 505,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "70.33%",
+    "llm_output": "Rate 70.33%",
     "source_data": {
-      "val": 0.6933
+      "rate": 0.6933
     },
     "holdout": true
   },
@@ -3063,9 +3063,9 @@
     "id": 506,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "56.33%",
+    "llm_output": "Rate 56.33%",
     "source_data": {
-      "val": 0.5533
+      "rate": 0.5533
     },
     "holdout": true
   },
@@ -3073,9 +3073,9 @@
     "id": 507,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "20.8%",
+    "llm_output": "Rate 20.8%",
     "source_data": {
-      "val": 0.198
+      "rate": 0.198
     },
     "holdout": true
   },
@@ -3083,9 +3083,9 @@
     "id": 508,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "67.16%",
+    "llm_output": "Rate 67.16%",
     "source_data": {
-      "val": 0.6616
+      "rate": 0.6616
     },
     "holdout": true
   },
@@ -3093,9 +3093,9 @@
     "id": 509,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "39.16%",
+    "llm_output": "Rate 39.16%",
     "source_data": {
-      "val": 0.3816
+      "rate": 0.3816
     },
     "holdout": true
   },
@@ -3103,9 +3103,9 @@
     "id": 510,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "75.32%",
+    "llm_output": "Rate 75.32%",
     "source_data": {
-      "val": 0.7432
+      "rate": 0.7432
     },
     "holdout": true
   },
@@ -3113,9 +3113,9 @@
     "id": 511,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "19.05%",
+    "llm_output": "Rate 19.05%",
     "source_data": {
-      "val": 0.1805
+      "rate": 0.1805
     },
     "holdout": true
   },
@@ -3123,9 +3123,9 @@
     "id": 512,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "57.77%",
+    "llm_output": "Rate 57.77%",
     "source_data": {
-      "val": 0.5677
+      "rate": 0.5677
     },
     "holdout": true
   },
@@ -3133,9 +3133,9 @@
     "id": 513,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "41.8%",
+    "llm_output": "Rate 41.8%",
     "source_data": {
-      "val": 0.408
+      "rate": 0.408
     },
     "holdout": true
   },
@@ -3143,9 +3143,9 @@
     "id": 514,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "83.71%",
+    "llm_output": "Rate 83.71%",
     "source_data": {
-      "val": 0.8271
+      "rate": 0.8271
     },
     "holdout": true
   },
@@ -3153,9 +3153,9 @@
     "id": 515,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "31.78%",
+    "llm_output": "Rate 31.78%",
     "source_data": {
-      "val": 0.3078
+      "rate": 0.3078
     },
     "holdout": true
   },
@@ -3163,9 +3163,9 @@
     "id": 516,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "22.6%",
+    "llm_output": "Rate 22.6%",
     "source_data": {
-      "val": 0.216
+      "rate": 0.216
     },
     "holdout": true
   },
@@ -3173,9 +3173,9 @@
     "id": 517,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "79.0%",
+    "llm_output": "Rate 79.0%",
     "source_data": {
-      "val": 0.78
+      "rate": 0.78
     },
     "holdout": true
   },
@@ -3183,9 +3183,9 @@
     "id": 518,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "61.45%",
+    "llm_output": "Rate 61.45%",
     "source_data": {
-      "val": 0.6045
+      "rate": 0.6045
     },
     "holdout": true
   },
@@ -3193,9 +3193,9 @@
     "id": 519,
     "category": "percent_vs_decimal",
     "label": "hallucination",
-    "llm_output": "33.58%",
+    "llm_output": "Rate 33.58%",
     "source_data": {
-      "val": 0.3258
+      "rate": 0.3258
     },
     "holdout": true
   },
@@ -3203,9 +3203,9 @@
     "id": 520,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "462.000",
+    "llm_output": "Volume 462.000",
     "source_data": {
-      "val": 462000
+      "volume": 462000
     },
     "holdout": true
   },
@@ -3213,9 +3213,9 @@
     "id": 521,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "462.000",
+    "llm_output": "Volume 462.000",
     "source_data": {
-      "val": 462000
+      "volume": 462000
     },
     "holdout": true
   },
@@ -3223,9 +3223,9 @@
     "id": 522,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "701.000",
+    "llm_output": "Volume 701.000",
     "source_data": {
-      "val": 701000
+      "volume": 701000
     },
     "holdout": true
   },
@@ -3233,9 +3233,9 @@
     "id": 523,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "228.000",
+    "llm_output": "Volume 228.000",
     "source_data": {
-      "val": 228000
+      "volume": 228000
     },
     "holdout": true
   },
@@ -3243,9 +3243,9 @@
     "id": 524,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "533.000",
+    "llm_output": "Volume 533.000",
     "source_data": {
-      "val": 533000
+      "volume": 533000
     },
     "holdout": true
   },
@@ -3253,9 +3253,9 @@
     "id": 525,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "494.000",
+    "llm_output": "Volume 494.000",
     "source_data": {
-      "val": 494000
+      "volume": 494000
     },
     "holdout": true
   },
@@ -3263,9 +3263,9 @@
     "id": 526,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "822.000",
+    "llm_output": "Volume 822.000",
     "source_data": {
-      "val": 822000
+      "volume": 822000
     },
     "holdout": true
   },
@@ -3273,9 +3273,9 @@
     "id": 527,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "932.000",
+    "llm_output": "Volume 932.000",
     "source_data": {
-      "val": 932000
+      "volume": 932000
     },
     "holdout": true
   },
@@ -3283,9 +3283,9 @@
     "id": 528,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "992.000",
+    "llm_output": "Volume 992.000",
     "source_data": {
-      "val": 992000
+      "volume": 992000
     },
     "holdout": true
   },
@@ -3293,9 +3293,9 @@
     "id": 529,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "825.000",
+    "llm_output": "Volume 825.000",
     "source_data": {
-      "val": 825000
+      "volume": 825000
     },
     "holdout": true
   },
@@ -3303,9 +3303,9 @@
     "id": 530,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "763.000",
+    "llm_output": "Volume 763.000",
     "source_data": {
-      "val": 763000
+      "volume": 763000
     },
     "holdout": true
   },
@@ -3313,9 +3313,9 @@
     "id": 531,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "183.000",
+    "llm_output": "Volume 183.000",
     "source_data": {
-      "val": 183000
+      "volume": 183000
     },
     "holdout": true
   },
@@ -3323,9 +3323,9 @@
     "id": 532,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "684.000",
+    "llm_output": "Volume 684.000",
     "source_data": {
-      "val": 684000
+      "volume": 684000
     },
     "holdout": true
   },
@@ -3333,9 +3333,9 @@
     "id": 533,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "96.000",
+    "llm_output": "Volume 96.000",
     "source_data": {
-      "val": 96000
+      "volume": 96000
     },
     "holdout": true
   },
@@ -3343,9 +3343,9 @@
     "id": 534,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "300.000",
+    "llm_output": "Volume 300.000",
     "source_data": {
-      "val": 300000
+      "volume": 300000
     },
     "holdout": true
   },
@@ -3353,9 +3353,9 @@
     "id": 535,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "537.000",
+    "llm_output": "Volume 537.000",
     "source_data": {
-      "val": 537000
+      "volume": 537000
     },
     "holdout": true
   },
@@ -3363,9 +3363,9 @@
     "id": 536,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "689.000",
+    "llm_output": "Volume 689.000",
     "source_data": {
-      "val": 689000
+      "volume": 689000
     },
     "holdout": true
   },
@@ -3373,9 +3373,9 @@
     "id": 537,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "658.000",
+    "llm_output": "Volume 658.000",
     "source_data": {
-      "val": 658000
+      "volume": 658000
     },
     "holdout": true
   },
@@ -3383,9 +3383,9 @@
     "id": 538,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "644.000",
+    "llm_output": "Volume 644.000",
     "source_data": {
-      "val": 644000
+      "volume": 644000
     },
     "holdout": true
   },
@@ -3393,9 +3393,9 @@
     "id": 539,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "353.000",
+    "llm_output": "Volume 353.000",
     "source_data": {
-      "val": 353000
+      "volume": 353000
     },
     "holdout": true
   },
@@ -3403,9 +3403,9 @@
     "id": 540,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "105.000",
+    "llm_output": "Volume 105.000",
     "source_data": {
-      "val": 105000
+      "volume": 105000
     },
     "holdout": true
   },
@@ -3413,9 +3413,9 @@
     "id": 541,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "848.000",
+    "llm_output": "Volume 848.000",
     "source_data": {
-      "val": 848000
+      "volume": 848000
     },
     "holdout": true
   },
@@ -3423,9 +3423,9 @@
     "id": 542,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "984.000",
+    "llm_output": "Volume 984.000",
     "source_data": {
-      "val": 984000
+      "volume": 984000
     },
     "holdout": true
   },
@@ -3433,9 +3433,9 @@
     "id": 543,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "779.000",
+    "llm_output": "Volume 779.000",
     "source_data": {
-      "val": 779000
+      "volume": 779000
     },
     "holdout": true
   },
@@ -3443,9 +3443,9 @@
     "id": 544,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "250.000",
+    "llm_output": "Volume 250.000",
     "source_data": {
-      "val": 250000
+      "volume": 250000
     },
     "holdout": true
   },
@@ -3453,9 +3453,9 @@
     "id": 545,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "698.000",
+    "llm_output": "Volume 698.000",
     "source_data": {
-      "val": 698000
+      "volume": 698000
     },
     "holdout": true
   },
@@ -3463,9 +3463,9 @@
     "id": 546,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "327.000",
+    "llm_output": "Volume 327.000",
     "source_data": {
-      "val": 327000
+      "volume": 327000
     },
     "holdout": true
   },
@@ -3473,9 +3473,9 @@
     "id": 547,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "240.000",
+    "llm_output": "Volume 240.000",
     "source_data": {
-      "val": 240000
+      "volume": 240000
     },
     "holdout": true
   },
@@ -3483,9 +3483,9 @@
     "id": 548,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "835.000",
+    "llm_output": "Volume 835.000",
     "source_data": {
-      "val": 835000
+      "volume": 835000
     },
     "holdout": true
   },
@@ -3493,9 +3493,9 @@
     "id": 549,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "213.000",
+    "llm_output": "Volume 213.000",
     "source_data": {
-      "val": 213000
+      "volume": 213000
     },
     "holdout": true
   },
@@ -3503,9 +3503,9 @@
     "id": 550,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "160.000",
+    "llm_output": "Volume 160.000",
     "source_data": {
-      "val": 160000
+      "volume": 160000
     },
     "holdout": true
   },
@@ -3513,9 +3513,9 @@
     "id": 551,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "35.000",
+    "llm_output": "Volume 35.000",
     "source_data": {
-      "val": 35000
+      "volume": 35000
     },
     "holdout": true
   },
@@ -3523,9 +3523,9 @@
     "id": 552,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "57.000",
+    "llm_output": "Volume 57.000",
     "source_data": {
-      "val": 57000
+      "volume": 57000
     },
     "holdout": true
   },
@@ -3533,9 +3533,9 @@
     "id": 553,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "260.000",
+    "llm_output": "Volume 260.000",
     "source_data": {
-      "val": 260000
+      "volume": 260000
     },
     "holdout": true
   },
@@ -3543,9 +3543,9 @@
     "id": 554,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "496.000",
+    "llm_output": "Volume 496.000",
     "source_data": {
-      "val": 496000
+      "volume": 496000
     },
     "holdout": true
   },
@@ -3553,9 +3553,9 @@
     "id": 555,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "635.000",
+    "llm_output": "Volume 635.000",
     "source_data": {
-      "val": 635000
+      "volume": 635000
     },
     "holdout": true
   },
@@ -3563,9 +3563,9 @@
     "id": 556,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "880.000",
+    "llm_output": "Volume 880.000",
     "source_data": {
-      "val": 880000
+      "volume": 880000
     },
     "holdout": true
   },
@@ -3573,9 +3573,9 @@
     "id": 557,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "796.000",
+    "llm_output": "Volume 796.000",
     "source_data": {
-      "val": 796000
+      "volume": 796000
     },
     "holdout": true
   },
@@ -3583,9 +3583,9 @@
     "id": 558,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "84.000",
+    "llm_output": "Volume 84.000",
     "source_data": {
-      "val": 84000
+      "volume": 84000
     },
     "holdout": true
   },
@@ -3593,9 +3593,9 @@
     "id": 559,
     "category": "thousand_separator_id",
     "label": "grounded",
-    "llm_output": "476.000",
+    "llm_output": "Volume 476.000",
     "source_data": {
-      "val": 476000
+      "volume": 476000
     },
     "holdout": true
   },
@@ -3603,9 +3603,9 @@
     "id": 560,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "435.000",
+    "llm_output": "Volume 436.000",
     "source_data": {
-      "val": 434000
+      "volume": 434000
     },
     "holdout": true
   },
@@ -3613,9 +3613,9 @@
     "id": 561,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "918.000",
+    "llm_output": "Volume 919.000",
     "source_data": {
-      "val": 917000
+      "volume": 917000
     },
     "holdout": true
   },
@@ -3623,9 +3623,9 @@
     "id": 562,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "655.000",
+    "llm_output": "Volume 656.000",
     "source_data": {
-      "val": 654000
+      "volume": 654000
     },
     "holdout": true
   },
@@ -3633,9 +3633,9 @@
     "id": 563,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "600.000",
+    "llm_output": "Volume 601.000",
     "source_data": {
-      "val": 599000
+      "volume": 599000
     },
     "holdout": true
   },
@@ -3643,9 +3643,9 @@
     "id": 564,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "210.000",
+    "llm_output": "Volume 211.000",
     "source_data": {
-      "val": 209000
+      "volume": 209000
     },
     "holdout": true
   },
@@ -3653,9 +3653,9 @@
     "id": 565,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "746.000",
+    "llm_output": "Volume 747.000",
     "source_data": {
-      "val": 745000
+      "volume": 745000
     },
     "holdout": true
   },
@@ -3663,9 +3663,9 @@
     "id": 566,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "724.000",
+    "llm_output": "Volume 725.000",
     "source_data": {
-      "val": 723000
+      "volume": 723000
     },
     "holdout": true
   },
@@ -3673,9 +3673,9 @@
     "id": 567,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "404.000",
+    "llm_output": "Volume 405.000",
     "source_data": {
-      "val": 403000
+      "volume": 403000
     },
     "holdout": true
   },
@@ -3683,9 +3683,9 @@
     "id": 568,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "517.000",
+    "llm_output": "Volume 518.000",
     "source_data": {
-      "val": 516000
+      "volume": 516000
     },
     "holdout": true
   },
@@ -3693,9 +3693,9 @@
     "id": 569,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "420.000",
+    "llm_output": "Volume 421.000",
     "source_data": {
-      "val": 419000
+      "volume": 419000
     },
     "holdout": true
   },
@@ -3703,9 +3703,9 @@
     "id": 570,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "260.000",
+    "llm_output": "Volume 261.000",
     "source_data": {
-      "val": 259000
+      "volume": 259000
     },
     "holdout": true
   },
@@ -3713,9 +3713,9 @@
     "id": 571,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "162.000",
+    "llm_output": "Volume 163.000",
     "source_data": {
-      "val": 161000
+      "volume": 161000
     },
     "holdout": true
   },
@@ -3723,9 +3723,9 @@
     "id": 572,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "682.000",
+    "llm_output": "Volume 683.000",
     "source_data": {
-      "val": 681000
+      "volume": 681000
     },
     "holdout": true
   },
@@ -3733,9 +3733,9 @@
     "id": 573,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "715.000",
+    "llm_output": "Volume 716.000",
     "source_data": {
-      "val": 714000
+      "volume": 714000
     },
     "holdout": true
   },
@@ -3743,9 +3743,9 @@
     "id": 574,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "16.000",
+    "llm_output": "Volume 17.000",
     "source_data": {
-      "val": 15000
+      "volume": 15000
     },
     "holdout": true
   },
@@ -3753,9 +3753,9 @@
     "id": 575,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "925.000",
+    "llm_output": "Volume 926.000",
     "source_data": {
-      "val": 924000
+      "volume": 924000
     },
     "holdout": true
   },
@@ -3763,9 +3763,9 @@
     "id": 576,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "779.000",
+    "llm_output": "Volume 780.000",
     "source_data": {
-      "val": 778000
+      "volume": 778000
     },
     "holdout": true
   },
@@ -3773,9 +3773,9 @@
     "id": 577,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "892.000",
+    "llm_output": "Volume 893.000",
     "source_data": {
-      "val": 891000
+      "volume": 891000
     },
     "holdout": true
   },
@@ -3783,9 +3783,9 @@
     "id": 578,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "799.000",
+    "llm_output": "Volume 800.000",
     "source_data": {
-      "val": 798000
+      "volume": 798000
     },
     "holdout": true
   },
@@ -3793,9 +3793,9 @@
     "id": 579,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "917.000",
+    "llm_output": "Volume 918.000",
     "source_data": {
-      "val": 916000
+      "volume": 916000
     },
     "holdout": true
   },
@@ -3803,9 +3803,9 @@
     "id": 580,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "120.000",
+    "llm_output": "Volume 121.000",
     "source_data": {
-      "val": 119000
+      "volume": 119000
     },
     "holdout": true
   },
@@ -3813,9 +3813,9 @@
     "id": 581,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "808.000",
+    "llm_output": "Volume 809.000",
     "source_data": {
-      "val": 807000
+      "volume": 807000
     },
     "holdout": true
   },
@@ -3823,9 +3823,9 @@
     "id": 582,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "446.000",
+    "llm_output": "Volume 447.000",
     "source_data": {
-      "val": 445000
+      "volume": 445000
     },
     "holdout": true
   },
@@ -3833,9 +3833,9 @@
     "id": 583,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "235.000",
+    "llm_output": "Volume 236.000",
     "source_data": {
-      "val": 234000
+      "volume": 234000
     },
     "holdout": true
   },
@@ -3843,9 +3843,9 @@
     "id": 584,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "191.000",
+    "llm_output": "Volume 192.000",
     "source_data": {
-      "val": 190000
+      "volume": 190000
     },
     "holdout": true
   },
@@ -3853,9 +3853,9 @@
     "id": 585,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "834.000",
+    "llm_output": "Volume 835.000",
     "source_data": {
-      "val": 833000
+      "volume": 833000
     },
     "holdout": true
   },
@@ -3863,9 +3863,9 @@
     "id": 586,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "991.000",
+    "llm_output": "Volume 992.000",
     "source_data": {
-      "val": 990000
+      "volume": 990000
     },
     "holdout": true
   },
@@ -3873,9 +3873,9 @@
     "id": 587,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "723.000",
+    "llm_output": "Volume 724.000",
     "source_data": {
-      "val": 722000
+      "volume": 722000
     },
     "holdout": true
   },
@@ -3883,9 +3883,9 @@
     "id": 588,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "541.000",
+    "llm_output": "Volume 542.000",
     "source_data": {
-      "val": 540000
+      "volume": 540000
     },
     "holdout": true
   },
@@ -3893,9 +3893,9 @@
     "id": 589,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "486.000",
+    "llm_output": "Volume 487.000",
     "source_data": {
-      "val": 485000
+      "volume": 485000
     },
     "holdout": true
   },
@@ -3903,9 +3903,9 @@
     "id": 590,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "62.000",
+    "llm_output": "Volume 63.000",
     "source_data": {
-      "val": 61000
+      "volume": 61000
     },
     "holdout": true
   },
@@ -3913,9 +3913,9 @@
     "id": 591,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "581.000",
+    "llm_output": "Volume 582.000",
     "source_data": {
-      "val": 580000
+      "volume": 580000
     },
     "holdout": true
   },
@@ -3923,9 +3923,9 @@
     "id": 592,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "266.000",
+    "llm_output": "Volume 267.000",
     "source_data": {
-      "val": 265000
+      "volume": 265000
     },
     "holdout": true
   },
@@ -3933,9 +3933,9 @@
     "id": 593,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "950.000",
+    "llm_output": "Volume 951.000",
     "source_data": {
-      "val": 949000
+      "volume": 949000
     },
     "holdout": true
   },
@@ -3943,9 +3943,9 @@
     "id": 594,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "879.000",
+    "llm_output": "Volume 880.000",
     "source_data": {
-      "val": 878000
+      "volume": 878000
     },
     "holdout": true
   },
@@ -3953,9 +3953,9 @@
     "id": 595,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "135.000",
+    "llm_output": "Volume 136.000",
     "source_data": {
-      "val": 134000
+      "volume": 134000
     },
     "holdout": true
   },
@@ -3963,9 +3963,9 @@
     "id": 596,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "478.000",
+    "llm_output": "Volume 479.000",
     "source_data": {
-      "val": 477000
+      "volume": 477000
     },
     "holdout": true
   },
@@ -3973,9 +3973,9 @@
     "id": 597,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "147.000",
+    "llm_output": "Volume 148.000",
     "source_data": {
-      "val": 146000
+      "volume": 146000
     },
     "holdout": true
   },
@@ -3983,9 +3983,9 @@
     "id": 598,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "831.000",
+    "llm_output": "Volume 832.000",
     "source_data": {
-      "val": 830000
+      "volume": 830000
     },
     "holdout": true
   },
@@ -3993,9 +3993,9 @@
     "id": 599,
     "category": "thousand_separator_id",
     "label": "hallucination",
-    "llm_output": "486.000",
+    "llm_output": "Volume 487.000",
     "source_data": {
-      "val": 485000
+      "volume": 485000
     },
     "holdout": true
   },
@@ -4003,9 +4003,9 @@
     "id": 600,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "693,000",
+    "llm_output": "Shares 693,000",
     "source_data": {
-      "val": 693000
+      "shares": 693000
     },
     "holdout": true
   },
@@ -4013,9 +4013,9 @@
     "id": 601,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "553,000",
+    "llm_output": "Shares 553,000",
     "source_data": {
-      "val": 553000
+      "shares": 553000
     },
     "holdout": true
   },
@@ -4023,9 +4023,9 @@
     "id": 602,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "582,000",
+    "llm_output": "Shares 582,000",
     "source_data": {
-      "val": 582000
+      "shares": 582000
     },
     "holdout": true
   },
@@ -4033,9 +4033,9 @@
     "id": 603,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "619,000",
+    "llm_output": "Shares 619,000",
     "source_data": {
-      "val": 619000
+      "shares": 619000
     },
     "holdout": true
   },
@@ -4043,9 +4043,9 @@
     "id": 604,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "334,000",
+    "llm_output": "Shares 334,000",
     "source_data": {
-      "val": 334000
+      "shares": 334000
     },
     "holdout": true
   },
@@ -4053,9 +4053,9 @@
     "id": 605,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "982,000",
+    "llm_output": "Shares 982,000",
     "source_data": {
-      "val": 982000
+      "shares": 982000
     },
     "holdout": true
   },
@@ -4063,9 +4063,9 @@
     "id": 606,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "783,000",
+    "llm_output": "Shares 783,000",
     "source_data": {
-      "val": 783000
+      "shares": 783000
     },
     "holdout": true
   },
@@ -4073,9 +4073,9 @@
     "id": 607,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "922,000",
+    "llm_output": "Shares 922,000",
     "source_data": {
-      "val": 922000
+      "shares": 922000
     },
     "holdout": true
   },
@@ -4083,9 +4083,9 @@
     "id": 608,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "463,000",
+    "llm_output": "Shares 463,000",
     "source_data": {
-      "val": 463000
+      "shares": 463000
     },
     "holdout": true
   },
@@ -4093,9 +4093,9 @@
     "id": 609,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "637,000",
+    "llm_output": "Shares 637,000",
     "source_data": {
-      "val": 637000
+      "shares": 637000
     },
     "holdout": true
   },
@@ -4103,9 +4103,9 @@
     "id": 610,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "844,000",
+    "llm_output": "Shares 844,000",
     "source_data": {
-      "val": 844000
+      "shares": 844000
     },
     "holdout": true
   },
@@ -4113,9 +4113,9 @@
     "id": 611,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "746,000",
+    "llm_output": "Shares 746,000",
     "source_data": {
-      "val": 746000
+      "shares": 746000
     },
     "holdout": true
   },
@@ -4123,9 +4123,9 @@
     "id": 612,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "923,000",
+    "llm_output": "Shares 923,000",
     "source_data": {
-      "val": 923000
+      "shares": 923000
     },
     "holdout": true
   },
@@ -4133,9 +4133,9 @@
     "id": 613,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "526,000",
+    "llm_output": "Shares 526,000",
     "source_data": {
-      "val": 526000
+      "shares": 526000
     },
     "holdout": true
   },
@@ -4143,9 +4143,9 @@
     "id": 614,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "446,000",
+    "llm_output": "Shares 446,000",
     "source_data": {
-      "val": 446000
+      "shares": 446000
     },
     "holdout": true
   },
@@ -4153,9 +4153,9 @@
     "id": 615,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "860,000",
+    "llm_output": "Shares 860,000",
     "source_data": {
-      "val": 860000
+      "shares": 860000
     },
     "holdout": true
   },
@@ -4163,9 +4163,9 @@
     "id": 616,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "938,000",
+    "llm_output": "Shares 938,000",
     "source_data": {
-      "val": 938000
+      "shares": 938000
     },
     "holdout": true
   },
@@ -4173,9 +4173,9 @@
     "id": 617,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "571,000",
+    "llm_output": "Shares 571,000",
     "source_data": {
-      "val": 571000
+      "shares": 571000
     },
     "holdout": true
   },
@@ -4183,9 +4183,9 @@
     "id": 618,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "466,000",
+    "llm_output": "Shares 466,000",
     "source_data": {
-      "val": 466000
+      "shares": 466000
     },
     "holdout": true
   },
@@ -4193,9 +4193,9 @@
     "id": 619,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "928,000",
+    "llm_output": "Shares 928,000",
     "source_data": {
-      "val": 928000
+      "shares": 928000
     },
     "holdout": true
   },
@@ -4203,9 +4203,9 @@
     "id": 620,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "172,000",
+    "llm_output": "Shares 172,000",
     "source_data": {
-      "val": 172000
+      "shares": 172000
     },
     "holdout": true
   },
@@ -4213,9 +4213,9 @@
     "id": 621,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "771,000",
+    "llm_output": "Shares 771,000",
     "source_data": {
-      "val": 771000
+      "shares": 771000
     },
     "holdout": true
   },
@@ -4223,9 +4223,9 @@
     "id": 622,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "892,000",
+    "llm_output": "Shares 892,000",
     "source_data": {
-      "val": 892000
+      "shares": 892000
     },
     "holdout": true
   },
@@ -4233,9 +4233,9 @@
     "id": 623,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "496,000",
+    "llm_output": "Shares 496,000",
     "source_data": {
-      "val": 496000
+      "shares": 496000
     },
     "holdout": true
   },
@@ -4243,9 +4243,9 @@
     "id": 624,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "470,000",
+    "llm_output": "Shares 470,000",
     "source_data": {
-      "val": 470000
+      "shares": 470000
     },
     "holdout": true
   },
@@ -4253,9 +4253,9 @@
     "id": 625,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "275,000",
+    "llm_output": "Shares 275,000",
     "source_data": {
-      "val": 275000
+      "shares": 275000
     },
     "holdout": true
   },
@@ -4263,9 +4263,9 @@
     "id": 626,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "779,000",
+    "llm_output": "Shares 779,000",
     "source_data": {
-      "val": 779000
+      "shares": 779000
     },
     "holdout": true
   },
@@ -4273,9 +4273,9 @@
     "id": 627,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "263,000",
+    "llm_output": "Shares 263,000",
     "source_data": {
-      "val": 263000
+      "shares": 263000
     },
     "holdout": true
   },
@@ -4283,9 +4283,9 @@
     "id": 628,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "870,000",
+    "llm_output": "Shares 870,000",
     "source_data": {
-      "val": 870000
+      "shares": 870000
     },
     "holdout": true
   },
@@ -4293,9 +4293,9 @@
     "id": 629,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "662,000",
+    "llm_output": "Shares 662,000",
     "source_data": {
-      "val": 662000
+      "shares": 662000
     },
     "holdout": true
   },
@@ -4303,9 +4303,9 @@
     "id": 630,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "293,000",
+    "llm_output": "Shares 293,000",
     "source_data": {
-      "val": 293000
+      "shares": 293000
     },
     "holdout": true
   },
@@ -4313,9 +4313,9 @@
     "id": 631,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "794,000",
+    "llm_output": "Shares 794,000",
     "source_data": {
-      "val": 794000
+      "shares": 794000
     },
     "holdout": true
   },
@@ -4323,9 +4323,9 @@
     "id": 632,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "806,000",
+    "llm_output": "Shares 806,000",
     "source_data": {
-      "val": 806000
+      "shares": 806000
     },
     "holdout": true
   },
@@ -4333,9 +4333,9 @@
     "id": 633,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "543,000",
+    "llm_output": "Shares 543,000",
     "source_data": {
-      "val": 543000
+      "shares": 543000
     },
     "holdout": true
   },
@@ -4343,9 +4343,9 @@
     "id": 634,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "506,000",
+    "llm_output": "Shares 506,000",
     "source_data": {
-      "val": 506000
+      "shares": 506000
     },
     "holdout": true
   },
@@ -4353,9 +4353,9 @@
     "id": 635,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "651,000",
+    "llm_output": "Shares 651,000",
     "source_data": {
-      "val": 651000
+      "shares": 651000
     },
     "holdout": true
   },
@@ -4363,9 +4363,9 @@
     "id": 636,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "254,000",
+    "llm_output": "Shares 254,000",
     "source_data": {
-      "val": 254000
+      "shares": 254000
     },
     "holdout": true
   },
@@ -4373,9 +4373,9 @@
     "id": 637,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "291,000",
+    "llm_output": "Shares 291,000",
     "source_data": {
-      "val": 291000
+      "shares": 291000
     },
     "holdout": true
   },
@@ -4383,9 +4383,9 @@
     "id": 638,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "460,000",
+    "llm_output": "Shares 460,000",
     "source_data": {
-      "val": 460000
+      "shares": 460000
     },
     "holdout": true
   },
@@ -4393,9 +4393,9 @@
     "id": 639,
     "category": "thousand_separator_en",
     "label": "grounded",
-    "llm_output": "89,000",
+    "llm_output": "Shares 89,000",
     "source_data": {
-      "val": 89000
+      "shares": 89000
     },
     "holdout": true
   },
@@ -4403,9 +4403,9 @@
     "id": 640,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "741,000",
+    "llm_output": "Shares 742,000",
     "source_data": {
-      "val": 740000
+      "shares": 740000
     },
     "holdout": true
   },
@@ -4413,9 +4413,9 @@
     "id": 641,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "303,000",
+    "llm_output": "Shares 304,000",
     "source_data": {
-      "val": 302000
+      "shares": 302000
     },
     "holdout": true
   },
@@ -4423,9 +4423,9 @@
     "id": 642,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "251,000",
+    "llm_output": "Shares 252,000",
     "source_data": {
-      "val": 250000
+      "shares": 250000
     },
     "holdout": true
   },
@@ -4433,9 +4433,9 @@
     "id": 643,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "289,000",
+    "llm_output": "Shares 290,000",
     "source_data": {
-      "val": 288000
+      "shares": 288000
     },
     "holdout": true
   },
@@ -4443,9 +4443,9 @@
     "id": 644,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "354,000",
+    "llm_output": "Shares 355,000",
     "source_data": {
-      "val": 353000
+      "shares": 353000
     },
     "holdout": true
   },
@@ -4453,9 +4453,9 @@
     "id": 645,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "338,000",
+    "llm_output": "Shares 339,000",
     "source_data": {
-      "val": 337000
+      "shares": 337000
     },
     "holdout": true
   },
@@ -4463,9 +4463,9 @@
     "id": 646,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "925,000",
+    "llm_output": "Shares 926,000",
     "source_data": {
-      "val": 924000
+      "shares": 924000
     },
     "holdout": true
   },
@@ -4473,9 +4473,9 @@
     "id": 647,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "564,000",
+    "llm_output": "Shares 565,000",
     "source_data": {
-      "val": 563000
+      "shares": 563000
     },
     "holdout": true
   },
@@ -4483,9 +4483,9 @@
     "id": 648,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "93,000",
+    "llm_output": "Shares 94,000",
     "source_data": {
-      "val": 92000
+      "shares": 92000
     },
     "holdout": true
   },
@@ -4493,9 +4493,9 @@
     "id": 649,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "152,000",
+    "llm_output": "Shares 153,000",
     "source_data": {
-      "val": 151000
+      "shares": 151000
     },
     "holdout": true
   },
@@ -4503,9 +4503,9 @@
     "id": 650,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "165,000",
+    "llm_output": "Shares 166,000",
     "source_data": {
-      "val": 164000
+      "shares": 164000
     },
     "holdout": true
   },
@@ -4513,9 +4513,9 @@
     "id": 651,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "247,000",
+    "llm_output": "Shares 248,000",
     "source_data": {
-      "val": 246000
+      "shares": 246000
     },
     "holdout": true
   },
@@ -4523,9 +4523,9 @@
     "id": 652,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "403,000",
+    "llm_output": "Shares 404,000",
     "source_data": {
-      "val": 402000
+      "shares": 402000
     },
     "holdout": true
   },
@@ -4533,9 +4533,9 @@
     "id": 653,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "721,000",
+    "llm_output": "Shares 722,000",
     "source_data": {
-      "val": 720000
+      "shares": 720000
     },
     "holdout": true
   },
@@ -4543,9 +4543,9 @@
     "id": 654,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "167,000",
+    "llm_output": "Shares 168,000",
     "source_data": {
-      "val": 166000
+      "shares": 166000
     },
     "holdout": true
   },
@@ -4553,9 +4553,9 @@
     "id": 655,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "734,000",
+    "llm_output": "Shares 735,000",
     "source_data": {
-      "val": 733000
+      "shares": 733000
     },
     "holdout": true
   },
@@ -4563,9 +4563,9 @@
     "id": 656,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "230,000",
+    "llm_output": "Shares 231,000",
     "source_data": {
-      "val": 229000
+      "shares": 229000
     },
     "holdout": true
   },
@@ -4573,9 +4573,9 @@
     "id": 657,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "76,000",
+    "llm_output": "Shares 77,000",
     "source_data": {
-      "val": 75000
+      "shares": 75000
     },
     "holdout": true
   },
@@ -4583,9 +4583,9 @@
     "id": 658,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "435,000",
+    "llm_output": "Shares 436,000",
     "source_data": {
-      "val": 434000
+      "shares": 434000
     },
     "holdout": true
   },
@@ -4593,9 +4593,9 @@
     "id": 659,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "428,000",
+    "llm_output": "Shares 429,000",
     "source_data": {
-      "val": 427000
+      "shares": 427000
     },
     "holdout": true
   },
@@ -4603,9 +4603,9 @@
     "id": 660,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "349,000",
+    "llm_output": "Shares 350,000",
     "source_data": {
-      "val": 348000
+      "shares": 348000
     },
     "holdout": true
   },
@@ -4613,9 +4613,9 @@
     "id": 661,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "566,000",
+    "llm_output": "Shares 567,000",
     "source_data": {
-      "val": 565000
+      "shares": 565000
     },
     "holdout": true
   },
@@ -4623,9 +4623,9 @@
     "id": 662,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "488,000",
+    "llm_output": "Shares 489,000",
     "source_data": {
-      "val": 487000
+      "shares": 487000
     },
     "holdout": true
   },
@@ -4633,9 +4633,9 @@
     "id": 663,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "436,000",
+    "llm_output": "Shares 437,000",
     "source_data": {
-      "val": 435000
+      "shares": 435000
     },
     "holdout": true
   },
@@ -4643,9 +4643,9 @@
     "id": 664,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "74,000",
+    "llm_output": "Shares 75,000",
     "source_data": {
-      "val": 73000
+      "shares": 73000
     },
     "holdout": true
   },
@@ -4653,9 +4653,9 @@
     "id": 665,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "222,000",
+    "llm_output": "Shares 223,000",
     "source_data": {
-      "val": 221000
+      "shares": 221000
     },
     "holdout": true
   },
@@ -4663,9 +4663,9 @@
     "id": 666,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "863,000",
+    "llm_output": "Shares 864,000",
     "source_data": {
-      "val": 862000
+      "shares": 862000
     },
     "holdout": true
   },
@@ -4673,9 +4673,9 @@
     "id": 667,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "441,000",
+    "llm_output": "Shares 442,000",
     "source_data": {
-      "val": 440000
+      "shares": 440000
     },
     "holdout": true
   },
@@ -4683,9 +4683,9 @@
     "id": 668,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "409,000",
+    "llm_output": "Shares 410,000",
     "source_data": {
-      "val": 408000
+      "shares": 408000
     },
     "holdout": true
   },
@@ -4693,9 +4693,9 @@
     "id": 669,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "937,000",
+    "llm_output": "Shares 938,000",
     "source_data": {
-      "val": 936000
+      "shares": 936000
     },
     "holdout": true
   },
@@ -4703,9 +4703,9 @@
     "id": 670,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "799,000",
+    "llm_output": "Shares 800,000",
     "source_data": {
-      "val": 798000
+      "shares": 798000
     },
     "holdout": true
   },
@@ -4713,9 +4713,9 @@
     "id": 671,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "609,000",
+    "llm_output": "Shares 610,000",
     "source_data": {
-      "val": 608000
+      "shares": 608000
     },
     "holdout": true
   },
@@ -4723,9 +4723,9 @@
     "id": 672,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "979,000",
+    "llm_output": "Shares 980,000",
     "source_data": {
-      "val": 978000
+      "shares": 978000
     },
     "holdout": true
   },
@@ -4733,9 +4733,9 @@
     "id": 673,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "723,000",
+    "llm_output": "Shares 724,000",
     "source_data": {
-      "val": 722000
+      "shares": 722000
     },
     "holdout": true
   },
@@ -4743,9 +4743,9 @@
     "id": 674,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "31,000",
+    "llm_output": "Shares 32,000",
     "source_data": {
-      "val": 30000
+      "shares": 30000
     },
     "holdout": true
   },
@@ -4753,9 +4753,9 @@
     "id": 675,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "888,000",
+    "llm_output": "Shares 889,000",
     "source_data": {
-      "val": 887000
+      "shares": 887000
     },
     "holdout": true
   },
@@ -4763,9 +4763,9 @@
     "id": 676,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "912,000",
+    "llm_output": "Shares 913,000",
     "source_data": {
-      "val": 911000
+      "shares": 911000
     },
     "holdout": true
   },
@@ -4773,9 +4773,9 @@
     "id": 677,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "794,000",
+    "llm_output": "Shares 795,000",
     "source_data": {
-      "val": 793000
+      "shares": 793000
     },
     "holdout": true
   },
@@ -4783,9 +4783,9 @@
     "id": 678,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "600,000",
+    "llm_output": "Shares 601,000",
     "source_data": {
-      "val": 599000
+      "shares": 599000
     },
     "holdout": true
   },
@@ -4793,9 +4793,9 @@
     "id": 679,
     "category": "thousand_separator_en",
     "label": "hallucination",
-    "llm_output": "400,000",
+    "llm_output": "Shares 401,000",
     "source_data": {
-      "val": 399000
+      "shares": 399000
     },
     "holdout": true
   },
@@ -4803,7 +4803,7 @@
     "id": 680,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "52.9",
+    "llm_output": "Price 52.9",
     "source_data": {},
     "holdout": true
   },
@@ -4811,7 +4811,7 @@
     "id": 681,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "94.8",
+    "llm_output": "Price 94.8",
     "source_data": {},
     "holdout": true
   },
@@ -4819,7 +4819,7 @@
     "id": 682,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "36.9",
+    "llm_output": "Price 36.9",
     "source_data": {},
     "holdout": true
   },
@@ -4827,7 +4827,7 @@
     "id": 683,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "45.1",
+    "llm_output": "Price 45.1",
     "source_data": {},
     "holdout": true
   },
@@ -4835,7 +4835,7 @@
     "id": 684,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "90.2",
+    "llm_output": "Price 90.2",
     "source_data": {},
     "holdout": true
   },
@@ -4843,7 +4843,7 @@
     "id": 685,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "85.2",
+    "llm_output": "Price 85.2",
     "source_data": {},
     "holdout": true
   },
@@ -4851,7 +4851,7 @@
     "id": 686,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "58.4",
+    "llm_output": "Price 58.4",
     "source_data": {},
     "holdout": true
   },
@@ -4859,7 +4859,7 @@
     "id": 687,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "76.1",
+    "llm_output": "Price 76.1",
     "source_data": {},
     "holdout": true
   },
@@ -4867,7 +4867,7 @@
     "id": 688,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "82.0",
+    "llm_output": "Price 82.0",
     "source_data": {},
     "holdout": true
   },
@@ -4875,7 +4875,7 @@
     "id": 689,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "90.8",
+    "llm_output": "Price 90.8",
     "source_data": {},
     "holdout": true
   },
@@ -4883,7 +4883,7 @@
     "id": 690,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "53.9",
+    "llm_output": "Price 53.9",
     "source_data": {},
     "holdout": true
   },
@@ -4891,7 +4891,7 @@
     "id": 691,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "34.6",
+    "llm_output": "Price 34.6",
     "source_data": {},
     "holdout": true
   },
@@ -4899,7 +4899,7 @@
     "id": 692,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "53.7",
+    "llm_output": "Price 53.7",
     "source_data": {},
     "holdout": true
   },
@@ -4907,7 +4907,7 @@
     "id": 693,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "45.0",
+    "llm_output": "Price 45.0",
     "source_data": {},
     "holdout": true
   },
@@ -4915,7 +4915,7 @@
     "id": 694,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "70.2",
+    "llm_output": "Price 70.2",
     "source_data": {},
     "holdout": true
   },
@@ -4923,7 +4923,7 @@
     "id": 695,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "81.8",
+    "llm_output": "Price 81.8",
     "source_data": {},
     "holdout": true
   },
@@ -4931,7 +4931,7 @@
     "id": 696,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "75.2",
+    "llm_output": "Price 75.2",
     "source_data": {},
     "holdout": true
   },
@@ -4939,7 +4939,7 @@
     "id": 697,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "85.6",
+    "llm_output": "Price 85.6",
     "source_data": {},
     "holdout": true
   },
@@ -4947,7 +4947,7 @@
     "id": 698,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "92.8",
+    "llm_output": "Price 92.8",
     "source_data": {},
     "holdout": true
   },
@@ -4955,7 +4955,7 @@
     "id": 699,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "98.3",
+    "llm_output": "Price 98.3",
     "source_data": {},
     "holdout": true
   },
@@ -4963,7 +4963,7 @@
     "id": 700,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "58.1",
+    "llm_output": "Price 58.1",
     "source_data": {},
     "holdout": true
   },
@@ -4971,7 +4971,7 @@
     "id": 701,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "91.6",
+    "llm_output": "Price 91.6",
     "source_data": {},
     "holdout": true
   },
@@ -4979,7 +4979,7 @@
     "id": 702,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "63.3",
+    "llm_output": "Price 63.3",
     "source_data": {},
     "holdout": true
   },
@@ -4987,7 +4987,7 @@
     "id": 703,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "69.7",
+    "llm_output": "Price 69.7",
     "source_data": {},
     "holdout": true
   },
@@ -4995,7 +4995,7 @@
     "id": 704,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "17.6",
+    "llm_output": "Price 17.6",
     "source_data": {},
     "holdout": true
   },
@@ -5003,7 +5003,7 @@
     "id": 705,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "48.6",
+    "llm_output": "Price 48.6",
     "source_data": {},
     "holdout": true
   },
@@ -5011,7 +5011,7 @@
     "id": 706,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "88.0",
+    "llm_output": "Price 88.0",
     "source_data": {},
     "holdout": true
   },
@@ -5019,7 +5019,7 @@
     "id": 707,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "26.4",
+    "llm_output": "Price 26.4",
     "source_data": {},
     "holdout": true
   },
@@ -5027,7 +5027,7 @@
     "id": 708,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "33.4",
+    "llm_output": "Price 33.4",
     "source_data": {},
     "holdout": true
   },
@@ -5035,7 +5035,7 @@
     "id": 709,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "39.5",
+    "llm_output": "Price 39.5",
     "source_data": {},
     "holdout": true
   },
@@ -5043,7 +5043,7 @@
     "id": 710,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "50.9",
+    "llm_output": "Price 50.9",
     "source_data": {},
     "holdout": true
   },
@@ -5051,7 +5051,7 @@
     "id": 711,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "40.4",
+    "llm_output": "Price 40.4",
     "source_data": {},
     "holdout": true
   },
@@ -5059,7 +5059,7 @@
     "id": 712,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "89.2",
+    "llm_output": "Price 89.2",
     "source_data": {},
     "holdout": true
   },
@@ -5067,7 +5067,7 @@
     "id": 713,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "35.0",
+    "llm_output": "Price 35.0",
     "source_data": {},
     "holdout": true
   },
@@ -5075,7 +5075,7 @@
     "id": 714,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "95.6",
+    "llm_output": "Price 95.6",
     "source_data": {},
     "holdout": true
   },
@@ -5083,7 +5083,7 @@
     "id": 715,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "47.9",
+    "llm_output": "Price 47.9",
     "source_data": {},
     "holdout": true
   },
@@ -5091,7 +5091,7 @@
     "id": 716,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "85.1",
+    "llm_output": "Price 85.1",
     "source_data": {},
     "holdout": true
   },
@@ -5099,7 +5099,7 @@
     "id": 717,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "52.3",
+    "llm_output": "Price 52.3",
     "source_data": {},
     "holdout": true
   },
@@ -5107,7 +5107,7 @@
     "id": 718,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "77.4",
+    "llm_output": "Price 77.4",
     "source_data": {},
     "holdout": true
   },
@@ -5115,7 +5115,7 @@
     "id": 719,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "14.7",
+    "llm_output": "Price 14.7",
     "source_data": {},
     "holdout": true
   },
@@ -5123,7 +5123,7 @@
     "id": 720,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "95.7",
+    "llm_output": "Price 95.7",
     "source_data": {},
     "holdout": true
   },
@@ -5131,7 +5131,7 @@
     "id": 721,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "30.2",
+    "llm_output": "Price 30.2",
     "source_data": {},
     "holdout": true
   },
@@ -5139,7 +5139,7 @@
     "id": 722,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "16.2",
+    "llm_output": "Price 16.2",
     "source_data": {},
     "holdout": true
   },
@@ -5147,7 +5147,7 @@
     "id": 723,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "96.2",
+    "llm_output": "Price 96.2",
     "source_data": {},
     "holdout": true
   },
@@ -5155,7 +5155,7 @@
     "id": 724,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "13.6",
+    "llm_output": "Price 13.6",
     "source_data": {},
     "holdout": true
   },
@@ -5163,7 +5163,7 @@
     "id": 725,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "12.8",
+    "llm_output": "Price 12.8",
     "source_data": {},
     "holdout": true
   },
@@ -5171,7 +5171,7 @@
     "id": 726,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "32.3",
+    "llm_output": "Price 32.3",
     "source_data": {},
     "holdout": true
   },
@@ -5179,7 +5179,7 @@
     "id": 727,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "85.5",
+    "llm_output": "Price 85.5",
     "source_data": {},
     "holdout": true
   },
@@ -5187,7 +5187,7 @@
     "id": 728,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "65.9",
+    "llm_output": "Price 65.9",
     "source_data": {},
     "holdout": true
   },
@@ -5195,7 +5195,7 @@
     "id": 729,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "31.5",
+    "llm_output": "Price 31.5",
     "source_data": {},
     "holdout": true
   },
@@ -5203,7 +5203,7 @@
     "id": 730,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "52.6",
+    "llm_output": "Price 52.6",
     "source_data": {},
     "holdout": true
   },
@@ -5211,7 +5211,7 @@
     "id": 731,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "20.3",
+    "llm_output": "Price 20.3",
     "source_data": {},
     "holdout": true
   },
@@ -5219,7 +5219,7 @@
     "id": 732,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "95.3",
+    "llm_output": "Price 95.3",
     "source_data": {},
     "holdout": true
   },
@@ -5227,7 +5227,7 @@
     "id": 733,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "51.9",
+    "llm_output": "Price 51.9",
     "source_data": {},
     "holdout": true
   },
@@ -5235,7 +5235,7 @@
     "id": 734,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "33.1",
+    "llm_output": "Price 33.1",
     "source_data": {},
     "holdout": true
   },
@@ -5243,7 +5243,7 @@
     "id": 735,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "43.2",
+    "llm_output": "Price 43.2",
     "source_data": {},
     "holdout": true
   },
@@ -5251,7 +5251,7 @@
     "id": 736,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "64.5",
+    "llm_output": "Price 64.5",
     "source_data": {},
     "holdout": true
   },
@@ -5259,7 +5259,7 @@
     "id": 737,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "96.7",
+    "llm_output": "Price 96.7",
     "source_data": {},
     "holdout": true
   },
@@ -5267,7 +5267,7 @@
     "id": 738,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "74.7",
+    "llm_output": "Price 74.7",
     "source_data": {},
     "holdout": true
   },
@@ -5275,7 +5275,7 @@
     "id": 739,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "80.0",
+    "llm_output": "Price 80.0",
     "source_data": {},
     "holdout": true
   },
@@ -5283,7 +5283,7 @@
     "id": 740,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "24.7",
+    "llm_output": "Price 24.7",
     "source_data": {},
     "holdout": true
   },
@@ -5291,7 +5291,7 @@
     "id": 741,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "38.0",
+    "llm_output": "Price 38.0",
     "source_data": {},
     "holdout": true
   },
@@ -5299,7 +5299,7 @@
     "id": 742,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "62.1",
+    "llm_output": "Price 62.1",
     "source_data": {},
     "holdout": true
   },
@@ -5307,7 +5307,7 @@
     "id": 743,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "93.6",
+    "llm_output": "Price 93.6",
     "source_data": {},
     "holdout": true
   },
@@ -5315,7 +5315,7 @@
     "id": 744,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "61.8",
+    "llm_output": "Price 61.8",
     "source_data": {},
     "holdout": true
   },
@@ -5323,7 +5323,7 @@
     "id": 745,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "91.7",
+    "llm_output": "Price 91.7",
     "source_data": {},
     "holdout": true
   },
@@ -5331,7 +5331,7 @@
     "id": 746,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "43.8",
+    "llm_output": "Price 43.8",
     "source_data": {},
     "holdout": true
   },
@@ -5339,7 +5339,7 @@
     "id": 747,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "94.7",
+    "llm_output": "Price 94.7",
     "source_data": {},
     "holdout": true
   },
@@ -5347,7 +5347,7 @@
     "id": 748,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "27.8",
+    "llm_output": "Price 27.8",
     "source_data": {},
     "holdout": true
   },
@@ -5355,7 +5355,7 @@
     "id": 749,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "63.3",
+    "llm_output": "Price 63.3",
     "source_data": {},
     "holdout": true
   },
@@ -5363,7 +5363,7 @@
     "id": 750,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "84.8",
+    "llm_output": "Price 84.8",
     "source_data": {},
     "holdout": true
   },
@@ -5371,7 +5371,7 @@
     "id": 751,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "31.9",
+    "llm_output": "Price 31.9",
     "source_data": {},
     "holdout": true
   },
@@ -5379,7 +5379,7 @@
     "id": 752,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "72.7",
+    "llm_output": "Price 72.7",
     "source_data": {},
     "holdout": true
   },
@@ -5387,7 +5387,7 @@
     "id": 753,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "37.1",
+    "llm_output": "Price 37.1",
     "source_data": {},
     "holdout": true
   },
@@ -5395,7 +5395,7 @@
     "id": 754,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "71.6",
+    "llm_output": "Price 71.6",
     "source_data": {},
     "holdout": true
   },
@@ -5403,7 +5403,7 @@
     "id": 755,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "82.5",
+    "llm_output": "Price 82.5",
     "source_data": {},
     "holdout": true
   },
@@ -5411,7 +5411,7 @@
     "id": 756,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "81.7",
+    "llm_output": "Price 81.7",
     "source_data": {},
     "holdout": true
   },
@@ -5419,7 +5419,7 @@
     "id": 757,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "60.9",
+    "llm_output": "Price 60.9",
     "source_data": {},
     "holdout": true
   },
@@ -5427,7 +5427,7 @@
     "id": 758,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "13.7",
+    "llm_output": "Price 13.7",
     "source_data": {},
     "holdout": true
   },
@@ -5435,7 +5435,7 @@
     "id": 759,
     "category": "no_source",
     "label": "unverified",
-    "llm_output": "57.9",
+    "llm_output": "Price 57.9",
     "source_data": {},
     "holdout": true
   },
@@ -5443,9 +5443,9 @@
     "id": 760,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "69.5",
+    "llm_output": "Profit 69.5",
     "source_data": {
-      "val": 82.25826946078561
+      "profit": 82.25826946078561
     },
     "holdout": true
   },
@@ -5453,9 +5453,9 @@
     "id": 761,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "68.3",
+    "llm_output": "Profit 68.3",
     "source_data": {
-      "val": 78.80608600663412
+      "profit": 78.80608600663412
     },
     "holdout": true
   },
@@ -5463,9 +5463,9 @@
     "id": 762,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "47.8",
+    "llm_output": "Profit 47.8",
     "source_data": {
-      "val": 77.40806819961632
+      "profit": 77.40806819961632
     },
     "holdout": true
   },
@@ -5473,9 +5473,9 @@
     "id": 763,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "49.0",
+    "llm_output": "Profit 49.0",
     "source_data": {
-      "val": 73.48752153980288
+      "profit": 73.48752153980288
     },
     "holdout": true
   },
@@ -5483,9 +5483,9 @@
     "id": 764,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "90.2",
+    "llm_output": "Profit 90.2",
     "source_data": {
-      "val": 118.58957390406985
+      "profit": 118.58957390406985
     },
     "holdout": true
   },
@@ -5493,9 +5493,9 @@
     "id": 765,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "23.8",
+    "llm_output": "Profit 23.8",
     "source_data": {
-      "val": 40.845478443442374
+      "profit": 40.845478443442374
     },
     "holdout": true
   },
@@ -5503,9 +5503,9 @@
     "id": 766,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "57.0",
+    "llm_output": "Profit 57.0",
     "source_data": {
-      "val": 93.01829656066965
+      "profit": 93.01829656066965
     },
     "holdout": true
   },
@@ -5513,9 +5513,9 @@
     "id": 767,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "65.4",
+    "llm_output": "Profit 65.4",
     "source_data": {
-      "val": 112.18470627611069
+      "profit": 112.18470627611069
     },
     "holdout": true
   },
@@ -5523,9 +5523,9 @@
     "id": 768,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "79.7",
+    "llm_output": "Profit 79.7",
     "source_data": {
-      "val": 108.29495086538032
+      "profit": 108.29495086538032
     },
     "holdout": true
   },
@@ -5533,9 +5533,9 @@
     "id": 769,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "84.3",
+    "llm_output": "Profit 84.3",
     "source_data": {
-      "val": 117.99898476254806
+      "profit": 117.99898476254806
     },
     "holdout": true
   },
@@ -5543,9 +5543,9 @@
     "id": 770,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "39.0",
+    "llm_output": "Profit 39.0",
     "source_data": {
-      "val": 58.819806763747636
+      "profit": 58.819806763747636
     },
     "holdout": true
   },
@@ -5553,9 +5553,9 @@
     "id": 771,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "94.1",
+    "llm_output": "Profit 94.1",
     "source_data": {
-      "val": 115.2571299676988
+      "profit": 115.2571299676988
     },
     "holdout": true
   },
@@ -5563,9 +5563,9 @@
     "id": 772,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "50.6",
+    "llm_output": "Profit 50.6",
     "source_data": {
-      "val": 90.61905127308026
+      "profit": 90.61905127308026
     },
     "holdout": true
   },
@@ -5573,9 +5573,9 @@
     "id": 773,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "61.3",
+    "llm_output": "Profit 61.3",
     "source_data": {
-      "val": 98.02753881781973
+      "profit": 98.02753881781973
     },
     "holdout": true
   },
@@ -5583,9 +5583,9 @@
     "id": 774,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "40.3",
+    "llm_output": "Profit 40.3",
     "source_data": {
-      "val": 70.07226014463689
+      "profit": 70.07226014463689
     },
     "holdout": true
   },
@@ -5593,9 +5593,9 @@
     "id": 775,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "39.3",
+    "llm_output": "Profit 39.3",
     "source_data": {
-      "val": 68.80199729565376
+      "profit": 68.80199729565376
     },
     "holdout": true
   },
@@ -5603,9 +5603,9 @@
     "id": 776,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "41.9",
+    "llm_output": "Profit 41.9",
     "source_data": {
-      "val": 62.234096354347116
+      "profit": 62.234096354347116
     },
     "holdout": true
   },
@@ -5613,9 +5613,9 @@
     "id": 777,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "35.2",
+    "llm_output": "Profit 35.2",
     "source_data": {
-      "val": 69.04620031749718
+      "profit": 69.04620031749718
     },
     "holdout": true
   },
@@ -5623,9 +5623,9 @@
     "id": 778,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "89.2",
+    "llm_output": "Profit 89.2",
     "source_data": {
-      "val": 121.43164111678335
+      "profit": 121.43164111678335
     },
     "holdout": true
   },
@@ -5633,9 +5633,9 @@
     "id": 779,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "56.5",
+    "llm_output": "Profit 56.5",
     "source_data": {
-      "val": 74.14225694108396
+      "profit": 74.14225694108396
     },
     "holdout": true
   },
@@ -5643,9 +5643,9 @@
     "id": 780,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "31.7",
+    "llm_output": "Profit 31.7",
     "source_data": {
-      "val": 57.95712498682077
+      "profit": 57.95712498682077
     },
     "holdout": true
   },
@@ -5653,9 +5653,9 @@
     "id": 781,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "60.0",
+    "llm_output": "Profit 60.0",
     "source_data": {
-      "val": 79.61295744496863
+      "profit": 79.61295744496863
     },
     "holdout": true
   },
@@ -5663,9 +5663,9 @@
     "id": 782,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "52.8",
+    "llm_output": "Profit 52.8",
     "source_data": {
-      "val": 91.2736962589089
+      "profit": 91.2736962589089
     },
     "holdout": true
   },
@@ -5673,9 +5673,9 @@
     "id": 783,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "50.3",
+    "llm_output": "Profit 50.3",
     "source_data": {
-      "val": 60.989730373934904
+      "profit": 60.989730373934904
     },
     "holdout": true
   },
@@ -5683,9 +5683,9 @@
     "id": 784,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "36.5",
+    "llm_output": "Profit 36.5",
     "source_data": {
-      "val": 62.67604514711712
+      "profit": 62.67604514711712
     },
     "holdout": true
   },
@@ -5693,9 +5693,9 @@
     "id": 785,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "31.9",
+    "llm_output": "Profit 31.9",
     "source_data": {
-      "val": 68.45840086387264
+      "profit": 68.45840086387264
     },
     "holdout": true
   },
@@ -5703,9 +5703,9 @@
     "id": 786,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "43.2",
+    "llm_output": "Profit 43.2",
     "source_data": {
-      "val": 75.33891820040999
+      "profit": 75.33891820040999
     },
     "holdout": true
   },
@@ -5713,9 +5713,9 @@
     "id": 787,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "40.9",
+    "llm_output": "Profit 40.9",
     "source_data": {
-      "val": 90.76525855837328
+      "profit": 90.76525855837328
     },
     "holdout": true
   },
@@ -5723,9 +5723,9 @@
     "id": 788,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "59.5",
+    "llm_output": "Profit 59.5",
     "source_data": {
-      "val": 83.57242110456673
+      "profit": 83.57242110456673
     },
     "holdout": true
   },
@@ -5733,9 +5733,9 @@
     "id": 789,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "50.8",
+    "llm_output": "Profit 50.8",
     "source_data": {
-      "val": 73.06491965395321
+      "profit": 73.06491965395321
     },
     "holdout": true
   },
@@ -5743,9 +5743,9 @@
     "id": 790,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "30.7",
+    "llm_output": "Profit 30.7",
     "source_data": {
-      "val": 69.55137325304278
+      "profit": 69.55137325304278
     },
     "holdout": true
   },
@@ -5753,9 +5753,9 @@
     "id": 791,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "38.4",
+    "llm_output": "Profit 38.4",
     "source_data": {
-      "val": 78.11524254556416
+      "profit": 78.11524254556416
     },
     "holdout": true
   },
@@ -5763,9 +5763,9 @@
     "id": 792,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "95.6",
+    "llm_output": "Profit 95.6",
     "source_data": {
-      "val": 133.20654216562207
+      "profit": 133.20654216562207
     },
     "holdout": true
   },
@@ -5773,9 +5773,9 @@
     "id": 793,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "27.2",
+    "llm_output": "Profit 27.2",
     "source_data": {
-      "val": 66.74418614035802
+      "profit": 66.74418614035802
     },
     "holdout": true
   },
@@ -5783,9 +5783,9 @@
     "id": 794,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "34.9",
+    "llm_output": "Profit 34.9",
     "source_data": {
-      "val": 68.48347623843163
+      "profit": 68.48347623843163
     },
     "holdout": true
   },
@@ -5793,9 +5793,9 @@
     "id": 795,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "78.4",
+    "llm_output": "Profit 78.4",
     "source_data": {
-      "val": 112.27162962049208
+      "profit": 112.27162962049208
     },
     "holdout": true
   },
@@ -5803,9 +5803,9 @@
     "id": 796,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "98.2",
+    "llm_output": "Profit 98.2",
     "source_data": {
-      "val": 141.50513453308272
+      "profit": 141.50513453308272
     },
     "holdout": true
   },
@@ -5813,9 +5813,9 @@
     "id": 797,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "36.7",
+    "llm_output": "Profit 36.7",
     "source_data": {
-      "val": 61.13524276597546
+      "profit": 61.13524276597546
     },
     "holdout": true
   },
@@ -5823,9 +5823,9 @@
     "id": 798,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "37.2",
+    "llm_output": "Profit 37.2",
     "source_data": {
-      "val": 75.52073942844126
+      "profit": 75.52073942844126
     },
     "holdout": true
   },
@@ -5833,9 +5833,9 @@
     "id": 799,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "21.4",
+    "llm_output": "Profit 21.4",
     "source_data": {
-      "val": 33.22062803932873
+      "profit": 33.22062803932873
     },
     "holdout": true
   },
@@ -5843,9 +5843,9 @@
     "id": 800,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 14.9",
     "source_data": {
-      "revenue": 150
+      "profit": 36.5854657821111
     },
     "holdout": true
   },
@@ -5853,9 +5853,9 @@
     "id": 801,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 95.0",
     "source_data": {
-      "revenue": 150
+      "profit": 130.5147862042371
     },
     "holdout": true
   },
@@ -5863,9 +5863,9 @@
     "id": 802,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 77.8",
     "source_data": {
-      "revenue": 150
+      "profit": 91.90350587151042
     },
     "holdout": true
   },
@@ -5873,9 +5873,9 @@
     "id": 803,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 11.1",
     "source_data": {
-      "revenue": 150
+      "profit": 32.473573085485974
     },
     "holdout": true
   },
@@ -5883,9 +5883,9 @@
     "id": 804,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 53.1",
     "source_data": {
-      "revenue": 150
+      "profit": 76.7282373024117
     },
     "holdout": true
   },
@@ -5893,9 +5893,9 @@
     "id": 805,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 96.9",
     "source_data": {
-      "revenue": 150
+      "profit": 116.99913561971891
     },
     "holdout": true
   },
@@ -5903,9 +5903,9 @@
     "id": 806,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 87.6",
     "source_data": {
-      "revenue": 150
+      "profit": 102.16348562899698
     },
     "holdout": true
   },
@@ -5913,9 +5913,9 @@
     "id": 807,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 15.9",
     "source_data": {
-      "revenue": 150
+      "profit": 45.56986241164272
     },
     "holdout": true
   },
@@ -5923,9 +5923,9 @@
     "id": 808,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 61.9",
     "source_data": {
-      "revenue": 150
+      "profit": 99.35804073024067
     },
     "holdout": true
   },
@@ -5933,9 +5933,9 @@
     "id": 809,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 23.7",
     "source_data": {
-      "revenue": 150
+      "profit": 66.1456830510019
     },
     "holdout": true
   },
@@ -5943,9 +5943,9 @@
     "id": 810,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 95.4",
     "source_data": {
-      "revenue": 150
+      "profit": 108.80723633584921
     },
     "holdout": true
   },
@@ -5953,9 +5953,9 @@
     "id": 811,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 32.3",
     "source_data": {
-      "revenue": 150
+      "profit": 64.62292138470514
     },
     "holdout": true
   },
@@ -5963,9 +5963,9 @@
     "id": 812,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 47.5",
     "source_data": {
-      "revenue": 150
+      "profit": 81.34507381640101
     },
     "holdout": true
   },
@@ -5973,9 +5973,9 @@
     "id": 813,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 65.7",
     "source_data": {
-      "revenue": 150
+      "profit": 106.72774158792869
     },
     "holdout": true
   },
@@ -5983,9 +5983,9 @@
     "id": 814,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 44.2",
     "source_data": {
-      "revenue": 150
+      "profit": 90.54017510495216
     },
     "holdout": true
   },
@@ -5993,9 +5993,9 @@
     "id": 815,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 36.8",
     "source_data": {
-      "revenue": 150
+      "profit": 70.34100554884411
     },
     "holdout": true
   },
@@ -6003,9 +6003,9 @@
     "id": 816,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 48.6",
     "source_data": {
-      "revenue": 150
+      "profit": 81.34517882496934
     },
     "holdout": true
   },
@@ -6013,9 +6013,9 @@
     "id": 817,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 15.4",
     "source_data": {
-      "revenue": 150
+      "profit": 63.80435109737196
     },
     "holdout": true
   },
@@ -6023,9 +6023,9 @@
     "id": 818,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 18.9",
     "source_data": {
-      "revenue": 150
+      "profit": 59.40948417418834
     },
     "holdout": true
   },
@@ -6033,9 +6033,9 @@
     "id": 819,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 66.3",
     "source_data": {
-      "revenue": 150
+      "profit": 86.8858450116003
     },
     "holdout": true
   },
@@ -6043,9 +6043,9 @@
     "id": 820,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 17.3",
     "source_data": {
-      "revenue": 150
+      "profit": 36.89460710698769
     },
     "holdout": true
   },
@@ -6053,9 +6053,9 @@
     "id": 821,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 59.7",
     "source_data": {
-      "revenue": 150
+      "profit": 75.96130461772553
     },
     "holdout": true
   },
@@ -6063,9 +6063,9 @@
     "id": 822,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 46.8",
     "source_data": {
-      "revenue": 150
+      "profit": 84.37484543139075
     },
     "holdout": true
   },
@@ -6073,9 +6073,9 @@
     "id": 823,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 52.3",
     "source_data": {
-      "revenue": 150
+      "profit": 63.60559421523697
     },
     "holdout": true
   },
@@ -6083,9 +6083,9 @@
     "id": 824,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 35.9",
     "source_data": {
-      "revenue": 150
+      "profit": 57.20873492449151
     },
     "holdout": true
   },
@@ -6093,9 +6093,9 @@
     "id": 825,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 87.4",
     "source_data": {
-      "revenue": 150
+      "profit": 100.24719040613917
     },
     "holdout": true
   },
@@ -6103,9 +6103,9 @@
     "id": 826,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 31.0",
     "source_data": {
-      "revenue": 150
+      "profit": 51.58218502635599
     },
     "holdout": true
   },
@@ -6113,9 +6113,9 @@
     "id": 827,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 81.2",
     "source_data": {
-      "revenue": 150
+      "profit": 114.79158356821031
     },
     "holdout": true
   },
@@ -6123,9 +6123,9 @@
     "id": 828,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 82.4",
     "source_data": {
-      "revenue": 150
+      "profit": 100.31276855025857
     },
     "holdout": true
   },
@@ -6133,9 +6133,9 @@
     "id": 829,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 20.3",
     "source_data": {
-      "revenue": 150
+      "profit": 39.29237801064096
     },
     "holdout": true
   },
@@ -6143,9 +6143,9 @@
     "id": 830,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 23.4",
     "source_data": {
-      "revenue": 150
+      "profit": 44.02529886562561
     },
     "holdout": true
   },
@@ -6153,9 +6153,9 @@
     "id": 831,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 22.8",
     "source_data": {
-      "revenue": 150
+      "profit": 35.18552158055388
     },
     "holdout": true
   },
@@ -6163,9 +6163,9 @@
     "id": 832,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 81.3",
     "source_data": {
-      "revenue": 150
+      "profit": 115.10176149277618
     },
     "holdout": true
   },
@@ -6173,9 +6173,9 @@
     "id": 833,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 84.2",
     "source_data": {
-      "revenue": 150
+      "profit": 131.04770115870554
     },
     "holdout": true
   },
@@ -6183,9 +6183,9 @@
     "id": 834,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 49.5",
     "source_data": {
-      "revenue": 150
+      "profit": 78.24791881104647
     },
     "holdout": true
   },
@@ -6193,9 +6193,9 @@
     "id": 835,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 37.4",
     "source_data": {
-      "revenue": 150
+      "profit": 63.500340766512224
     },
     "holdout": true
   },
@@ -6203,9 +6203,9 @@
     "id": 836,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 34.5",
     "source_data": {
-      "revenue": 150
+      "profit": 66.09926250392056
     },
     "holdout": true
   },
@@ -6213,9 +6213,9 @@
     "id": 837,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 49.4",
     "source_data": {
-      "revenue": 150
+      "profit": 83.32146648164414
     },
     "holdout": true
   },
@@ -6223,9 +6223,9 @@
     "id": 838,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 90.0",
     "source_data": {
-      "revenue": 150
+      "profit": 129.38135693142462
     },
     "holdout": true
   },
@@ -6233,9 +6233,9 @@
     "id": 839,
     "category": "hallucination",
     "label": "hallucination",
-    "llm_output": "Profit 150",
+    "llm_output": "Profit 64.3",
     "source_data": {
-      "revenue": 150
+      "profit": 75.33459569553341
     },
     "holdout": true
   }
