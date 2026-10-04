@@ -20,20 +20,30 @@ _THRESHOLDS = json.loads(
 )
 _L4 = _THRESHOLDS["L4_llm"]
 
-#: Relative tolerance for claims whose TEXT declares no fractional part.
-#: Rationale (thresholds.json "L4_llm.default_relative_tolerance"): an LLM
-#: writing "3170" for source 3170.4 rounds at the precision it chose to
-#: state; 1% accepts that and rejects a wrong magnitude.
-DEFAULT_RELATIVE_TOLERANCE = _L4["default_relative_tolerance"]
+#: THE SINGLE RULE (thresholds.json "L4_llm.grounding_rule").
+#:
+#:   A claim is GROUNDED iff, after rendering the source value in the unit
+#:   the claim itself uses (percent -> x100) and rounding it to the
+#:   precision the claim's own text declares, that rounded value EQUALS
+#:   the claim's value. Nothing else is accepted.
+#:
+#:   - text declares no fractional part ("3170") -> compare rounded to 0 dp
+#:   - text declares n decimals ("0,12", "3.1416", "15,3%") -> compare
+#:     rounded to n dp IN DISPLAY SPACE
+#:   - no source fact at all -> UNVERIFIED (counted as detected)
+#:   - otherwise -> HALLUCINATION
+#:
+#: Rationale for dropping relative tolerance: 1% is meaningless without a
+#: scale-free anchor and it is what let 3170 vs 3180 pass. Rationale for
+#: rounding rather than a +/- band: "12,34%" asserts 12.3 +/- 0.05, so a
+#: source of 0.1234 (-> 12.34%) IS that claim and 0.12 IS a legitimate
+#: rounding of it -- a band of 0.0034 measured in desimal space would
+#: have called that a hallucination. Rounding is unit-consistent; the
+#: previous absolute band applied a percent-space tolerance to
+#: fraction-space values and was 100x too wide (see 10,5% vs 0.1).
+GROUNDING_RULE = "round_source_to_declared_precision_in_display_space"
 
-#: Half-unit-in-last-declared-place band applied INSTEAD when the claim
-#: declares decimals. Rationale (thresholds.json "declared_precision_absolute_tolerance"):
-#: "3.1416" asserts 4-decimal precision (half-ULP = 5e-5) yet the old
-#: 1%-relative band on 3.1415 was 3.1e-2 -- 630x wider than what the text
-#: promised, which is how "3.1416 vs 3.1415" passed as verified.
-DECLARED_PRECISION_ABSOLUTE_TOLERANCE = _L4["declared_precision_absolute_tolerance"]
-
-#: Label attached to any claim that cannot be matched to a source fact.
+#: Where a rejected claim is written down in the audit trail.
 UNVERIFIED_LABEL = _L4["unverified_label"]
 
 
@@ -148,7 +158,10 @@ def _normalize_number(text: str) -> Optional[Decimal]:
             normalized = text
     elif comma_count > 0 and period_count == 0:
         # Could be Indonesian decimal (1,23) or English thousands (1,234)
-        if re.search(r',\d{3}$', text):
+        # Heuristic: a 3-digit group only makes sense as thousands when it
+        # does not start with '0' -- "0,001" is the Indonesian decimal
+        # 0.001, never English thousands of zero.
+        if re.search(r',\d{3}$', text) and not re.search(r',0\d\d$', text):
             # English thousands: 1,234 -> 1234
             normalized = text.replace(',', '')
         else:
@@ -179,28 +192,18 @@ def _normalize_number(text: str) -> Optional[Decimal]:
 def verify_against_source(
     text: str,
     source_data: Dict[str, Any],
-    tolerance: Optional[float] = None,
 ) -> NumericGroundingResult:
     """Verify numbers in text against source data.
     
     Args:
         text: LLM output text to verify.
         source_data: Dict of source facts (flat or nested).
-        tolerance: Relative tolerance for claims whose text declares no
-            fractional precision. ``None`` reads
-            ``L4_llm.default_relative_tolerance`` from thresholds.json.
-            Claims that DO declare decimals are compared against an
-            absolute band derived from the declared precision instead --
-            see DECLARED_PRECISION_ABSOLUTE_TOLERANCE.
     
     Returns:
         NumericGroundingResult with verified/unverified numbers. A claim
         with no matching source fact is unverified, never silently
         accepted; an empty ``source_data`` verifies nothing.
     """
-    rel_tolerance = (
-        DEFAULT_RELATIVE_TOLERANCE if tolerance is None else tolerance
-    )
     result = NumericGroundingResult()
     extracted = extract_numbers(text)
     result.extracted_numbers = extracted
@@ -209,13 +212,9 @@ def verify_against_source(
     source_numbers = _flatten_source(source_data)
     
     for raw_text, value in extracted:
-        abs_tol = _abs_tolerance_for(raw_text)
         matched = False
         for source_key, source_val in source_numbers:
-            if abs_tol is not None:
-                ok = abs(value - source_val) <= abs_tol
-            else:
-                ok = _numbers_match(value, source_val, rel_tolerance)
+            ok = _numbers_match(value, source_val, raw_text)
             if ok:
                 result.verified.append((raw_text, value, source_key))
                 matched = True
@@ -257,24 +256,33 @@ def _flatten_source(data: Dict[str, Any], prefix: str = "") -> List[Tuple[str, D
     return results
 
 
-def _numbers_match(a: Decimal, b: Decimal, tolerance: float) -> bool:
-    """Check if two numbers match within relative tolerance.
+def _numbers_match(claim_value: Decimal, source_val: Decimal, raw_text: str) -> bool:
+    """Check if numbers match using the grounding rule.
     
-    Args:
-        a, b: Numbers to compare.
-        tolerance: Relative tolerance (e.g., 0.01 = 1%).
+    A claim is grounded iff rounding the source to the precision the
+    claim's own text declares yields the claim's value.
     
-    Returns:
-        True if |a - b| / |b| <= tolerance (or both are zero).
+    Percent claims are compared in percent space (source × 100).
     """
-    if a == b:
+    if claim_value == source_val:
         return True
     
-    if b == 0:
-        return abs(a) <= tolerance
+    is_percent = raw_text.strip().endswith('%')
+    # Work in display space for percent claims
+    display_source = source_val * 100 if is_percent else source_val
+    display_claim = claim_value * 100 if is_percent else claim_value
     
-    rel_diff = abs((a - b) / b)
-    return rel_diff <= Decimal(str(tolerance))
+    places = declared_precision(raw_text)
+    if places is None:
+        places = 0
+    
+    # Round source to the exact decimal places declared by the text
+    try:
+        quant_exp = Decimal(10) ** -places
+        rounded_source = display_source.quantize(quant_exp)
+        return rounded_source == display_claim
+    except (InvalidOperation, ValueError):
+        return False
 
 
 def compute_metrics(

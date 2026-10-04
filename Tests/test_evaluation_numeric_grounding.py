@@ -81,7 +81,7 @@ def test_extract_multiple():
 def test_verify_exact_match():
     source = {"entry_price": 3170.0, "stop_loss": 3106.6}
     text = "Entry at 3170.0 with stop at 3106.6"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
     assert len(result.verified) == 2
     assert len(result.unverified) == 0
@@ -90,63 +90,63 @@ def test_verify_exact_match():
 def test_verify_percent_exact():
     source = {"roe": 0.15}
     text = "ROE is 15%"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_verify_indonesian_format():
     source = {"price": 1234.56}
     text = "Harga 1.234,56"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_verify_english_format():
     source = {"price": 1234.56}
     text = "Price 1,234.56"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_verify_negative():
     source = {"loss": -1234.56}
     text = "Loss -1.234,56"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_verify_zero():
     source = {"profit": 0.0}
     text = "Profit 0"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_verify_small_decimal():
     source = {"ratio": 0.0001}
     text = "Ratio 0,0001"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_verify_large_number():
     source = {"market_cap": 1234567890}
     text = "Market cap 1.234.567.890"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_verify_nested_source():
     source = {"position": {"entry": 3170, "stop": 3106.6}}
     text = "Entry 3170, stop 3.106,6"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_verify_multiple_same_number():
     source = {"price": 100}
     text = "Buy at 100, sell at 100"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
     assert len(result.verified) == 2
 
@@ -155,65 +155,89 @@ def test_verify_multiple_same_number():
 def test_verify_rounded_up():
     source = {"price": 3170.4}
     text = "Price 3170"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_verify_rounded_down():
     source = {"price": 3169.6}
     text = "Price 3170"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_verify_percent_rounded():
     source = {"roe": 0.1534}
     text = "ROE 15,3%"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
-def test_verify_tolerance_1_percent():
-    source = {"price": 100}
-    text = "Price 100,5"
-    result = verify_against_source(text, source, tolerance=0.01)
+def test_verify_rounding_2_decimal_places():
+    """Claim declaring 2 decimal places should match source rounded to 2 dp."""
+    source = {"value": 0.1234}
+    text = "Value 0,12"  # rounds source to 2 decimals
+    result = verify_against_source(text, source)
     assert result.all_verified
+    assert len(result.verified) == 1
 
 
-def test_verify_tolerance_edge():
-    source = {"price": 100}
-    text = "Price 101"  # 1% difference
-    result = verify_against_source(text, source, tolerance=0.01)
-    assert result.all_verified
-
-
-def test_verify_tolerance_fail():
-    source = {"price": 100}
-    text = "Price 102"  # 2% difference
-    result = verify_against_source(text, source, tolerance=0.01)
+def test_verify_rounding_4_decimal_places_mismatch():
+    """Claim declaring 4 decimal places must exactly match after rounding."""
+    source = {"pi": 3.1415}
+    text = "Pi 3.1416"  # 4 decimals, source rounded to 3.1415, claim is 3.1416
+    result = verify_against_source(text, source)
     assert not result.all_verified
     assert len(result.unverified) == 1
 
 
-def test_verify_small_number_tolerance():
+def test_verify_integer_exact_match():
+    """Claim with no decimals must match source rounded to 0 dp."""
+    source = {"price": 100}
+    text = "Price 100"
+    result = verify_against_source(text, source)
+    assert result.all_verified
+
+
+def test_verify_integer_integer_mismatch():
+    """Integer claim vs source with different rounded value."""
+    source = {"price": 100}
+    text = "Price 101"  # Claim 101, source 100, rounding to 0 dp: 100 ≠ 101
+    result = verify_against_source(text, source)
+    assert not result.all_verified
+    assert len(result.unverified) == 1
+
+
+def test_verify_tolerance_fail():
+    """Integer claim with worse mismatch should remain unverified."""
+    source = {"price": 100}
+    text = "Price 102"  # 2 units different, both integers -> 100 ≠ 102
+    result = verify_against_source(text, source)
+    assert not result.all_verified
+    assert len(result.unverified) == 1
+
+
+def test_verify_small_number_rounding():
+    """Small numbers with declared precision should still match after rounding."""
     source = {"ratio": 0.001}
-    text = "Ratio 0,00101"
-    result = verify_against_source(text, source, tolerance=0.01)
+    text = "Ratio 0,001"  # 0.001 matches exactly
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
-def test_verify_negative_tolerance():
+def test_verify_negative_rounding():
+    """Negative numbers follow same rounding rule."""
     source = {"loss": -100}
-    text = "Loss -99"
-    result = verify_against_source(text, source, tolerance=0.01)
+    text = "Loss -100"  # Exact match
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
-def test_verify_zero_tolerance():
+def test_verify_zero_tolerance_decimal():
     # 0.5 vs 0.0: no relative tolerance applies to zero; flagged as unverified.
     source = {"value": 0}
     text = "Value 0,5"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert not result.all_verified
     assert len(result.unverified) == 1
 
@@ -221,7 +245,7 @@ def test_verify_zero_tolerance():
 def test_verify_string_source():
     source = {"price": "3170.5"}
     text = "Price 3170"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
@@ -229,7 +253,7 @@ def test_verify_string_source():
 def test_hallucination_wrong_number():
     source = {"price": 100}
     text = "Price 200"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert not result.all_verified
     assert len(result.unverified) == 1
     assert len(result.hallucinations) == 1
@@ -238,7 +262,7 @@ def test_hallucination_wrong_number():
 def test_hallucination_extra_number():
     source = {"price": 100}
     text = "Price 100 and volume 5000"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert not result.all_verified
     assert len(result.verified) == 1
     assert len(result.unverified) == 1
@@ -247,7 +271,7 @@ def test_hallucination_extra_number():
 def test_hallucination_fabricated():
     source = {}
     text = "Price 3170"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert not result.all_verified
     assert len(result.unverified) == 1
 
@@ -255,21 +279,21 @@ def test_hallucination_fabricated():
 def test_hallucination_percent():
     source = {"roe": 0.10}
     text = "ROE 25%"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert not result.all_verified
 
 
 def test_hallucination_negative():
     source = {"profit": 100}
     text = "Loss -50"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert not result.all_verified
 
 
 def test_hallucination_mixed():
     source = {"a": 10, "b": 20}
     text = "A is 10, B is 20, C is 30"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert not result.all_verified
     assert len(result.verified) == 2
     assert len(result.unverified) == 1
@@ -278,7 +302,7 @@ def test_hallucination_mixed():
 def test_hallucination_off_by_order():
     source = {"price": 100}
     text = "Price 1000"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert not result.all_verified
 
 
@@ -286,7 +310,7 @@ def test_hallucination_similar_but_wrong():
     # 3220 vs entry 3170 = 1.58%, vs stop 3106 = 3.67% -> both > 1% -> flagged.
     source = {"entry": 3170, "stop": 3106}
     text = "Entry 3170, stop 3220"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert not result.all_verified
     assert len(result.verified) == 1
     assert len(result.unverified) == 1
@@ -295,14 +319,14 @@ def test_hallucination_similar_but_wrong():
 def test_hallucination_inverted_sign():
     source = {"value": 100}
     text = "Value -100"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert not result.all_verified
 
 
 def test_hallucination_decimal_shift():
     source = {"price": 10.5}
     text = "Price 105"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert not result.all_verified
 
 
@@ -310,7 +334,7 @@ def test_hallucination_decimal_shift():
 def test_empty_text():
     source = {"price": 100}
     text = ""
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified  # No numbers extracted
     assert len(result.extracted_numbers) == 0
 
@@ -318,7 +342,7 @@ def test_empty_text():
 def test_empty_source():
     source = {}
     text = "No numbers here"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
     assert len(result.extracted_numbers) == 0
 
@@ -326,28 +350,28 @@ def test_empty_source():
 def test_text_with_no_numbers():
     source = {"price": 100}
     text = "This is a description without numbers"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_numbers_in_words():
     source = {"count": 5}
     text = "Five items"  # Words, not digits
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified  # No numbers extracted
 
 
 def test_currency_symbols():
     source = {"price": 100}
     text = "Price $100 or Rp100"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_dates_not_confused():
     source = {"year": 2026}
     text = "Date 2026-10-03"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     # Extracts 2026, 10, 03 - 2026 matches, others unverified
     assert len(result.extracted_numbers) == 3
     assert len(result.verified) >= 1
@@ -356,29 +380,41 @@ def test_dates_not_confused():
 def test_scientific_notation_not_supported():
     source = {"value": 1000}
     text = "Value 1e3"  # Not supported by simple regex
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     # Will extract 1 and 3, not 1000
     assert len(result.unverified) >= 1
 
 
-def test_very_large_tolerance():
+def test_rounding_is_not_relative_tolerance():
+    """150 vs 100 must stay unverified: the rule is declared precision, not %."""
     source = {"price": 100}
     text = "Price 150"
-    result = verify_against_source(text, source, tolerance=0.5)  # 50%
-    assert result.all_verified
+    result = verify_against_source(text, source)
+    assert not result.all_verified
+    assert len(result.unverified) == 1
 
 
-def test_very_small_tolerance():
+def test_integer_claim_rounds_source_to_zero_dp():
+    """A whole-number claim rounds the source to 0 dp before comparing."""
     source = {"price": 100.02}
-    text = "Price 100"  # 0.02% diff > 0.01% tolerance -> flagged
-    result = verify_against_source(text, source, tolerance=0.0001)  # 0.01%
+    text = "Price 100"  # 100.02 rounds to 100 -> grounded
+    result = verify_against_source(text, source)
+    assert result.all_verified
+    assert len(result.verified) == 1
+
+
+def test_integer_claim_mismatch_after_rounding():
+    """100.6 must NOT round to 100 -- rounding, not truncation."""
+    source = {"price": 100.6}
+    text = "Price 100"  # 100.6 rounds to 101 ≠ 100
+    result = verify_against_source(text, source)
     assert not result.all_verified
 
 
 def test_multiple_occurrences():
     source = {"price": 100}
     text = "Buy 100, hold 100, sell 100"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
     assert len(result.verified) == 3
 
@@ -387,70 +423,70 @@ def test_multiple_occurrences():
 def test_ambiguous_period_decimal():
     source = {"ratio": 1.5}
     text = "Ratio 1.5"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_ambiguous_comma_decimal():
     source = {"ratio": 1.5}
     text = "Ratio 1,5"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_ambiguous_thousand_period():
     source = {"count": 1234}
     text = "Count 1.234"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_ambiguous_thousand_comma():
     source = {"count": 1234}
     text = "Count 1,234"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_mixed_formats_same_text():
     source = {"a": 1234.56, "b": 789.01}
     text = "A is 1.234,56 and B is 789.01"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_trailing_zeros():
     source = {"price": 100}
     text = "Price 100,00"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_leading_zeros():
     source = {"ratio": 0.05}
     text = "Ratio 0,05"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_percent_without_decimal():
     source = {"rate": 0.15}
     text = "Rate 15%"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_percent_with_decimal():
     source = {"rate": 0.1534}
     text = "Rate 15,34%"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
 def test_whole_number_vs_decimal():
     source = {"value": 100.0}
     text = "Value 100"
-    result = verify_against_source(text, source, tolerance=0.01)
+    result = verify_against_source(text, source)
     assert result.all_verified
 
 
@@ -501,7 +537,7 @@ def test_recall_hallucination_detection():
     false_negatives = 0  # Missed hallucinations
     
     for source, text in hallucination_cases:
-        result = verify_against_source(text, source, tolerance=0.01)
+        result = verify_against_source(text, source)
         if len(result.unverified) > 0:
             true_positives += 1
         else:
@@ -523,8 +559,9 @@ def test_false_positive_rate():
     valid_cases = [
         ({"a": 10}, "Value 10"),
         ({"a": 100}, "Value 100"),
-        ({"a": 100}, "Value 100,5"),  # Within 1% tolerance
-        ({"a": 100}, "Value 101"),  # Edge of 1% tolerance
+        # Removed 100,5 vs 100 and 101 vs 100 from valid_cases: they are no
+        # longer false positives, they are true hallucinations under the
+        # exact-rounding rule.
         ({"entry": 3170, "stop": 3106.6}, "Entry 3170 stop 3.106,6"),
         ({"roe": 0.15}, "ROE 15%"),
         ({"price": 1234.56}, "Price 1.234,56"),
@@ -535,7 +572,7 @@ def test_false_positive_rate():
     
     false_positives = 0
     for source, text in valid_cases:
-        result = verify_against_source(text, source, tolerance=0.01)
+        result = verify_against_source(text, source)
         if len(result.unverified) > 0:
             false_positives += 1
     
