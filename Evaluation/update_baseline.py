@@ -20,7 +20,8 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 
 _PROJ = Path(__file__).resolve().parent.parent
@@ -85,8 +86,8 @@ def main() -> None:
         "L2_position_performance_property": details["L2_position_performance_property"],
         "L2_profit_factor_property": details["L2_profit_factor_property"],
         "L1_gap_count": details["L1_data"]["failed"],
-        "L4_recall": None,  # DATA_TIDAK_CUKUP saat ini
-        "L4_fpr": None,
+        "L4_recall": details.get("L4_llm_grounding"),
+        "L4_fpr": details.get("L4_llm_grounding"),
         "L3_abstain_synthetic": details["L3_abstain_calibration_synthetic"],
     }
     
