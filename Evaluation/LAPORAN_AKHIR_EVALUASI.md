@@ -182,10 +182,10 @@ L2 PositionPerformance (property, derandomized seed): 1000/1000 passed
 L2 ProfitFactor (property, derandomized seed): 1000/1000 passed
 
 --- Data & Orchestration ---
-L1 Data: duplicates=0, gaps=13 (distinct_dates=3)
-  trading_dates=2, expected_trading_days=15, weekend_dates_excluded=1
-  missing trading dates: 2026-08-25, 2026-08-26, 2026-08-27, 2026-08-28, 2026-08-31, 2026-09-01, 2026-09-02, 2026-09-03, 2026-09-04, 2026-09-07, 2026-09-08, 2026-09-09, 2026-09-10
-  FAIL: gap count 13 > 0
+L1 Data: duplicates=0, gaps=12 (distinct_dates=3)
+  trading_dates=2, expected_trading_days=14, weekend_dates_excluded=1
+  missing trading dates: 2026-08-26, 2026-08-27, 2026-08-28, 2026-08-31, 2026-09-01, 2026-09-02, 2026-09-03, 2026-09-04, 2026-09-07, 2026-09-08, 2026-09-09, 2026-09-10
+  FAIL: gap count 12 > 0
 
 L4 LLM Grounding: DATA_TIDAK_CUKUP (no llm_outputs archive in DB)
 L3 Signals: DATA_TIDAK_CUKUP (< 200 samples per class)
