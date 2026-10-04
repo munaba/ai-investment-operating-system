@@ -76,7 +76,6 @@ pytest -q --ignore=Tests/test_phase_i_gate3.1_datetime.py:
 
 ## Run Command
 ```bash
-cd "F:/My Son"
-C:/Users/Nabil/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe Evaluation/run_eval.py
+python Evaluation/run_eval.py
 ```
 Exit code non-zero bila ada metrik di bawah target.

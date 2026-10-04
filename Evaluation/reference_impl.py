@@ -122,3 +122,40 @@ def ref_forex_maximum_loss(
     # pip_value == pip_size * quantity (USD-quoted pair, quote == USD)
     pip_value = pip_size * qty
     return (distance / pip_size) * pip_value
+# ---------------------------------------------------------------------------
+# Business/position_performance_engine.py -- PositionPerformanceEngine.calculate
+# Contract: computes win/loss/breakeven counts, gross profit/loss, net profit,
+# average win/loss directly from realized_pnl.
+# ---------------------------------------------------------------------------
+
+def ref_position_performance(pnls: List[float]) -> dict:
+    winning = 0
+    losing = 0
+    breakeven = 0
+    gross_profit = 0.0
+    gross_loss = 0.0
+    
+    for pnl in pnls:
+        if pnl > 0:
+            winning += 1
+            gross_profit += pnl
+        elif pnl < 0:
+            losing += 1
+            gross_loss += abs(pnl)
+        else:
+            breakeven += 1
+            
+    net = gross_profit - gross_loss
+    avg_win = gross_profit / winning if winning > 0 else 0.0
+    avg_loss = gross_loss / losing if losing > 0 else 0.0
+    
+    return {
+        "winning_positions": winning,
+        "losing_positions": losing,
+        "breakeven_positions": breakeven,
+        "gross_profit": gross_profit,
+        "gross_loss": gross_loss,
+        "net_profit": net,
+        "average_win": avg_win,
+        "average_loss": avg_loss,
+    }

@@ -20,6 +20,7 @@ from Evaluation.reference_impl import (  # noqa: E402
     ref_forex_maximum_loss,
     ref_maximum_drawdown,
     ref_profit_factor,
+    ref_position_performance,
 )
 
 OUT = _PROJ / "Evaluation" / "golden_cases"
@@ -66,6 +67,18 @@ FOREX_MAX_LOSS_CASES = [
 ]
 
 
+
+POSITION_PERF_CASES = [
+    # list of pnls
+    [],
+    [0.0, 0.0, 0.0],
+    [10.5, 20.25, -5.0, -10.0, 0.0],
+    [-100.0, -50.0],
+    [100.0, 50.0],
+    [1e-9, -1e-9],
+    [1e12, -1e12],
+]
+
 def main() -> None:
     expectancy = [
         {
@@ -95,11 +108,17 @@ def main() -> None:
         for (p, e, s, q) in FOREX_MAX_LOSS_CASES
     ]
 
+    position_perf = [
+        {"input": {"pnls": p}, "expected": ref_position_performance(p)}
+        for p in POSITION_PERF_CASES
+    ]
+
     files = {
         "l2_expectancy_golden.json": expectancy,
         "l2_max_drawdown_golden.json": drawdown,
         "l2_profit_factor_golden.json": profit,
         "l2_forex_max_loss_golden.json": forex,
+        "l2_position_performance_golden.json": position_perf,
     }
     for name, payload in files.items():
         (OUT / name).write_text(json.dumps(payload, indent=2))
