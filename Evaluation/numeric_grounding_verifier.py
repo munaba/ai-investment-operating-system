@@ -10,6 +10,7 @@ Target: recall >= 99% on synthetic test set.
 from __future__ import annotations
 
 import json
+import math
 import re
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -78,7 +79,9 @@ def declared_precision(raw_text: str) -> Optional[int]:
     "1.234" -> None (Indonesian/English thousands group, not precision).
     "0,001" -> 3 (leading zero before separator means decimal, not thousands).
     """
-    body = raw_text.rstrip("%").strip().lstrip("-")
+    body = raw_text.strip().lstrip("-")
+    # Strip trailing unit words / % / spaces ("3.2 trillion", "12,34%")
+    body = re.sub(r"[^0-9.,]*$", "", body)
     last_dot = body.rfind(".")
     last_comma = body.rfind(",")
     if last_dot < 0 and last_comma < 0:
@@ -108,6 +111,33 @@ def _abs_tolerance_for(raw_text: str) -> Optional[Decimal]:
     )
 
 
+#: Magnitude words a claim may attach to a number. The extracted value is
+#: scaled, so the same quantization rule then decides grounded vs
+#: hallucination. Indonesian and English spellings share a factor.
+MAGNITUDE_WORDS: Dict[str, int] = {
+    "ribu": 10 ** 3,
+    "thousand": 10 ** 3,
+    "thousands": 10 ** 3,
+    "juta": 10 ** 6,
+    "million": 10 ** 6,
+    "millions": 10 ** 6,
+    "miliar": 10 ** 9,
+    "billion": 10 ** 9,
+    "billions": 10 ** 9,
+    "triliun": 10 ** 12,
+    "trillion": 10 ** 12,
+    "trillions": 10 ** 12,
+}
+
+
+def _magnitude_after(text: str, end: int) -> int:
+    """Magnitude factor for a word immediately following a number, else 1."""
+    rest = re.match(r"\s*([A-Za-z]+)", text[end:])
+    if rest is None:
+        return 1
+    return MAGNITUDE_WORDS.get(rest.group(1).lower(), 1)
+
+
 def extract_numbers(text: str) -> List[Tuple[str, Decimal]]:
     """Extract numbers from text (Indonesian and English formats).
     
@@ -124,6 +154,14 @@ def extract_numbers(text: str) -> List[Tuple[str, Decimal]]:
         raw = match.group(0)
         normalized = _normalize_number(raw)
         if normalized is not None:
+            factor = _magnitude_after(text, match.end())
+            if factor != 1:
+                # Keep the magnitude word in raw text so declared_precision
+                # and _numbers_match see the same unit the claim declared.
+                word = re.match(r"\s*([A-Za-z]+)", text[match.end():])
+                if word:
+                    raw = f"{raw} {word.group(1)}"
+            normalized *= factor
             results.append((raw, normalized))
     
     return results
@@ -285,9 +323,17 @@ def _numbers_match(claim_value: Decimal, source_val: Decimal, raw_text: str) -> 
     if places is None:
         places = 0
     
+    # Magnitude factor declared in the raw text itself ("3.2 trillion"):
+    # the declared decimal place stands in magnitude space, so the ULP in
+    # base units is 10^-places * factor.
+    mag = 1
+    unit = re.search(r"([A-Za-z]+)\s*$", raw_text)
+    if unit:
+        mag = MAGNITUDE_WORDS.get(unit.group(1).lower(), 1)
+    
     # Round source to the exact decimal places declared by the text
     try:
-        quant_exp = Decimal(10) ** -places
+        quant_exp = (Decimal(10) ** -places) * mag
         rounded_source = display_source.quantize(quant_exp)
         return rounded_source == display_claim
     except (InvalidOperation, ValueError):
@@ -319,6 +365,50 @@ def compute_metrics(
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
     fpr = fp / (fp + tn) if (fp + tn) > 0 else 0.0
     return {"recall": recall, "fpr": fpr}
+
+
+def _binomial_tail(k: int, n: int, p: float) -> float:
+    """P(X >= k) for X ~ Binomial(n, p). Exact sum via math.comb."""
+    return sum(
+        math.comb(n, i) * (p ** i) * ((1.0 - p) ** (n - i))
+        for i in range(k, n + 1)
+    )
+
+
+def clopper_pearson(k: int, n: int, alpha: float = 0.05) -> Tuple[float, float]:
+    """Clopper-Pearson exact two-sided (1-alpha) confidence interval.
+
+    k successes out of n trials. Solved by bisection on the monotone
+    binomial tail — no scipy dependency.
+
+    Lower: largest p with P(X >= k | p) <= alpha/2 (tail decreasing).
+    Upper: largest p with P(X >= k+1 | p) < 1 - alpha/2 (tail increasing).
+    """
+    if n <= 0:
+        return (0.0, 1.0)
+    if k <= 0:
+        lower = 0.0
+    else:
+        lo, hi = 0.0, 1.0
+        for _ in range(80):
+            mid = (lo + hi) / 2.0
+            if _binomial_tail(k, n, mid) > alpha / 2.0:
+                hi = mid
+            else:
+                lo = mid
+        lower = (lo + hi) / 2.0
+    if k >= n:
+        upper = 1.0
+    else:
+        lo, hi = 0.0, 1.0
+        for _ in range(80):
+            mid = (lo + hi) / 2.0
+            if _binomial_tail(k + 1, n, mid) < 1.0 - alpha / 2.0:
+                lo = mid
+            else:
+                hi = mid
+        upper = (lo + hi) / 2.0
+    return (lower, upper)
 
 
 # ponytail: no narrate_explanation hook integration yet.
