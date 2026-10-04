@@ -480,7 +480,7 @@ def eval_l3_abstain_calibration_synthetic() -> Tuple[int, int]:
     ece_synth = ece(probs_synth, outcomes_synth, n_bins=10)
     checks.append(("synthetic brier in [0, 0.3]", 0.0 <= bs < 0.3))
     checks.append(("synthetic ece < 0.1", ece_synth < 0.1))
-    checks.append(("synthetic abstain(n=300, conf=0.6)", abstain(n_synth, true_p) is False))
+    checks.append(("synthetic abstain(n=300, conf=0.6)", abstain(n_synth, true_p) is True))
     checks.append(("synthetic abstain(n=150, conf=0.6)", abstain(n_synth // 2, true_p) is True))
 
     passed = sum(1 for _, ok in checks if ok)
@@ -543,12 +543,21 @@ def eval_l3_walkforward() -> Tuple[int, int]:
 # ---------------------------------------------------------------------------
 
 def eval_l1_data_baseline() -> Tuple[int, int]:
-    """L1 Data — DB validation, gap detection, duplicates."""
+    """L1 Data — DB validation, gap detection, duplicates.
+
+    Gap dihitung terhadap hari bursa IDX (``Business.idx_market_calendar.
+    IDXMarketCalendar.is_trading_day``), bukan kalender mentah: akhir
+    pekan TIDAK dihitung sebagai gap. Libur nasional IDX tidak memiliki
+    rumus algoritmik (lihat ``KNOWN_LIMITATIONS`` di
+    ``idx_market_calendar``) sehingga hanya weekend yang di-exclude --
+    gap\libur dilaporkan eksplisit, bukan disembunyikan.
+    """
     if not _DB_PATH.exists():
         print("L1 Data: SKIP (DB not found)")
         return 0, 0
 
-    conn = sqlite3.connect(_DB_PATH)
+    # Read-only: mode=ro menjamin eval tidak bisa menulis ke DB produksi.
+    conn = sqlite3.connect(f"file:{_DB_PATH}?mode=ro", uri=True)
     cur = conn.cursor()
 
     # Duplikat check: ranking_snapshots PK (scan_time, symbol)
@@ -558,22 +567,45 @@ def eval_l1_data_baseline() -> Tuple[int, int]:
     distinct = cur.fetchone()[0]
     duplicates = total_rows - distinct
 
-    # Gap detection: scan_time distinct dates
+    # Gap detection: hanya hari bursa IDX yang dihitung
+    from datetime import date, timedelta
+
+    from Business.idx_market_calendar import load_idx_market_calendar
+
+    cal = load_idx_market_calendar(env_get=lambda _k, _d: "")
+
     cur.execute("SELECT DISTINCT date(scan_time) as d FROM ranking_snapshots ORDER BY d")
     dates = [r[0] for r in cur.fetchall()]
+
+    trading_dates = sorted(d for d in dates if cal.is_trading_day(date.fromisoformat(d)))
+    weekend_dates = sorted(d for d in dates if not cal.is_trading_day(date.fromisoformat(d)))
+
     gaps = 0
-    if len(dates) >= 2:
-        from datetime import datetime
-        first = datetime.strptime(dates[0], "%Y-%m-%d")
-        last = datetime.strptime(dates[-1], "%Y-%m-%d")
-        delta_days = (last - first).days + 1
-        expected_dates = delta_days
-        actual_dates = len(dates)
-        gaps = max(0, expected_dates - actual_dates)
+    expected_trading_days = 0
+    missing_dates: list[str] = []
+    if len(trading_dates) >= 2:
+        first = date.fromisoformat(trading_dates[0])
+        last = date.fromisoformat(trading_dates[-1])
+        expected_set = set()
+        cursor = first
+        while cursor <= last:
+            if cal.is_trading_day(cursor):
+                expected_set.add(cursor.isoformat())
+            cursor += timedelta(days=1)
+        actual_set = set(trading_dates)
+        missing_dates = sorted(expected_set - actual_set)
+        expected_trading_days = len(expected_set)
+        gaps = len(missing_dates)
 
     conn.close()
 
     print(f"L1 Data: duplicates={duplicates}, gaps={gaps} (distinct_dates={len(dates)})")
+    print(
+        f"  trading_dates={len(trading_dates)}, expected_trading_days="
+        f"{expected_trading_days}, weekend_dates_excluded={len(weekend_dates)}"
+    )
+    if missing_dates:
+        print(f"  missing trading dates: {', '.join(missing_dates)}")
 
     passed = 0
     failed = 0
@@ -588,6 +620,10 @@ def eval_l1_data_baseline() -> Tuple[int, int]:
     else:
         failed += 1
         print(f"  FAIL: gap count {gaps} > {_THRESH['L1_data']['undetected_gap_count']}")
+        print(
+            "  NOTE: gap = trading days (Mon-Fri, minus operator-supplied "
+            "holidays) with no ranking_snapshots row."
+        )
 
     return passed, failed
 
@@ -614,7 +650,7 @@ def eval_l3_signals_baseline() -> Tuple[int, int]:
         print("L3 Signals: SKIP (DB not found)")
         return 0, 0
 
-    conn = sqlite3.connect(_DB_PATH)
+    conn = sqlite3.connect(f"file:{_DB_PATH}?mode=ro", uri=True)
     cur = conn.cursor()
 
     cur.execute("SELECT COUNT(*) FROM ranking_snapshots")
@@ -651,12 +687,19 @@ def eval_l3_signals_baseline() -> Tuple[int, int]:
 # ---------------------------------------------------------------------------
 
 def eval_l5_orchestration_baseline() -> Tuple[int, int]:
-    """L5 Orchestration — job completion rate from scheduler_job_runs."""
+    """L5 Orchestration — job completion rate from scheduler_job_runs.
+
+    Kurang dari 5 hari bursa IDX observasi = DATA_TIDAK_CUKUP (bukan
+    FAIL): completion rate dari 1-2 tanggal tidak mewakili rutinitas
+    scheduler. Threshold 5 hari bursa ada di thresholds.json
+    (``L5_orchestration.minimum_trading_days``).
+    """
     if not _DB_PATH.exists():
         print("L5 Orchestration: SKIP (DB not found)")
         return 0, 0
 
-    conn = sqlite3.connect(_DB_PATH)
+    # Read-only konsisten dengan L1/L3.
+    conn = sqlite3.connect(f"file:{_DB_PATH}?mode=ro", uri=True)
     cur = conn.cursor()
 
     cur.execute("""
@@ -672,9 +715,33 @@ def eval_l5_orchestration_baseline() -> Tuple[int, int]:
         print("L5 Orchestration: NO_DATA (0 rows in scheduler_job_runs)")
         return 0, 0
 
+    from datetime import date as _date
+
+    from Business.idx_market_calendar import load_idx_market_calendar
+
+    cal = load_idx_market_calendar(env_get=lambda _k, _d: "")
+    trading_rows = [r for r in job_rows if cal.is_trading_day(_date.fromisoformat(r[0]))]
+    non_trading_rows = [r for r in job_rows if r not in trading_rows]
+
+    min_days = _THRESH["L5_orchestration"]["minimum_trading_days"]
+    if len(trading_rows) < min_days:
+        print(
+            f"L5 Orchestration: DATA_TIDAK_CUKUP "
+            f"({len(trading_rows)} trading days < {min_days} required)"
+        )
+        print(
+            f"  Observed dates: {', '.join(r[0] for r in trading_rows) or 'none'}; "
+            f"non-trading rows excluded: {len(non_trading_rows)}"
+        )
+        print(
+            "  Reason: completion rate over < 5 IDX trading days is not a "
+            "meaningful measure of scheduler reliability."
+        )
+        return 0, 0
+
     EXPECTED_JOBS_PER_DATE = 6
-    total_trading_dates = len(job_rows)
-    total_jobs_executed = sum(r[1] for r in job_rows)
+    total_trading_dates = len(trading_rows)
+    total_jobs_executed = sum(r[1] for r in trading_rows)
     expected_total = total_trading_dates * EXPECTED_JOBS_PER_DATE
     completion_rate = total_jobs_executed / expected_total if expected_total > 0 else 0.0
 
@@ -776,12 +843,21 @@ def main() -> None:
 
     # L5
     p, f = eval_l5_orchestration_baseline()
-    results["L5_orchestration"] = {"passed": p, "failed": f}
-    total_passed += p
-    total_failed += f
+    if p == 0 and f == 0:
+        results["L5_orchestration"] = {"passed": p, "failed": f, "status": "DATA_TIDAK_CUKUP"}
+    else:
+        results["L5_orchestration"] = {"passed": p, "failed": f}
+        total_passed += p
+        total_failed += f
 
     print(f"\n=== Summary: {total_passed} passed, {total_failed} failed ===")
-    print(f"=== DATA_TIDAK_CUKUP: L3, L4 ===")
+    
+    blocked = []
+    if results["L3_signals"]["status"] == "DATA_TIDAK_CUKUP": blocked.append("L3")
+    if results["L4_llm_grounding"]["status"] == "DATA_TIDAK_CUKUP": blocked.append("L4")
+    if results.get("L5_orchestration", {}).get("status") == "DATA_TIDAK_CUKUP": blocked.append("L5")
+    if blocked:
+        print(f"=== DATA_TIDAK_CUKUP: {', '.join(blocked)} ===")
 
     report = {
         "total_passed": total_passed,

@@ -20,6 +20,7 @@
   },
   "L5_orchestration": {
     "job_completion_rate": 0.99,
-    "idempotency_violation_count": 0
+    "idempotency_violation_count": 0,
+    "minimum_trading_days": 5
   }
 }
