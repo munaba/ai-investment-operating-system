@@ -1,0 +1,200 @@
+[
+  {
+    "id": 100,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "The price is 150.00",
+    "source_data": {
+      "price": 150.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 101,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "Revenue reached 2,500,000",
+    "source_data": {
+      "revenue": 2500000
+    },
+    "holdout": true
+  },
+  {
+    "id": 102,
+    "category": "exact",
+    "label": "grounded",
+    "llm_output": "ROE 0.15",
+    "source_data": {
+      "roe": 0.15
+    },
+    "holdout": true
+  },
+  {
+    "id": 103,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "PER of 15.5",
+    "source_data": {
+      "per": 15.467
+    },
+    "holdout": true
+  },
+  {
+    "id": 104,
+    "category": "rounded",
+    "label": "grounded",
+    "llm_output": "Valuation 3.2 trillion",
+    "source_data": {
+      "valuation": 3189000000000.0
+    },
+    "holdout": true
+  },
+  {
+    "id": 105,
+    "category": "rounded",
+    "label": "hallucination",
+    "llm_output": "Growth 25%",
+    "source_data": {
+      "growth": 0.234
+    },
+    "holdout": true
+  },
+  {
+    "id": 106,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "Market cap 45 billion",
+    "source_data": {
+      "market_cap_usd": 45000000000
+    },
+    "holdout": true
+  },
+  {
+    "id": 107,
+    "category": "unit_difference",
+    "label": "grounded",
+    "llm_output": "Dividend 500 rupiah per share",
+    "source_data": {
+      "dps_rupiah": 500
+    },
+    "holdout": true
+  },
+  {
+    "id": 108,
+    "category": "unit_difference",
+    "label": "hallucination",
+    "llm_output": "Price up 150%",
+    "source_data": {
+      "price_change": 0.5
+    },
+    "holdout": true
+  },
+  {
+    "id": 109,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "Profit margin 18.5%",
+    "source_data": {
+      "margin": 0.185
+    },
+    "holdout": true
+  },
+  {
+    "id": 110,
+    "category": "percent_vs_decimal",
+    "label": "hallucination",
+    "llm_output": "Return 12.5%",
+    "source_data": {
+      "return": 0.1
+    },
+    "holdout": true
+  },
+  {
+    "id": 111,
+    "category": "percent_vs_decimal",
+    "label": "grounded",
+    "llm_output": "Yield 6%",
+    "source_data": {
+      "yield_pct": 0.06
+    },
+    "holdout": true
+  },
+  {
+    "id": 112,
+    "category": "thousand_separator_id",
+    "label": "grounded",
+    "llm_output": "Volume 12.500.000 shares",
+    "source_data": {
+      "volume": 12500000
+    },
+    "holdout": true
+  },
+  {
+    "id": 113,
+    "category": "thousand_separator_en",
+    "label": "grounded",
+    "llm_output": "Shares traded: 3,250,000",
+    "source_data": {
+      "shares": 3250000
+    },
+    "holdout": true
+  },
+  {
+    "id": 114,
+    "category": "thousand_separator_id",
+    "label": "hallucination",
+    "llm_output": "Total 50.000.000",
+    "source_data": {
+      "total": 49500000
+    },
+    "holdout": true
+  },
+  {
+    "id": 115,
+    "category": "thousand_separator_en",
+    "label": "hallucination",
+    "llm_output": "Open at 1,200",
+    "source_data": {
+      "open": 1100
+    },
+    "holdout": true
+  },
+  {
+    "id": 116,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "Market sentiment is bullish with index at 7250",
+    "source_data": {},
+    "holdout": true
+  },
+  {
+    "id": 117,
+    "category": "no_source",
+    "label": "unverified",
+    "llm_output": "Trading volume reached 500 million shares",
+    "source_data": {
+      "some_other_field": 123
+    },
+    "holdout": true
+  },
+  {
+    "id": 118,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "The stock gained 200%",
+    "source_data": {
+      "gain_pct": 0.5
+    },
+    "holdout": true
+  },
+  {
+    "id": 119,
+    "category": "hallucination",
+    "label": "hallucination",
+    "llm_output": "Peak was 999.99",
+    "source_data": {
+      "peak": 750.0
+    },
+    "holdout": true
+  }
+]
