@@ -192,7 +192,7 @@ else
                 var logLine = $"[refresh] {DateTime.Now:HH:mm:ss.fff} Phase1.RefreshDataAsync";
                 Logger.LogInformation(logLine);
                 // Also write to file for verification
-                try { File.AppendAllText(@"F:\My Son\aios_dashboard_csharp\refresh_log.txt", logLine + Environment.NewLine); } catch (Exception ex) { Logger.LogWarning(ex, "[phase1] refresh_log write failed"); }
+                try { File.AppendAllText("refresh_log.txt", logLine + Environment.NewLine); } catch (Exception ex) { Logger.LogWarning(ex, "[phase1] refresh_log write failed"); }
                 await RefreshDataAsync();
             }
         }
@@ -345,5 +345,5 @@ else
         await JSRuntime.InvokeVoidAsync("downloadFile", $"journal_entries_{DateTime.Now:yyyyMMdd}.md", Convert.ToBase64String(bytes), "text/markdown");
     }
 
-    private const string DbPath = @"F:\My Son\data\investment_platform.db";
+    private const string DbPath = @"..\data\investment_platform.db";
 }

@@ -501,7 +501,7 @@
             {
                 var logLine = $"[refresh] {DateTime.Now:HH:mm:ss.fff} Phase3.LoadAllDataAsync";
                 Console.WriteLine(logLine);
-                try { System.IO.File.AppendAllText(@"F:\My Son\aios_dashboard_csharp\refresh_log.txt", logLine + Environment.NewLine); } catch (Exception ex) { Console.WriteLine($"[refresh] file write error: {ex.Message}"); }
+                try { System.IO.File.AppendAllText("refresh_log.txt", logLine + Environment.NewLine); } catch (Exception ex) { Console.WriteLine($"[refresh] file write error: {ex.Message}"); }
                 await LoadAllDataAsync();
             }
         }

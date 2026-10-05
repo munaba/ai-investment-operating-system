@@ -270,7 +270,7 @@ else
     private long SelectedClosedWindowId = 0;
     private bool IsLoading = true;
 
-    private const string DbPath = @"F:\My Son\data\investment_platform.db";
+    private const string DbPath = @"..\data\investment_platform.db";
 
     // Phase 4a: Human Decision Form state
     private bool ShowDecisionForm = false;
@@ -314,7 +314,7 @@ else
             while (await _refreshTimer!.WaitForNextTickAsync() && !_disposed)
             {
                 var logLine = $"[refresh] {DateTime.Now:HH:mm:ss.fff} Phase2.LoadDataAsync";
-                try { File.AppendAllText(@"F:\My Son\aios_dashboard_csharp\refresh_log.txt", logLine + Environment.NewLine); } catch (Exception ex) { Console.WriteLine($"[refresh] file write error: {ex.Message}"); }
+                try { File.AppendAllText("refresh_log.txt", logLine + Environment.NewLine); } catch (Exception ex) { Console.WriteLine($"[refresh] file write error: {ex.Message}"); }
                 await LoadDataAsync();
             }
         }
@@ -590,7 +590,7 @@ else
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-warning">
-                        <strong>Konfirmasi Wajib:</strong> Form ini akan menjalankan command CLI <code>python main.py sustained-use-final decide</code> dari <code>F:\My Son</code>. 
+                        <strong>Konfirmasi Wajib:</strong> Form ini akan menjalankan command CLI <code>python main.py sustained-use-final decide</code> dari direktori proyek. 
                         Proses ini <strong>tidak</strong> menulis langsung ke database dari C# — C# hanya memanggil proses eksternal yang sama persis dengan manual ketik CLI.
                     </div>
                     <div class="mb-3">

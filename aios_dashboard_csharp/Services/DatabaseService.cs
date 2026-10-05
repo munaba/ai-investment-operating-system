@@ -31,7 +31,7 @@ public class DatabaseService : IDatabaseService
     // M-08: path dari IConfiguration ConnectionStrings:Default, fallback path lama bila kosong.
     public DatabaseService(IConfiguration config)
     {
-        _dbPath = config["ConnectionStrings:Default"] ?? @"F:\My Son\data\investment_platform.db";
+        _dbPath = config["ConnectionStrings:Default"] ?? @"..\data\investment_platform.db";
         // Read-only connection string using URI format with mode=ro
         _connectionString = $"Data Source={_dbPath};Mode=ReadOnly";
     }

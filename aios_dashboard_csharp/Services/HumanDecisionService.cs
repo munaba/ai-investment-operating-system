@@ -38,7 +38,7 @@ public sealed class RealProcessRunner : IProcessRunner
 
 public class HumanDecisionService : IHumanDecisionService
 {
-    private readonly string _workingDirectory = @"F:\My Son";
+    private readonly string _workingDirectory = @"..";
     private readonly IProcessRunner _runner;
 
     // Default ctor preserves existing DI registration (AddSingleton<...> with no args).
