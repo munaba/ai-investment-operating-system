@@ -12,7 +12,7 @@
 `_dbPath` is hardcoded at class scope:
 
 ```csharp
-private readonly string _dbPath = @"F:\My Son\data\investment_platform.db";
+private readonly string _dbPath = @"<repo>\data\investment_platform.db";
 ```
 
 Used to build a read-only SQLite connection string in the constructor:
@@ -21,7 +21,7 @@ Used to build a read-only SQLite connection string in the constructor:
 _connectionString = $"Data Source={_dbPath};Mode=ReadOnly";
 ```
 
-**Impact:** The dashboard can only connect to a DB at exactly that path. Moving `data/` or running on a non-Windows host fails at startup/open. Recommendation (when picked up): resolve from `IConfiguration["ConnectionStrings:ReadOnly"]` or `Path.Combine(AppContext.BaseDirectory, "data", "investment_platform.db")`, not a literal `F:\My Son`.
+**Impact:** The dashboard can only connect to a DB at exactly that path. Moving `data/` or running on a non-Windows host fails at startup/open. Recommendation (when picked up): resolve from `IConfiguration["ConnectionStrings:ReadOnly"]` or `Path.Combine(AppContext.BaseDirectory, "data", "investment_platform.db")`, not a literal `<repo>`.
 
 ---
 
@@ -30,18 +30,18 @@ _connectionString = $"Data Source={_dbPath};Mode=ReadOnly";
 `_workingDirectory` is hardcoded at class scope:
 
 ```csharp
-private readonly string _workingDirectory = @"F:\My Son";
+private readonly string _workingDirectory = @"<repo>";
 ```
 
 Used as `ProcessStartInfo.WorkingDirectory` when shelling out to `python main.py ...`.
 
-**Impact:** Decision submission only works when `main.py` lives under `F:\My Son`. Same portability defect as above. Note: this file was refactored in Batch 3 to add an `IProcessRunner` test seam (no behavior change) — the hardcoded path is untouched and remains the only portability issue here. Recommendation (when picked up): inject the working directory via config or a relative/resolved path.
+**Impact:** Decision submission only works when `main.py` lives under `<repo>`. Same portability defect as above. Note: this file was refactored in Batch 3 to add an `IProcessRunner` test seam (no behavior change) — the hardcoded path is untouched and remains the only portability issue here. Recommendation (when picked up): inject the working directory via config or a relative/resolved path.
 
 ---
 
 ## Why severity = Low
 
-- Both paths are correct and functional on the current dev host (`F:\My Son\...` exists; `main.py` present).
+- Both paths are correct and functional on the current dev host (`<repo>\...` exists; `main.py` present).
 - The app is LAN-only, single-user, runs on this one Windows machine — no cross-platform deployment is planned.
 - No security exposure; purely a maintainability / portability smell.
 - Does not block Batch 3 acceptance (tests pass, prod build clean).

@@ -1,7 +1,7 @@
 # Read-Only Enforcement Proof
 
 > Sumber: sesi Hermes 25 Aug 2026 (@session:default/20260825_120156_d8a0f1).
-> DB: `F:\My Son\data\investment_platform.db`
+> DB: `<repo>\data\investment_platform.db`
 
 ## Tes yang dijalankan
 
@@ -9,7 +9,7 @@ Koneksi SQLite dengan `file:...?mode=ro` (URI mode), lalu:
 
 ```python
 import sqlite3
-conn = sqlite3.connect(r'file:F:\My Son\data\investment_platform.db?mode=ro', uri=True)
+conn = sqlite3.connect(r'file:<repo>\data\investment_platform.db?mode=ro', uri=True)
 c = conn.cursor()
 c.execute('SELECT 1')
 print('SELECT ok:', c.fetchone()[0])

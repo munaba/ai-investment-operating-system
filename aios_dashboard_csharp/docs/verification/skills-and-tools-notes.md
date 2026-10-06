@@ -4,7 +4,7 @@
 
 ## Skill lokal: `blazor-server-dashboard-patterns`
 
-- **Lokasi:** `C:\Users\Nabil\AppData\Local\hermes\skills\software-development\blazor-server-dashboard-patterns\`
+- **Lokasi:** `%LOCALAPPDATA%\hermes\skills\software-development\blazor-server-dashboard-patterns\`
 - **Provenance:** ⚠️ **AUTO-GENERATED dari project ini sendiri** (dibuat 25 Aug 2026 selama rewrite dashboard) — BUKAN skill komunitas pre-existing. Sempat salah dilabeli "kandidat eksternal" dan sudah dikoreksi.
 - **Isi:** pola yang sudah terbukti di project ini — ReadOnlyDbContext (`Mode=ReadOnly` + SaveChanges throw), composite key `scheduler_job_runs(job_type, trading_date)`, PeriodicTimer auto-refresh + IDisposable, Chart.js interop dengan locale id-ID, external CLI mutation pattern, honest empty states.
 - **Relevansi:** source of truth pola untuk pengembangan AIOS lanjutan; perlu adaptasi bila dipakai untuk project lain.
@@ -16,7 +16,7 @@
 - `systematic-debugging` — root cause sebelum fix
 - Ketiganya builtin/generic, genuine pre-existing.
 
-## Referensi eksternal (clone-only, di `F:\My Son\_reference\`)
+## Referensi eksternal (clone-only, di `<repo>\_reference\`)
 
 ### Vibe-Trading (`_reference/vibe-trading/`)
 - Repo: https://github.com/HKUDS/Vibe-Trading · Lisensi: **MIT** (dicek dari LICENSE file)

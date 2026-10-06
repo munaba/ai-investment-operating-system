@@ -19,7 +19,7 @@ Submit sample: `decision=CONTINUE`, `windowId=1`, `note="test"`, `decidedBy="ope
 python main.py sustained-use-final decide --decision CONTINUE --window-id 1 --note test --decided-by operator
 ```
 
-- **Working directory:** `F:\My Son`
+- **Working directory:** `<repo>`
 - **Valid enum decisions:** `PENDING`, `CONTINUE`, `SIMPLIFY`, `AUTHORIZE_FUTURE_INVESTIGATION`
 - Invalid decision ditolak sebelum Process dijalankan (return error, tidak eksekusi).
 

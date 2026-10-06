@@ -1,14 +1,14 @@
 # Phase 0–4 Build & Run Proof
 
 > Sumber: verifikasi runtime sesi Hermes 25 Aug 2026 (@session:default/20260825_120156_d8a0f1).
-> Catatan path: output asli menunjukkan `F:\f\My Son\...` — kemungkinan artefak mount/typo di shell session saat itu. Path project aktual: `F:\My Son\aios_dashboard_csharp\`.
+> Catatan path: output asli menunjukkan `<repo>\...` — kemungkinan artefak mount/typo di shell session saat itu. Path project aktual: `<repo>\aios_dashboard_csharp\`.
 
 ## 1. `dotnet build` — raw output
 
 ```
 Determining projects to restore...
   All projects are up-to-date for restore.
-  aios_dashboard_csharp -> F:\f\My Son\aios_dashboard_csharp\bin\Debug\net8.0\aios_dashboard_csharp.dll
+  aios_dashboard_csharp -> <repo>\aios_dashboard_csharp\bin\Debug\net8.0\aios_dashboard_csharp.dll
 
 Build succeeded.
     0 Warning(s)
@@ -32,7 +32,7 @@ info: Microsoft.Hosting.Lifetime[0]
 info: Microsoft.Hosting.Lifetime[0]
       Hosting environment: Development
 info: Microsoft.Hosting.Lifetime[0]
-      Content root path: F:\f\My Son\aios_dashboard_csharp
+      Content root path: <repo>\aios_dashboard_csharp
 ```
 
 Ports: **https://localhost:5001** / **http://localhost:5000**.
