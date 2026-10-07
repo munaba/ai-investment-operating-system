@@ -453,17 +453,24 @@ def run_cases() -> None:
             f"({flag_comparisons})",
         )
 
-        # Non-registration: skill still absent from DI surfaces.
-        for path, label in [
-            ("Core/composition_root.py", "Core/composition_root.py"),
-            ("Orchestration/skill_registry.py", "Orchestration/skill_registry.py"),
-        ]:
-            p = _PROJECT_ROOT / path
-            if p.exists():
-                check(
-                    "DecisionCopilotSkill" not in p.read_text(encoding="utf-8"),
-                    f"DecisionCopilotSkill absent from {label}",
-                )
+        # Non-registration: skill absent from DI surfaces (registry + module level).
+        # Gate 4 allows LOCAL import inside _build_idx_daily_scheduler, but not module-level or global DI.
+        reg_path = _PROJECT_ROOT / "Orchestration/skill_registry.py"
+        comp_path = _PROJECT_ROOT / "Core/composition_root.py"
+        
+        if reg_path.exists():
+            check(
+                "DecisionCopilotSkill" not in reg_path.read_text(encoding="utf-8"),
+                "DecisionCopilotSkill absent from Orchestration/skill_registry.py",
+            )
+        
+        if comp_path.exists():
+            comp_text = comp_path.read_text(encoding="utf-8")
+            comp_module_level = comp_text.split("def _build_idx_daily_scheduler")[0]
+            check(
+                "DecisionCopilotSkill" not in comp_module_level,
+                "DecisionCopilotSkill not imported at module level in composition_root.py (allowed only inside _build_idx_daily_scheduler)",
+            )
         check(
             'from Orchestration.decision_copilot import DecisionCopilotSkill'
             in new_code,

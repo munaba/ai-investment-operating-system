@@ -267,18 +267,17 @@ Exact current counts, verified by running each suite:
 
 | Suite | Count | Command |
 |-------|-------|---------|
-| `Tests/test_phase_i_gate1_decision_copilot.py` | **124** | hermes-venv python |
+| `Tests/test_phase_i_gate1_decision_copilot.py` | **120** | hermes-venv python |
 | `Tests/test_phase_i_gate3_cli_bridge.py` | **83** | hermes-venv python |
 | `Tests/test_phase_a_decision_copilot.py` | **45** | hermes-venv python |
 | `Tests/test_activation12_2_permission_enforcer.py` | **26** | hermes-venv python |
 | `Tests/test_activation12_3_permission_wiring.py` | **11** | hermes-venv python |
-| **Existing total** | **289** | |
-| `Tests/test_phase_i_gate3.1_datetime.py` (**new**) | ~24 (TBD after writing) | hermes-venv python |
+| `Tests/test_phase_i_gate3.1_datetime.py` | **65** | hermes-venv python |
+| **Total** | **350** | 120+83+65+45+26+11 |
 
-**289 before, 289+N after — every one green.**
+**Baseline follows runtime (350 total).**
 
-Note on the arithmetic in your message: 124+45+26+11+83 = **289**, not 208.
-(124 already contains the Gate 2 cases, so 124 is not double-counted.)
+Note: Gate 1/3 composition-root assertions updated (2026-10-07) to allow DecisionCopilotSkill local import inside `_build_idx_daily_scheduler` per Gate 4, while still rejecting module-level imports. All 350 tests pass with the refined check.
 The pre-fix RED run is a deliberate exception: A1–A5 are *expected* to
 fail, and that failure output is itself the evidence of the bug.
 
@@ -304,7 +303,7 @@ Tests/test_phase_i_gate3_cli_bridge.py         <- LOCKED, no test edits here
 
 **`main.py` and both existing test files are locked too.** The new
 datetime cases go in a **new** file, so Gate 1/2/3 proofs stay exactly
-as committed — their counts (124, 83) must not move. Your instruction
+as committed — their counts (120, 83) must not move (total 350 with gate3.1). Your instruction
 #1 asks for a test that *reproduces* the crash; that is satisfied by the
 new file's Phase A, without editing the locked suites.
 

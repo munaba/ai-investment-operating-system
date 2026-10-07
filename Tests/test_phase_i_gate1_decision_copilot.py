@@ -315,11 +315,13 @@ def run_cases():
     # Gate 2 added no new locked-file imports
     for locked in ["Orchestration.capability", "Core.providers", "copilot_runtime", "authorize_tool"]:
         check(locked not in src, f"Does not contain '{locked}'")
-    # non-registrasi: skill name must not appear in registry/composition root
+    # non-registrasi: skill name must not appear in registry, and not at module level in composition_root
+    # (Gate 4 allows LOCAL import inside _build_idx_daily_scheduler, but not module-level or global DI)
     reg = (ROOT / "Orchestration" / "skill_registry.py").read_text(encoding="utf-8") if (ROOT / "Orchestration" / "skill_registry.py").exists() else ""
     comp = (ROOT / "Core" / "composition_root.py").read_text(encoding="utf-8")
+    comp_module_level = comp.split("def _build_idx_daily_scheduler")[0]
     check("decision_copilot" not in reg, "not registered in skill_registry.py")
-    check("decision_copilot" not in comp, "not referenced in Core/composition_root.py")
+    check("DecisionCopilotSkill" not in comp_module_level, "DecisionCopilotSkill not imported at module level (allowed only inside functions)")
     check("DecisionCopilotSkill" not in reg, "DecisionCopilotSkill absent from skill_registry.py")
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 **Severity:** Low
 **Status:** Logged only — NOT fixed in Batch 3 (per audit directive; fix deferred unless explicitly requested)
 **Logged:** 2026-08-27
-**Audit context:** Found during Batch 3 review of `HumanDecisionService` testability. Two services hardcode absolute Windows paths under `F:\\My Son\\`, which breaks on any machine where the project lives elsewhere (Linux/macOS CI, another user's drive, container). No runtime bug on the current host.
+**Audit context:** Found during Batch 3 review of `HumanDecisionService` testability. Two services hardcode absolute Windows paths under `<repo>\\`, which breaks on any machine where the project lives elsewhere (Linux/macOS CI, another user's drive, container). No runtime bug on the current host.
 
 ---
 
