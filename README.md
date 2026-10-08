@@ -2,88 +2,45 @@
 
 > Evidence-led decision support for the Indonesian stock market (IDX) — no broker, no auto-trading, human always decides.
 
-AIOS is a personal, evidence-led daily trading decision-support agent for IDX. It assembles sourced evidence with timestamps, applies a risk ledger and human-approval gates, and only then — on `SUCCESS` — surfaces a conditional trade plan. Every other outcome is an explicit non-action status. Built as a learning and technical-demonstration project.
+AIOS is a personal decision-support agent for IDX stock analysis. It assembles evidence with timestamps, applies risk gates, and surfaces a conditional trade plan only when the evidence check returns `SUCCESS`; every other state is an explicit non-action. A human is always the final decision-maker.
 
-![AIOS Dashboard](docs/screenshot-dashboard.png)
-<!-- Replace the placeholder above with a real screenshot: docs/screenshot-dashboard.png -->
+## Disclaimer
 
-## Features
+AIOS is a personal research and learning project. It is not a broker, not an autonomous trading bot, and not financial advice. It never submits live orders, and nothing in this repository recommends buying or selling any security. Use at your own risk.
 
-- **Evidence before plan** — every brief carries sources and timestamps; missing/stale/contradictory inputs → `NO_TRADE` / `DATA_STALE` / `INSUFFICIENT_DATA`
-- **Risk ledger & policy gates** — position, loss, and window checks before any plan is formed
-- **Paper trading (explicit only)** — a journal decision never auto-creates a paper order
-- **Observation windows & sustained-use review** — Phase H infrastructure for long-horizon review
-- **Multi-provider LLM** — Gemini / Ollama behind a capability-based selector (no hard vendor lock-in)
-- **Dashboard** — Blazor Server (`aios_dashboard_csharp`, .NET 8), SQLite source of truth
-- **Fail-closed** — provider, scheduler, notification, or persistence failures are surfaced in health/audit, never as a trade
+## What it does
 
-## Tech Stack
+- **Evidence first** — every brief carries sources and timestamps; missing or stale inputs yield `NO_TRADE`, `DATA_STALE`, or `INSUFFICIENT_DATA`
+- **Risk gates** — position, loss, and window checks before any plan forms
+- **Paper trading** — explicit journal entries only; no auto-execution
+- **Multi-provider LLM** — Gemini / Ollama selector (no vendor lock-in)
+- **Fail-closed** — provider, scheduler, and DB failures surface in the audit trail, never as a trade
 
-| Layer | Stack |
-|---|---|
-| Python core | Python 3.11+, `pandas`, `yfinance`, `python-dotenv` (+ optional `google-genai`, `requests`, chart/backtest libs) |
-| Persistence | SQLite + custom migrations (`Database/migrations_*.py`, `run_*_migrations.py`) |
-| C# dashboard | ASP.NET Core 8, Blazor Server, EF Core Sqlite, BCrypt.Net-Next, CsvHelper |
-| Providers | `Providers/` (Gemini, Ollama, selector) |
-| Tests | `pytest` / `vitest` / `playwright` |
+## Quick Start
 
-## Development Process
+### Prerequisites
 
-This project was architected and directed by Nabil, with implementation carried out through AI-assisted engineering — using Claude, ChatGPT, and an autonomous coding agent (Hermes) to implement the design across iterative phases (see `Docs/` for phase-by-phase closeout reports). Nabil defined the system architecture, risk policies, and decision-flow requirements, then broke them into tasks directed to AI agents, reviewing and testing each output.
+- Python 3.11+
+- .NET 8 SDK (for the dashboard)
+- SQLite
 
-This reflects an AI-directed development workflow — a skill increasingly relevant in modern software engineering — rather than a claim that every line was hand-written unassisted.
-
-## Project Structure
-
-```
-.
-├── Core/                 # composition root, bootstrap, doctor, config
-├── Business/             # risk ledger, policies, calendars, paper engine
-├── Orchestration/        # copilot skills, tools, planner, scheduler
-├── Services/             # decision brief, journal, notifications
-├── Repository/           # persistence base + per-feature repos
-├── Providers/            # LLM provider abstraction
-├── Agents/               # agent framework primitives
-├── Database/             # DB manager, migrations (one file per feature)
-├── Tests/                # one file per stage/feature
-├── Docs/                 # closeout reports per activation/phase
-├── aios_dashboard_csharp/  # Blazor Server dashboard (.NET 8)
-├── aios_dashboard_react/   # deprecated, archived — see git history (tag archive/react-dashboard)
-├── data/                 # SQLite DB lives here (gitignored; seed via migrations)
-├── main.py               # entry point (Python copilot)
-├── requirements*.txt     # core + provider/optional/dev/full manifests
-├── .env.example          # template (copy to .env, never commit .env)
-└── run_*_migrations.py  # standalone migration runners
-```
-
-## Installation
+### Install
 
 ```bash
-# 1. Clone
 git clone https://github.com/munaba/ai-investment-operating-system.git
 cd ai-investment-operating-system
 
-# 2. Python env (3.11+)
 python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
-# source .venv/bin/activate
-
+.venv\Scripts\activate        # Windows (Linux/macOS: source .venv/bin/activate)
 pip install -r requirements.txt
-# optional — pick what you need:
-pip install -r requirements-gemini.txt      # Gemini provider
-pip install -r requirements-ollama.txt      # Ollama provider
-pip install -r requirements-optional.txt    # chart/backtest/market-data
-pip install -r requirements-dev.txt         # test suite
-# or everything:
-# pip install -r requirements-full.txt
 
-# 3. Configure
-cp .env.example .env
-# edit .env: set ACTIVE_PROVIDER, GEMINI_API_KEY / OLLAMA_HOST, etc.
+cp .env.example .env          # Windows cmd: copy .env.example .env
+# edit .env: ACTIVE_PROVIDER, GEMINI_API_KEY or OLLAMA_HOST
+```
 
-# 4. Database (creates data/investment_platform.db)
+### Database
+
+```bash
 python run_watchlist_migrations.py
 python run_position_migrations.py
 python run_order_migrations.py
@@ -95,47 +52,84 @@ python run_risk_ledger_migrations.py
 python run_decision_brief_migrations.py
 python run_observation_window_migrations.py
 python run_sustained_use_final_review_migrations.py
-# (or run the subset you need — each script is idempotent)
+python run_brief_approval_migrations.py
+python run_daily_performance_migrations.py
+python run_idempotency_migrations.py
+python run_llm_output_audit_migrations.py
+python run_scheduler_migrations.py
+python run_telegram_control_migrations.py
+python run_valuation_observation_migrations.py
 ```
 
-### C# Dashboard
+### Run
+
+Python copilot (interactive REPL):
+
+```bash
+python main.py
+```
+
+C# dashboard (Blazor Server, .NET 8):
 
 ```bash
 cd aios_dashboard_csharp
+cp appsettings.json.example appsettings.json   # then set DashboardAuth:Username and a BCrypt PasswordHash
 dotnet restore
-dotnet run
-# → http://localhost:5000
-# default account is seeded; reset password:
-dotnet run --project reset-password
+dotnet run                                     # default: http://localhost:5000
+dotnet run --project reset-password            # generate password hash (hidden input)
 ```
 
-## Running
+Login is fail-closed: with no password hash configured, nobody can sign in. `appsettings.json` is git-ignored. The example config binds Kestrel to `0.0.0.0:5000` (reachable from your LAN); change the URL to `http://localhost:5000` if you do not want that.
+
+## Testing
 
 ```bash
-# Python copilot (uses Core/composition_root + .env)
-python main.py
-
-# Telegram / notification wiring is credential-gated — without
-# TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID the app still starts; doctor
-# reports the gap and no message is sent (fail-closed).
-
-# Tests
-pytest -q
-# or: python -m pytest Tests/test_stage9_4_startup_validation.py -v
+pip install pytest
+PYTHONPATH=. python -m pytest -q          # 204 tests collected
 ```
 
-## Status
+Standalone gate scripts (not collected by pytest, run each from the repo root with `PYTHONPATH=.`; 350 checks in total):
 
-Actively developed — **Phase H (Sustained-use review, no automatic expansion)**. Phases A–G are gated and closed (see `Docs/` closeout reports). The roadmap in `AIOS_Personal_IDX_Decision_Agent_Roadmap.md` is the source of truth for scope and gates.
+| Script | Checks |
+|--------|--------|
+| `Tests/test_phase_i_gate1_decision_copilot.py` | 120 |
+| `Tests/test_phase_i_gate3_cli_bridge.py` | 83 |
+| `Tests/test_phase_i_gate3.1_datetime.py` | 65 |
+| `Tests/test_phase_a_decision_copilot.py` | 45 |
+| `Tests/test_activation12_2_permission_enforcer.py` | 26 |
+| `Tests/test_activation12_3_permission_wiring.py` | 11 |
 
-## Disclaimer
+## Evaluation
 
-> This project is built for **learning and technical demonstration** purposes. It is **not** a broker, financial adviser, or autonomous trading bot, and does **not** submit live orders. Nothing here constitutes investment or financial advice. A human is always the final decision-maker and acts at their own broker at their own risk.
+The evaluation harness covers layers L1–L5; see `Evaluation/README.md`. Latest committed baseline (2026-10-04, `Evaluation/baseline.json`): L2 engine 4032/4032 passed (32 golden cases + 4000 property-based).
 
-## Author
+## Architecture
 
-**Nabil** — GitHub: `github.com/munaba` · LinkedIn: `linkedin.com/in/munaba` · Email: `munaba@example.com`
+| Folder | Role |
+|--------|------|
+| `Core/` | Composition root, bootstrap, config |
+| `Business/` | Risk ledger, engines, policies, calendars |
+| `Orchestration/` | Skills, tools, scheduler, permissions |
+| `Services/` | Decision brief, journal, notifications |
+| `Repository/` | Persistence layer |
+| `Providers/` | LLM abstraction (Gemini, Ollama) |
+| `Agents/` | Agent registry, planner, executor |
+| `Database/` | DB manager |
+| `Tests/` | pytest suite and standalone gate scripts |
+| `Evaluation/` | Evaluation harness, golden cases |
+| `aios_dashboard_csharp/` | Blazor Server dashboard |
+
+Scheduler details: `README_SCHEDULER.md`.
+
+## Development
+
+Architected and directed by Nabil; implemented through AI-assisted engineering (Claude, ChatGPT, Hermes agent) across iterative phases.
+
+- **Phases A–G**: complete (scanner, analysis, copilot, paper trading, notifications)
+- **Phase H**: sustained-use review (observation windows, evidence assembly)
+- **Phase I**: evidence profile analysis job added
+- **Parked**: US stocks, crypto, forex (IDX only)
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+No license has been chosen yet; all rights reserved.
