@@ -84,9 +84,11 @@ Login is fail-closed: with no password hash configured, nobody can sign in. `app
 ## Testing
 
 ```bash
-pip install pytest
+pip install pytest hypothesis
 PYTHONPATH=. python -m pytest -q          # 204 tests collected
 ```
+
+`hypothesis` is also required by `Evaluation/run_eval.py` (property-based L2 checks). PowerShell: `$env:PYTHONPATH="."; python -m pytest -q`.
 
 Standalone gate scripts (not collected by pytest, run each from the repo root with `PYTHONPATH=.`; 350 checks in total):
 
@@ -123,7 +125,9 @@ Scheduler details: `README_SCHEDULER.md`.
 
 ## Development
 
-Architected and directed by Nabil; implemented through AI-assisted engineering (Claude, ChatGPT, Hermes agent) across iterative phases.
+AIOS was architected and directed by Nabil, with implementation carried out through AI-assisted engineering, using Claude, ChatGPT, and an autonomous coding agent (Hermes) across iterative phases. Nabil defined the system architecture, risk policies, and decision-flow requirements, broke them into tasks for the AI agents, and reviewed and tested each output.
+
+This is an AI-directed development workflow, not a claim that every line was written by hand without assistance.
 
 - **Phases A–G**: complete (scanner, analysis, copilot, paper trading, notifications)
 - **Phase H**: sustained-use review (observation windows, evidence assembly)
