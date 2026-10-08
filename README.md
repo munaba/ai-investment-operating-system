@@ -85,10 +85,12 @@ Login is fail-closed: with no password hash configured, nobody can sign in. `app
 
 ```bash
 pip install pytest hypothesis
-PYTHONPATH=. python -m pytest -q          # 204 tests collected
+PYTHONPATH=. python -m pytest -q          # 204 passed
 ```
 
 `hypothesis` is also required by `Evaluation/run_eval.py` (property-based L2 checks). PowerShell: `$env:PYTHONPATH="."; python -m pytest -q`.
+
+Two evaluation tests need a populated local `data/` database; on a fresh clone without it they are expected to fail.
 
 Standalone gate scripts (not collected by pytest, run each from the repo root with `PYTHONPATH=.`; 350 checks in total):
 
