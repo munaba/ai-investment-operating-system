@@ -236,13 +236,43 @@ class SQLiteDatabase(BaseDatabase):
 
         Args:
             connection: The connection to configure.
+
+        Security note:
+            PRAGMA names are whitelisted to prevent SQL injection through
+            the 'extra_pragmas' dict. Values are not sanitized because
+            SQLite's PRAGMA syntax only accepts literals or keywords,
+            not arbitrary SQL expressions. The caller is responsible for
+            ensuring values are valid for their respective pragmas.
         """
+        # Whitelist of allowed PRAGMA names (no SQL injection possible)
+        ALLOWED_PRAGMAS = frozenset({
+            "journal_mode",
+            "synchronous",
+            "foreign_keys",
+            "busy_timeout",
+            "cache_size",
+            "temp_store",
+            "mmap_size",
+            "page_size",
+            "auto_vacuum",
+        })
         cursor = connection.cursor()
         try:
+            # Explicitly allow only whitelisted pragmas
+            if self.config.journal_mode not in {"WAL", "DELETE", "TRUNCATE", "PERSIST", "MEMORY", "OFF"}:
+                raise ValueError(f"Invalid journal_mode: {self.config.journal_mode}")
             cursor.execute(f"PRAGMA journal_mode = {self.config.journal_mode}")
+            
+            if self.config.synchronous not in {"OFF", "NORMAL", "FULL", "EXTRA", "0", "1", "2", "3"}:
+                raise ValueError(f"Invalid synchronous: {self.config.synchronous}")
             cursor.execute(f"PRAGMA synchronous = {self.config.synchronous}")
+            
             cursor.execute(f"PRAGMA foreign_keys = {'ON' if self.config.foreign_keys else 'OFF'}")
+            
+            # Validate extra_pragmas against whitelist
             for pragma_name, pragma_value in self.config.extra_pragmas.items():
+                if pragma_name not in ALLOWED_PRAGMAS:
+                    raise ValueError(f"PRAGMA '{pragma_name}' is not allowed")
                 cursor.execute(f"PRAGMA {pragma_name} = {pragma_value}")
         finally:
             cursor.close()
@@ -424,6 +454,13 @@ class SQLiteDatabase(BaseDatabase):
                         "exclusive=True is only valid for a new top-level "
                         "transaction, not a nested savepoint (a transaction "
                         "is already active on this connection)."
+                    )
+                # Validate SAVEPOINT name against pattern to prevent SQL injection
+                import re
+                if not re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", name):
+                    raise DatabaseError(
+                        f"Invalid SAVEPOINT name: {name}",
+                        details={"error": "Name must match ^[A-Za-z_][A-Za-z0-9_]*$"},
                     )
                 savepoint_name = f"sp_{len(stack)}"
                 connection.execute(f"SAVEPOINT {savepoint_name}")

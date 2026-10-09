@@ -134,17 +134,49 @@ class IDXMarketCalendar:
         """Return whether ``day`` is a trading day: a weekday, not a
         caller-declared holiday.
 
+        For years outside the 2026 holiday table, returns False (fail-closed)
+        and logs a WARNING, UNLESS the operator has explicitly added that
+        year's holidays via the constructor or IDX_MARKET_HOLIDAYS env var.
+        This prevents the scheduler from assuming weekdays are trading days
+        in uncovered years, which could lead to false-positive ticks on
+        national holidays.
+
         Args:
             day: The calendar date to check (naive -- interpreted as a
                 date in this calendar's timezone).
 
         Returns:
             ``True`` if ``day`` is Monday-Friday and not present in
-            ``self.holiday_dates``.
+            ``self.holiday_dates``, and either ``day.year == 2026`` OR
+            the operator has explicitly added holidays for that year.
+            ``False`` for years outside 2026 without operator override
+            (fail-closed) and weekends.
         """
+        from Core.logger import get_logger
+        
+        logger = get_logger(__name__)
         if day.weekday() >= 5:  # Saturday=5, Sunday=6
             return False
-        return day not in self.holiday_dates
+        
+        # Check if day is in the explicit holiday set first
+        if day in self.holiday_dates:
+            return False
+        
+        # Fail-closed for years outside 2026 holiday table, UNLESS operator
+        # has explicitly provided holidays for that year (detected by checking
+        # if ANY date from that year exists in holiday_dates)
+        if day.year != 2026:
+            # Check if operator provided any holidays for this year
+            year_has_holidays = any(h.year == day.year for h in self.holiday_dates)
+            if not year_has_holidays:
+                logger.warning(
+                    f"Date {day} is outside 2026 holiday coverage and no holidays "
+                    f"for {day.year} were provided. Fail-closed: treating as non-trading day. "
+                    f"Add {day.year} holidays via IDX_MARKET_HOLIDAYS env var."
+                )
+                return False
+        
+        return True
 
     def to_local(self, moment: datetime) -> datetime:
         """Convert ``moment`` to this calendar's timezone.
