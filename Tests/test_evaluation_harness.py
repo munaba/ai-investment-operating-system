@@ -17,6 +17,9 @@ _PY = sys.executable
 
 def test_run_eval_executes_and_produces_report():
     """run_eval.py berjalan sampai selesai dan menghasilkan report JSON valid."""
+    if not (_PROJ / "data" / "investment_platform.db").exists():
+        pytest.skip("requires populated local data/ database")
+
     result = subprocess.run(
         [_PY, str(_PROJ / "Evaluation" / "run_eval.py")],
         cwd=_PROJ,
@@ -69,6 +72,9 @@ def test_run_eval_executes_and_produces_report():
 
 def test_golden_cases_exist():
     """Golden case files generated from reference exist and are valid JSON."""
+    if not (_PROJ / "data" / "investment_platform.db").exists():
+        pytest.skip("requires populated local data/ database")
+
     golden_dir = _PROJ / "Evaluation" / "golden_cases"
     
     expectancy_path = golden_dir / "l2_expectancy_golden.json"
