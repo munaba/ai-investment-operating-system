@@ -455,14 +455,15 @@ class SQLiteDatabase(BaseDatabase):
                         "transaction, not a nested savepoint (a transaction "
                         "is already active on this connection)."
                     )
+                savepoint_name = f"sp_{len(stack)}"
                 # Validate SAVEPOINT name against pattern to prevent SQL injection
                 import re
-                if not re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", name):
+
+                if not re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", savepoint_name):
                     raise DatabaseError(
-                        f"Invalid SAVEPOINT name: {name}",
+                        f"Invalid SAVEPOINT name: {savepoint_name}",
                         details={"error": "Name must match ^[A-Za-z_][A-Za-z0-9_]*$"},
                     )
-                savepoint_name = f"sp_{len(stack)}"
                 connection.execute(f"SAVEPOINT {savepoint_name}")
                 stack.append(savepoint_name)
         except sqlite3.Error as exc:
