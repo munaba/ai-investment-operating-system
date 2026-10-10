@@ -57,13 +57,17 @@ class StockDataRepository(BaseExternalRepository):
             ) from exc
         return yf
 
-    def get_history(self, ticker: str, period: str, interval: str) -> Any:
+    def get_history(
+        self, ticker: str, period: str, interval: str, *, timeout: float = 30
+    ) -> Any:
         """Fetch raw OHLCV history for ``ticker``.
 
         Args:
             ticker: Ticker symbol to fetch history for.
             period: ``yfinance``-style lookback period (e.g. ``"6mo"``).
             interval: ``yfinance``-style bar interval (e.g. ``"1d"``).
+            timeout: Network timeout in seconds passed to
+                ``yfinance.Ticker.history(timeout=...)``.  Default 30.
 
         Returns:
             The raw ``pandas.DataFrame`` returned by
@@ -81,7 +85,12 @@ class StockDataRepository(BaseExternalRepository):
         client = self._resolve_client()
 
         def _fetch() -> Any:
-            return client.Ticker(ticker).history(period=period, interval=interval)
+            # ponytail: pass timeout directly instead of relying on
+            # inspect.signature -- yfinance wraps history() with a
+            # decorator that hides the real signature.
+            return client.Ticker(ticker).history(
+                period=period, interval=interval, timeout=timeout
+            )
 
         return self._call(_fetch)
 
