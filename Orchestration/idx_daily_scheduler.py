@@ -639,7 +639,7 @@ class IDXDailyScheduler:
                 title=f"IDX Calendar: {year} not covered",
                 body=(
                     f"The IDX market calendar has no holiday coverage for {year}. "
-                    f"Add 2027 holidays via IDX_MARKET_HOLIDAYS env var. "
+                    f"Add {year} holidays via IDX_MARKET_HOLIDAYS env var. "
                     f"Until then, the scheduler will treat every day as non-trading (fail-closed)."
                 ),
             )

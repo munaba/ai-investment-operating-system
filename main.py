@@ -3828,37 +3828,39 @@ def main() -> None:
     # is already hermetic (Stage 9.0 lock: succeeds with no secrets/network/
     # optional package present) and is needed to construct ``app`` for
     # every command, including "scan".
-    app = build_application()
-    logger.info(
-        f"Application ready -- agent='{app.agent_name}' "
-        f"provider='{app.provider_name}'"
-    )
+    
+    # Gunakan with app untuk menjamin ApplicationGraph.shutdown() terpanggil
+    with build_application() as app:
+        logger.info(
+            f"Application ready -- agent='{app.agent_name}' "
+            f"provider='{app.provider_name}'"
+        )
 
-    while True:
-        try:
-            user_input = input("> ")
-        except (EOFError, KeyboardInterrupt):
-            break
-        if not user_input:
-            continue
-        if user_input.startswith("auto "):
-            # Uses app.autonomous_agent -> the active provider: validate
-            # only here, right before the command that needs it.
+        while True:
+            try:
+                user_input = input("> ")
+            except (EOFError, KeyboardInterrupt):
+                break
+            if not user_input:
+                continue
+            if user_input.startswith("auto "):
+                # Uses app.autonomous_agent -> the active provider: validate
+                # only here, right before the command that needs it.
+                validate_runtime_environment()
+                parts = user_input.split()
+                ticker = parts[1]
+                iterations = int(parts[2]) if len(parts) > 2 else 1
+                _run_autonomous(app, ticker, iterations)
+                continue
+            if user_input == "scan":
+                # No provider dependency -- must run even when
+                # GEMINI_API_KEY/OLLAMA_HOST is unset (Activation 1.5, Section 3).
+                _run_manual_scan(app)
+                continue
+            # Falls through to app.agent.chat(), which uses the active provider.
             validate_runtime_environment()
-            parts = user_input.split()
-            ticker = parts[1]
-            iterations = int(parts[2]) if len(parts) > 2 else 1
-            _run_autonomous(app, ticker, iterations)
-            continue
-        if user_input == "scan":
-            # No provider dependency -- must run even when
-            # GEMINI_API_KEY/OLLAMA_HOST is unset (Activation 1.5, Section 3).
-            _run_manual_scan(app)
-            continue
-        # Falls through to app.agent.chat(), which uses the active provider.
-        validate_runtime_environment()
-        reply = app.agent.chat(user_input)
-        print(reply)
+            reply = app.agent.chat(user_input)
+            print(reply)
 
 
 def _extract_cli_market(argv: list[str]) -> str:

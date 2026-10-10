@@ -75,6 +75,9 @@ class BaseExternalRepository(BaseRepository):
         Raises:
             RepositoryError: If ``func`` raises after exhausting retries.
                 The original exception is preserved as ``__cause__``.
+                Permanent errors (``ValueError``, ``TypeError``, ``KeyError``,
+                ``AttributeError``, ``NotImplementedError``) are not retried --
+                they indicate a logic/usage bug, not a transient network failure.
         """
         # If client signature expects a `timeout` kwarg, inject it unless already given
         sig = inspect.signature(func)
@@ -96,6 +99,12 @@ class BaseExternalRepository(BaseRepository):
                 raise
             except Exception as exc:  # noqa: BLE001 - normalize any provider/SDK failure
                 last_exc = exc
+
+                # Permanent errors: do not retry logic/usage bugs
+                if isinstance(exc, (ValueError, TypeError, KeyError,
+                                    AttributeError, NotImplementedError)):
+                    break
+
                 if attempt == max_attempts - 1:
                     break
 
