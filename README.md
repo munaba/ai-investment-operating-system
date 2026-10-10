@@ -103,6 +103,17 @@ Standalone gate scripts (not collected by pytest, run each from the repo root wi
 | `Tests/test_activation12_2_permission_enforcer.py` | 26 |
 | `Tests/test_activation12_3_permission_wiring.py` | 11 |
 
+## Important: Market Calendar Coverage
+
+**IDX trading calendar currently covers 2026 only.** Before 2027-01-01, populate `Business/idx_market_calendar.py::IDX_NATIONAL_HOLIDAYS_2027` from official sources:
+
+- Bursa Efek Indonesia (BEI) official trading calendar
+- SKB 3 Menteri (joint decree on national holidays)
+
+The scheduler operates **fail-closed** for years without coverage: any date outside 2026 returns `False` for `is_trading_day()` unless overridden via constructor or `TRADING_CALENDAR_OVERRIDE_ALLOW_UNKNOWN_YEARS=1`. An alert fires once per uncovered year when the scheduler ticks.
+
+**Do not fabricate holiday dates.** Obtain them from authoritative government/exchange sources only.
+
 ## Evaluation
 
 The evaluation harness covers layers L1–L5; see `Evaluation/README.md`. Latest committed baseline (2026-10-04, `Evaluation/baseline.json`): L2 engine 4032/4032 passed (32 golden cases + 4000 property-based).
