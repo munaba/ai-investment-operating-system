@@ -402,6 +402,31 @@ class ApplicationGraph:
     planner: Planner
     agent: StockAgent
     database_manager: DatabaseManager
+
+    def shutdown(self) -> None:
+        """Disconnect the database manager, closing all tracked connections.
+
+        Intended for graceful application shutdown -- delegates to
+        ``SQLiteDatabase.close_all()`` via ``DatabaseManager.disconnect()``,
+        which closes every tracked cross-thread connection deterministically.
+        After this call, ``_reclaim_leaked_connection`` finalizers should
+        never fire (no connections left to reclaim).
+        """
+        try:
+            if self.database_manager.is_connected:
+                self.database_manager.disconnect()
+        except Exception as exc:  # noqa: BLE001
+            import logging
+            logging.getLogger(__name__).warning(
+                f"ApplicationGraph.shutdown: disconnect failed: {exc}"
+            )
+
+    def __enter__(self) -> "ApplicationGraph":
+        return self
+
+    def __exit__(self, *exc_info: object) -> None:
+        self.shutdown()
+
     runtime_analysis_pipeline: RuntimeAnalysisPipeline
     service_skills: Dict[str, ServiceSkill]
     goal_planner: GoalPlanner
