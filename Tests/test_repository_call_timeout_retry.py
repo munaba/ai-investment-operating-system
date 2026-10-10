@@ -32,7 +32,6 @@ class TestRepositoryCallTimeoutRetry:
         mock_client = MagicMock()
         repo = ConcreteExternalRepository(mock_client)
 
-        # Create a callable with a 'timeout' parameter in its signature
         def client_method(timeout: float = 10) -> str:
             return "called"
 
@@ -58,7 +57,6 @@ class TestRepositoryCallTimeoutRetry:
 
         assert result == "success"
         assert call_count == 3
-        # sleep(1 * jitter) then sleep(2 * jitter). jitter = 1 + U(0,0.3) -> [1.0,1.3] and [2.0,2.6]
         assert mock_sleep.call_count == 2
         first, second = mock_sleep.call_args_list[0].args[0], mock_sleep.call_args_list[1].args[0]
         assert 1.0 <= first <= 1.3, f"first sleep {first} not in [1.0, 1.3]"
@@ -95,6 +93,46 @@ class TestRepositoryCallTimeoutRetry:
 
         assert str(exc_info.value) == "already translated"
         assert call_count == 1  # No retries
+
+    def test_call_does_not_retry_permanent_error(self) -> None:
+        """Permanent errors (ValueError, TypeError, KeyError, AttributeError,
+        NotImplementedError) are NOT retried -- they indicate a logic/usage
+        bug, not a transient network failure."""
+        call_count = 0
+
+        def raises_value_error() -> None:
+            nonlocal call_count
+            call_count += 1
+            raise ValueError("invalid ticker")
+
+        repo = ConcreteExternalRepository(MagicMock())
+
+        with patch("time.sleep") as mock_sleep:
+            with pytest.raises(RepositoryError) as exc_info:
+                repo._call(raises_value_error, max_attempts=5)
+
+        assert call_count == 1  # No retries
+        assert isinstance(exc_info.value.__cause__, ValueError)
+        assert mock_sleep.call_count == 0
+
+    def test_call_retries_transient_network_error(self) -> None:
+        """ConnectionError / TimeoutError are transient and ARE retried."""
+        call_count = 0
+
+        def raises_connection_error() -> None:
+            nonlocal call_count
+            call_count += 1
+            raise ConnectionError("network down")
+
+        repo = ConcreteExternalRepository(MagicMock())
+
+        with patch("time.sleep") as mock_sleep:
+            with pytest.raises(RepositoryError) as exc_info:
+                repo._call(raises_connection_error, max_attempts=3)
+
+        assert call_count == 3  # Retried
+        assert isinstance(exc_info.value.__cause__, ConnectionError)
+        assert mock_sleep.call_count == 2
 
 
 if __name__ == "__main__":
