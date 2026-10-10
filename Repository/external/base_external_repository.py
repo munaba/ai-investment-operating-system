@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import inspect
+import random
+import time
 from typing import Any, Callable, TypeVar
 
 from Core.exceptions import RepositoryError
@@ -41,30 +44,62 @@ class BaseExternalRepository(BaseRepository):
         """
         self._client = client
 
-    def _call(self, func: Callable[..., _T], *args: Any, **kwargs: Any) -> _T:
-        """Invoke a provider-specific callable, translating failures.
+    def _call(
+        self,
+        func: Callable[..., _T],
+        *args: Any,
+        timeout: float | None = 30.0,
+        max_attempts: int = 3,
+        backoff_base: float = 2.0,
+        **kwargs: Any,
+    ) -> _T:
+        """Invoke a provider-specific callable with timeout and retry.
 
         Args:
             func: The callable to invoke (typically a method/attribute of
                 ``self._client``).
             *args: Positional arguments passed through to ``func``.
-            **kwargs: Keyword arguments passed through to ``func``.
+            timeout: Optional timeout in seconds to pass to underlying client
+                (if the client supports a ``timeout`` kwarg). Default 30.
+            max_attempts: Maximum number of attempts before raising.
+                Default 3 (original + 2 retries).
+            backoff_base: Base for exponential backoff: delay = backoff_base ** (attempt - 1)
+                with jitter ``* (1 + uniform(0, 0.3))`` added before sleep.
+                Default 2.0 (1s, ~2.3s, ~4.6s with jitter on retry sleeps).
+            **kwargs: Keyword arguments passed through to ``func``, updated with
+                ``timeout`` if not already present and the client signature expects it.
 
         Returns:
             Whatever ``func`` returns, unchanged.
 
         Raises:
-            RepositoryError: If ``func`` raises. The original exception is
-                preserved as ``__cause__``.
+            RepositoryError: If ``func`` raises after exhausting retries.
+                The original exception is preserved as ``__cause__``.
         """
-        try:
-            return func(*args, **kwargs)
-        except RepositoryError:
-            # Already translated (e.g. by a nested repository call) -- do not
-            # wrap a RepositoryError inside another RepositoryError.
-            raise
-        except Exception as exc:  # noqa: BLE001 - normalize any provider/SDK failure
-            raise RepositoryError(
-                f"External call failed: {getattr(func, '__name__', func)!r}",
-                details={"error": str(exc)},
-            ) from exc
+        # If client signature expects a `timeout` kwarg, inject it unless already given
+        sig = inspect.signature(func)
+        if "timeout" in sig.parameters and "timeout" not in kwargs and timeout is not None:
+            kwargs["timeout"] = timeout
+
+        last_exc: Exception | None = None
+        for attempt in range(max_attempts):
+            if attempt > 0:
+                backoff = backoff_base ** (attempt - 1)
+                jitter = 1.0 + random.uniform(0.0, 0.3)
+                time.sleep(backoff * jitter)
+
+            try:
+                return func(*args, **kwargs)
+            except RepositoryError:
+                # Already translated (e.g. by a nested repository call) -- do not
+                # wrap a RepositoryError inside another RepositoryError.
+                raise
+            except Exception as exc:  # noqa: BLE001 - normalize any provider/SDK failure
+                last_exc = exc
+                if attempt == max_attempts - 1:
+                    break
+
+        raise RepositoryError(
+            f"External call failed after {max_attempts} attempts: {getattr(func, '__name__', func)!r}",
+            details={"error": str(last_exc)},
+        ) from last_exc
