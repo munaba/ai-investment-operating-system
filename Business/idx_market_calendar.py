@@ -130,6 +130,24 @@ class IDXMarketCalendar:
 
         return ZoneInfo(self.timezone_name)
 
+    def covers_year(self, year: int) -> bool:
+        """Return whether ``year`` has operator-supplied holiday coverage.
+
+        ``True`` for 2026 (built-in national holiday table), or for any
+        year the operator has explicitly added holidays for (constructor
+        override or ``IDX_MARKET_HOLIDAYS`` env var). ``False`` for any
+        other year -- the scheduler must refuse to run jobs for that
+        year and alert, because treating its weekdays as trading days
+        risks false-positive ticks on real national holidays.
+
+        TODO (manual input, do NOT invent): populate ``IDX_NATIONAL_
+        HOLIDAYS_2027`` from the official BEI / SKB 3 Menteri announcement
+        once published, then extend this check.
+        """
+        if year == 2026:
+            return True
+        return any(h.year == year for h in self.holiday_dates)
+
     def is_trading_day(self, day: date) -> bool:
         """Return whether ``day`` is a trading day: a weekday, not a
         caller-declared holiday.

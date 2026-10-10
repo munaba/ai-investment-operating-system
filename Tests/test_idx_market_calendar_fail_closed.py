@@ -51,9 +51,8 @@ class TestYearCoverage:
 class TestFailClosedBehavior:
     """Test explicit fail-closed behavior when year is outside coverage.
 
-    NOTE: The current implementation is fail-open for years outside 2026.
-    A future change should make this fail-closed (return False or raise)
-    for years not in the holiday table, with logging.
+    Implementation is fail-closed (return False) for years outside 2026
+    unless the operator has explicitly added holidays for that year.
     """
 
     def test_current_behavior_fail_closed_2027(self) -> None:

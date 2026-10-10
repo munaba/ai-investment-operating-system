@@ -254,6 +254,11 @@ class IDXDailyScheduler:
         local_time = self._calendar.to_local(now).time()
 
         if not self._calendar.is_trading_day(local_date):
+            # Fail-closed check: if the calendar has no coverage for this year
+            # and operator hasn't provided holidays, alert once per year.
+            year = local_date.year
+            if not self._calendar.covers_year(year):
+                self._alert_year_not_covered(year, now)
             return TickResult(now=now.isoformat(), trading_date=trading_date, session=session, jobs=())
 
         outcomes = []
@@ -616,6 +621,43 @@ class IDXDailyScheduler:
             "job_summary": summary,
             "reviewed_at": now.isoformat(),
         }
+
+    def _alert_year_not_covered(self, year: int, now: datetime) -> None:
+        """Alert once per year if the calendar has no holiday coverage
+        for ``year`` and the operator has not provided one via override.
+
+        Dedup key is ``f"calendar_year_uncovered_{year}"`` so we send
+        exactly one alert per uncovered year, not repeatedly on every
+        tick that year.
+        """
+        alert_type = f"calendar_year_uncovered_{year}"
+        new_signature = f"{year}"
+
+        def build_event():
+            return NotificationEvent(
+                event_type=NotificationEventType.ALERT,
+                title=f"IDX Calendar: {year} not covered",
+                body=(
+                    f"The IDX market calendar has no holiday coverage for {year}. "
+                    f"Add 2027 holidays via IDX_MARKET_HOLIDAYS env var. "
+                    f"Until then, the scheduler will treat every day as non-trading (fail-closed)."
+                ),
+            )
+
+        decision = self._dedup_policy.should_send_notification(
+            alert_type=alert_type,
+            new_signature=new_signature,
+            prior_signature=None,
+            prior_sent_at=None,
+        )
+
+        self._apply_dedup_decision(
+            alert_type=alert_type,
+            decision=decision,
+            new_signature=new_signature,
+            now=now,
+            build_event=build_event,
+        )
 
     # ------------------------------------------------------------------
     # Shared helpers
