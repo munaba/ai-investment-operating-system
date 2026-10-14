@@ -66,7 +66,7 @@ class TestRepositoryCallTimeoutRetry:
         """After exhausting max_attempts, original exception is wrapped in RepositoryError."""
 
         def always_fails() -> None:
-            raise ValueError("intentional failure")
+            raise TimeoutError("intentional failure")
 
         repo = ConcreteExternalRepository(MagicMock())
 
@@ -75,7 +75,26 @@ class TestRepositoryCallTimeoutRetry:
                 repo._call(always_fails, max_attempts=2, backoff_base=2.0)
 
         assert "failed after 2 attempts" in str(exc_info.value)
-        assert isinstance(exc_info.value.__cause__, ValueError)
+        assert isinstance(exc_info.value.__cause__, TimeoutError)
+
+    def test_call_does_not_retry_runtime_error(self) -> None:
+        """RuntimeError is NOT transient -- it is raised immediately without retry."""
+        call_count = 0
+
+        def raises_runtime_error() -> None:
+            nonlocal call_count
+            call_count += 1
+            raise RuntimeError("unexpected state")
+
+        repo = ConcreteExternalRepository(MagicMock())
+
+        with patch("time.sleep") as mock_sleep:
+            with pytest.raises(RepositoryError) as exc_info:
+                repo._call(raises_runtime_error, max_attempts=5)
+
+        assert call_count == 1  # No retries
+        assert isinstance(exc_info.value.__cause__, RuntimeError)
+        assert mock_sleep.call_count == 0
 
     def test_call_does_not_retry_repository_error(self) -> None:
         """RepositoryError is not retried; raised immediately."""

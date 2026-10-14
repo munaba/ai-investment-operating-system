@@ -55,31 +55,10 @@ class BaseExternalRepository(BaseRepository):
     ) -> _T:
         """Invoke a provider-specific callable with timeout and retry.
 
-        Args:
-            func: The callable to invoke (typically a method/attribute of
-                ``self._client``).
-            *args: Positional arguments passed through to ``func``.
-            timeout: Optional timeout in seconds to pass to underlying client
-                (if the client supports a ``timeout`` kwarg). Default 30.
-            max_attempts: Maximum number of attempts before raising.
-                Default 3 (original + 2 retries).
-            backoff_base: Base for exponential backoff: delay = backoff_base ** (attempt - 1)
-                with jitter ``* (1 + uniform(0, 0.3))`` added before sleep.
-                Default 2.0 (1s, ~2.3s, ~4.6s with jitter on retry sleeps).
-            **kwargs: Keyword arguments passed through to ``func``, updated with
-                ``timeout`` if not already present and the client signature expects it.
-
-        Returns:
-            Whatever ``func`` returns, unchanged.
-
-        Raises:
-            RepositoryError: If ``func`` raises after exhausting retries.
-                The original exception is preserved as ``__cause__``.
-                Permanent errors (``ValueError``, ``TypeError``, ``KeyError``,
-                ``AttributeError``, ``NotImplementedError``) are not retried --
-                they indicate a logic/usage bug, not a transient network failure.
+        Only transient network/timeout errors are retried. Everything else
+        (ValueError, TypeError, KeyError, AttributeError, NotImplementedError,
+        RuntimeError, etc.) is raised immediately as a permanent failure.
         """
-        # If client signature expects a `timeout` kwarg, inject it unless already given
         sig = inspect.signature(func)
         if "timeout" in sig.parameters and "timeout" not in kwargs and timeout is not None:
             kwargs["timeout"] = timeout
@@ -94,21 +73,65 @@ class BaseExternalRepository(BaseRepository):
             try:
                 return func(*args, **kwargs)
             except RepositoryError:
-                # Already translated (e.g. by a nested repository call) -- do not
-                # wrap a RepositoryError inside another RepositoryError.
                 raise
-            except Exception as exc:  # noqa: BLE001 - normalize any provider/SDK failure
+            except Exception as exc:  # noqa: BLE001
                 last_exc = exc
 
-                # Permanent errors: do not retry logic/usage bugs
-                if isinstance(exc, (ValueError, TypeError, KeyError,
-                                    AttributeError, NotImplementedError)):
-                    break
+                if not self._is_transient(exc):
+                    raise RepositoryError(
+                        f"External call failed permanently: {getattr(func, "__name__", func)!r}",
+                        details={"error": str(exc)},
+                    ) from exc
 
                 if attempt == max_attempts - 1:
                     break
 
         raise RepositoryError(
-            f"External call failed after {max_attempts} attempts: {getattr(func, '__name__', func)!r}",
+            f"External call failed after {max_attempts} attempts: {getattr(func, "__name__", func)!r}",
             details={"error": str(last_exc)},
         ) from last_exc
+
+    @staticmethod
+    def _is_transient(exc: Exception) -> bool:
+        """Return True only for transient network/timeout errors."""
+        import http.client  # noqa: PLC0415
+        import socket  # noqa: PLC0415
+        import urllib.error  # noqa: PLC0415
+
+        transient_types = (
+            TimeoutError,
+            ConnectionError,
+            ConnectionResetError,
+            ConnectionAbortedError,
+            ConnectionRefusedError,
+            BrokenPipeError,
+            OSError,
+            socket.timeout,
+            http.client.RemoteDisconnected,
+            urllib.error.URLError,
+        )
+        if isinstance(exc, transient_types):
+            return True
+
+        response = getattr(exc, "response", None)
+        status = getattr(response, "status_code", None)
+        if status is None:
+            status = getattr(exc, "status_code", None)
+        if isinstance(status, int) and (status == 429 or 500 <= status <= 599):
+            return True
+
+        msg = str(exc).lower()
+        return any(
+            phrase in msg
+            for phrase in (
+                "timed out",
+                "connection reset",
+                "connection refused",
+                "connection aborted",
+                "broken pipe",
+                "remote disconnect",
+                "urlopen error",
+                "http 5",
+                "http 429",
+            )
+        )
