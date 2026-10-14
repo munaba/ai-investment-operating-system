@@ -28,7 +28,17 @@ PYTHONPATH=. python Tests/activation_3_2_independent_proof.py
 
 # Example: activation_2_7_proof.py (needs real DB)
 PYTHONPATH=. DB_PATH=data/investment_platform.db python Tests/activation_2_7_proof.py
+
+# Example: activation6_telegram_real_send_proof.py (requires explicit guard)
+PYTHONPATH=. python Tests/activation6_telegram_real_send_proof.py --confirm-send
+# or
+CONFIRM_TELEGRAM_SEND=1 PYTHONPATH=. python Tests/activation6_telegram_real_send_proof.py
 ```
+
+## Exit Codes (activation6_telegram_real_send_proof.py)
+- `0` -- PASS: real message delivered; Telegram's own `ok: true` + a real `message_id` were observed.
+- `2` -- BLOCKED: missing credentials OR missing confirmation guard (`--confirm-send` flag or `CONFIRM_TELEGRAM_SEND=1`).
+- `3` -- FAILED: credentials were present + guard passed but the real call did not succeed (invalid token/chat id, network unreachable, Telegram API error, etc).
 
 ## Windows Notes
 

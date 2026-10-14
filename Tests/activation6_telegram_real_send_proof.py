@@ -70,6 +70,22 @@ _CHAT_ID_ENV = "TELEGRAM_CHAT_ID"
 
 
 def main() -> int:
+    # Guard: refuse to send unless explicitly confirmed.
+    # Prevents accidental real sends in CI, test sweeps, or careless runs.
+    # Acceptable confirmation methods (any one):
+    #   --confirm-send     command-line flag
+    #   CONFIRM_TELEGRAM_SEND=1   environment variable
+    import os  # noqa: PLC0415
+    _confirmed = (
+        "--confirm-send" in sys.argv
+        or os.environ.get("CONFIRM_TELEGRAM_SEND", "") == "1"
+    )
+    if not _confirmed:
+        print("BLOCKED - real Telegram send requires explicit confirmation.")
+        print("  Pass --confirm-send flag or set CONFIRM_TELEGRAM_SEND=1")
+        print("  Example: python Tests/activation6_telegram_real_send_proof.py --confirm-send")
+        return 2
+
     bot_token = config.get_str(_BOT_TOKEN_ENV)
     chat_id = config.get_str(_CHAT_ID_ENV)
     missing = [
