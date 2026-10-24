@@ -40,6 +40,45 @@ from Repository.persistence.snapshot_repository import SnapshotRepository
 
 DB_PATH = Path(os.environ["DB_PATH"])
 
+# Item 4 (PENUTUP): operate on a COPY of the real DB, never on it directly.
+# The proof script previously pointed DB_PATH at the real
+# data/investment_platform.db and mutated it in place (append-only scans
+# accumulate rows across runs). That made the "table is empty before the
+# first scan" check fail on any DB that had already been proofed, and it
+# meant the script could not be re-run safely.
+#
+# Fix: copy the real DB into a per-run tempfile.TemporaryDirectory, run
+# every assertion against the copy, and at the end verify the ORIGINAL
+# file's SHA-256 is byte-for-byte identical to its hash taken before the
+# run. If the copy diverges from the original, the script exits non-zero
+# -- the original DB is never touched.
+import hashlib  # noqa: E402
+import shutil  # noqa: E402
+import tempfile  # noqa: E402
+
+_ORIGINAL_DB_PATH = DB_PATH
+_ORIGINAL_HASH = (
+    hashlib.sha256(_ORIGINAL_DB_PATH.read_bytes()).hexdigest()
+    if _ORIGINAL_DB_PATH.exists()
+    else None
+)
+
+if _ORIGINAL_DB_PATH.exists():
+    _tmp = tempfile.TemporaryDirectory(prefix="activation_2_7_proof_")
+    _copy_path = _tmp.name + ".db"
+    shutil.copy2(_ORIGINAL_DB_PATH, _copy_path)
+    DB_PATH = Path(_copy_path)
+else:
+    _tmp = None
+    _copy_path = None
+
+
+def _verify_original_untouched() -> bool:
+    if _ORIGINAL_HASH is None or not _ORIGINAL_DB_PATH.exists():
+        return True
+    return hashlib.sha256(_ORIGINAL_DB_PATH.read_bytes()).hexdigest() == _ORIGINAL_HASH
+
+
 _PASS = 0
 _FAIL = 0
 
@@ -225,6 +264,14 @@ def main() -> int:
     print("\n" + "=" * 60)
     print(f"ACTIVATION 2.7 PROOF RESULTS: {_PASS} PASS / {_FAIL} FAIL (total {_PASS + _FAIL})")
     print("=" * 60)
+
+    # Item 4: verify original DB untouched
+    if _verify_original_untouched():
+        print("DB INTEGRITY: original data/investment_platform.db hash VERIFIED (byte-for-byte identical)")
+    else:
+        print("DB INTEGRITY: FAIL -- original DB was mutated during proof!")
+        return 1
+
     return 0 if _FAIL == 0 else 1
 
 
