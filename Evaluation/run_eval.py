@@ -9,6 +9,7 @@ Usage:
 """
 from __future__ import annotations
 
+import os
 import json
 import sqlite3
 import sys
@@ -19,7 +20,11 @@ _PROJ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_PROJ))
 
 _THRESH = json.loads((_PROJ / "Evaluation/thresholds.json").read_text())
-_DB_PATH = _PROJ / "data" / "investment_platform.db"
+_DB_PATH = Path(
+    os.environ.get("AIOS_EVAL_DB_PATH")
+    or os.environ.get("DB_PATH")
+    or (_PROJ / "data" / "investment_platform.db")
+)
 
 
 # ---------------------------------------------------------------------------
@@ -508,7 +513,7 @@ def eval_l3_walkforward() -> Tuple[int, int]:
     import sqlite3
     from pathlib import Path
 
-    db_path = Path(__file__).resolve().parent.parent / "data" / "investment_platform.db"
+    db_path = Path(os.environ.get("AIOS_EVAL_DB_PATH") or os.environ.get("DB_PATH") or (_PROJ / "data" / "investment_platform.db"))
     if not db_path.exists():
         print("L3 Walk-forward: SKIP (DB not found)")
         return 0, 0
