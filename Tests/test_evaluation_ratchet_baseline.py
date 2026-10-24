@@ -75,7 +75,7 @@ def test_metrics_do_not_regress_from_baseline():
     
     # L1 gap: tidak boleh naik
     current_gap = details["L1_data"]["failed"]
-    baseline_gap = baseline["L1_gap_count"]
+    baseline_gap = baseline["L1_failed_checks"]
     assert current_gap <= baseline_gap, (
         f"L1 gap count increased: {current_gap} > {baseline_gap}"
     )
@@ -122,7 +122,7 @@ def test_degraded_baseline_fails_ratchet():
         # Kita ingin test current yg buruk. Mutasi: baseline passed=1000 failed=0, tapi run asli passed=1000 failed=0 → sama. 
         # Mutasi lain: baseline L1_gap=0, current=1 → gap naik → FAIL.
         degraded2 = baseline.copy()
-        degraded2["L1_gap_count"] = 0  # baseline gap 0, current 1 → gap naik → FAIL
+        degraded2["L1_failed_checks"] = 0  # baseline gap 0, current 1 → gap naik → FAIL
         baseline_path.write_text(json.dumps(degraded2, indent=2))
         
         result = subprocess.run(

@@ -85,7 +85,7 @@ def main() -> None:
         "L2_max_drawdown_property": details["L2_max_drawdown_property"],
         "L2_position_performance_property": details["L2_position_performance_property"],
         "L2_profit_factor_property": details["L2_profit_factor_property"],
-        "L1_gap_count": details["L1_data"]["failed"],
+        "L1_failed_checks": details["L1_data"]["failed"],
         "L4_recall": details.get("L4_llm_grounding"),
         "L4_fpr": details.get("L4_llm_grounding"),
         "L3_abstain_synthetic": details["L3_abstain_calibration_synthetic"],
