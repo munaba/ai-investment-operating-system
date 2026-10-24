@@ -14,6 +14,23 @@ from .database_config import DatabaseConfig
 logger = get_logger(__name__)
 
 _BARE_MEMORY_PATH = ":memory:"
+
+
+_instances: set = set()
+
+
+def _register_instance(instance: "SQLiteDatabase") -> None:
+    _instances.add(instance)
+
+
+def close_all_instances() -> None:
+    """Close all tracked connections across all SQLiteDatabase instances."""
+    for instance in list(_instances):
+        try:
+            instance.close_all()
+        except Exception:
+            pass
+    _instances.clear()
 _ROOT_TRANSACTION = "__root__"
 
 
@@ -80,12 +97,9 @@ class SQLiteDatabase(BaseDatabase):
         self._registry_lock: threading.Lock = threading.Lock()
         # thread ident -> live sqlite3.Connection, for close_all()/introspection.
         self._connections: Dict[int, sqlite3.Connection] = {}
-        # thread ident -> that connection's leak-detection finalizer, so
-        # close_all() can detach() them (a connection this method closes
-        # should never also be closed again later by a finalizer running
-        # on an arbitrary GC thread).
         self._finalizers: Dict[int, "weakref.finalize"] = {}
         self._reject_unsafe_bare_memory_path()
+        _register_instance(self)
 
     def _reject_unsafe_bare_memory_path(self) -> None:
         """Raise early if configured with the unsafe bare ``:memory:`` path."""
