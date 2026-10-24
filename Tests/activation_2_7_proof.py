@@ -65,9 +65,18 @@ _ORIGINAL_HASH = (
 
 if _ORIGINAL_DB_PATH.exists():
     _tmp = tempfile.TemporaryDirectory(prefix="activation_2_7_proof_")
-    _copy_path = _tmp.name + ".db"
-    shutil.copy2(_ORIGINAL_DB_PATH, _copy_path)
-    DB_PATH = Path(_copy_path)
+    _copy_path = Path(_tmp.name) / "copy.db"
+    _src_conn = sqlite3.connect(str(_ORIGINAL_DB_PATH))
+    _dst_conn = sqlite3.connect(str(_copy_path))
+    _src_conn.backup(_dst_conn)
+    _src_conn.close()
+    _dst_conn.close()
+    # Start from clean slate for proof assertions (copy includes existing data)
+    _clean = sqlite3.connect(str(_copy_path))
+    _clean.execute("DELETE FROM ranking_snapshots")
+    _clean.commit()
+    _clean.close()
+    DB_PATH = _copy_path
 else:
     _tmp = None
     _copy_path = None
