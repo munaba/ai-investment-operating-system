@@ -16,7 +16,7 @@ logger = get_logger(__name__)
 _BARE_MEMORY_PATH = ":memory:"
 
 
-_instances: set = set()
+_instances: "weakref.WeakSet[SQLiteDatabase]" = weakref.WeakSet()
 
 
 def _register_instance(instance: "SQLiteDatabase") -> None:
