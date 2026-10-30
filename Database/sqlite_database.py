@@ -50,8 +50,18 @@ class SQLiteDatabase(BaseDatabase):
         the connection is closed automatically as a last resort once the
         thread object itself is garbage collected. This instance also
         tracks every connection it has opened (across all threads) so
-        that :meth:`close_all` can shut everything down cleanly, e.g. at
-        application exit.
+        that :meth:`close_all()` can shut them all down deterministically
+        at application shutdown from any thread. ``check_same_thread=False``
+        is set on every connection specifically to make that cross-thread
+        close safe (see :meth:`connect`).
+
+        **Lifecycle note:** once :meth:`close_all()` has been called on this
+        instance, the object must not be reused. Any subsequent call to
+        :meth:`connect()` or to a method that implicitly calls it (e.g.
+        :meth:`execute`, :meth:`begin`) raises ``DatabaseError`` with message
+        ``"database was closed via close_all()"``. Thread-local state cleaned
+        by :meth:`close_all()` is only for the calling thread; other threads
+        reconnect lazily unless also shut down explicitly.
 
     Nested transactions:
         ``begin()``/``commit()``/``rollback()`` nest via ``SAVEPOINT``
@@ -98,6 +108,7 @@ class SQLiteDatabase(BaseDatabase):
         # thread ident -> live sqlite3.Connection, for close_all()/introspection.
         self._connections: Dict[int, sqlite3.Connection] = {}
         self._finalizers: Dict[int, "weakref.finalize"] = {}
+        self._closed: bool = False
         self._reject_unsafe_bare_memory_path()
         _register_instance(self)
 
@@ -147,6 +158,8 @@ class SQLiteDatabase(BaseDatabase):
         Raises:
             DatabaseError: If the connection cannot be opened.
         """
+        if self._closed:
+            raise DatabaseError("database was closed via close_all()")
         if self.is_connected:
             return
         path_str = str(self.config.db_path)
@@ -337,10 +350,17 @@ class SQLiteDatabase(BaseDatabase):
         they call :meth:`connect` (or any method that connects
         implicitly).
 
+        **Lifecycle:** After calling this method, the instance is marked
+        closed. Objects must not be used again; subsequent :meth:`connect`
+        calls raise ``DatabaseError`` with message
+        ``"database was closed via close_all()"``.
+        Thread-local state is only cleaned for the calling thread.
+
         Never raises: failures closing individual connections are logged
         and skipped so one bad connection can't block shutdown of the
         rest.
         """
+        self._closed = True
         with self._registry_lock:
             connections = list(self._connections.items())
 

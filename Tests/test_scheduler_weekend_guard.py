@@ -194,6 +194,8 @@ def test_tick_runner_calls_same_tick_path(monkeypatch):
     monkeypatch.setattr(tick_runner, "datetime", _FixedDateTime)
     # mock sys.argv so we don't accidentally run with real args
     monkeypatch.setattr(sys, "argv", ["tick_runner.py"])
+    fake_app.__enter__ = lambda self: self
+    fake_app.__exit__ = lambda self, exc_type, exc_val, exc_tb: None
 
     # Output capture
     monkeypatch.setattr("builtins.print", lambda *a, **k: None)

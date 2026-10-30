@@ -83,9 +83,12 @@ def scenario_close_all_shuts_down_every_tracked_connection():
         check(db.active_connection_count == 0, "close_all() clears the registry")
         check(not db.is_connected, "calling thread's connection closed by close_all()")
 
-        # Lazily reconnecting afterwards must still work (close_all() isn't terminal).
-        check(db.health_check() is True, "database still usable after close_all() via lazy reconnect")
-        db.disconnect()  # close the lazily-reopened connection before TemporaryDirectory cleans up
+        # close_all() is now terminal: the instance must not be reused.
+        try:
+            db.connect()
+            check(False, "connect() after close_all() must raise")
+        except DatabaseError as exc:
+            check(str(exc) == "database was closed via close_all()", "connect() after close_all() raises clear error")
 
 
 def scenario_leaked_connection_is_reclaimed_on_thread_gc():

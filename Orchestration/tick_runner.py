@@ -20,31 +20,31 @@ from Core.composition_root import build_application
 
 def main() -> int:
     dry_run = "--dry-run" in sys.argv
-    app = build_application()
-    scheduler = app.idx_daily_scheduler
-    now = datetime.now(timezone.utc)
-    
-    print(f"=== AIOS L5 Tick Runner ===")
-    print(f"Now (UTC): {now.isoformat()}")
-    print(f"Dry-run: {dry_run}")
-    
-    if dry_run:
-        print("Dry-run mode: tick() will execute but no DB commit (if supported).")
-        print("Note: Current scheduler does not support dry-run rollback internally.")
-        print("      Jobs will execute normally. Use test DB or backup before real run.")
-    
-    tick_result = scheduler.tick(now)
-    
-    print(f"\nTick result:")
-    print(f"  Trading date: {tick_result.trading_date}")
-    print(f"  Session: {tick_result.session}")
-    print(f"  Jobs scheduled: {len(tick_result.jobs)}")
-    for job in tick_result.jobs:
-        print(f"    - {job}")
-    # reason_no_jobs no longer exists on TickResult
-    print(f"  Reason (if none): N/A")
-    
-    return 0
+    with build_application() as app:
+        scheduler = app.idx_daily_scheduler
+        now = datetime.now(timezone.utc)
+        
+        print(f"=== AIOS L5 Tick Runner ===")
+        print(f"Now (UTC): {now.isoformat()}")
+        print(f"Dry-run: {dry_run}")
+        
+        if dry_run:
+            print("Dry-run mode: tick() will execute but no DB commit (if supported).")
+            print("Note: Current scheduler does not support dry-run rollback internally.")
+            print("      Jobs will execute normally. Use test DB or backup before real run.")
+        
+        tick_result = scheduler.tick(now)
+        
+        print(f"\nTick result:")
+        print(f"  Trading date: {tick_result.trading_date}")
+        print(f"  Session: {tick_result.session}")
+        print(f"  Jobs scheduled: {len(tick_result.jobs)}")
+        for job in tick_result.jobs:
+            print(f"    - {job}")
+        # reason_no_jobs no longer exists on TickResult
+        print(f"  Reason (if none): N/A")
+        
+        return 0
 
 
 if __name__ == "__main__":
