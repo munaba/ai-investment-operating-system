@@ -54,21 +54,14 @@ class DatabaseConfig:
     uri_mode: bool = _DEFAULT_URI_MODE
 
     @classmethod
-    def from_env(cls) -> "DatabaseConfig":
-        """Build a :class:`DatabaseConfig` from environment variables.
-
-        Reads ``DB_PATH``, ``DB_TIMEOUT``, ``DB_JOURNAL_MODE``,
-        ``DB_SYNCHRONOUS``, and ``DB_FOREIGN_KEYS`` via ``Core.config``,
-        falling back to this class's defaults for any variable that is
-        not set. Never raises for missing variables (mirrors how
-        ``Core.request_defaults`` values are consumed elsewhere in this
-        framework).
-
-        Returns:
-            A populated :class:`DatabaseConfig`.
-        """
+    def from_env(cls, db_path: str | Path | None = None) -> "DatabaseConfig":
+        """Build a :class:`DatabaseConfig` from environment variables."""
+        if db_path is not None:
+            path_val = Path(db_path) if not isinstance(db_path, Path) else db_path
+        else:
+            path_val = Path(config.get_str("DB_PATH", _DEFAULT_DB_PATH))
         return cls(
-            db_path=Path(config.get_str("DB_PATH", _DEFAULT_DB_PATH)),
+            db_path=path_val,
             timeout=config.get_float("DB_TIMEOUT", _DEFAULT_TIMEOUT),
             journal_mode=config.get_str("DB_JOURNAL_MODE", _DEFAULT_JOURNAL_MODE),
             synchronous=config.get_str("DB_SYNCHRONOUS", _DEFAULT_SYNCHRONOUS),

@@ -192,4 +192,21 @@ SNAPSHOTS_MIGRATIONS = (
             """,
         ],
     ),
+    Migration(
+        version=12,
+        name="enforce_unique_scan_time_symbol",
+        up_statements=[
+            """
+            DELETE FROM ranking_snapshots
+            WHERE snapshot_id NOT IN (
+                SELECT MIN(snapshot_id) FROM ranking_snapshots
+                GROUP BY scan_time, symbol
+            )
+            """,
+            """
+            CREATE UNIQUE INDEX IF NOT EXISTS ux_ranking_snapshots_scan_time_symbol
+            ON ranking_snapshots (scan_time, symbol)
+            """,
+        ],
+    ),
 )
