@@ -413,12 +413,11 @@ class ApplicationGraph:
         never fire (no connections left to reclaim).
         """
         try:
-            if self.database_manager.is_connected:
-                self.database_manager.disconnect()
+            self.database_manager.close_all()
         except Exception as exc:  # noqa: BLE001
             import logging
             logging.getLogger(__name__).warning(
-                f"ApplicationGraph.shutdown: disconnect failed: {exc}"
+                "ApplicationGraph.shutdown failed: %s", exc
             )
 
     def __enter__(self) -> "ApplicationGraph":

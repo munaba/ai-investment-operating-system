@@ -11,6 +11,19 @@ from Repository.base_repository import BaseRepository
 _T = TypeVar("_T")
 
 
+def _status_code(exc: BaseException) -> int | None:
+    """Extract HTTP status code from an exception, if any."""
+    import urllib.error  # noqa: PLC0415
+
+    for obj in (getattr(exc, "response", None), exc):
+        code = getattr(obj, "status_code", None)
+        if isinstance(code, int):
+            return code
+    if isinstance(exc, urllib.error.HTTPError):
+        return exc.code
+    return None
+
+
 class BaseExternalRepository(BaseRepository):
     """Contract shared by every repository backed by an external data provider.
 
@@ -93,45 +106,63 @@ class BaseExternalRepository(BaseRepository):
 
     @staticmethod
     def _is_transient(exc: Exception) -> bool:
-        """Return True only for transient network/timeout errors."""
+        """Return True only for transient network/timeout errors.
+
+        Check order matters:
+        1. HTTP status code — wins over type (a 404 HTTPError is permanent).
+        2. Permanent OS error subclasses — excluded before the broad type check.
+        3. urllib.error.URLError — unwrap .reason and recurse.
+        4. Known transient type families.
+        5. OSError with a transient errno (e.g. ENETUNREACH).
+        """
+        import errno  # noqa: PLC0415
         import http.client  # noqa: PLC0415
         import socket  # noqa: PLC0415
         import urllib.error  # noqa: PLC0415
 
-        transient_types = (
+        _PERMANENT_OS_ERRORS = (  # noqa: N806
+            FileNotFoundError,
+            PermissionError,
+            IsADirectoryError,
+            NotADirectoryError,
+            FileExistsError,
+        )
+        _TRANSIENT_TYPES = (  # noqa: N806
             TimeoutError,
             ConnectionError,
-            ConnectionResetError,
-            ConnectionAbortedError,
-            ConnectionRefusedError,
-            BrokenPipeError,
-            OSError,
             socket.timeout,
+            socket.gaierror,
             http.client.RemoteDisconnected,
-            urllib.error.URLError,
         )
-        if isinstance(exc, transient_types):
+        _TRANSIENT_ERRNOS = {  # noqa: N806
+            errno.ENETUNREACH,
+            errno.EHOSTUNREACH,
+            errno.ENETDOWN,
+            errno.ETIMEDOUT,
+        }
+
+        # ── 1. HTTP status code takes precedence ──
+        status = _status_code(exc)
+        if status is not None:
+            return status in (408, 429) or 500 <= status <= 599
+
+        # ── 2. Permanent OS error subclasses are never transient ──
+        if isinstance(exc, _PERMANENT_OS_ERRORS):
+            return False
+
+        # ── 3. URLError: unwrap .reason and recurse ──
+        if isinstance(exc, urllib.error.URLError):
+            reason = exc.reason
+            if isinstance(reason, BaseException):
+                return BaseExternalRepository._is_transient(reason)
+            return False
+
+        # ── 4. Known transient types ──
+        if isinstance(exc, _TRANSIENT_TYPES):
             return True
 
-        response = getattr(exc, "response", None)
-        status = getattr(response, "status_code", None)
-        if status is None:
-            status = getattr(exc, "status_code", None)
-        if isinstance(status, int) and (status == 429 or 500 <= status <= 599):
+        # ── 5. OSError with transient errno ──
+        if isinstance(exc, OSError) and exc.errno in _TRANSIENT_ERRNOS:
             return True
 
-        msg = str(exc).lower()
-        return any(
-            phrase in msg
-            for phrase in (
-                "timed out",
-                "connection reset",
-                "connection refused",
-                "connection aborted",
-                "broken pipe",
-                "remote disconnect",
-                "urlopen error",
-                "http 5",
-                "http 429",
-            )
-        )
+        return False

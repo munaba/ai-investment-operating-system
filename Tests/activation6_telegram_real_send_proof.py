@@ -36,6 +36,10 @@ difference between "not configured" and "actually failed"):
        succeed (invalid token/chat id, network unreachable, Telegram
        API error, etc). The failure is printed in full -- never
        swallowed, never turned into a fake success.
+  4 -- BLOCKED: the confirm-send guard was not given (no
+       ``--confirm-send`` flag and no ``CONFIRM_TELEGRAM_SEND=1``
+       environment variable). Not a code failure -- protects against
+       accidental real sends in CI/test sweeps/careless runs.
 
 Manual retry: this script itself IS the manual retry mechanism the
 roadmap's Failure gate requires ("notification dapat dicoba ulang
@@ -84,7 +88,7 @@ def main() -> int:
         print("BLOCKED - real Telegram send requires explicit confirmation.")
         print("  Pass --confirm-send flag or set CONFIRM_TELEGRAM_SEND=1")
         print("  Example: python Tests/activation6_telegram_real_send_proof.py --confirm-send")
-        return 2
+        return 4
 
     bot_token = config.get_str(_BOT_TOKEN_ENV)
     chat_id = config.get_str(_CHAT_ID_ENV)

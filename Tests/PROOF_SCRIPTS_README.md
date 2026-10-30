@@ -37,8 +37,9 @@ CONFIRM_TELEGRAM_SEND=1 PYTHONPATH=. python Tests/activation6_telegram_real_send
 
 ## Exit Codes (activation6_telegram_real_send_proof.py)
 - `0` -- PASS: real message delivered; Telegram's own `ok: true` + a real `message_id` were observed.
-- `2` -- BLOCKED: missing credentials OR missing confirmation guard (`--confirm-send` flag or `CONFIRM_TELEGRAM_SEND=1`).
+- `2` -- BLOCKED: missing credentials (TELEGRAM_BOT_TOKEN and/or TELEGRAM_CHAT_ID not configured).
 - `3` -- FAILED: credentials were present + guard passed but the real call did not succeed (invalid token/chat id, network unreachable, Telegram API error, etc).
+- `4` -- BLOCKED: missing confirmation guard (`--confirm-send` flag or `CONFIRM_TELEGRAM_SEND=1`). Not a code failure -- protects against accidental real sends.
 
 ## Windows Notes
 

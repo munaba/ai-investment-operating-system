@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 import pytest
+from urllib.error import HTTPError, URLError
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
@@ -152,6 +153,38 @@ class TestRepositoryCallTimeoutRetry:
         assert call_count == 3  # Retried
         assert isinstance(exc_info.value.__cause__, ConnectionError)
         assert mock_sleep.call_count == 2
+
+
+class TestIsTransient:
+    """Classifier: transient vs permanent errors."""
+
+    @pytest.mark.parametrize(
+        "exc,expected",
+        [
+            (FileNotFoundError("no such file"), False),
+            (PermissionError("denied"), False),
+            (IsADirectoryError("is dir"), False),
+            (NotADirectoryError("not dir"), False),
+            (FileExistsError("exists"), False),
+            (HTTPError("http://example.com", 404, "Not Found", {}, None), False),
+            (HTTPError("http://example.com", 401, "Unauthorized", {}, None), False),
+            (HTTPError("http://example.com", 400, "Bad Request", {}, None), False),
+            (HTTPError("http://example.com", 403, "Forbidden", {}, None), False),
+            (HTTPError("http://example.com", 408, "Request Timeout", {}, None), True),
+            (HTTPError("http://example.com", 429, "Too Many Requests", {}, None), True),
+            (HTTPError("http://example.com", 500, "Internal Server Error", {}, None), True),
+            (HTTPError("http://example.com", 502, "Bad Gateway", {}, None), True),
+            (HTTPError("http://example.com", 503, "Service Unavailable", {}, None), True),
+            (HTTPError("http://example.com", 504, "Gateway Timeout", {}, None), True),
+            (ConnectionResetError("reset by peer"), True),
+            (ConnectionRefusedError("refused"), True),
+            (TimeoutError("timed out"), True),
+            (URLError(TimeoutError()), True),
+            (RuntimeError("Feature timed out permanently"), False),
+        ],
+    )
+    def test_is_transient(self, exc, expected):
+        assert BaseExternalRepository._is_transient(exc) is expected
 
 
 if __name__ == "__main__":

@@ -37,7 +37,7 @@
     "passed": 1000,
     "failed": 0
   },
-  "L1_gap_count": 1,
+  "L1_failed_checks": 1,
   "L4_recall": null,
   "L4_fpr": null,
   "L3_abstain_synthetic": {

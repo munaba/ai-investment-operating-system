@@ -130,3 +130,16 @@ class DatabaseManager:
         except Exception as exc:  # noqa: BLE001
             logger.warning(f"DatabaseManager.health_check failed: {exc}")
             return False
+
+    def close_all(self) -> None:
+        """Close every tracked connection across all threads.
+
+        Delegates to :meth:`SQLiteDatabase.close_all` (when the underlying
+        backend is a :class:`SQLiteDatabase`); otherwise falls back to
+        :meth:`disconnect` for the calling thread.
+        """
+        db = self._database
+        if hasattr(db, "close_all"):
+            db.close_all()
+        else:
+            self.disconnect()
