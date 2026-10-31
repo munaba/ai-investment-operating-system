@@ -3963,8 +3963,8 @@ if __name__ == "__main__":
     # so build_application() runs first, then the process exits with the
     # command's own status code instead of falling into the REPL.
     if len(sys.argv) > 1 and sys.argv[1] == "watchlist":
-        _app = build_application()
-        sys.exit(_run_watchlist_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_watchlist_command(_app, sys.argv[2:]))
     # Activation 12, Phase 3: "preference set/get/list" is a one-shot argv
     # command, dispatched here -- same pattern as "watchlist" immediately
     # above. Needs a real ``app`` (the already-built ``app.memory_store``),
@@ -3973,8 +3973,8 @@ if __name__ == "__main__":
     # the single ApplicationGraph-constructed MemoryStore -- no second
     # store, no persistence, no financial-state access.
     if len(sys.argv) > 1 and sys.argv[1] == "preference":
-        _app = build_application()
-        sys.exit(_run_preference_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_preference_command(_app, sys.argv[2:]))
     # Activation 12 Memory (Strategy Notes): "strategy-note add/list" is
     # a one-shot argv command, dispatched here -- same pattern as
     # "preference" immediately above. Needs a real ``app`` (the
@@ -3984,8 +3984,8 @@ if __name__ == "__main__":
     # ApplicationGraph-constructed MemoryStore -- no second store, no
     # persistence, no financial-state access.
     if len(sys.argv) > 1 and sys.argv[1] == "strategy-note":
-        _app = build_application()
-        sys.exit(_run_strategy_note_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_strategy_note_command(_app, sys.argv[2:]))
     # Activation 12 Memory (Previous Decisions): "previous-decision
     # add/list" is a one-shot argv command, dispatched here -- same
     # pattern as "strategy-note" immediately above. Needs a real ``app``
@@ -3995,8 +3995,8 @@ if __name__ == "__main__":
     # ApplicationGraph-constructed MemoryStore -- no second store, no
     # persistence, no financial-state access.
     if len(sys.argv) > 1 and sys.argv[1] == "previous-decision":
-        _app = build_application()
-        sys.exit(_run_previous_decision_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_previous_decision_command(_app, sys.argv[2:]))
     # Activation 12 Memory (Lessons From Failed Trades): "lesson add/list"
     # is a one-shot argv command, dispatched here -- same pattern as
     # "previous-decision" immediately above. Needs a real ``app`` (the
@@ -4007,15 +4007,15 @@ if __name__ == "__main__":
     # persistence, no financial-state access. This is user-authored
     # passive memory only: no automatic failed-trade lesson generation.
     if len(sys.argv) > 1 and sys.argv[1] == "lesson":
-        _app = build_application()
-        sys.exit(_run_lesson_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_lesson_command(_app, sys.argv[2:]))
     if len(sys.argv) > 1 and sys.argv[1] == "scan":
         _argv = sys.argv[2:]
         rc = _configure_cli_market(_argv)
         if rc:
             sys.exit(rc)
-        _app = build_application()
-        sys.exit(_run_scan_command(_app, _argv))
+        with build_application() as _app:
+            sys.exit(_run_scan_command(_app, _argv))
     # Activation 4 Session 1: "recommendation SYMBOL" and "paper
     # buy/sell ..." are one-shot argv commands, dispatched here --
     # same pattern as "watchlist"/"scan" immediately above. Both need
@@ -4024,8 +4024,8 @@ if __name__ == "__main__":
     # build_application() runs first, then the process exits with the
     # command's own status code instead of falling into the REPL.
     if len(sys.argv) > 1 and sys.argv[1] == "recommendation":
-        _app = build_application()
-        sys.exit(_run_recommendation_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_recommendation_command(_app, sys.argv[2:]))
     # Phase B ("Decision Copilot"): "brief" is a one-shot, read-mostly
     # argv command, dispatched here -- same pattern as "recommendation"
     # immediately above. Needs a real app (decision_brief_service via
@@ -4033,8 +4033,8 @@ if __name__ == "__main__":
     # build_application() runs first, then the process exits with the
     # command's own status code instead of falling into the REPL.
     if len(sys.argv) > 1 and sys.argv[1] == "brief":
-        _app = build_application()
-        sys.exit(_run_brief_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_brief_command(_app, sys.argv[2:]))
     # Phase C ("Personal Risk Ledger + Decision Journal"): "risk-limits"
     # and "journal" are one-shot argv commands, dispatched here -- same
     # pattern as "brief" immediately above. Both need a real app
@@ -4042,11 +4042,11 @@ if __name__ == "__main__":
     # runs first, then the process exits with the command's own status
     # code instead of falling into the REPL.
     if len(sys.argv) > 1 and sys.argv[1] == "risk-limits":
-        _app = build_application()
-        sys.exit(_run_risk_limits_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_risk_limits_command(_app, sys.argv[2:]))
     if len(sys.argv) > 1 and sys.argv[1] == "journal":
-        _app = build_application()
-        sys.exit(_run_journal_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_journal_command(_app, sys.argv[2:]))
     # Phase H Task 1 ("Observation Window + Sustained-Use Review
     # Record"): "observation-window" is a one-shot argv command,
     # dispatched here -- same pattern as "journal"/"risk-limits"
@@ -4054,15 +4054,15 @@ if __name__ == "__main__":
     # so build_application() runs first, then the process exits with
     # the command's own status code instead of falling into the REPL.
     if len(sys.argv) > 1 and sys.argv[1] == "observation-window":
-        _app = build_application()
-        sys.exit(_run_observation_window_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_observation_window_command(_app, sys.argv[2:]))
     if len(sys.argv) > 1 and sys.argv[1] == "paper":
         _argv = sys.argv[2:]
         rc = _configure_cli_market(_argv)
         if rc:
             sys.exit(rc)
-        _app = build_application()
-        sys.exit(_run_paper_command(_app, _argv))
+        with build_application() as _app:
+            sys.exit(_run_paper_command(_app, _argv))
     # Activation 4 Session 2: "portfolio"/"account"/"orders"/"trades"
     # are one-shot, read-only argv commands, dispatched here -- same
     # pattern as "recommendation"/"paper" immediately above. Each
@@ -4071,17 +4071,17 @@ if __name__ == "__main__":
     # build_application() runs first, then the process exits with the
     # command's own status code instead of falling into the REPL.
     if len(sys.argv) > 1 and sys.argv[1] == "portfolio":
-        _app = build_application()
-        sys.exit(_run_portfolio_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_portfolio_command(_app, sys.argv[2:]))
     if len(sys.argv) > 1 and sys.argv[1] == "account":
-        _app = build_application()
-        sys.exit(_run_account_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_account_command(_app, sys.argv[2:]))
     if len(sys.argv) > 1 and sys.argv[1] == "orders":
-        _app = build_application()
-        sys.exit(_run_orders_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_orders_command(_app, sys.argv[2:]))
     if len(sys.argv) > 1 and sys.argv[1] == "trades":
-        _app = build_application()
-        sys.exit(_run_trades_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_trades_command(_app, sys.argv[2:]))
     # Activation 6.4: "report daily" is a one-shot argv command,
     # dispatched here -- same pattern as "portfolio"/"account"/
     # "orders"/"trades" immediately above. Needs a real ``app``
@@ -4093,8 +4093,8 @@ if __name__ == "__main__":
     # pipeline's manual retry entry point -- running the same
     # command again re-runs the whole chain from a fresh scan.
     if len(sys.argv) > 1 and sys.argv[1] == "report":
-        _app = build_application()
-        sys.exit(_run_report_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_report_command(_app, sys.argv[2:]))
     # Activation 12 Scheduler, atomic step 1: "scheduler tick" is a
     # one-shot argv command, dispatched here -- same pattern as
     # "report" immediately above. Needs a real ``app`` (the
@@ -4105,8 +4105,8 @@ if __name__ == "__main__":
     # falling into the REPL. Manual trigger only -- no background
     # scheduling, no daemon, no cron is introduced by this dispatch.
     if len(sys.argv) > 1 and sys.argv[1] == "scheduler":
-        _app = build_application()
-        sys.exit(_run_scheduler_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_scheduler_command(_app, sys.argv[2:]))
     # Phase E Task 6 ("Wire the existing Telegram inbound control
     # plane"): "telegram poll"/"telegram status" are one-shot argv
     # commands, dispatched here -- same pattern as "scheduler"
@@ -4120,8 +4120,8 @@ if __name__ == "__main__":
     # Every existing command above is unchanged and unaffected by this
     # addition.
     if len(sys.argv) > 1 and sys.argv[1] == "telegram":
-        _app = build_application()
-        sys.exit(_run_telegram_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_telegram_command(_app, sys.argv[2:]))
     # Phase H Task 4 ("Operator Feedback + Final Review Record"):
     # "sustained-use-final feedback"/"sustained-use-final decide" are
     # one-shot argv commands, dispatched here -- same pattern as
@@ -4135,8 +4135,8 @@ if __name__ == "__main__":
     # roadmap calls for. Neither ever mutates a trading, risk-limit,
     # or permission table.
     if len(sys.argv) > 1 and sys.argv[1] == "sustained-use-final":
-        _app = build_application()
-        sys.exit(_run_sustained_use_final_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_sustained_use_final_command(_app, sys.argv[2:]))
     # Phase I Gate 3 ("Decision Copilot CLI Bridge"): "decision-copilot
     # patterns"/"decision-copilot evidence" are one-shot argv commands,
     # dispatched here -- same pattern as "telegram"/
@@ -4149,6 +4149,6 @@ if __name__ == "__main__":
     # exposes no apply/confirm/decide/submit flag, and leaves the skill
     # itself unregistered in the Composition Root / SkillRegistry.
     if len(sys.argv) > 1 and sys.argv[1] == "decision-copilot":
-        _app = build_application()
-        sys.exit(_run_decision_copilot_command(_app, sys.argv[2:]))
+        with build_application() as _app:
+            sys.exit(_run_decision_copilot_command(_app, sys.argv[2:]))
     main()
