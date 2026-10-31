@@ -555,12 +555,13 @@ def eval_l1_data_baseline() -> Tuple[int, int]:
     coverage_ratio days_since_last_scan adalah INFORMATIF (tidak gagal).
     Duplikat tetap pass/fail dengan threshold 0.
     """
-    if not _DB_PATH.exists():
+    db_path = Path(os.environ.get("AIOS_EVAL_DB_PATH") or os.environ.get("DB_PATH") or _DB_PATH)
+    if not db_path.exists():
         print("L1 Data: SKIP (DB not found)")
         return 0, 0
 
     # Read-only: mode=ro menjamin eval tidak bisa menulis ke DB produksi.
-    conn = sqlite3.connect(f"file:{_DB_PATH}?mode=ro", uri=True)
+    conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
     cur = conn.cursor()
 
     # Duplikat check: ranking_snapshots PK (scan_time, symbol)
@@ -700,23 +701,33 @@ def eval_l4_llm_grounding() -> Tuple[int, int]:
 
 def eval_l3_signals_baseline() -> Tuple[int, int]:
     """L3 Signals — walk-forward calibration, DATA_TIDAK_CUKUP."""
-    if not _DB_PATH.exists():
+    db_path = Path(os.environ.get("AIOS_EVAL_DB_PATH") or os.environ.get("DB_PATH") or _DB_PATH)
+    if not db_path.exists():
         print("L3 Signals: SKIP (DB not found)")
         return 0, 0
 
-    conn = sqlite3.connect(f"file:{_DB_PATH}?mode=ro", uri=True)
+    conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
     cur = conn.cursor()
 
     cur.execute("SELECT COUNT(*) FROM ranking_snapshots")
     n_ranking = cur.fetchone()[0]
     cur.execute("SELECT COUNT(DISTINCT scan_time) FROM ranking_snapshots")
     n_scans = cur.fetchone()[0]
-    cur.execute("SELECT COUNT(*) FROM decision_briefs")
-    n_briefs = cur.fetchone()[0]
-    cur.execute("SELECT COUNT(*) FROM journal_entries")
-    n_journals = cur.fetchone()[0]
-    cur.execute("SELECT COUNT(*) FROM trades")
-    n_trades = cur.fetchone()[0]
+    try:
+        cur.execute("SELECT COUNT(*) FROM decision_briefs")
+        n_briefs = cur.fetchone()[0]
+    except Exception:
+        n_briefs = 0
+    try:
+        cur.execute("SELECT COUNT(*) FROM journal_entries")
+        n_journals = cur.fetchone()[0]
+    except Exception:
+        n_journals = 0
+    try:
+        cur.execute("SELECT COUNT(*) FROM trades")
+        n_trades = cur.fetchone()[0]
+    except Exception:
+        n_trades = 0
 
     conn.close()
 
@@ -753,16 +764,26 @@ def eval_l5_orchestration_baseline() -> Tuple[int, int]:
         return 0, 0
 
     # Read-only konsisten dengan L1/L3.
-    conn = sqlite3.connect(f"file:{_DB_PATH}?mode=ro", uri=True)
+    db_path = Path(os.environ.get("AIOS_EVAL_DB_PATH") or os.environ.get("DB_PATH") or _DB_PATH)
+    if not db_path.exists():
+        print("L5 Orchestration: SKIP (DB not found)")
+        return 0, 0
+
+    conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
     cur = conn.cursor()
 
-    cur.execute("""
-        SELECT trading_date, COUNT(*) as job_count
-        FROM scheduler_job_runs
-        GROUP BY trading_date
-        ORDER BY trading_date
-    """)
-    job_rows = cur.fetchall()
+    try:
+        cur.execute("""
+            SELECT trading_date, COUNT(*) as job_count
+            FROM scheduler_job_runs
+            GROUP BY trading_date
+            ORDER BY trading_date
+        """)
+        job_rows = cur.fetchall()
+    except Exception:
+        conn.close()
+        print("L5 Orchestration: DATA_TIDAK_CUKUP (scheduler_job_runs table not present)")
+        return 0, 0
     conn.close()
 
     if not job_rows:

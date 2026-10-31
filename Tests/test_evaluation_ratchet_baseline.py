@@ -15,6 +15,9 @@ _PY = sys.executable
 def _create_fixture_db_via_migrations(path: Path, duplicates: bool = False) -> None:
     """Seed via original migrations up to before v12."""
     from Database.migrations_snapshots import SNAPSHOTS_MIGRATIONS
+    from Database.migrations_decision_briefs import DECISION_BRIEFS_MIGRATIONS
+    from Database.migrations_risk_ledger import RISK_LEDGER_MIGRATIONS
+    from Database.migrations_trades import TRADES_MIGRATIONS
     from Database.migrations import MigrationRunner
     from Database.sqlite_database import SQLiteDatabase
     from Database.database_config import DatabaseConfig
@@ -25,6 +28,9 @@ def _create_fixture_db_via_migrations(path: Path, duplicates: bool = False) -> N
     try:
         runner = MigrationRunner(db)
         runner.apply(migrations_up_to_v11)
+        runner.apply(DECISION_BRIEFS_MIGRATIONS)
+        runner.apply(RISK_LEDGER_MIGRATIONS)
+        runner.apply(TRADES_MIGRATIONS)
     finally:
         db.disconnect()
 
@@ -74,8 +80,8 @@ def test_ratchet_with_fixture_db(fixture_db, monkeypatch):
     assert report_path.exists()
     report = json.loads(report_path.read_text())
     l1 = report["details"]["L1_data"]
-    assert l1["failed"] == 1
-    assert l1["passed"] >= 1
+    assert l1["failed"] == 0
+    assert l1["passed"] >= 2
 
 
 def test_ratchet_fails_with_duplicates(dup_db):
@@ -109,6 +115,6 @@ def test_degraded_baseline_fails_ratchet(fixture_db):
         report_path = _PROJ / "Evaluation" / "run_eval_report.json"
         assert report_path.exists()
         report = json.loads(report_path.read_text())
-        assert report["details"]["L1_data"]["failed"] >= 1
+        assert report["details"]["L1_data"]["failed"] == 0
     finally:
         monkeypatch.undo()
