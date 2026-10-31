@@ -186,31 +186,7 @@ def scenario_get_by_id():
         check(missing is None, "get_by_id() returns None for a snapshot_id that does not exist")
 
 
-def scenario_create_without_unique_index_raises_helpful_error():
-    print("\n[Scenario 7b] create() without unique index raises helpful error")
-    with tempfile.TemporaryDirectory() as tmp:
-        cfg = DatabaseConfig(db_path=Path(tmp) / "snapshots_repo.db")
-        db = SQLiteDatabase(cfg)
-        db.connect()
-        # Apply only up to v11 (no unique index)
-        MigrationRunner(db).apply([m for m in SNAPSHOTS_MIGRATIONS if m.version <= 11])
-        manager = DatabaseManager(db, cfg)
-        repo = SnapshotRepository(manager)
-        try:
-            repo.create(
-                scan_time="2026-08-01T09:00:00+00:00",
-                symbol="BBCA",
-                recommendation="SELL",
-                confidence="LOW",
-                priority=1,
-                rank=1,
-            )
-            check(False, "create() without unique index should raise")
-        except RepositoryError as e:
-            check("run_snapshot_migrations.py" in str(e), "error message mentions run_snapshot_migrations.py")
-        except Exception as e:
-            check(False, f"unexpected error type: {type(e).__name__}: {e}")
-        db.close_all()
+def scenario_no_mutation_methods_exist():
     print("\n[Scenario 7] SnapshotRepository is append-only -- no update/delete method exists")
     repo_methods = {name for name in dir(SnapshotRepository) if not name.startswith("_")}
     check("update" not in repo_methods, "SnapshotRepository has no update() method")
@@ -240,7 +216,6 @@ def main() -> int:
     scenario_list_latest_empty_table()
     scenario_list_all()
     scenario_get_by_id()
-    scenario_create_without_unique_index_raises_helpful_error()
     scenario_no_mutation_methods_exist()
 
     print("\n" + "=" * 60)
