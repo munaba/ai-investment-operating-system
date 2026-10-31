@@ -193,11 +193,11 @@ SNAPSHOTS_MIGRATIONS = (
         ],
     ),
     Migration(
-        version=12,
+        version=34,
         name="enforce_unique_scan_time_symbol",
         up_statements=[
             """
-            CREATE TEMPORARY TRIGGER IF NOT EXISTS v12_conflict_guard
+            CREATE TEMPORARY TRIGGER IF NOT EXISTS v34_conflict_guard
             BEFORE DELETE ON ranking_snapshots
             WHEN EXISTS (
                 SELECT 1 FROM ranking_snapshots r2
@@ -214,7 +214,7 @@ SNAPSHOTS_MIGRATIONS = (
                   )
             )
             BEGIN
-                SELECT RAISE(ABORT, 'v12: conflicting duplicate rows exist for (scan_time,symbol)');
+                SELECT RAISE(ABORT, 'v34: conflicting duplicate rows exist for (scan_time,symbol)');
             END
             """,
             """
@@ -229,7 +229,7 @@ SNAPSHOTS_MIGRATIONS = (
             ON ranking_snapshots (scan_time, symbol)
             """,
             """
-            DROP TRIGGER IF EXISTS v12_conflict_guard
+            DROP TRIGGER IF EXISTS v34_conflict_guard
             """,
         ],
     ),

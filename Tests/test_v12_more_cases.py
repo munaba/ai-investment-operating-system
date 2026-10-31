@@ -38,8 +38,8 @@ def test_v12_conflicting_duplicates_error_full(tmp_path):
     ver_before = _schema_version(db)
     assert ver_before == 11
     runner = MigrationRunner(db)
-    with pytest.raises(Exception, match="v12.*conflicting"):
-        runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 12])
+    with pytest.raises(Exception, match="v34.*conflicting"):
+        runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 34])
     cksum_after = _table_checksum(db)
     ver_after = _schema_version(db)
     assert cksum_after == cksum_before
@@ -56,8 +56,8 @@ def test_v12_mixed_duplicates_error_full(tmp_path):
     cksum_before = _table_checksum(db)
     ver_before = _schema_version(db)
     runner = MigrationRunner(db)
-    with pytest.raises(Exception, match="v12.*conflicting"):
-        runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 12])
+    with pytest.raises(Exception, match="v34.*conflicting"):
+        runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 34])
     cksum_after = _table_checksum(db)
     ver_after = _schema_version(db)
     assert cksum_after == cksum_before
@@ -72,13 +72,13 @@ def test_v12_trigger_cleaned_after_failure_full(tmp_path):
     db.execute(_INSERT + "(" + _ROW_B + ")")
     runner = MigrationRunner(db)
     with pytest.raises(Exception):
-        runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 12])
+        runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 34])
     temp_triggers = db.execute("SELECT name FROM sqlite_temp_master WHERE type='trigger'").rows
-    assert "v12_conflict_guard" not in [r["name"] for r in temp_triggers]
+    assert "v34_conflict_guard" not in [r["name"] for r in temp_triggers]
     db.close_all()
 
 def test_rowcount_new_and_duplicate_repo(tmp_path):
-    db = _seed_db(tmp_path, 12)
+    db = _seed_db(tmp_path, 34)
     repo = SnapshotRepository(db)
     snap1 = repo.create(scan_time="2026-02-02", symbol="BBCA", status="success", recommendation="BUY", confidence="0.9", priority=1, rank=1, score=80.0, score_breakdown_json="{}", evidence_summary="ok", error_message="")
     snap2 = repo.create(scan_time="2026-02-02", symbol="BBCA", status="success", recommendation="BUY", confidence="0.9", priority=1, rank=1, score=80.0, score_breakdown_json="{}", evidence_summary="ok", error_message="")
@@ -86,7 +86,7 @@ def test_rowcount_new_and_duplicate_repo(tmp_path):
     db.close_all()
 
 def test_create_duplicate_returns_existing_full(tmp_path):
-    db = _seed_db(tmp_path, 12)
+    db = _seed_db(tmp_path, 34)
     repo = SnapshotRepository(db)
     original = repo.create(scan_time="2026-03-03", symbol="TLKM", status="success", recommendation="HOLD", confidence="0.5", priority=2, rank=3, score=50.0, score_breakdown_json='{"x":1}', evidence_summary="test", error_message=None)
     duplicate = repo.create(scan_time="2026-03-03", symbol="TLKM", status="success", recommendation="HOLD", confidence="0.5", priority=2, rank=3, score=50.0, score_breakdown_json='{"x":1}', evidence_summary="test", error_message=None)
@@ -96,19 +96,13 @@ def test_create_duplicate_returns_existing_full(tmp_path):
     db.close_all()
 
 def test_raw_duplicate_insert_after_v12_raises_full(tmp_path):
-    db = _seed_db(tmp_path, 12)
+    db = _seed_db(tmp_path, 34)
     db.execute(_INSERT + "(" + _ROW_A + ")")
     with pytest.raises(Exception) as exc_info:
         db.execute(_INSERT + "(" + _ROW_A + ")")
     assert "UNIQUE" in str(exc_info.value) or "IntegrityError" in str(type(exc_info.value).__name__)
     db.close_all()
 
-@pytest.mark.xfail(
-    reason="v12 snapshots collides with v12 idempotency in live DB; "
-           "runner skips it because version 12 is already applied. "
-           "Needs version renumber before merge.",
-    strict=True,
-)
 def test_live_db_migration_copy_full():
     src = "data/investment_platform.db"
     if not os.path.exists(src):
@@ -125,12 +119,12 @@ def test_live_db_migration_copy_full():
     db = SQLiteDatabase(config)
     db.connect()
     runner = MigrationRunner(db)
-    runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 12])
+    runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 34])
     cnt = db.execute("SELECT COUNT(*) AS c FROM ranking_snapshots").rows[0]["c"]
     assert cnt == 94
     idx = db.execute("SELECT name FROM sqlite_master WHERE type='index' AND name='ux_ranking_snapshots_scan_time_symbol'").rows
     assert idx
     ver = _schema_version(db)
-    assert ver == 12
+    assert ver == 34
     db.close_all()
     os.remove(dst)

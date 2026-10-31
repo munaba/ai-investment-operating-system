@@ -30,8 +30,8 @@ def _seed_db(tmp_path: Path, migrations_up_to: int = 11) -> SQLiteDatabase:
 def test_v12_no_duplicates_passes(tmp_path):
     db = _seed_db(tmp_path, 11)
     runner = MigrationRunner(db)
-    applied = runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 12])
-    assert any(r.version == 12 for r in applied)
+    applied = runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 34])
+    assert any(r.version == 34 for r in applied)
     # index exists
     cur = db.execute(
         "SELECT name FROM sqlite_master WHERE type='index' AND name='ux_ranking_snapshots_scan_time_symbol'"
@@ -52,8 +52,8 @@ def test_v12_identical_duplicates_cleaned(tmp_path):
     before = db.execute("SELECT COUNT(*) AS c FROM ranking_snapshots").rows[0]["c"]
     assert before == 2
     runner = MigrationRunner(db)
-    applied = runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 12])
-    assert any(r.version == 12 for r in applied)
+    applied = runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 34])
+    assert any(r.version == 34 for r in applied)
     after = db.execute("SELECT COUNT(*) AS c FROM ranking_snapshots").rows[0]["c"]
     assert after == 1
     db.close_all()
@@ -71,7 +71,7 @@ def test_v12_conflicting_duplicates_error(tmp_path):
     assert before == 2
     runner = MigrationRunner(db)
     try:
-        runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 12])
+        runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 34])
         # Should have raised
         assert False, "expected DatabaseError"
     except Exception:
@@ -82,7 +82,7 @@ def test_v12_conflicting_duplicates_error(tmp_path):
 
 
 def test_rowcount_new_and_duplicate(tmp_path):
-    db = _seed_db(tmp_path, 12)
+    db = _seed_db(tmp_path, 34)
     repo = SnapshotRepository(db)
     snap1 = repo.create(
         scan_time="2026-02-02", symbol="BBCA", status="SUCCESS",
@@ -124,7 +124,7 @@ def test_live_db_migration_copy():
     # check for conflicting
     for c in conflicts:
         pass
-    applied = runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 12])
+    applied = runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 34])
     # may be already applied; just verify no error
     db.close_all()
     # cleanup
