@@ -104,29 +104,41 @@ class SnapshotRepository(BasePersistenceRepository):
         Raises:
             RepositoryError: If the underlying statement fails.
         """
-        result = self._execute(
-            """
-            INSERT INTO ranking_snapshots
-                (scan_time, symbol, status, recommendation, confidence,
-                 priority, rank, score, score_breakdown_json,
-                 evidence_summary, error_message)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(scan_time, symbol) DO NOTHING
-            """,
-            (
-                scan_time,
-                symbol,
-                status,
-                recommendation,
-                confidence,
-                priority,
-                rank,
-                score,
-                score_breakdown_json,
-                evidence_summary,
-                error_message,
-            ),
-        )
+        try:
+            result = self._execute(
+                """
+                INSERT INTO ranking_snapshots
+                    (scan_time, symbol, status, recommendation, confidence,
+                     priority, rank, score, score_breakdown_json,
+                     evidence_summary, error_message)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(scan_time, symbol) DO NOTHING
+                """,
+                (
+                    scan_time,
+                    symbol,
+                    status,
+                    recommendation,
+                    confidence,
+                    priority,
+                    rank,
+                    score,
+                    score_breakdown_json,
+                    evidence_summary,
+                    error_message,
+                ),
+            )
+        except Exception as exc:
+            err = str(exc)
+            if "ON CONFLICT clause does not match" in err or "ON CONFLICT clause does not match" in err:
+                from Core.exceptions import RepositoryError
+                raise RepositoryError(
+                    "SnapshotRepository.create() failed: the unique index "
+                    "ux_ranking_snapshots_scan_time_symbol is missing. "
+                    "Run `python run_snapshot_migrations.py` before using "
+                    "create()."
+                ) from exc
+            raise
         if result.rowcount == 0:
             existing = self._execute(
                 "SELECT * FROM ranking_snapshots WHERE scan_time = ? AND symbol = ?",
