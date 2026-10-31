@@ -27,8 +27,8 @@ def test_run_eval_executes_and_produces_report():
         text=True,
     )
     
-    # Exit code 1 expected (L1/L5 fail)
-    assert result.returncode == 1
+    # Exit code 0 expected (L1 informational, L5 DATA_TIDAK_CUKUP — no failures)
+    assert result.returncode == 0
     
     # Report file exists
     report_path = _PROJ / "Evaluation" / "run_eval_report.json"
@@ -54,8 +54,9 @@ def test_run_eval_executes_and_produces_report():
     assert report["details"]["L2_max_drawdown_property"]["passed"] == 1000
     assert report["details"]["L2_max_drawdown_property"]["failed"] == 0
     
-    # L1 should fail (gap count > 0)
-    assert report["details"]["L1_data"]["failed"] > 0
+    # L1 should be informational (no failures)
+    assert report["details"]["L1_data"]["failed"] == 0
+    assert report["details"]["L1_data"]["passed"] >= 1
     
     # L5: fewer than 5 IDX trading days observed -> DATA_TIDAK_CUKUP, not FAIL.
     # Rationale: completion rate over 1-2 trading days is statistical noise,
