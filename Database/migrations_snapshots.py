@@ -197,6 +197,27 @@ SNAPSHOTS_MIGRATIONS = (
         name="enforce_unique_scan_time_symbol",
         up_statements=[
             """
+            CREATE TEMPORARY TRIGGER IF NOT EXISTS v12_conflict_guard
+            BEFORE DELETE ON ranking_snapshots
+            WHEN EXISTS (
+                SELECT 1 FROM ranking_snapshots r2
+                WHERE r2.scan_time = OLD.scan_time
+                  AND r2.symbol = OLD.symbol
+                  AND r2.snapshot_id <> OLD.snapshot_id
+                  AND (
+                    r2.status IS NOT OLD.status OR r2.recommendation IS NOT OLD.recommendation
+                    OR r2.confidence IS NOT OLD.confidence OR r2.priority IS NOT OLD.priority
+                    OR r2.rank IS NOT OLD.rank OR r2.score IS NOT OLD.score
+                    OR r2.score_breakdown_json IS NOT OLD.score_breakdown_json
+                    OR r2.evidence_summary IS NOT OLD.evidence_summary
+                    OR r2.error_message IS NOT OLD.error_message
+                  )
+            )
+            BEGIN
+                SELECT RAISE(ABORT, 'v12: conflicting duplicate rows exist for (scan_time,symbol)');
+            END
+            """,
+            """
             DELETE FROM ranking_snapshots
             WHERE snapshot_id NOT IN (
                 SELECT MIN(snapshot_id) FROM ranking_snapshots
@@ -206,6 +227,9 @@ SNAPSHOTS_MIGRATIONS = (
             """
             CREATE UNIQUE INDEX IF NOT EXISTS ux_ranking_snapshots_scan_time_symbol
             ON ranking_snapshots (scan_time, symbol)
+            """,
+            """
+            DROP TRIGGER IF EXISTS v12_conflict_guard
             """,
         ],
     ),

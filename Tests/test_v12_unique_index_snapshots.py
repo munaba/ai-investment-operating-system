@@ -49,12 +49,12 @@ def test_v12_identical_duplicates_cleaned(tmp_path):
     db.execute(
         "INSERT INTO ranking_snapshots (scan_time, symbol, status, recommendation, confidence, priority, rank, score, score_breakdown_json, evidence_summary, error_message) VALUES ('2026-01-01','BBCA','SUCCESS','BUY',0.9,1,1,80.0,'{}','ok','')"
     )
-    before = db.execute("SELECT COUNT(*) FROM ranking_snapshots").rows[0][0]
+    before = db.execute("SELECT COUNT(*) AS c FROM ranking_snapshots").rows[0]["c"]
     assert before == 2
     runner = MigrationRunner(db)
     applied = runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 12])
     assert any(r.version == 12 for r in applied)
-    after = db.execute("SELECT COUNT(*) FROM ranking_snapshots").rows[0][0]
+    after = db.execute("SELECT COUNT(*) AS c FROM ranking_snapshots").rows[0]["c"]
     assert after == 1
     db.close_all()
 
@@ -67,7 +67,7 @@ def test_v12_conflicting_duplicates_error(tmp_path):
     db.execute(
         "INSERT INTO ranking_snapshots (scan_time, symbol, status, recommendation, confidence, priority, rank, score, score_breakdown_json, evidence_summary, error_message) VALUES ('2026-01-01','BBCA','FAIL','SELL',0.1,2,2,10.0,'{}','bad','err')"
     )
-    before = db.execute("SELECT COUNT(*) FROM ranking_snapshots").rows[0][0]
+    before = db.execute("SELECT COUNT(*) AS c FROM ranking_snapshots").rows[0]["c"]
     assert before == 2
     runner = MigrationRunner(db)
     try:
@@ -76,7 +76,7 @@ def test_v12_conflicting_duplicates_error(tmp_path):
         assert False, "expected DatabaseError"
     except Exception:
         pass
-    after = db.execute("SELECT COUNT(*) FROM ranking_snapshots").rows[0][0]
+    after = db.execute("SELECT COUNT(*) AS c FROM ranking_snapshots").rows[0]["c"]
     assert after == 2
     db.close_all()
 
