@@ -1,4 +1,4 @@
-"""Regression tests for v12 unique index on ranking_snapshots."""
+"""Regression tests for v34 unique index on ranking_snapshots."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ def _seed_db(tmp_path: Path, migrations_up_to: int = 11) -> SQLiteDatabase:
     return db
 
 
-def test_v12_no_duplicates_passes(tmp_path):
+def test_v34_no_duplicates_passes(tmp_path):
     db = _seed_db(tmp_path, 11)
     runner = MigrationRunner(db)
     applied = runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 34])
@@ -40,7 +40,7 @@ def test_v12_no_duplicates_passes(tmp_path):
     db.close_all()
 
 
-def test_v12_identical_duplicates_cleaned(tmp_path):
+def test_v34_identical_duplicates_cleaned(tmp_path):
     db = _seed_db(tmp_path, 11)
     # insert duplicate identical rows
     db.execute(
@@ -59,7 +59,7 @@ def test_v12_identical_duplicates_cleaned(tmp_path):
     db.close_all()
 
 
-def test_v12_conflicting_duplicates_error(tmp_path):
+def test_v34_conflicting_duplicates_error(tmp_path):
     db = _seed_db(tmp_path, 11)
     db.execute(
         "INSERT INTO ranking_snapshots (scan_time, symbol, status, recommendation, confidence, priority, rank, score, score_breakdown_json, evidence_summary, error_message) VALUES ('2026-01-01','BBCA','SUCCESS','BUY',0.9,1,1,80.0,'{}','ok','')"

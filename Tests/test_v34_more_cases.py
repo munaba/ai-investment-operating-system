@@ -30,7 +30,7 @@ def _schema_version(db):
     versions = db.execute("SELECT MAX(version) AS v FROM schema_migrations").rows
     return int(versions[0]["v"]) if versions else 0
 
-def test_v12_conflicting_duplicates_error_full(tmp_path):
+def test_v34_conflicting_duplicates_error_full(tmp_path):
     db = _seed_db(tmp_path, 11)
     db.execute(_INSERT + "(" + _ROW_A + ")")
     db.execute(_INSERT + "(" + _ROW_B + ")")
@@ -48,7 +48,7 @@ def test_v12_conflicting_duplicates_error_full(tmp_path):
     assert cnt == 2
     db.close_all()
 
-def test_v12_mixed_duplicates_error_full(tmp_path):
+def test_v34_mixed_duplicates_error_full(tmp_path):
     db = _seed_db(tmp_path, 11)
     db.execute(_INSERT + "(" + _ROW_A + ")")
     db.execute(_INSERT + "(" + _ROW_A + ")")
@@ -66,7 +66,7 @@ def test_v12_mixed_duplicates_error_full(tmp_path):
     assert cnt == 3
     db.close_all()
 
-def test_v12_trigger_cleaned_after_failure_full(tmp_path):
+def test_v34_trigger_cleaned_after_failure_full(tmp_path):
     db = _seed_db(tmp_path, 11)
     db.execute(_INSERT + "(" + _ROW_A + ")")
     db.execute(_INSERT + "(" + _ROW_B + ")")
@@ -95,7 +95,7 @@ def test_create_duplicate_returns_existing_full(tmp_path):
     assert cnt == 1
     db.close_all()
 
-def test_raw_duplicate_insert_after_v12_raises_full(tmp_path):
+def test_raw_duplicate_insert_after_v34_raises_full(tmp_path):
     db = _seed_db(tmp_path, 34)
     db.execute(_INSERT + "(" + _ROW_A + ")")
     with pytest.raises(Exception) as exc_info:
