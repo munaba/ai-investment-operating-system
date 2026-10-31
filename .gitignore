@@ -82,3 +82,5 @@ test_output.txt
 /_guidelines.md
 /IDEA.md
 Evaluation/run_eval_report.json
+
+data/
