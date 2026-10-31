@@ -111,6 +111,7 @@ class SnapshotRepository(BasePersistenceRepository):
                  priority, rank, score, score_breakdown_json,
                  evidence_summary, error_message)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(scan_time, symbol) DO NOTHING
             """,
             (
                 scan_time,
@@ -126,6 +127,13 @@ class SnapshotRepository(BasePersistenceRepository):
                 error_message,
             ),
         )
+        if result.rowcount == 0:
+            existing = self._execute(
+                "SELECT * FROM ranking_snapshots WHERE scan_time = ? AND symbol = ?",
+                (scan_time, symbol),
+            ).rows
+            if existing:
+                return self._row_to_snapshot(existing[0])
         return RankingSnapshot(
             snapshot_id=result.lastrowid,
             scan_time=scan_time,
