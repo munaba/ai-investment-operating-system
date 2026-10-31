@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-04T10:36+07:00",
-  "commit": "ed97e53b4c50682bbbbcb678ba1a10b93faeb6b6",
+  "generated_at": "2026-10-31T16:35+07:00",
+  "commit": "70432a3cd0a466f61a713f91c72ef6a1e092c8be",
   "L2_expectancy_golden": {
     "passed": 6,
     "failed": 0
@@ -37,9 +37,15 @@
     "passed": 1000,
     "failed": 0
   },
-  "L1_failed_checks": 1,
-  "L4_recall": null,
-  "L4_fpr": null,
+  "L1_failed_checks": 0,
+  "L4_recall": {
+    "passed": 1,
+    "failed": 0
+  },
+  "L4_fpr": {
+    "passed": 1,
+    "failed": 0
+  },
   "L3_abstain_synthetic": {
     "passed": 15,
     "failed": 0
