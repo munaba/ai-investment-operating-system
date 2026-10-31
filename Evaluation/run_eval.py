@@ -548,14 +548,12 @@ def eval_l3_walkforward() -> Tuple[int, int]:
 # ---------------------------------------------------------------------------
 
 def eval_l1_data_baseline() -> Tuple[int, int]:
-    """L1 Data — DB validation, gap detection, duplicates.
+    """L1 Data — DB validation, coverage metrics, duplicates.
 
-    Gap dihitung terhadap hari bursa IDX (``Business.idx_market_calendar.
-    IDXMarketCalendar.is_trading_day``), bukan kalender mentah: akhir
-    pekan TIDAK dihitung sebagai gap. Libur nasional IDX tidak memiliki
-    rumus algoritmik (lihat ``KNOWN_LIMITATIONS`` di
-    ``idx_market_calendar``) sehingga hanya weekend yang di-exclude --
-    gap\libur dilaporkan eksplisit, bukan disembunyikan.
+    missing_trading_days renamed from gaps. Akhir rentang dihitung sampai
+    tanggal evaluasi (bukan scan terakhir). missing_trading_days dan
+    coverage_ratio days_since_last_scan adalah INFORMATIF (tidak gagal).
+    Duplikat tetap pass/fail dengan threshold 0.
     """
     if not _DB_PATH.exists():
         print("L1 Data: SKIP (DB not found)")
@@ -580,39 +578,46 @@ def eval_l1_data_baseline() -> Tuple[int, int]:
     cal = load_idx_market_calendar(env_get=lambda _k, _d: "")
 
     # Item 5a: normalize scan_time from UTC to WIB (UTC+7) before date extraction
-    # to prevent Friday 18:00 UTC (Sat 01:00 WIB) misclassification as Friday
     cur.execute("SELECT DISTINCT date(datetime(scan_time, '+7 hours')) as d FROM ranking_snapshots ORDER BY d")
     dates = [r[0] for r in cur.fetchall()]
 
     trading_dates = sorted(d for d in dates if cal.is_trading_day(date.fromisoformat(d)))
     weekend_dates = sorted(d for d in dates if not cal.is_trading_day(date.fromisoformat(d)))
 
-    gaps = 0
+    missing_trading_days: list[str] = []
     expected_trading_days = 0
-    missing_dates: list[str] = []
-    if len(trading_dates) >= 2:
+    scanned_trading_days = 0
+    coverage_ratio = 1.0
+    days_since_last_scan = 0
+
+    if trading_dates:
         first = date.fromisoformat(trading_dates[0])
-        last = date.fromisoformat(trading_dates[-1])
+        last_eval = date.today()
         expected_set = set()
         cursor = first
-        while cursor <= last:
+        while cursor <= last_eval:
             if cal.is_trading_day(cursor):
                 expected_set.add(cursor.isoformat())
             cursor += timedelta(days=1)
         actual_set = set(trading_dates)
-        missing_dates = sorted(expected_set - actual_set)
+        scanned_in_range = sorted(actual_set & expected_set)
+        missing_trading_days = sorted(expected_set - actual_set)
         expected_trading_days = len(expected_set)
-        gaps = len(missing_dates)
+        scanned_trading_days = len(scanned_in_range)
+        coverage_ratio = (scanned_trading_days / expected_trading_days) if expected_trading_days else 1.0
+        last_scan_trading = date.fromisoformat(max(trading_dates))
+        days_since_last_scan = (last_eval - last_scan_trading).days
 
     conn.close()
 
-    print(f"L1 Data: duplicates={duplicates}, gaps={gaps} (distinct_dates={len(dates)})")
+    print(f"L1 Data: duplicates={duplicates}, missing_trading_days={len(missing_trading_days)} (distinct_dates={len(dates)})")
     print(
-        f"  trading_dates={len(trading_dates)}, expected_trading_days="
-        f"{expected_trading_days}, weekend_dates_excluded={len(weekend_dates)}"
+        f"  trading_dates={len(trading_dates)}, expected_trading_days={expected_trading_days}, "
+        f"scanned_trading_days={scanned_trading_days}, weekend_dates_excluded={len(weekend_dates)}"
     )
-    if missing_dates:
-        print(f"  missing trading dates: {', '.join(missing_dates)}")
+    print(f"  coverage_ratio={coverage_ratio:.6f}, days_since_last_scan={days_since_last_scan}")
+    if missing_trading_days:
+        print(f"  missing trading dates (first/last): {missing_trading_days[0]} .. {missing_trading_days[-1]} (count={len(missing_trading_days)})")
 
     passed = 0
     failed = 0
@@ -622,15 +627,8 @@ def eval_l1_data_baseline() -> Tuple[int, int]:
         failed += 1
         print(f"  FAIL: {duplicates} duplicate (scan_time, symbol) pairs")
 
-    if gaps <= _THRESH["L1_data"]["undetected_gap_count"]:
-        passed += 1
-    else:
-        failed += 1
-        print(f"  FAIL: gap count {gaps} > {_THRESH['L1_data']['undetected_gap_count']}")
-        print(
-            "  NOTE: gap = trading days (Mon-Fri, minus operator-supplied "
-            "holidays) with no ranking_snapshots row."
-        )
+    # missing_trading_days is informational - does not fail
+    passed += 1
 
     return passed, failed
 

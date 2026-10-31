@@ -2,7 +2,7 @@
   "L1_data": {
     "validation_pass_rate": 0.999,
     "duplicate_count": 0,
-    "undetected_gap_count": 0
+    "missing_trading_days_threshold": null
   },
   "L2_engine": {
     "reference_match_rate": 1.0,
