@@ -20,7 +20,7 @@ AIOS is a personal research and learning project. It is not a broker, not an aut
 
 ### Prerequisites
 
-- Python 3.11+
+- Python 3.14 (tested)
 - .NET 8 SDK (for the dashboard)
 - SQLite
 
@@ -60,6 +60,14 @@ python run_scheduler_migrations.py
 python run_telegram_control_migrations.py
 python run_valuation_observation_migrations.py
 ```
+
+### Deployment order
+
+- **Back up the DB first** — use the SQLite backup API or copy `data/investment_platform.db`.
+- Run `python run_snapshot_migrations.py` before any scan.
+- Migrate the DB first, then deploy new code.
+- No auto-migration at startup — the operator runs migrations manually.
+- Details: [Docs/DEPLOYMENT.md](Docs/DEPLOYMENT.md).
 
 ### Run
 
@@ -136,6 +144,15 @@ The evaluation harness covers layers L1–L5; see `Evaluation/README.md`. Latest
 
 Scheduler details: `README_SCHEDULER.md`.
 
+## Engineering notes
+
+- 269 pytest tests
+- Global test for migration-version uniqueness (caught a version collision)
+- v34: guarded unique index on ranking_snapshots (scan_time, symbol); clear RepositoryError if the index is missing
+- Retry classifier rebuilt as an allowlist (27 tests; 21 fail on the old logic)
+- Deterministic evaluation harness; insufficient data reports DATA_TIDAK_CUKUP instead of a false pass
+- CLI commands use `with build_application()` so connections are closed
+
 ## Development
 
 AIOS was architected and directed by Nabil, with implementation carried out through AI-assisted engineering, using Claude, ChatGPT, and an autonomous coding agent (Hermes) across iterative phases. Nabil defined the system architecture, risk policies, and decision-flow requirements, broke them into tasks for the AI agents, and reviewed and tested each output.
@@ -146,6 +163,10 @@ This is an AI-directed development workflow, not a claim that every line was wri
 - **Phase H**: sustained-use review (observation windows, evidence assembly)
 - **Phase I**: evidence profile analysis job added
 - **Parked**: US stocks, crypto, forex (IDX only)
+
+## Author
+
+Muhammad Nabil Baihaqi - GitHub: github.com/munaba - LinkedIn: linkedin.com/in/muhammad-nabil-baihaqi-munaba - Email: munaba1006@gmail.com
 
 ## License
 
