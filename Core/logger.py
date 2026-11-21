@@ -16,6 +16,29 @@ _MAX_BYTES: int = 5 * 1024 * 1024
 _BACKUP_COUNT: int = 5
  
  
+class WinError32SafeRotatingFileHandler(RotatingFileHandler):
+    """RotatingFileHandler that survives Windows refusing the rename (WinError 32)."""
+
+    _rollover_warned = False
+
+    def doRollover(self) -> None:
+        try:
+            super().doRollover()
+        except PermissionError as exc:
+            if getattr(exc, "winerror", None) != 32:
+                raise
+            # The base class closes the stream before renaming; reopen the
+            # unchanged original file so records are still written.
+            if self.stream is None and not self._closed:
+                self.stream = self._open()
+            if not self._rollover_warned:
+                self._rollover_warned = True
+                logging.getLogger(__name__).warning(
+                    "Log rollover skipped (WinError 32), still writing to %s",
+                    self.baseFilename,
+                )
+
+
 class LoggerFactory:
     """Thread-safe singleton factory that creates and caches configured loggers.
  
@@ -78,7 +101,7 @@ class LoggerFactory:
                 console_handler.setFormatter(formatter)
                 logger.addHandler(console_handler)
  
-                file_handler = RotatingFileHandler(
+                file_handler = WinError32SafeRotatingFileHandler(
                     filename=_LOG_FILE,
                     maxBytes=_MAX_BYTES,
                     backupCount=_BACKUP_COUNT,
