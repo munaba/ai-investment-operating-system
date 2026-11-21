@@ -1,7 +1,8 @@
 """Standalone regression checks for
 ``Database.migrations_snapshots.SNAPSHOTS_MIGRATIONS``.
 
-Covers Sprint 5 STEP 3 (version=10) AND Activation 2.7 (version=11):
+Covers Sprint 5 STEP 3 (version=10), Activation 2.7 (version=11) AND
+the version=34 unique ``(scan_time, symbol)`` enforcement:
 
 * migration ``version=10`` applies idempotently and creates the
   ``ranking_snapshots`` table with the expected columns/types;
@@ -75,7 +76,7 @@ def _apply_prior_migrations(db: SQLiteDatabase) -> None:
 
 
 def scenario_migration_applies_and_is_idempotent():
-    print("\n[Scenario 1] version=10 and version=11 apply and are idempotent")
+    print("\n[Scenario 1] version=10, version=11 and version=34 apply and are idempotent")
     with tempfile.TemporaryDirectory() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "snapshots_migration.db")
         db = SQLiteDatabase(cfg)
@@ -84,9 +85,13 @@ def scenario_migration_applies_and_is_idempotent():
             _apply_prior_migrations(db)
             runner = MigrationRunner(db)
             applied = runner.apply(SNAPSHOTS_MIGRATIONS)
-            check(len(applied) == 2, "exactly two migrations applied on first run (v10, v11)")
+            check(
+                [m.version for m in applied] == [m.version for m in SNAPSHOTS_MIGRATIONS],
+                "applied versions match SNAPSHOTS_MIGRATIONS exactly (v10, v11, v34)",
+            )
             check(applied[0].version == 10, "first applied migration is version=10")
             check(applied[1].version == 11, "second applied migration is version=11")
+            check(applied[2].version == 34, "third applied migration is version=34")
             check(
                 applied[0].name == "create_ranking_snapshots_table",
                 "v10 migration name matches",
@@ -95,6 +100,10 @@ def scenario_migration_applies_and_is_idempotent():
                 applied[1].name == "extend_ranking_snapshots_for_status_and_analysis",
                 "v11 migration name matches",
             )
+            check(
+                applied[2].name == "enforce_unique_scan_time_symbol",
+                "v34 migration name matches",
+            )
 
             applied_again = runner.apply(SNAPSHOTS_MIGRATIONS)
             check(applied_again == [], "second apply() is a no-op (idempotent)")
@@ -102,6 +111,7 @@ def scenario_migration_applies_and_is_idempotent():
             versions = runner.applied_versions()
             check(10 in versions, "version 10 recorded in schema_migrations")
             check(11 in versions, "version 11 recorded in schema_migrations")
+            check(34 in versions, "version 34 recorded in schema_migrations")
             check(6 not in versions, "version 6 was never applied (still reserved, untouched)")
             check(7 not in versions, "version 7 was never applied (still reserved, untouched)")
             check(8 not in versions, "version 8 was never applied (still reserved, untouched)")
@@ -238,7 +248,7 @@ def scenario_insert_and_select_row():
 
 
 def scenario_restart_preserves_v10_rows_and_autoincrement():
-    print("\n[Scenario 5] a v10-only database upgraded to v11 keeps every row and the autoincrement counter")
+    print("\n[Scenario 5] a v10-only database upgraded to v11+v34 keeps every row and the autoincrement counter")
     with tempfile.TemporaryDirectory() as tmp:
         db_path = Path(tmp) / "snapshots_restart.db"
         cfg = DatabaseConfig(db_path=db_path)
@@ -276,8 +286,13 @@ def scenario_restart_preserves_v10_rows_and_autoincrement():
         db.connect()
         try:
             applied = MigrationRunner(db).apply(SNAPSHOTS_MIGRATIONS)
-            check(len(applied) == 1, "only version=11 is pending on the upgrade run")
-            check(applied[0].version == 11, "the pending migration is version=11")
+            pending = [m for m in SNAPSHOTS_MIGRATIONS if m.version != 10]
+            check(
+                [m.version for m in applied] == [m.version for m in pending],
+                "only versions 11 and 34 are pending on the upgrade run (v10 already applied)",
+            )
+            check(applied[0].version == 11, "the first pending migration is version=11")
+            check(applied[1].version == 34, "the second pending migration is version=34")
 
             rows = db.execute("SELECT * FROM ranking_snapshots ORDER BY snapshot_id ASC").rows
             check(len(rows) == 2, "both pre-existing rows survived the v10->v11 rebuild")
