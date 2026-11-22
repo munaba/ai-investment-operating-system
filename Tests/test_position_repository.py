@@ -74,184 +74,211 @@ def _build_repository(tmp_dir: str):
         equity=100_000_000.0,
         buying_power=100_000_000.0,
     )
-    return position_repo
+    return position_repo, db
 
 
 def scenario_create_and_get():
     print("\n[Scenario 1] create / get_by_id happy path")
     with tempfile.TemporaryDirectory() as tmp:
-        repo = _build_repository(tmp)
-        position = repo.create(
-            account_id="paper-id",
-            symbol="BBCA",
-            quantity=100.0,
-            average_price=9500.0,
-            realized_pnl=0.0,
-            status="open",
-        )
-        check(position.position_id is not None, "create() returns a position_id (repository-generated)")
-        check(position.symbol == "BBCA", "create() returns position with correct symbol")
-        check(position.created_at == position.updated_at, "created_at == updated_at on creation")
+        repo, db = _build_repository(tmp)
+        try:
+            position = repo.create(
+                account_id="paper-id",
+                symbol="BBCA",
+                quantity=100.0,
+                average_price=9500.0,
+                realized_pnl=0.0,
+                status="open",
+            )
+            check(position.position_id is not None, "create() returns a position_id (repository-generated)")
+            check(position.symbol == "BBCA", "create() returns position with correct symbol")
+            check(position.created_at == position.updated_at, "created_at == updated_at on creation")
 
-        fetched = repo.get_by_id(position.position_id)
-        check(fetched is not None, "get_by_id() finds the created position")
-        check(fetched.quantity == 100.0, "get_by_id() returns correct quantity")
-        check(fetched.status == "open", "get_by_id() returns correct status")
+            fetched = repo.get_by_id(position.position_id)
+            check(fetched is not None, "get_by_id() finds the created position")
+            check(fetched.quantity == 100.0, "get_by_id() returns correct quantity")
+            check(fetched.status == "open", "get_by_id() returns correct status")
 
-        missing = repo.get_by_id(999999)
-        check(missing is None, "get_by_id() returns None for missing position")
+            missing = repo.get_by_id(999999)
+            check(missing is None, "get_by_id() returns None for missing position")
+        finally:
+            db.disconnect()
 
 
 def scenario_get_open_position():
     print("\n[Scenario 2] get_open_position() finds the open row, not closed ones")
     with tempfile.TemporaryDirectory() as tmp:
-        repo = _build_repository(tmp)
-        repo.create("paper-id", "BBCA", 0.0, 0.0, 500.0, "closed")
-        open_position = repo.create("paper-id", "BBCA", 200.0, 9600.0, 0.0, "open")
+        repo, db = _build_repository(tmp)
+        try:
+            repo.create("paper-id", "BBCA", 0.0, 0.0, 500.0, "closed")
+            open_position = repo.create("paper-id", "BBCA", 200.0, 9600.0, 0.0, "open")
 
-        found = repo.get_open_position("paper-id", "BBCA")
-        check(found is not None, "get_open_position() finds the open row")
-        check(found.position_id == open_position.position_id, "get_open_position() returns the correct row")
+            found = repo.get_open_position("paper-id", "BBCA")
+            check(found is not None, "get_open_position() finds the open row")
+            check(found.position_id == open_position.position_id, "get_open_position() returns the correct row")
 
-        none_found = repo.get_open_position("paper-id", "TLKM")
-        check(none_found is None, "get_open_position() returns None when no open position exists")
+            none_found = repo.get_open_position("paper-id", "TLKM")
+            check(none_found is None, "get_open_position() returns None when no open position exists")
+        finally:
+            db.disconnect()
 
 
 def scenario_list_by_account_and_list_all():
     print("\n[Scenario 3] list_by_account() / list_all()")
     with tempfile.TemporaryDirectory() as tmp:
-        repo = _build_repository(tmp)
-        repo.create("paper-id", "BBCA", 100.0, 9500.0, 0.0, "open")
-        repo.create("paper-id", "TLKM", 50.0, 3200.0, 0.0, "open")
+        repo, db = _build_repository(tmp)
+        try:
+            repo.create("paper-id", "BBCA", 100.0, 9500.0, 0.0, "open")
+            repo.create("paper-id", "TLKM", 50.0, 3200.0, 0.0, "open")
 
-        by_account = repo.list_by_account("paper-id")
-        check(len(by_account) == 2, "list_by_account() returns all positions for the account")
-        ids = [p.position_id for p in by_account]
-        check(ids == sorted(ids), "list_by_account() ordered by position_id ascending")
+            by_account = repo.list_by_account("paper-id")
+            check(len(by_account) == 2, "list_by_account() returns all positions for the account")
+            ids = [p.position_id for p in by_account]
+            check(ids == sorted(ids), "list_by_account() ordered by position_id ascending")
 
-        by_account_missing = repo.list_by_account("does-not-exist")
-        check(by_account_missing == [], "list_by_account() returns empty list for unknown account")
+            by_account_missing = repo.list_by_account("does-not-exist")
+            check(by_account_missing == [], "list_by_account() returns empty list for unknown account")
 
-        all_positions = repo.list_all()
-        check(len(all_positions) == 2, "list_all() returns every position")
+            all_positions = repo.list_all()
+            check(len(all_positions) == 2, "list_all() returns every position")
+        finally:
+            db.disconnect()
 
 
 def scenario_update_mutates_in_place():
     print("\n[Scenario 4] update() mutates in place, no merge/average computation")
     with tempfile.TemporaryDirectory() as tmp:
-        repo = _build_repository(tmp)
-        created = repo.create("paper-id", "BBCA", 100.0, 9500.0, 0.0, "open")
+        repo, db = _build_repository(tmp)
+        try:
+            created = repo.create("paper-id", "BBCA", 100.0, 9500.0, 0.0, "open")
 
-        repo.update(created.position_id, quantity=300.0, average_price=9700.0, realized_pnl=15000.0, status="open")
-        updated = repo.get_by_id(created.position_id)
+            repo.update(created.position_id, quantity=300.0, average_price=9700.0, realized_pnl=15000.0, status="open")
+            updated = repo.get_by_id(created.position_id)
 
-        check(updated.quantity == 300.0, "quantity updated to exactly the caller-supplied value")
-        check(updated.average_price == 9700.0, "average_price updated to exactly the caller-supplied value")
-        check(updated.realized_pnl == 15000.0, "realized_pnl updated to exactly the caller-supplied value")
-        check(updated.updated_at >= created.created_at, "updated_at is refreshed by update()")
-        check(updated.account_id == "paper-id", "account_id unchanged by update()")
+            check(updated.quantity == 300.0, "quantity updated to exactly the caller-supplied value")
+            check(updated.average_price == 9700.0, "average_price updated to exactly the caller-supplied value")
+            check(updated.realized_pnl == 15000.0, "realized_pnl updated to exactly the caller-supplied value")
+            check(updated.updated_at >= created.created_at, "updated_at is refreshed by update()")
+            check(updated.account_id == "paper-id", "account_id unchanged by update()")
+        finally:
+            db.disconnect()
 
 
 def scenario_position_can_reopen_after_close():
     print("\n[Scenario 5] a new OPEN position after CLOSE gets a distinct position_id")
     with tempfile.TemporaryDirectory() as tmp:
-        repo = _build_repository(tmp)
-        first = repo.create("paper-id", "BBCA", 100.0, 9500.0, 0.0, "open")
-        repo.update(first.position_id, quantity=0.0, average_price=9500.0, realized_pnl=500.0, status="closed")
+        repo, db = _build_repository(tmp)
+        try:
+            first = repo.create("paper-id", "BBCA", 100.0, 9500.0, 0.0, "open")
+            repo.update(first.position_id, quantity=0.0, average_price=9500.0, realized_pnl=500.0, status="closed")
 
-        reopened = repo.create("paper-id", "BBCA", 50.0, 9800.0, 0.0, "open")
-        check(reopened.position_id != first.position_id, "reopened position gets a new, distinct position_id")
+            reopened = repo.create("paper-id", "BBCA", 50.0, 9800.0, 0.0, "open")
+            check(reopened.position_id != first.position_id, "reopened position gets a new, distinct position_id")
 
-        closed_row = repo.get_by_id(first.position_id)
-        check(closed_row.status == "closed", "original closed row is untouched by the reopen")
-        check(closed_row.realized_pnl == 500.0, "original closed row's realized_pnl is preserved")
+            closed_row = repo.get_by_id(first.position_id)
+            check(closed_row.status == "closed", "original closed row is untouched by the reopen")
+            check(closed_row.realized_pnl == 500.0, "original closed row's realized_pnl is preserved")
 
-        open_lookup = repo.get_open_position("paper-id", "BBCA")
-        check(open_lookup.position_id == reopened.position_id, "get_open_position() now finds the reopened row")
+            open_lookup = repo.get_open_position("paper-id", "BBCA")
+            check(open_lookup.position_id == reopened.position_id, "get_open_position() now finds the reopened row")
+        finally:
+            db.disconnect()
 
 
 def scenario_invalid_status_raises_validation_error():
     print("\n[Scenario 6] invalid status raises ValidationError (existing exception, no new class)")
     with tempfile.TemporaryDirectory() as tmp:
-        repo = _build_repository(tmp)
+        repo, db = _build_repository(tmp)
         try:
-            repo.create("paper-id", "BBCA", 100.0, 9500.0, 0.0, "pending")
-            check(False, "invalid status on create() raises ValidationError")
-        except ValidationError:
-            check(True, "invalid status on create() raises ValidationError")
-        except Exception as exc:  # noqa: BLE001
-            check(False, f"invalid status on create() raised wrong exception type: {type(exc).__name__}")
+            try:
+                repo.create("paper-id", "BBCA", 100.0, 9500.0, 0.0, "pending")
+                check(False, "invalid status on create() raises ValidationError")
+            except ValidationError:
+                check(True, "invalid status on create() raises ValidationError")
+            except Exception as exc:  # noqa: BLE001
+                check(False, f"invalid status on create() raised wrong exception type: {type(exc).__name__}")
 
-        created = repo.create("paper-id", "TLKM", 50.0, 3200.0, 0.0, "open")
-        try:
-            repo.update(created.position_id, quantity=50.0, average_price=3200.0, realized_pnl=0.0, status="bogus")
-            check(False, "invalid status on update() raises ValidationError")
-        except ValidationError:
-            check(True, "invalid status on update() raises ValidationError")
-        except Exception as exc:  # noqa: BLE001
-            check(False, f"invalid status on update() raised wrong exception type: {type(exc).__name__}")
+            created = repo.create("paper-id", "TLKM", 50.0, 3200.0, 0.0, "open")
+            try:
+                repo.update(created.position_id, quantity=50.0, average_price=3200.0, realized_pnl=0.0, status="bogus")
+                check(False, "invalid status on update() raises ValidationError")
+            except ValidationError:
+                check(True, "invalid status on update() raises ValidationError")
+            except Exception as exc:  # noqa: BLE001
+                check(False, f"invalid status on update() raised wrong exception type: {type(exc).__name__}")
+        finally:
+            db.disconnect()
 
 
 def scenario_domain_values_consistent_with_single_source_of_truth():
     print("\n[Scenario 7] every POSITION_STATUSES value passes both Python and SQL layers")
     with tempfile.TemporaryDirectory() as tmp:
-        repo = _build_repository(tmp)
-        count = 0
-        for status in POSITION_STATUSES:
-            repo.create("paper-id", f"SYM-{status}", 1.0, 1.0, 0.0, status)
-            count += 1
-        check(
-            len(repo.list_all()) == count,
-            f"all {count} POSITION_STATUSES values inserted successfully",
-        )
+        repo, db = _build_repository(tmp)
+        try:
+            count = 0
+            for status in POSITION_STATUSES:
+                repo.create("paper-id", f"SYM-{status}", 1.0, 1.0, 0.0, status)
+                count += 1
+            check(
+                len(repo.list_all()) == count,
+                f"all {count} POSITION_STATUSES values inserted successfully",
+            )
+        finally:
+            db.disconnect()
 
 
 def scenario_stop_loss_take_profit_persist_and_read_back():
     print("\n[Scenario 9] stop_loss/take_profit (Activation 3.8 STEP 2) persist and read back")
     with tempfile.TemporaryDirectory() as tmp:
-        repo = _build_repository(tmp)
-        created = repo.create(
-            account_id="paper-id",
-            symbol="BBCA",
-            quantity=100.0,
-            average_price=9500.0,
-            realized_pnl=0.0,
-            status="open",
-            stop_loss=9000.0,
-            take_profit=10000.0,
-        )
-        check(created.stop_loss == 9000.0, "create() returns the supplied stop_loss")
-        check(created.take_profit == 10000.0, "create() returns the supplied take_profit")
+        repo, db = _build_repository(tmp)
+        try:
+            created = repo.create(
+                account_id="paper-id",
+                symbol="BBCA",
+                quantity=100.0,
+                average_price=9500.0,
+                realized_pnl=0.0,
+                status="open",
+                stop_loss=9000.0,
+                take_profit=10000.0,
+            )
+            check(created.stop_loss == 9000.0, "create() returns the supplied stop_loss")
+            check(created.take_profit == 10000.0, "create() returns the supplied take_profit")
 
-        fetched = repo.get_by_id(created.position_id)
-        check(fetched.stop_loss == 9000.0, "get_by_id() reads back stop_loss")
-        check(fetched.take_profit == 10000.0, "get_by_id() reads back take_profit")
+            fetched = repo.get_by_id(created.position_id)
+            check(fetched.stop_loss == 9000.0, "get_by_id() reads back stop_loss")
+            check(fetched.take_profit == 10000.0, "get_by_id() reads back take_profit")
 
-        repo.update(
-            created.position_id,
-            quantity=100.0,
-            average_price=9500.0,
-            realized_pnl=0.0,
-            status="open",
-            stop_loss=9100.0,
-            take_profit=10200.0,
-        )
-        updated = repo.get_by_id(created.position_id)
-        check(updated.stop_loss == 9100.0, "update() overwrites stop_loss with the new value")
-        check(updated.take_profit == 10200.0, "update() overwrites take_profit with the new value")
+            repo.update(
+                created.position_id,
+                quantity=100.0,
+                average_price=9500.0,
+                realized_pnl=0.0,
+                status="open",
+                stop_loss=9100.0,
+                take_profit=10200.0,
+            )
+            updated = repo.get_by_id(created.position_id)
+            check(updated.stop_loss == 9100.0, "update() overwrites stop_loss with the new value")
+            check(updated.take_profit == 10200.0, "update() overwrites take_profit with the new value")
+        finally:
+            db.disconnect()
 
 
 def scenario_stop_loss_take_profit_default_to_none():
     print("\n[Scenario 10] stop_loss/take_profit default to None/NULL when omitted")
     with tempfile.TemporaryDirectory() as tmp:
-        repo = _build_repository(tmp)
-        created = repo.create("paper-id", "BBCA", 100.0, 9500.0, 0.0, "open")
-        check(created.stop_loss is None, "create() without stop_loss/take_profit defaults stop_loss to None")
-        check(created.take_profit is None, "create() without stop_loss/take_profit defaults take_profit to None")
+        repo, db = _build_repository(tmp)
+        try:
+            created = repo.create("paper-id", "BBCA", 100.0, 9500.0, 0.0, "open")
+            check(created.stop_loss is None, "create() without stop_loss/take_profit defaults stop_loss to None")
+            check(created.take_profit is None, "create() without stop_loss/take_profit defaults take_profit to None")
 
-        fetched = repo.get_by_id(created.position_id)
-        check(fetched.stop_loss is None, "get_by_id() reads back stop_loss as None (SQL NULL)")
-        check(fetched.take_profit is None, "get_by_id() reads back take_profit as None (SQL NULL)")
+            fetched = repo.get_by_id(created.position_id)
+            check(fetched.stop_loss is None, "get_by_id() reads back stop_loss as None (SQL NULL)")
+            check(fetched.take_profit is None, "get_by_id() reads back take_profit as None (SQL NULL)")
+        finally:
+            db.disconnect()
 
 
 def scenario_positions_migration_additive_and_idempotent():
@@ -360,26 +387,28 @@ def scenario_stop_loss_take_profit_survive_restart():
         cfg = DatabaseConfig(db_path=db_path)
         db = SQLiteDatabase(cfg)
         db.connect()
-        MigrationRunner(db).apply(ACCOUNTS_MIGRATIONS)
-        MigrationRunner(db).apply(POSITIONS_MIGRATIONS)
-        manager = DatabaseManager(db, cfg)
-        account_repo = AccountRepository(manager)
-        account_repo.create(
-            account_id="paper-id",
-            account_name="Paper Indonesia",
-            mode="paper",
-            currency="IDR",
-            asset_class="stock_id",
-            cash=100_000_000.0,
-            equity=100_000_000.0,
-            buying_power=100_000_000.0,
-        )
-        position_repo = PositionRepository(manager)
-        created = position_repo.create(
-            "paper-id", "BBCA", 100.0, 9500.0, 0.0, "open",
-            stop_loss=9000.0, take_profit=10000.0,
-        )
-        db.disconnect()
+        try:
+            MigrationRunner(db).apply(ACCOUNTS_MIGRATIONS)
+            MigrationRunner(db).apply(POSITIONS_MIGRATIONS)
+            manager = DatabaseManager(db, cfg)
+            account_repo = AccountRepository(manager)
+            account_repo.create(
+                account_id="paper-id",
+                account_name="Paper Indonesia",
+                mode="paper",
+                currency="IDR",
+                asset_class="stock_id",
+                cash=100_000_000.0,
+                equity=100_000_000.0,
+                buying_power=100_000_000.0,
+            )
+            position_repo = PositionRepository(manager)
+            created = position_repo.create(
+                "paper-id", "BBCA", 100.0, 9500.0, 0.0, "open",
+                stop_loss=9000.0, take_profit=10000.0,
+            )
+        finally:
+            db.disconnect()
 
         cfg2 = DatabaseConfig(db_path=db_path)
         db2 = SQLiteDatabase(cfg2)

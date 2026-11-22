@@ -71,7 +71,7 @@ def _build_service(tmp_dir: str):
         equity=120_000_000.0,
         buying_power=100_000_000.0,
     )
-    return AccountBalanceService(account_repo), account_repo
+    return AccountBalanceService(account_repo), account_repo, db
 
 
 def _trade(trade_id=1, order_id=1, account_id="paper-id", action="BUY", quantity=100.0, fill_price=9500.0):
@@ -92,89 +92,107 @@ def _trade(trade_id=1, order_id=1, account_id="paper-id", action="BUY", quantity
 def scenario_buy_debits_cash():
     print("\n[Scenario 1] BUY debits cash by quantity * fill_price")
     with tempfile.TemporaryDirectory() as tmp:
-        service, account_repo = _build_service(tmp)
-        trade = _trade(action="BUY", quantity=100.0, fill_price=9500.0)
+        service, account_repo, db = _build_service(tmp)
+        try:
+            trade = _trade(action="BUY", quantity=100.0, fill_price=9500.0)
 
-        result = service.apply_trade(trade)
+            result = service.apply_trade(trade)
 
-        check(result.cash == 100_000_000.0 - 950_000.0, "cash decreased by exactly trade_value")
-        check(result.equity == 120_000_000.0, "equity left unchanged")
-        check(result.buying_power == 100_000_000.0, "buying_power left unchanged")
+            check(result.cash == 100_000_000.0 - 950_000.0, "cash decreased by exactly trade_value")
+            check(result.equity == 120_000_000.0, "equity left unchanged")
+            check(result.buying_power == 100_000_000.0, "buying_power left unchanged")
 
-        stored = account_repo.get_by_id("paper-id")
-        check(stored.cash == result.cash, "the new cash value was actually persisted")
+            stored = account_repo.get_by_id("paper-id")
+            check(stored.cash == result.cash, "the new cash value was actually persisted")
+        finally:
+            db.disconnect()
 
 
 def scenario_sell_credits_cash():
     print("\n[Scenario 2] SELL credits cash by quantity * fill_price")
     with tempfile.TemporaryDirectory() as tmp:
-        service, account_repo = _build_service(tmp)
-        trade = _trade(action="SELL", quantity=50.0, fill_price=9600.0)
+        service, account_repo, db = _build_service(tmp)
+        try:
+            trade = _trade(action="SELL", quantity=50.0, fill_price=9600.0)
 
-        result = service.apply_trade(trade)
+            result = service.apply_trade(trade)
 
-        check(result.cash == 100_000_000.0 + 480_000.0, "cash increased by exactly trade_value")
-        check(result.equity == 120_000_000.0, "equity left unchanged")
-        check(result.buying_power == 100_000_000.0, "buying_power left unchanged")
+            check(result.cash == 100_000_000.0 + 480_000.0, "cash increased by exactly trade_value")
+            check(result.equity == 120_000_000.0, "equity left unchanged")
+            check(result.buying_power == 100_000_000.0, "buying_power left unchanged")
+        finally:
+            db.disconnect()
 
 
 def scenario_insufficient_cash_rejected():
     print("\n[Scenario 3] a BUY exceeding current cash is rejected, no write happens")
     with tempfile.TemporaryDirectory() as tmp:
-        service, account_repo = _build_service(tmp)
-        trade = _trade(action="BUY", quantity=1_000_000.0, fill_price=9500.0)
-
-        raised = False
+        service, account_repo, db = _build_service(tmp)
         try:
-            service.apply_trade(trade)
-        except ValidationError:
-            raised = True
-        check(raised, "apply_trade() raises ValidationError when trade_value exceeds cash")
+            trade = _trade(action="BUY", quantity=1_000_000.0, fill_price=9500.0)
 
-        unchanged = account_repo.get_by_id("paper-id")
-        check(unchanged.cash == 100_000_000.0, "cash is completely untouched after rejection")
+            raised = False
+            try:
+                service.apply_trade(trade)
+            except ValidationError:
+                raised = True
+            check(raised, "apply_trade() raises ValidationError when trade_value exceeds cash")
+
+            unchanged = account_repo.get_by_id("paper-id")
+            check(unchanged.cash == 100_000_000.0, "cash is completely untouched after rejection")
+        finally:
+            db.disconnect()
 
 
 def scenario_unknown_action_rejected():
     print("\n[Scenario 4] an unknown trade.action is rejected")
     with tempfile.TemporaryDirectory() as tmp:
-        service, account_repo = _build_service(tmp)
-        trade = _trade(action="SHORT")
-
-        raised = False
+        service, account_repo, db = _build_service(tmp)
         try:
-            service.apply_trade(trade)
-        except ValidationError:
-            raised = True
-        check(raised, "apply_trade() rejects an unrecognized action")
+            trade = _trade(action="SHORT")
 
-        unchanged = account_repo.get_by_id("paper-id")
-        check(unchanged.cash == 100_000_000.0, "cash is untouched after an unknown-action rejection")
+            raised = False
+            try:
+                service.apply_trade(trade)
+            except ValidationError:
+                raised = True
+            check(raised, "apply_trade() rejects an unrecognized action")
+
+            unchanged = account_repo.get_by_id("paper-id")
+            check(unchanged.cash == 100_000_000.0, "cash is untouched after an unknown-action rejection")
+        finally:
+            db.disconnect()
 
 
 def scenario_missing_account_rejected():
     print("\n[Scenario 5] a non-existent trade.account_id is rejected")
     with tempfile.TemporaryDirectory() as tmp:
-        service, _ = _build_service(tmp)
-        trade = _trade(account_id="does-not-exist")
-
-        raised = False
+        service, _, db = _build_service(tmp)
         try:
-            service.apply_trade(trade)
-        except ValidationError:
-            raised = True
-        check(raised, "apply_trade() raises ValidationError for a non-existent account_id")
+            trade = _trade(account_id="does-not-exist")
+
+            raised = False
+            try:
+                service.apply_trade(trade)
+            except ValidationError:
+                raised = True
+            check(raised, "apply_trade() raises ValidationError for a non-existent account_id")
+        finally:
+            db.disconnect()
 
 
 def scenario_no_position_or_trade_dependency():
     print("\n[Scenario 6] no Position/Trade repository dependency exists on the service")
     with tempfile.TemporaryDirectory() as tmp:
-        service, _ = _build_service(tmp)
-        attrs = sorted(vars(service).keys())
-        check(
-            attrs == ["_account_repository"],
-            "AccountBalanceService holds exactly one collaborator: _account_repository",
-        )
+        service, _, db = _build_service(tmp)
+        try:
+            attrs = sorted(vars(service).keys())
+            check(
+                attrs == ["_account_repository"],
+                "AccountBalanceService holds exactly one collaborator: _account_repository",
+            )
+        finally:
+            db.disconnect()
 
 
 def main() -> int:
