@@ -1,11 +1,20 @@
-"""Load the exported AIOS snapshot (data/snapshot.json) into pandas frames.
+"""Load the exported AIOS snapshot into pandas frames.
 
-The dashboard never touches the live database; it only reads the JSON file
-written by export_snapshot.py. All timestamps are converted to WIB.
+The dashboard never touches the live database. It reads the JSON written by
+export_snapshot.py from two places and uses whichever is newer:
+
+* the `dashboard-data` branch on GitHub (refreshed daily by
+  publish_snapshot.py), and
+* the local file Dashboard/data/snapshot.json (committed fallback, or a fresh
+  local export while developing).
+
+All timestamps are converted to WIB.
 """
 from __future__ import annotations
 
 import json
+import os
+import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -13,6 +22,10 @@ import pandas as pd
 import streamlit as st
 
 SNAPSHOT_PATH = Path(__file__).resolve().parent / "data" / "snapshot.json"
+SNAPSHOT_URL = os.environ.get(
+    "AIOS_SNAPSHOT_URL",
+    "https://raw.githubusercontent.com/munaba/ai-investment-operating-system/dashboard-data/snapshot.json",
+)
 WIB = "Asia/Jakarta"
 
 _TIME_COLUMNS = {
@@ -45,12 +58,32 @@ def _to_wib(series: pd.Series) -> pd.Series:
     return pd.to_datetime(series, utc=True, errors="coerce", format="ISO8601").dt.tz_convert(WIB)
 
 
-@st.cache_data(ttl="10m")
-def load_snapshot(path: str = str(SNAPSHOT_PATH)) -> Snapshot | None:
-    file = Path(path)
-    if not file.is_file():
+def _read_local(path: Path) -> dict | None:
+    if not path.is_file():
         return None
-    raw = json.loads(file.read_text(encoding="utf-8"))
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _read_remote(url: str) -> dict | None:
+    if not url:
+        return None
+    try:
+        with urllib.request.urlopen(url, timeout=10) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except (OSError, ValueError):
+        return None  # offline, branch not published yet, or bad JSON
+
+
+def _newest(*candidates: dict | None) -> dict | None:
+    valid = [c for c in candidates if c and "exported_at" in c]
+    return max(valid, key=lambda c: pd.Timestamp(c["exported_at"])) if valid else None
+
+
+@st.cache_data(ttl="10m")
+def load_snapshot(path: str = str(SNAPSHOT_PATH), url: str = SNAPSHOT_URL) -> Snapshot | None:
+    raw = _newest(_read_local(Path(path)), _read_remote(url))
+    if raw is None:
+        return None
 
     tables: dict[str, pd.DataFrame] = {}
     for name, rows in raw.get("tables", {}).items():
