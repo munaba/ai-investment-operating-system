@@ -7,6 +7,7 @@ from typing import Any, Dict, Optional, Tuple
 
 from Core.exceptions import AgentError
 from Core.logger import get_logger
+from Core.redaction import redact_secrets
 from Services.base_service import BaseService
 from Services.service_context import ServiceContext
 from Services.service_result import ServiceResult
@@ -344,10 +345,11 @@ class NotificationService(BaseService):
             ) from exc
         except NotificationServiceError:
             raise
-        except Exception as exc:  
+        except Exception as exc:
+            # requests quotes the URL, which contains the bot token.
             raise NotificationServiceError(
-                "Telegram API request failed", details={"error": str(exc)}
-            ) from exc
+                "Telegram API request failed", details={"error": redact_secrets(exc)}
+            ) from None
 
         body: Optional[Dict[str, Any]]
         try:

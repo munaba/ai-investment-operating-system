@@ -45,7 +45,7 @@ class TestYearCoverage:
     def test_holiday_dates_coverage_range(self) -> None:
         """Verify the 2026 holiday table min/max dates."""
         assert min(IDX_NATIONAL_HOLIDAYS_2026) == date(2026, 1, 1)
-        assert max(IDX_NATIONAL_HOLIDAYS_2026) == date(2026, 12, 25)
+        assert max(IDX_NATIONAL_HOLIDAYS_2026) == date(2026, 12, 31)
 
 
 class TestFailClosedBehavior:

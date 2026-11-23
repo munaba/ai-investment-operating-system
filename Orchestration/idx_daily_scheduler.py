@@ -90,8 +90,10 @@ from Repository.persistence.notification_dedup_repository import (
     STATUS_SUPPRESSED as DEDUP_STATUS_SUPPRESSED,
     NotificationDedupRepository,
 )
+from Core.redaction import redact_secrets
 from Repository.persistence.scheduler_state_repository import (
     STATUS_FAILED as JOB_STATUS_FAILED,
+    STATUS_SUCCESS as JOB_STATUS_SUCCESS,
     SchedulerStateRepository,
 )
 
@@ -212,6 +214,7 @@ class IDXDailyScheduler:
         evidence_adapter=None,
         retry_base_seconds: float = DEFAULT_RETRY_BASE_SECONDS,
         retry_max_seconds: float = DEFAULT_RETRY_MAX_SECONDS,
+        session_scan_min_interval_seconds: float = 0.0,
     ) -> None:
         self._calendar = idx_market_calendar
         self._state_repo = scheduler_state_repository
@@ -226,6 +229,11 @@ class IDXDailyScheduler:
         self._evidence_adapter = evidence_adapter
         self._retry_base_seconds = retry_base_seconds
         self._retry_max_seconds = retry_max_seconds
+        #: Minimum gap between two *successful* session scans on the same
+        #: trading date. 0 keeps the original "scan on every open-session
+        #: tick" behaviour; the production graph sets it from
+        #: AIOS_SESSION_SCAN_MIN_INTERVAL_MINUTES.
+        self._session_scan_min_interval_seconds = session_scan_min_interval_seconds
 
     # ------------------------------------------------------------------
     # Public API
@@ -424,7 +432,9 @@ class IDXDailyScheduler:
                 self._retry_max_seconds,
             )
             next_retry_at = (now + timedelta(seconds=backoff_seconds)).isoformat()
-            error_text = str(exc)[:500]
+            # Redact before truncating: this text is persisted and later
+            # published on the public dashboard.
+            error_text = redact_secrets(exc)[:500]
             self._state_repo.mark_failed(
                 job_type,
                 trading_date,
@@ -483,7 +493,28 @@ class IDXDailyScheduler:
                 outcome="SKIPPED",
                 detail="awaiting retry backoff from a prior failed attempt this session",
             )
+        next_allowed = self._next_session_scan_at(trading_date)
+        if next_allowed is not None and now < next_allowed:
+            # A fixed-cadence caller (cron every few minutes) must not turn
+            # into a full market-data fetch on every tick.
+            return JobOutcome(
+                job_type=JOB_SESSION_SCAN,
+                attempted=False,
+                outcome="SKIPPED",
+                detail=f"minimum scan interval: next scan at or after {next_allowed.isoformat()}",
+            )
         return self._attempt(JOB_SESSION_SCAN, trading_date, now, lambda: self._job_session_scan(now))
+
+    def _next_session_scan_at(self, trading_date: str) -> Optional[datetime]:
+        """Earliest moment the next session scan may run, or ``None`` when
+        no minimum interval applies (disabled, or no successful scan yet
+        on ``trading_date``)."""
+        if self._session_scan_min_interval_seconds <= 0:
+            return None
+        row = self._state_repo.get(JOB_SESSION_SCAN, trading_date)
+        if row is None or row.status != JOB_STATUS_SUCCESS or not row.finished_at:
+            return None
+        return _parse_iso8601(row.finished_at) + timedelta(seconds=self._session_scan_min_interval_seconds)
 
     def _job_session_scan(self, now: datetime) -> Dict[str, Any]:
         """Fetch a fresh scan via the existing ``ManualScanService``,
@@ -710,7 +741,7 @@ class IDXDailyScheduler:
             self._audit.record(
                 "notification_failed",
                 created_at=updated_at,
-                payload={"alert_type": alert_type, "signature": new_signature, "error": str(exc)[:500]},
+                payload={"alert_type": alert_type, "signature": new_signature, "error": redact_secrets(exc)[:500]},
             )
             return "FAILED"
 

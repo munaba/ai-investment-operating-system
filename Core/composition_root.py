@@ -2248,6 +2248,10 @@ def _build_idx_daily_scheduler(
         notification_manager=notification_manager,
         account_id=account_id,
         evidence_adapter=evidence_adapter,
+        # A 5-minute cron would otherwise trigger ~64 full Yahoo scans per
+        # trading day. Default 30 minutes; set 0 to scan on every tick.
+        session_scan_min_interval_seconds=60.0
+        * config.get_float("AIOS_SESSION_SCAN_MIN_INTERVAL_MINUTES", 30.0),
     )
 
 

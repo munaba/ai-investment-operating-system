@@ -20,7 +20,7 @@ rest of the watchlist over the following week?
 | Signal | One `ranking_snapshots` row with `status = 'success'` and a recommendation of `BUY`, `WAIT` or `SELL`. |
 | One signal per stock per day | The scheduler scans every 5 minutes during the session, so only the **first** successful scan of a symbol on a given WIB calendar date counts. Later scans that day are ignored. |
 | Entry | Closing price on the **first trading day after** the scan date (WIB). Using the next close avoids look-ahead when the scan ran during or after that day's session. |
-| Exit | Closing price **5 trading days after entry**. Trading days are the dates on which the symbol has a daily bar. |
+| Exit | Closing price **5 trading days after entry**. Trading days are the dates on which the symbol has a daily bar. Only fully closed sessions count: a bar dated today (WIB) is ignored, because it is a live quote until the closing auction ends. |
 | Forward return | `exit / entry - 1`. Prices are daily closes from Yahoo Finance (`<SYMBOL>.JK`, auto-adjusted). |
 | Benchmark | Equal-weight mean forward return of **every watchlist symbol** over the same entry and exit dates. |
 | Excess return | Forward return minus benchmark. |

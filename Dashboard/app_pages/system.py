@@ -17,8 +17,11 @@ with st.container(horizontal=True):
     st.metric("Migrations applied", len(applied), border=True)
     st.metric("Migrations pending", len(pending), border=True)
     st.metric("Scheduler runs", len(jobs), border=True)
-    failed = int((jobs["status"] != "SUCCESS").sum()) if not jobs.empty else 0
+    failed = int((jobs["status"] == "FAILED").sum()) if not jobs.empty else 0
     st.metric("Failed runs", failed, border=True)
+    running = int((jobs["status"] == "RUNNING").sum()) if not jobs.empty else 0
+    if running:
+        st.metric("Running", running, border=True, help="Started but not finished (or interrupted).")
 
 if pending:
     st.warning(
@@ -69,7 +72,7 @@ with left:
             st.info("No observation window recorded.")
         else:
             st.dataframe(
-                windows[["window_id", "start_at", "end_at", "status", "note"]],
+                windows[["window_id", "start_at", "end_at", "status"]],
                 hide_index=True,
                 alt="Operator observation windows",
             )

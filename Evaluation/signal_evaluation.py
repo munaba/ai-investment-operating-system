@@ -15,6 +15,7 @@ from contextlib import closing
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Callable, Dict, Iterable, Optional
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -155,7 +156,7 @@ def summarize(scored: pd.DataFrame) -> dict:
 
 def evaluate(signals: pd.DataFrame, fetch: PriceFetcher = yahoo_closes, today: Optional[date] = None) -> dict:
     """Score every signal and split into official (out-of-sample) and exploratory."""
-    today = today or datetime.now().date()
+    today = today or datetime.now(ZoneInfo(WIB)).date()
     rules = {
         "horizon_trading_days": HORIZON_TRADING_DAYS,
         "min_buy_signals": MIN_BUY_SIGNALS,
@@ -167,7 +168,10 @@ def evaluate(signals: pd.DataFrame, fetch: PriceFetcher = yahoo_closes, today: O
         return {"rules": rules, "official": empty, "exploratory": empty, "signals": []}
 
     universe = sorted(signals["symbol"].unique())
-    closes = fetch(universe, min(signals["scan_date"]), today)
+    fetched = fetch(universe, min(signals["scan_date"]), today)
+    # Only fully closed sessions count: today's bar is a live quote until the
+    # closing auction ends, and the daily publish runs around 15:50 WIB.
+    closes = {symbol: series[[d < today for d in series.index]] for symbol, series in fetched.items()}
     scored = score_signals(signals, closes, universe)
 
     official = scored[scored["scan_date"] >= REGISTERED_ON]

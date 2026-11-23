@@ -285,6 +285,7 @@ IDX_NATIONAL_HOLIDAYS_2026: FrozenSet[date] = frozenset(
         date(2026, 8, 25),  # Maulid Nabi Muhammad SAW 1448 H
         date(2026, 12, 24),  # Cuti bersama Natal
         date(2026, 12, 25),  # Hari Raya Natal
+        date(2026, 12, 31),  # Libur bursa akhir tahun (BEI Peng-00171/BEI.POP/09-2025)
     }
 )
 

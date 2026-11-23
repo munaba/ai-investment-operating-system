@@ -105,6 +105,19 @@ def test_evaluate_splits_official_from_exploratory() -> None:
     assert result["rules"]["registered_on"] == "2026-11-24"
 
 
+def test_todays_bar_is_never_used_as_a_close() -> None:
+    # Exit would land exactly on `today`; that bar is a live quote, so the
+    # signal must stay pending instead of being scored with it.
+    days = _days(date(2026, 11, 23), 8)  # Mon 23 Nov .. Wed 2 Dec
+    closes = {"AAA": _series(days, [100] * 7 + [999]), "BBB": _series(days, [100] * 8)}
+    sig = _signals([("2026-11-23T02:05:00+00:00", "AAA", "BUY")])
+    fetch = lambda symbols, start, end: closes  # noqa: E731
+    result = se.evaluate(sig, fetch=fetch, today=days[6])
+    assert result["exploratory"]["by_recommendation"]["BUY"] == {"completed": 0, "pending": 1}
+    result = se.evaluate(sig, fetch=fetch, today=days[6] + timedelta(days=1))
+    assert result["exploratory"]["by_recommendation"]["BUY"]["completed"] == 1
+
+
 def test_rules_match_the_registered_document() -> None:
     doc = (se._REPO_ROOT / "Docs" / "SIGNAL_EVALUATION.md").read_text(encoding="utf-8")
     assert f"**{se.MIN_BUY_SIGNALS}**" in doc

@@ -103,6 +103,7 @@ from Business.telegram_allowlist_policy import (
 )
 from Business.telegram_command_router import ParsedCommand, parse_command
 from Core.exceptions import RepositoryError
+from Core.redaction import redact_secrets
 from Orchestration.telegram_command_executor import ExecutionResult, TelegramCommandExecutor
 from Repository.persistence.telegram_command_audit_repository import (
     ERROR,
@@ -347,7 +348,7 @@ class TelegramInboundControlPlane:
         except TelegramInboundControlPlaneError as exc:
             return PollOutcome(
                 polling_failed=True,
-                polling_error=str(exc),
+                polling_error=redact_secrets(exc),
                 updates=[],
                 last_update_id=last_update_id,
             )
@@ -465,7 +466,7 @@ class TelegramInboundControlPlane:
             # unexpected failure anywhere in this update's handling must
             # become an explicit, audited ERROR outcome, never an
             # exception that escapes poll_once and stalls the offset.
-            detail = str(exc)
+            detail = redact_secrets(exc)
             try:
                 self._audit_repository.record(
                     "",
@@ -569,7 +570,7 @@ class TelegramInboundControlPlane:
         except Exception as exc:  # noqa: BLE001 -- defensive; execute() is
             # documented to never raise, but a reply failure must never
             # propagate out of this control plane either way.
-            return False, str(exc)
+            return False, redact_secrets(exc)
 
         if result.success:
             return True, None
@@ -598,7 +599,8 @@ class TelegramInboundControlPlane:
                 f"{base_url}/getUpdates", params=params, timeout=_REQUEST_TIMEOUT_SECONDS
             )
         except Exception as exc:  # noqa: BLE001 -- normalize any transport-level error
-            raise TelegramInboundControlPlaneError(f"getUpdates request failed: {exc}") from exc
+            # The request URL in exc contains the bot token.
+            raise TelegramInboundControlPlaneError(f"getUpdates request failed: {redact_secrets(exc)}") from None
 
         try:
             body = response.json()

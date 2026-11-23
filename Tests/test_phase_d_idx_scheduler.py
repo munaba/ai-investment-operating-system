@@ -205,7 +205,8 @@ CLOSE_UTC = lambda y, mo, d: _utc(y, mo, d, 9, 0)  # 16:00 WIB (>= 15:49 close)
 
 
 def _build_stack(db_path: Path, *, scan_service=None, report_orchestrator=None, notification_manager=None,
-                  retry_base_seconds: float = 60.0, retry_max_seconds: float = 3600.0):
+                  retry_base_seconds: float = 60.0, retry_max_seconds: float = 3600.0,
+                  session_scan_min_interval_seconds: float = 0.0):
     cfg = DatabaseConfig(db_path=db_path)
     db = SQLiteDatabase(cfg)
     db.connect()
@@ -236,8 +237,9 @@ def _build_stack(db_path: Path, *, scan_service=None, report_orchestrator=None, 
         account_id="paper-idx",
         retry_base_seconds=retry_base_seconds,
         retry_max_seconds=retry_max_seconds,
+        session_scan_min_interval_seconds=session_scan_min_interval_seconds,
     )
-    health_service = HealthAuditService(state_repo, dedup_repo, audit_repo, calendar)
+    health_service =HealthAuditService(state_repo, dedup_repo, audit_repo, calendar)
     return {
         "manager": manager,
         "db": db,
@@ -343,6 +345,26 @@ def scenario_c_session_scan_gating():
         # Now open the session once -- exactly one fetch should occur.
         scheduler.tick(SESSION_OPEN_UTC(*_MON))
         check(scan.call_count == 1, "exactly one fetch occurs on the single open-session tick")
+
+
+def scenario_c2_session_scan_min_interval():
+    print("\n[Scenario C2] session scan minimum interval -- a 5-minute cron does not fetch every tick")
+    with scenario_tempdir() as tmp:
+        scan = FakeManualScanService()
+        stack = _build_stack(Path(tmp) / "phase_d.db", scan_service=scan,
+                             session_scan_min_interval_seconds=1800.0)
+        scheduler = stack["scheduler"]
+
+        scheduler.tick(_utc(*_MON, 2, 30))  # 09:30 WIB -> scans
+        second = _outcome_map(scheduler.tick(_utc(*_MON, 2, 35)))[JOB_SESSION_SCAN]  # 09:35
+        check(scan.call_count == 1, "a tick 5 minutes later does not fetch again")
+        check(second.attempted is False and second.outcome == "SKIPPED"
+              and "minimum scan interval" in second.detail,
+              "the skipped tick says why (minimum scan interval)")
+        scheduler.tick(_utc(*_MON, 3, 0))  # 10:00 WIB, 30 minutes after the first scan
+        check(scan.call_count == 2, "the next tick after the interval fetches again")
+        scheduler.tick(_utc(*_TUE, 2, 30))  # new trading day
+        check(scan.call_count == 3, "the interval never carries over to the next trading day")
 
 
 # ---------------------------------------------------------------------
@@ -688,6 +710,7 @@ def main() -> int:
     scenario_a_session_gating()
     scenario_b_premarket_idempotency()
     scenario_c_session_scan_gating()
+    scenario_c2_session_scan_min_interval()
     scenario_d_data_health_check()
     scenario_e_retry_backoff()
     scenario_f_notification_dedup()

@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from aios_data import format_time, latest_scan, require_snapshot
+from aios_data import WIB, format_time, latest_scan, require_snapshot
 
 snapshot = require_snapshot()
 scans = snapshot.table("ranking_snapshots")
@@ -11,7 +11,16 @@ jobs = snapshot.table("scheduler_job_runs")
 
 current = latest_scan(snapshot)
 last_scan_time = current["scan_time"].iloc[0] if not current.empty else None
-age_days = (snapshot.exported_at - last_scan_time).days if last_scan_time is not None else None
+
+# Age is measured against *now*, not the export time: if publishing stops,
+# the page must still show that the data is getting old. Weekends are not
+# counted (IDX holidays are not modelled here).
+now = pd.Timestamp.now(tz=WIB)
+age_days = (
+    None
+    if last_scan_time is None
+    else len(pd.bdate_range(last_scan_time.date(), now.date())) - 1
+)
 
 st.caption(
     "AIOS gathers timestamped evidence for a watchlist of IDX stocks, ranks it, and only "
@@ -22,10 +31,10 @@ st.caption(
 with st.container(horizontal=True):
     st.metric("Latest scan", format_time(last_scan_time), border=True)
     st.metric(
-        "Days since last scan",
+        "Weekdays since last scan",
         "—" if age_days is None else age_days,
         border=True,
-        help="Counted from the export time. More than one trading day means the data is stale.",
+        help="Counted up to now, skipping weekends. More than one means the data is stale.",
     )
     st.metric("Symbols in latest scan", len(current), border=True)
     st.metric("Scans recorded", scans["scan_time"].nunique() if not scans.empty else 0, border=True)
@@ -41,8 +50,8 @@ with st.container(horizontal=True):
 
 if age_days is not None and age_days > 1:
     st.warning(
-        f"The newest scan is {age_days} days old, so AIOS treats this data as stale and "
-        "will not produce new trade plans from it.",
+        f"The newest scan is {age_days} weekdays old (exported {format_time(snapshot.exported_at)}), "
+        "so AIOS treats this data as stale and will not produce new trade plans from it.",
         title="Data is stale",
     )
 

@@ -45,12 +45,13 @@ _EXPECTED_DATES = frozenset(
         date(2026, 8, 25),  # Maulid Nabi 1448 H                 (Selasa)
         date(2026, 12, 24),  # Cuti bersama Natal               (Kamis)
         date(2026, 12, 25),  # Hari Raya Natal                  (Jumat)
+        date(2026, 12, 31),  # Libur bursa akhir tahun (BEI Peng-00171/BEI.POP/09-2025, Kamis)
     }
 )
 
 
 def test_count_matches_spec():
-    """Count reconciliation for the 21-date set (16 libur nasional + 5 cuti bersama)."""
+    """Count reconciliation for the 22-date set (16 libur nasional + 5 cuti bersama + 1 libur bursa)."""
     if len(IDX_NATIONAL_HOLIDAYS_2026) != len(_EXPECTED_DATES):
         missing = _EXPECTED_DATES - IDX_NATIONAL_HOLIDAYS_2026
         extra = IDX_NATIONAL_HOLIDAYS_2026 - _EXPECTED_DATES
