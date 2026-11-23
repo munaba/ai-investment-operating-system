@@ -50,6 +50,10 @@ from Services.decision_brief_service import (  # noqa: E402
     RiskInputs,
 )
 from Services.risk_management_service import RiskManagementService  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -89,7 +93,7 @@ def _build_service(tmp_dir: str) -> DecisionBriefService:
 
 def scenario_no_snapshot_is_insufficient_data():
     print("\n[Scenario 1] symbol with no snapshot at all -> INSUFFICIENT_DATA, no plan")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, _snap_repo = _build_service(tmp)
         brief = service.generate_brief("BBCA")
         check(brief.status == "INSUFFICIENT_DATA", "no snapshot resolves to INSUFFICIENT_DATA")
@@ -99,7 +103,7 @@ def scenario_no_snapshot_is_insufficient_data():
 
 def scenario_error_snapshot_is_data_error_never_actionable():
     print("\n[Scenario 2] status='error' snapshot -> DATA_ERROR, never actionable even with risk_inputs")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, snap_repo = _build_service(tmp)
         snap_repo.create(
             scan_time=datetime.now(timezone.utc).isoformat(),
@@ -122,7 +126,7 @@ def scenario_error_snapshot_is_data_error_never_actionable():
 
 def scenario_stale_snapshot_is_data_stale_never_actionable():
     print("\n[Scenario 3] stale snapshot -> DATA_STALE, never actionable even with risk_inputs")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, snap_repo = _build_service(tmp)
         stale_time = datetime.now(timezone.utc) - timedelta(hours=12)
         snap_repo.create(
@@ -147,7 +151,7 @@ def scenario_stale_snapshot_is_data_stale_never_actionable():
 
 def scenario_non_buy_is_no_trade():
     print("\n[Scenario 4] non-BUY recommendation -> NO_TRADE, no plan")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, snap_repo = _build_service(tmp)
         snap_repo.create(
             scan_time=datetime.now(timezone.utc).isoformat(),
@@ -164,7 +168,7 @@ def scenario_non_buy_is_no_trade():
 
 def scenario_actionable_without_risk_inputs_is_policy_blocked():
     print("\n[Scenario 5] fresh BUY snapshot but NO risk_inputs -> POLICY_BLOCKED, never a guessed plan")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, snap_repo = _build_service(tmp)
         snap_repo.create(
             scan_time=datetime.now(timezone.utc).isoformat(),
@@ -183,7 +187,7 @@ def scenario_actionable_without_risk_inputs_is_policy_blocked():
 
 def scenario_actionable_with_risk_inputs_is_success_with_real_plan():
     print("\n[Scenario 6] fresh BUY snapshot + real risk_inputs -> SUCCESS with RiskManagementService's own numbers")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, snap_repo = _build_service(tmp)
         snapshot = snap_repo.create(
             scan_time=datetime.now(timezone.utc).isoformat(),
@@ -221,7 +225,7 @@ def scenario_actionable_with_risk_inputs_is_success_with_real_plan():
 
 def scenario_risk_rejection_is_risk_rejected_not_fabricated():
     print("\n[Scenario 7] RiskManagementService rejection -> RISK_REJECTED, no fabricated plan")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, snap_repo = _build_service(tmp)
         snap_repo.create(
             scan_time=datetime.now(timezone.utc).isoformat(),
@@ -251,7 +255,7 @@ def scenario_risk_rejection_is_risk_rejected_not_fabricated():
 
 def scenario_only_success_can_contain_a_plan_invariant():
     print("\n[Scenario 8] structural invariant: every non-SUCCESS brief has every plan field None")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, snap_repo = _build_service(tmp)
         snap_repo.create(
             scan_time=datetime.now(timezone.utc).isoformat(),
@@ -276,7 +280,7 @@ def scenario_only_success_can_contain_a_plan_invariant():
 
 def scenario_get_latest_brief_retrieves_persisted_success():
     print("\n[Scenario 11] get_latest_brief retrieves a persisted SUCCESS brief without regenerating it")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, snap_repo = _build_service(tmp)
         snap_repo.create(
             scan_time=datetime.now(timezone.utc).isoformat(),
@@ -321,7 +325,7 @@ def scenario_get_latest_brief_retrieves_persisted_success():
 
 def scenario_get_latest_brief_retrieves_persisted_no_trade():
     print("\n[Scenario 12] get_latest_brief retrieves a persisted NO_TRADE brief")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, snap_repo = _build_service(tmp)
         snap_repo.create(
             scan_time=datetime.now(timezone.utc).isoformat(),
@@ -343,7 +347,7 @@ def scenario_get_latest_brief_retrieves_persisted_no_trade():
 
 def scenario_get_latest_brief_none_when_nothing_persisted():
     print("\n[Scenario 13] get_latest_brief returns None when no brief was ever persisted for the symbol")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, _snap_repo = _build_service(tmp)
         retrieved = service.get_latest_brief("GOTO")
         check(retrieved is None, "get_latest_brief returns None for a symbol with zero persisted briefs")
@@ -351,7 +355,7 @@ def scenario_get_latest_brief_none_when_nothing_persisted():
 
 def scenario_risk_argument_invocation_bypasses_retrieval_and_creates_new_brief():
     print("\n[Scenario 14] a risk-argument call always creates a NEW brief rather than retrieving")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, snap_repo = _build_service(tmp)
         snap_repo.create(
             scan_time=datetime.now(timezone.utc).isoformat(),

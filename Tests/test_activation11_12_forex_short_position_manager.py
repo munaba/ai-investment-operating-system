@@ -49,6 +49,10 @@ from Database.models import Trade  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -147,7 +151,7 @@ def _trade(trade_id=1, order_id=1, account_id="forex-id", symbol="EURUSD",
 # ---------------------------------------------------------------------------
 def scenario_a_forex_sell_opens_short():
     print("\n[Scenario A] Forex SELL with no OPEN position opens a SHORT")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         position = service.apply_trade(
             _trade(action="SELL", quantity=10_000.0, fill_price=1.1000)
@@ -172,7 +176,7 @@ def scenario_a_forex_sell_opens_short():
 # ---------------------------------------------------------------------------
 def scenario_b_forex_sell_merges_short():
     print("\n[Scenario B] a second Forex SELL merges into the existing SHORT")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         service.apply_trade(_trade(action="SELL", quantity=10_000.0, fill_price=1.1000))
 
@@ -199,7 +203,7 @@ def scenario_b_forex_sell_merges_short():
 # ---------------------------------------------------------------------------
 def scenario_c_forex_buy_reduces_short():
     print("\n[Scenario C] a Forex BUY reduces the existing SHORT with direction-signed P/L")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         service.apply_trade(_trade(action="SELL", quantity=10_000.0, fill_price=1.1000))
         service.apply_trade(
@@ -231,7 +235,7 @@ def scenario_c_forex_buy_reduces_short():
 # ---------------------------------------------------------------------------
 def scenario_d_forex_buy_closes_short():
     print("\n[Scenario D] a Forex BUY for the exact remaining quantity closes the SHORT")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         service.apply_trade(_trade(action="SELL", quantity=10_000.0, fill_price=1.1000))
         service.apply_trade(
@@ -261,7 +265,7 @@ def scenario_d_forex_buy_closes_short():
 # ---------------------------------------------------------------------------
 def scenario_e_new_buy_after_short_closed_opens_long():
     print("\n[Scenario E] a fresh BUY after the SHORT closed opens a brand-new LONG row")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         service.apply_trade(_trade(action="SELL", quantity=10_000.0, fill_price=1.1000))
         closed = service.apply_trade(
@@ -293,7 +297,7 @@ def scenario_e_new_buy_after_short_closed_opens_long():
 # ---------------------------------------------------------------------------
 def scenario_f_forex_buy_opens_long():
     print("\n[Scenario F] a Forex BUY on a fresh account still opens a LONG")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         position = service.apply_trade(
             _trade(action="BUY", symbol="GBPUSD", quantity=8_000.0, fill_price=1.2500)
@@ -310,7 +314,7 @@ def scenario_f_forex_buy_opens_long():
 # ---------------------------------------------------------------------------
 def scenario_g_forex_buy_merges_long():
     print("\n[Scenario G] a second Forex BUY merges into the existing LONG")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         service.apply_trade(_trade(action="BUY", symbol="GBPUSD", quantity=8_000.0, fill_price=1.2500))
 
@@ -333,7 +337,7 @@ def scenario_g_forex_buy_merges_long():
 # ---------------------------------------------------------------------------
 def scenario_h_forex_sell_reduces_long():
     print("\n[Scenario H] a Forex SELL reduces an existing LONG using the unchanged LONG realized-P/L formula")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         service.apply_trade(_trade(action="BUY", symbol="GBPUSD", quantity=8_000.0, fill_price=1.2500))
 
@@ -360,7 +364,7 @@ def scenario_h_forex_sell_reduces_long():
 # ---------------------------------------------------------------------------
 def scenario_i_forex_sell_closes_long():
     print("\n[Scenario I] a Forex SELL for the exact remaining quantity closes the LONG")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         service.apply_trade(_trade(action="BUY", symbol="GBPUSD", quantity=8_000.0, fill_price=1.2500))
 
@@ -382,7 +386,7 @@ def scenario_i_forex_sell_closes_long():
 # ---------------------------------------------------------------------------
 def scenario_j_same_trade_reversal_rejected():
     print("\n[Scenario J] a same-trade reversal (close-and-flip) is rejected on both sides")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
 
         # SHORT 10,000, then BUY 15,000 in one trade -> reject.
@@ -431,7 +435,7 @@ def scenario_j_same_trade_reversal_rejected():
 def scenario_k_non_forex_sell_without_position_still_rejected():
     print("\n[Scenario K] non-Forex SELL with no OPEN position still raises ValidationError "
           "(IDX, US, Crypto -- Forex-specific behavior does not leak)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
 
         for account_id, symbol in (
@@ -456,7 +460,7 @@ def scenario_k_non_forex_sell_without_position_still_rejected():
 def scenario_k2_no_account_repository_never_opens_short():
     print("\n[Scenario K2] with NO account_repository supplied at all, even a Forex-account SELL "
           "with no OPEN position raises ValidationError (matches every pre-11.12 caller)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "forex_no_account_repo.db")
         db = SQLiteDatabase(cfg)
         db.connect()
@@ -494,7 +498,7 @@ def scenario_k2_no_account_repository_never_opens_short():
 # ---------------------------------------------------------------------------
 def scenario_l_direction_survives_round_trip():
     print("\n[Scenario L] direction survives a SHORT -> merge -> reduce round-trip through the repository")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
 
         opened = service.apply_trade(

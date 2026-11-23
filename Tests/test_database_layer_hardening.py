@@ -35,6 +35,10 @@ from Database import (
     MigrationRunner,
     SQLiteDatabase,
 )
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -57,7 +61,7 @@ def check(condition: bool, description: str) -> None:
 
 def scenario_close_all_shuts_down_every_tracked_connection():
     print("\n[Blocker 1] close_all() closes connections across threads")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "t1.db")
         db = SQLiteDatabase(cfg)
         db.connect()
@@ -93,7 +97,7 @@ def scenario_close_all_shuts_down_every_tracked_connection():
 
 def scenario_leaked_connection_is_reclaimed_on_thread_gc():
     print("\n[Blocker 1] a thread that never calls disconnect() doesn't leak forever")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "t2.db")
         db = SQLiteDatabase(cfg)
         db.connect()
@@ -127,7 +131,7 @@ def scenario_leaked_connection_is_reclaimed_on_thread_gc():
 
 def scenario_nested_transactions_commit():
     print("\n[Blocker 2] nested begin()/commit() via SAVEPOINT, both commit")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "t3.db")
         db = SQLiteDatabase(cfg)
         db.connect()
@@ -152,7 +156,7 @@ def scenario_nested_transactions_commit():
 
 def scenario_nested_savepoint_rollback_does_not_undo_outer_work():
     print("\n[Blocker 2] rolling back an inner savepoint leaves the outer transaction intact")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "t4.db")
         db = SQLiteDatabase(cfg)
         db.connect()
@@ -172,7 +176,7 @@ def scenario_nested_savepoint_rollback_does_not_undo_outer_work():
 
 def scenario_composable_repository_pattern_via_manager_session():
     print("\n[Blocker 2] DatabaseManager.session() composes: nested call doesn't raise")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "t5.db")
         db = SQLiteDatabase(cfg)
         manager = DatabaseManager(db, cfg)
@@ -206,7 +210,7 @@ def scenario_composable_repository_pattern_via_manager_session():
 
 def scenario_migration_lock_is_exclusive_within_one_process():
     print("\n[Blocker 3] a second concurrent apply() in the same process waits, then sees nothing pending")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "t6.db"
         cfg = DatabaseConfig(db_path=db_path, timeout=5.0)
         db_a = SQLiteDatabase(cfg)
@@ -270,7 +274,7 @@ def _mp_worker_apply_migrations(db_path: str, ready_barrier, result_queue) -> No
 
 def scenario_migration_lock_across_real_processes():
     print("\n[Blocker 3] two REAL OS processes racing to migrate the same file don't double-apply")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = str(Path(tmp) / "t7.db")
         ctx = multiprocessing.get_context("spawn")
         barrier = ctx.Barrier(2)
@@ -304,7 +308,7 @@ def scenario_migration_lock_across_real_processes():
 
 def scenario_migration_batch_is_atomic_on_failure():
     print("\n[Blocker 3] a failing migration rolls back the WHOLE batch, not just itself")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "t8.db")
         db = SQLiteDatabase(cfg)
         db.connect()
@@ -333,7 +337,7 @@ def scenario_migration_batch_is_atomic_on_failure():
 
 def scenario_database_errors_carry_consistent_shape():
     print("\n[Blocker 4] every failure surfaces as DatabaseError with message + details")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "t9.db")
         db = SQLiteDatabase(cfg)
         db.connect()

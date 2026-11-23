@@ -100,6 +100,13 @@ class FakeApp:
         self.agent_name = "fake-agent"
         self.provider_name = "fake-provider"
 
+    # main() now uses ``with build_application() as app:``.
+    def __enter__(self) -> "FakeApp":
+        return self
+
+    def __exit__(self, *exc_info) -> None:
+        return None
+
 
 def _report(recommendations: List[Recommendation], generated_at: str = "irrelevant") -> Report:
     return Report(

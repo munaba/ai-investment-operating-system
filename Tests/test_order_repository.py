@@ -39,6 +39,10 @@ from Database.order_constants import ORDER_STATUSES  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -80,7 +84,7 @@ def _build_repository(tmp_dir: str):
 
 def scenario_create_and_get():
     print("\n[Scenario 1] create / get_by_id happy path")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         order = repo.create(
             account_id="paper-id",
@@ -108,7 +112,7 @@ def scenario_create_and_get():
 
 def scenario_create_with_explicit_filled_quantity():
     print("\n[Scenario 2] create() accepts an explicit filled_quantity")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         order = repo.create(
             account_id="paper-id",
@@ -128,7 +132,7 @@ def scenario_create_with_explicit_filled_quantity():
 
 def scenario_list_by_account_and_list_all():
     print("\n[Scenario 3] list_by_account() / list_all()")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         repo.create("paper-id", "BBCA", "BUY", 100.0, 9500.0, 0.0, "NEW", "order 1")
         repo.create("paper-id", "TLKM", "SELL", 50.0, 3200.0, 0.0, "NEW", "order 2")
@@ -147,7 +151,7 @@ def scenario_list_by_account_and_list_all():
 
 def scenario_update_mutates_in_place():
     print("\n[Scenario 4] update() mutates fill fields in place, no fill computation")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         created = repo.create("paper-id", "BBCA", "BUY", 100.0, 9500.0, 0.0, "PENDING", "placed")
 
@@ -171,7 +175,7 @@ def scenario_update_mutates_in_place():
 
 def scenario_update_status_only_touches_status_and_reason():
     print("\n[Scenario 5] update_status() leaves fill fields untouched")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         created = repo.create(
             "paper-id", "BBCA", "BUY", 100.0, 9500.0, 9500.0, "PENDING", "placed",
@@ -190,7 +194,7 @@ def scenario_update_status_only_touches_status_and_reason():
 
 def scenario_invalid_status_raises_validation_error():
     print("\n[Scenario 6] invalid status raises ValidationError (existing exception, no new class)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         try:
             repo.create("paper-id", "BBCA", "BUY", 100.0, 9500.0, 0.0, "BOGUS", "bad status")
@@ -220,7 +224,7 @@ def scenario_invalid_status_raises_validation_error():
 
 def scenario_domain_values_consistent_with_single_source_of_truth():
     print("\n[Scenario 7] every ORDER_STATUSES value passes both Python and SQL layers")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         count = 0
         for status in ORDER_STATUSES:

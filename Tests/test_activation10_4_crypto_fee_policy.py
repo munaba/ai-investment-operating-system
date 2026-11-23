@@ -80,6 +80,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -295,7 +299,7 @@ def scenario_policy_env_override():
 
 def scenario_taker_buy():
     print("\n[Scenario C] real crypto BUY uses taker fee")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         account_before = repos["account"].get_by_id(CRYPTO_ACCOUNT_ID)
 
@@ -330,7 +334,7 @@ def scenario_taker_buy():
 
 def scenario_taker_sell():
     print("\n[Scenario D] real crypto SELL uses taker fee")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
 
         os.environ["AIOS_MARKET"] = "crypto"
@@ -400,7 +404,7 @@ def scenario_maker_selection():
 
 def scenario_pretrade_execution_consistency():
     print("\n[Scenario F] pre-trade required-cash fee == persisted Trade.fee")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         account_before = repos["account"].get_by_id(CRYPTO_ACCOUNT_ID)
 
@@ -438,7 +442,7 @@ def scenario_fee_isolation_from_idx():
     os.environ["EXECUTION_SELL_FEE_RATE"] = "0.05"
     os.environ["EXECUTION_SELL_TAX_RATE"] = "0.05"
     try:
-        with tempfile.TemporaryDirectory() as tmp:
+        with scenario_tempdir() as tmp:
             engine, repos, _ = _build_engine(tmp)
 
             os.environ["AIOS_MARKET"] = "crypto"
@@ -474,7 +478,7 @@ def scenario_fee_isolation_from_us():
     os.environ["US_COMMISSION_RATE"] = "0.05"
     os.environ["US_REGULATORY_FEE_RATE"] = "0.05"
     try:
-        with tempfile.TemporaryDirectory() as tmp:
+        with scenario_tempdir() as tmp:
             engine, repos, _ = _build_engine(tmp)
 
             os.environ["AIOS_MARKET"] = "crypto"
@@ -508,7 +512,7 @@ def scenario_idx_regression():
     print("\n[Scenario I] IDX fee behavior is unaffected by crypto fee policy")
     os.environ["EXECUTION_BUY_FEE_RATE"] = "0.001"
     try:
-        with tempfile.TemporaryDirectory() as tmp:
+        with scenario_tempdir() as tmp:
             engine, repos, _ = _build_engine(tmp)
 
             os.environ["AIOS_MARKET"] = "idx"
@@ -546,7 +550,7 @@ def scenario_us_regression():
     print("\n[Scenario J] US fee behavior is unaffected by crypto fee policy")
     os.environ["US_COMMISSION_RATE"] = "0.002"
     try:
-        with tempfile.TemporaryDirectory() as tmp:
+        with scenario_tempdir() as tmp:
             engine, repos, _ = _build_engine(tmp)
 
             os.environ["AIOS_MARKET"] = "us"
@@ -582,7 +586,7 @@ def scenario_us_regression():
 
 def scenario_reconciliation():
     print("\n[Scenario K] reconciliation stays consistent after real crypto BUY/SELL")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
 
         os.environ["AIOS_MARKET"] = "crypto"
@@ -618,7 +622,7 @@ def scenario_reconciliation():
 
 def scenario_fee_charged_once():
     print("\n[Scenario L] fee affects cash/trade arithmetic exactly once")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         account_before = repos["account"].get_by_id(CRYPTO_ACCOUNT_ID)
 

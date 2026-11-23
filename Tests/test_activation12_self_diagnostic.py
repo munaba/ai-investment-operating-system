@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import sqlite3
 import tempfile
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from Core.self_diagnostic import run_self_diagnostic
@@ -62,9 +63,18 @@ def make_db(path: Path, scan_time: str, account_id: str = "acct-1") -> None:
 
 
 def main() -> None:
+    # Hermetic notification state: an operator .env with real Telegram
+    # credentials must not turn "unconfigured" into "configured" here.
+    for key in ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"):
+        os.environ[key] = ""
+    # Timestamps relative to now: a fixed date (2026-08-20) went stale
+    # 24 hours after it was written.
+    now = datetime.now(timezone.utc)
+    fresh_scan = (now - timedelta(hours=1)).isoformat()
+    stale_scan = (now - timedelta(hours=72)).isoformat()
     with tempfile.TemporaryDirectory(prefix="a12_diag_") as tmp:
         db = Path(tmp) / "diag.db"
-        make_db(db, "2026-08-20T00:00:00+00:00")
+        make_db(db, fresh_scan)
         cfg = DatabaseConfig(db_path=db)
         os.environ["AIOS_DATA_STALE_AFTER_HOURS"] = "24"
         sections = run_self_diagnostic(cfg)
@@ -74,7 +84,7 @@ def main() -> None:
         check(names["Notifications"].status == "OPTIONAL MISSING", "unconfigured notifications are optional")
 
         stale = Path(tmp) / "stale.db"
-        make_db(stale, "2026-08-18T00:00:00+00:00")
+        make_db(stale, stale_scan)
         stale_sections = run_self_diagnostic(DatabaseConfig(db_path=stale))
         stale_map = {s.name: s for s in stale_sections}
         check(stale_map["Data Freshness"].status == "BLOCKED", "stale data is BLOCKED")

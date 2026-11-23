@@ -29,11 +29,11 @@ from typing import List, Sequence, Tuple
 from .migrations import Migration
 
 #: domain label -> (module path, tuple-of-Migration attribute name).
-#: Source: Database/migrations_watchlist.py, migrations_accounts.py,
-#: migrations_positions.py, migrations_orders.py, migrations_trades.py,
-#: migrations_snapshots.py -- six independent domains, each with its
-#: own standalone MIGRATIONS tuple (see each module's own "Migration
-#: version allocation" comment for the reserved version number).
+#: Every ``Database/migrations_<domain>.py`` module must be listed here
+#: (enforced by Tests/test_migration_registry_complete.py); otherwise
+#: ``python main.py init`` silently skips its tables and ``doctor``
+#: reports READY without checking them. See each module's own "Migration
+#: version allocation" comment for its reserved version numbers.
 MIGRATION_MODULES: Sequence[Tuple[str, str, str]] = (
     ("watchlist", "Database.migrations_watchlist", "WATCHLIST_MIGRATIONS"),
     ("accounts", "Database.migrations_accounts", "ACCOUNTS_MIGRATIONS"),
@@ -44,8 +44,22 @@ MIGRATION_MODULES: Sequence[Tuple[str, str, str]] = (
     ("idempotency", "Database.migrations_idempotency", "IDEMPOTENCY_MIGRATIONS"),
     ("portfolio_snapshots", "Database.migrations_portfolio_snapshots", "PORTFOLIO_SNAPSHOTS_MIGRATIONS"),
     ("order_approvals", "Database.migrations_order_approvals", "ORDER_APPROVALS_MIGRATIONS"),
-        ("llm_output_audit", "Database.migrations_llm_output_audit", "LLM_OUTPUT_AUDIT_MIGRATIONS"),
-    )
+    ("daily_performance", "Database.migrations_daily_performance", "DAILY_PERFORMANCE_MIGRATIONS"),
+    ("decision_briefs", "Database.migrations_decision_briefs", "DECISION_BRIEFS_MIGRATIONS"),
+    ("risk_ledger", "Database.migrations_risk_ledger", "RISK_LEDGER_MIGRATIONS"),
+    ("scheduler", "Database.migrations_scheduler", "SCHEDULER_MIGRATIONS"),
+    ("telegram_control", "Database.migrations_telegram_control", "TELEGRAM_CONTROL_MIGRATIONS"),
+    ("brief_approvals", "Database.migrations_brief_approvals", "BRIEF_APPROVALS_MIGRATIONS"),
+    ("valuation_observations", "Database.migrations_valuation_observations", "VALUATION_OBSERVATIONS_MIGRATIONS"),
+    (
+        "portfolio_snapshot_valuation_status",
+        "Database.migrations_portfolio_snapshot_valuation_status",
+        "PORTFOLIO_SNAPSHOT_VALUATION_STATUS_MIGRATIONS",
+    ),
+    ("observation_window", "Database.migrations_observation_window", "OBSERVATION_WINDOW_MIGRATIONS"),
+    ("sustained_use_final_review", "Database.migrations_sustained_use_final_review", "SUSTAINED_USE_FINAL_REVIEW_MIGRATIONS"),
+    ("llm_output_audit", "Database.migrations_llm_output_audit", "LLM_OUTPUT_AUDIT_MIGRATIONS"),
+)
 
 
 def all_migrations() -> List[Tuple[Migration, str]]:

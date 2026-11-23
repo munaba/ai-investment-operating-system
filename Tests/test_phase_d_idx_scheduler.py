@@ -91,6 +91,10 @@ from Repository.persistence.scheduler_state_repository import (  # noqa: E402
     SchedulerStateRepository,
 )
 from Services.health_audit_service import HealthAuditService  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -260,7 +264,7 @@ def _outcome_map(tick_result) -> Dict[str, Any]:
 
 def scenario_a_session_gating():
     print("\n[Scenario A] IDX session gating")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         stack = _build_stack(Path(tmp) / "phase_d.db")
         scheduler = stack["scheduler"]
 
@@ -296,7 +300,7 @@ def scenario_a_session_gating():
 
 def scenario_b_premarket_idempotency():
     print("\n[Scenario B] pre-market exactly-once/idempotency")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         stack = _build_stack(Path(tmp) / "phase_d.db")
         scheduler = stack["scheduler"]
 
@@ -326,7 +330,7 @@ _TUE_ISO = f"{_TUE[0]:04d}-{_TUE[1]:02d}-{_TUE[2]:02d}"
 
 def scenario_c_session_scan_gating():
     print("\n[Scenario C] session scan gating -- closed market performs no scan/fetch")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         scan = FakeManualScanService()
         stack = _build_stack(Path(tmp) / "phase_d.db", scan_service=scan)
         scheduler = stack["scheduler"]
@@ -348,7 +352,7 @@ def scenario_c_session_scan_gating():
 
 def scenario_d_data_health_check():
     print("\n[Scenario D] data-health check -- no fetch, freshness reconstruction")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         scan = FakeManualScanService()
         stack = _build_stack(Path(tmp) / "phase_d.db", scan_service=scan)
         scheduler = stack["scheduler"]
@@ -392,7 +396,7 @@ def scenario_d_data_health_check():
 
 def scenario_e_retry_backoff():
     print("\n[Scenario E] retry/backoff")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         orchestrator = FakeDailyReportOrchestrator(fail_calls={1})
         stack = _build_stack(
             Path(tmp) / "phase_d.db",
@@ -443,7 +447,7 @@ def _scan_alerts(notifier: "FakeNotificationManager") -> List[NotificationEvent]
 
 def scenario_f_notification_dedup():
     print("\n[Scenario F] notification dedup/rate-limit")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         scan = FakeManualScanService(symbols_by_call=[["BBCA"], ["BBCA"], ["TLKM"], ["TLKM"]])
         notifier = FakeNotificationManager()
         stack = _build_stack(Path(tmp) / "phase_d.db", scan_service=scan, notification_manager=notifier)
@@ -486,7 +490,7 @@ def _freshness_alerts(notifier: "FakeNotificationManager") -> List[NotificationE
 
 def scenario_g_degradation_recovery():
     print("\n[Scenario G] degradation/recovery (data-freshness alert)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         notifier = FakeNotificationManager()
         stack = _build_stack(Path(tmp) / "phase_d.db", notification_manager=notifier)
         scheduler = stack["scheduler"]
@@ -528,7 +532,7 @@ def scenario_g_degradation_recovery():
 
 def scenario_h_market_close_once():
     print("\n[Scenario H] market-close exactly once")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         orchestrator = FakeDailyReportOrchestrator()
         stack = _build_stack(Path(tmp) / "phase_d.db", report_orchestrator=orchestrator)
         scheduler = stack["scheduler"]
@@ -554,7 +558,7 @@ def scenario_h_market_close_once():
 
 def scenario_i_daily_review_once():
     print("\n[Scenario I] daily review exactly once, gated on market_close_recap success")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         orchestrator = FakeDailyReportOrchestrator(fail_calls={1})
         stack = _build_stack(Path(tmp) / "phase_d.db", report_orchestrator=orchestrator)
         scheduler = stack["scheduler"]
@@ -583,7 +587,7 @@ def scenario_i_daily_review_once():
 
 def scenario_j_restart_persistence():
     print("\n[Scenario J] restart persistence (fresh instance, same DB)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_d.db"
         stack1 = _build_stack(db_path)
         stack1["scheduler"].tick(PRE_MARKET_UTC(*_MON))
@@ -607,7 +611,7 @@ def scenario_j_restart_persistence():
 
 def scenario_k_audit_persistence():
     print("\n[Scenario K] audit persistence")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         stack = _build_stack(Path(tmp) / "phase_d.db")
         stack["scheduler"].tick(PRE_MARKET_UTC(*_MON))
         stack["scheduler"].tick(SESSION_OPEN_UTC(*_MON))
@@ -653,7 +657,7 @@ def scenario_l_no_automatic_paper_order():
         )
         check(not used_as_name, f"idx_daily_scheduler.py never references {forbidden} as a live identifier")
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_d.db"
         stack = _build_stack(db_path)
         stack["scheduler"].tick(PRE_MARKET_UTC(*_MON))

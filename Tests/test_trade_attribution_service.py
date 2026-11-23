@@ -69,6 +69,10 @@ from Repository.persistence.account_repository import AccountRepository  # noqa:
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.snapshot_repository import SnapshotRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -130,7 +134,7 @@ def _make_account(account_repository, account_id="paper", asset_class="stock_id"
 
 def scenario_unknown_account_raises_validation_error():
     print("\n[Scenario 1] get_attribution() on an unknown account_id raises ValidationError")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, *_ = _build_service(Path(tmp) / "s1.db")
         raised = False
         try:
@@ -142,7 +146,7 @@ def scenario_unknown_account_raises_validation_error():
 
 def scenario_zero_trades_returns_empty_list():
     print("\n[Scenario 2] an account with zero trades returns an empty list")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, account_repo, *_ = _build_service(Path(tmp) / "s2.db")
         _make_account(account_repo)
         result = service.get_attribution("paper")
@@ -151,7 +155,7 @@ def scenario_zero_trades_returns_empty_list():
 
 def scenario_market_resolves_to_account_asset_class():
     print("\n[Scenario 3] market resolves to the real Account.asset_class")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, account_repo, order_repo, trade_repo, snap_repo, _ = _build_service(Path(tmp) / "s3.db")
         _make_account(account_repo, asset_class="crypto")
         order = order_repo.create(account_id="paper", symbol="BTC", action="BUY", quantity=1.0,
@@ -166,7 +170,7 @@ def scenario_market_resolves_to_account_asset_class():
 
 def scenario_strategy_manual_vs_recommendation_following():
     print("\n[Scenario 4] strategy resolves per-trade from the real Order.analysis_snapshot_id")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, account_repo, order_repo, trade_repo, snap_repo, _ = _build_service(Path(tmp) / "s4.db")
         _make_account(account_repo)
         snapshot = snap_repo.create(scan_time="2026-08-01T08:00:00+00:00", symbol="BBCA",
@@ -193,7 +197,7 @@ def scenario_strategy_manual_vs_recommendation_following():
 
 def scenario_signal_resolves_real_snapshot_and_dangling_id_resolves_none():
     print("\n[Scenario 5] signal_snapshot_id: real snapshot resolves, dangling/never-existing id resolves to None")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, account_repo, order_repo, trade_repo, snap_repo, _ = _build_service(Path(tmp) / "s5.db")
         _make_account(account_repo)
         snapshot = snap_repo.create(scan_time="2026-08-01T08:00:00+00:00", symbol="BBCA",
@@ -221,7 +225,7 @@ def scenario_signal_resolves_real_snapshot_and_dangling_id_resolves_none():
 
 def scenario_holding_period_episode_across_full_lifecycle():
     print("\n[Scenario 6] holding_period_seconds: BUY -> partial SELL -> full SELL -> reopen")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, account_repo, order_repo, trade_repo, snap_repo, _ = _build_service(Path(tmp) / "s6.db")
         _make_account(account_repo)
 
@@ -247,7 +251,7 @@ def scenario_holding_period_episode_across_full_lifecycle():
 
 def scenario_risk_category_matches_decision_policy():
     print("\n[Scenario 7] risk_category matches DecisionPolicy.risk_level for the trade's action")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, account_repo, order_repo, trade_repo, snap_repo, _ = _build_service(Path(tmp) / "s7.db")
         _make_account(account_repo)
         buy_order = order_repo.create(account_id="paper", symbol="BBCA", action="BUY", quantity=100.0,
@@ -267,7 +271,7 @@ def scenario_risk_category_matches_decision_policy():
 
 def scenario_account_isolation():
     print("\n[Scenario 8] account isolation -- a second account's data never leaks in")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, account_repo, order_repo, trade_repo, snap_repo, _ = _build_service(Path(tmp) / "s8.db")
         _make_account(account_repo, account_id="paper-1")
         _make_account(account_repo, account_id="paper-2")
@@ -285,7 +289,7 @@ def scenario_account_isolation():
 
 def scenario_read_only_row_counts_unchanged():
     print("\n[Scenario 9] read-only proof -- row counts unchanged across every touched table")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "s9.db"
         service, account_repo, order_repo, trade_repo, snap_repo, _ = _build_service(db_path)
         _make_account(account_repo)
@@ -314,7 +318,7 @@ def scenario_read_only_row_counts_unchanged():
 
 def scenario_grouping_by_all_five_dimensions():
     print("\n[Scenario 10] group_trade_attributions groups correctly by all five LOCKED dimensions")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, account_repo, order_repo, trade_repo, snap_repo, _ = _build_service(Path(tmp) / "s10.db")
         _make_account(account_repo)
         buy_order = order_repo.create(account_id="paper", symbol="BBCA", action="BUY", quantity=100.0,

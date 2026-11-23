@@ -93,7 +93,7 @@ class FakeYFinanceTicker:
             },
         ]
 
-    def history(self, period: str = "6mo", interval: str = "1d") -> pd.DataFrame:
+    def history(self, period: str = "6mo", interval: str = "1d", timeout: float = 30) -> pd.DataFrame:
         if self._raise_on_history:
             raise RuntimeError("Simulated yfinance network failure")
         if self._empty_history:

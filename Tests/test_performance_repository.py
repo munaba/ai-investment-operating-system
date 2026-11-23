@@ -48,6 +48,10 @@ from Repository.persistence.performance_repository import PerformanceRepository 
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.snapshot_repository import SnapshotRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -107,7 +111,7 @@ def _seed_order(manager: DatabaseManager, account_id: str = "paper-id", symbol: 
 
 def scenario_constructor():
     print("\n[Scenario 1] constructor -- only takes database_manager")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_manager(tmp)
         repo = PerformanceRepository(manager)
         check(isinstance(repo, PerformanceRepository), "constructs a PerformanceRepository instance")
@@ -116,7 +120,7 @@ def scenario_constructor():
 
 def scenario_get_all_trades_ordered_by_executed_at():
     print("\n[Scenario 2] get_all_trades() returns every trade, ordered by executed_at ascending")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_manager(tmp)
         _seed_account(manager)
         order_id = _seed_order(manager)
@@ -146,7 +150,7 @@ def scenario_get_all_trades_ordered_by_executed_at():
 
 def scenario_get_all_positions():
     print("\n[Scenario 3] get_all_positions() returns every position")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_manager(tmp)
         _seed_account(manager)
         position_repo = PositionRepository(manager)
@@ -171,7 +175,7 @@ def scenario_get_all_positions():
 
 def scenario_get_all_accounts():
     print("\n[Scenario 4] get_all_accounts() returns every account")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_manager(tmp)
         _seed_account(manager, account_id="paper-id")
         _seed_account(manager, account_id="crypto-main")
@@ -188,7 +192,7 @@ def scenario_get_all_accounts():
 
 def scenario_get_all_snapshots():
     print("\n[Scenario 5] get_all_snapshots() returns every RankingSnapshot")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_manager(tmp)
         snapshot_repo = SnapshotRepository(manager)
         first = snapshot_repo.create(
@@ -215,7 +219,7 @@ def scenario_get_all_snapshots():
 
 def scenario_empty_database_returns_empty_lists():
     print("\n[Scenario 6] against an empty database, every method returns an empty list")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_manager(tmp)
         repo = PerformanceRepository(manager)
         check(repo.get_all_trades() == [], "get_all_trades() on empty database returns []")

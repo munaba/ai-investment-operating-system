@@ -118,6 +118,10 @@ from Repository.persistence.telegram_command_audit_repository import (  # noqa: 
 from Repository.persistence.telegram_inbound_state_repository import (  # noqa: E402
     TelegramInboundStateRepository,
 )
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -389,7 +393,7 @@ def _build_stack(
 
 def scenario_a_authorized_chat():
     print("\n[Scenario A] Authorized chat")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_a.db"
         http = FakeHttpClient([_ok_response([_telegram_update(1, "111111", "/help")])])
         stack = _build_stack(db_path, allowed_chat_ids=("111111",), http_client=http)
@@ -415,7 +419,7 @@ def scenario_a_authorized_chat():
 
 def scenario_b_unauthorized_chat():
     print("\n[Scenario B] Unauthorized chat")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_b.db"
         http = FakeHttpClient([_ok_response([_telegram_update(1, "999999", "/scan")])])
         stack = _build_stack(db_path, allowed_chat_ids=("111111",), http_client=http)
@@ -449,7 +453,7 @@ def scenario_b_unauthorized_chat():
 
 def scenario_c_all_six_commands():
     print("\n[Scenario C] All six commands")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_c.db"
         updates = [
             _telegram_update(1, "111111", "/scan"),
@@ -514,7 +518,7 @@ def scenario_c_all_six_commands():
 
 def scenario_d_deterministic_routing():
     print("\n[Scenario D] Deterministic routing")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_d.db"
         updates = [
             _telegram_update(1, "111111", "/nope"),
@@ -553,7 +557,7 @@ def scenario_d_deterministic_routing():
 
 def scenario_e_audit_outcomes():
     print("\n[Scenario E] Audit outcomes")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_e.db"
 
         # EXECUTED
@@ -609,7 +613,7 @@ def scenario_e_audit_outcomes():
 
 def scenario_f_restart_safe_offset():
     print("\n[Scenario F] Restart-safe update_id")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_f.db"
 
         http1 = FakeHttpClient([_ok_response([_telegram_update(10, "111111", "/help")])])
@@ -643,7 +647,7 @@ def scenario_f_restart_safe_offset():
 
 def scenario_g_duplicate_update():
     print("\n[Scenario G] Duplicate update")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_g.db"
 
         # Same update_id appears twice within one fetched batch (Telegram
@@ -685,7 +689,7 @@ def scenario_g_duplicate_update():
 
 def scenario_h_polling_failure():
     print("\n[Scenario H] Polling failure")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_h.db"
 
         # Transport-level exception.
@@ -730,7 +734,7 @@ def scenario_h_polling_failure():
 
 def scenario_i_reply_failure():
     print("\n[Scenario I] Reply failure")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_i.db"
 
         # Scripted failed ServiceResult (normal failure path).
@@ -783,7 +787,7 @@ def scenario_j_doctor_diagnostics():
     print("\n[Scenario J] Doctor diagnostics")
     from Core.doctor import BLOCKED, READY, _check_telegram_inbound_control_plane
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_j.db"
         db_cfg = DatabaseConfig(db_path=db_path)
 
@@ -832,7 +836,7 @@ def scenario_j_doctor_diagnostics():
 def scenario_k_cli_status_and_poll():
     print("\n[Scenario K] CLI status/poll")
     env = dict(os.environ)
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_k.db"
         db_cfg = DatabaseConfig(db_path=db_path)
         db = SQLiteDatabase(db_cfg)
@@ -842,7 +846,11 @@ def scenario_k_cli_status_and_poll():
         # end (mirrors what `python main.py init` does in production).
         from Database.migration_registry import all_migrations
 
-        MigrationRunner(db).apply([m for m, _domain in all_migrations()])
+        # The canonical registry now includes telegram_control; leave it
+        # out explicitly to reproduce the unmigrated-table state.
+        MigrationRunner(db).apply(
+            [m for m, domain in all_migrations() if domain != "telegram_control"]
+        )
         MigrationRunner(db).apply(TELEGRAM_CONTROL_MIGRATIONS)
         db.disconnect()
 
@@ -929,7 +937,7 @@ def scenario_l_no_broker_or_paper_order():
             f"{path.name} never references {sorted(forbidden_identifiers)} as a live identifier (found: {used_as_name or 'none'})",
         )
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_l.db"
         stack = _build_stack(db_path, allowed_chat_ids=("111111",))
 
@@ -980,7 +988,7 @@ def scenario_m_unmigrated_database_regression():
     print("\n[Scenario M] Unmigrated database (regression)")
     from Database.migration_registry import all_migrations
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "phase_e_m.db"
         db_cfg = DatabaseConfig(db_path=db_path)
         db = SQLiteDatabase(db_cfg)
@@ -989,7 +997,11 @@ def scenario_m_unmigrated_database_regression():
         # TELEGRAM_CONTROL_MIGRATIONS -- mirrors the exact real-world
         # state an operator reported (all 15+ other migrations
         # current, telegram_control tables missing).
-        MigrationRunner(db).apply([m for m, _domain in all_migrations()])
+        # The canonical registry now includes telegram_control; leave it
+        # out explicitly to reproduce the unmigrated-table state.
+        MigrationRunner(db).apply(
+            [m for m, domain in all_migrations() if domain != "telegram_control"]
+        )
         manager = DatabaseManager(db, db_cfg)
 
         audit_repo = TelegramCommandAuditRepository(manager)

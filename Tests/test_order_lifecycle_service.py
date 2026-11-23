@@ -46,6 +46,10 @@ from Database.migrations_orders import ORDERS_MIGRATIONS  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -87,7 +91,7 @@ def _build_service(tmp_dir: str) -> tuple[OrderLifecycleService, OrderRepository
 
 def scenario_new_to_validated_to_pending_happy_path():
     print("\n[Scenario 1] NEW -> VALIDATED -> PENDING happy path")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, order_repo = _build_service(tmp)
         order = service.create_order(
             account_id="paper-id",
@@ -106,7 +110,7 @@ def scenario_new_to_validated_to_pending_happy_path():
 
 def scenario_new_to_rejected_each_reason_code():
     print("\n[Scenario 2] NEW -> REJECTED for each structural rule")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, order_repo = _build_service(tmp)
 
         cases = [
@@ -138,7 +142,7 @@ def scenario_new_to_rejected_each_reason_code():
 
 def scenario_first_matching_rule_wins():
     print("\n[Scenario 3] first matching structural rule wins")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, _ = _build_service(tmp)
         # Both symbol AND action are invalid -- INVALID_SYMBOL must win
         # (checked first in the LOCKED rule order).
@@ -157,7 +161,7 @@ def scenario_first_matching_rule_wins():
 
 def scenario_illegal_transition_rejected():
     print("\n[Scenario 4] illegal transitions are rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, order_repo = _build_service(tmp)
         order = service.create_order(
             account_id="paper-id",
@@ -191,7 +195,7 @@ def scenario_illegal_transition_rejected():
 
 def scenario_skip_state_rejected():
     print("\n[Scenario 5] skipping a state (NEW -> PENDING directly) is illegal")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, order_repo = _build_service(tmp)
         order = service._order_repository.create(
             account_id="paper-id",
@@ -213,7 +217,7 @@ def scenario_skip_state_rejected():
 
 def scenario_repository_called_correctly():
     print("\n[Scenario 6] repository is called with the right arguments")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, order_repo = _build_service(tmp)
 
         calls = []
@@ -264,7 +268,7 @@ def scenario_no_trade_position_or_cash_side_effects():
     # __init__ only ever accepts/stores an OrderRepository, so there is
     # no attribute through which it could reach a TradeRepository,
     # PositionRepository, or AccountRepository.
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, _ = _build_service(tmp)
         attrs = vars(service)
         check(

@@ -105,9 +105,11 @@ def test_rowcount_new_and_duplicate(tmp_path):
 def test_live_db_migration_copy():
     import sqlite3, tempfile, os
     src = "data/investment_platform.db"
+    if not os.path.exists(src):
+        pytest.skip("live DB not available")
     tmp = tempfile.mkdtemp()
     dst = os.path.join(tmp, "copy.db")
-    c1 = sqlite3.connect(src)
+    c1 = sqlite3.connect(f"file:{os.path.abspath(src)}?mode=ro", uri=True)
     c2 = sqlite3.connect(dst)
     c1.backup(c2)
     c1.close()

@@ -518,7 +518,7 @@ def eval_l3_walkforward() -> Tuple[int, int]:
         print("L3 Walk-forward: SKIP (DB not found)")
         return 0, 0
 
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
     cur = conn.cursor()
 
     cur.execute("SELECT COUNT(*) FROM ranking_snapshots")

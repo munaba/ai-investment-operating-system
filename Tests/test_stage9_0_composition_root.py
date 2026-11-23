@@ -101,7 +101,14 @@ def scenario_production_classes_not_fakes(graph: ApplicationGraph) -> None:
     check(type(graph.agent) is StockAgent, "graph.agent is the real StockAgent class (not a subclass/double)")
 
     provider = graph.provider_manager.get(graph.provider_name)
-    check(type(provider) is GeminiProvider, "registered default provider is the real GeminiProvider class")
+    # build_application() resolves provider_kind from ACTIVE_PROVIDER
+    # (default "gemini"), so an operator .env with ACTIVE_PROVIDER=ollama
+    # legitimately changes the class registered under provider_name.
+    active = (os.environ.get("ACTIVE_PROVIDER") or "gemini").strip()
+    from Core import composition_root as composition_root_module
+    expected_cls = composition_root_module._PROVIDER_CLASSES.get(active, GeminiProvider)
+    check(type(provider) is expected_cls,
+          f"registered default provider is the real {expected_cls.__name__} class (ACTIVE_PROVIDER={active!r})")
 
 
 def scenario_singletons_are_the_shared_instances(graph: ApplicationGraph) -> None:

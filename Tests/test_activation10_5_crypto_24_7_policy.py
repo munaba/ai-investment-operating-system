@@ -77,6 +77,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -235,7 +239,7 @@ def scenario_policy_pure_checks():
 
 def scenario_monday():
     print("\n[Scenario A] Monday crypto order accepted through the real engine")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         trade = _submit_crypto(engine, executed_at="2026-08-17T03:00:00+00:00", idempotency_key="crypto-24-7-a")
         check(isinstance(trade, Trade), "A: Monday BUY accepted")
@@ -243,7 +247,7 @@ def scenario_monday():
 
 def scenario_saturday():
     print("\n[Scenario B] Saturday crypto order accepted through the real engine")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         trade = _submit_crypto(engine, executed_at="2026-08-15T03:00:00+00:00", idempotency_key="crypto-24-7-b")
         check(isinstance(trade, Trade), "B: Saturday BUY accepted")
@@ -251,7 +255,7 @@ def scenario_saturday():
 
 def scenario_sunday():
     print("\n[Scenario C] Sunday crypto order accepted through the real engine")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         trade = _submit_crypto(engine, executed_at="2026-08-16T23:59:00+00:00", idempotency_key="crypto-24-7-c")
         check(isinstance(trade, Trade), "C: Sunday BUY accepted")
@@ -264,7 +268,7 @@ def scenario_sunday():
 
 def scenario_us_holiday():
     print("\n[Scenario D] known US equity holiday does not block crypto (no USMarketCalendar reuse)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         # 2026-12-25 is Christmas Day -- a known NYSE/Nasdaq holiday
         # under Business.us_market_policy.us_market_holidays(). A US
@@ -283,7 +287,7 @@ def scenario_us_holiday():
 
 def scenario_utc_boundaries():
     print("\n[Scenario E] UTC boundary times (00:00 and 23:59) both allowed")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         trade_open = _submit_crypto(engine, executed_at="2026-08-18T00:00:00+00:00", idempotency_key="crypto-24-7-e1")
         check(isinstance(trade_open, Trade), "E: 00:00 UTC accepted")
@@ -298,7 +302,7 @@ def scenario_utc_boundaries():
 
 def scenario_dst_transition():
     print("\n[Scenario F] US DST transition timestamp does not affect crypto")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         # 2026-03-08 is the US spring-forward DST transition date
         # (2:00 AM -> 3:00 AM ET). A crypto order at this same UTC
@@ -314,7 +318,7 @@ def scenario_dst_transition():
 
 def scenario_idx_regression():
     print("\n[Scenario G] IDX regression -- IDX behavior unchanged by crypto 24/7 gate")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         os.environ["AIOS_MARKET"] = "idx"
         try:
@@ -342,7 +346,7 @@ def scenario_idx_regression():
 
 def scenario_us_regression():
     print("\n[Scenario H] US regression -- US session/calendar gate (17) unchanged")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
 
         # H1: US order during regular session on a trading day -> accepted.
@@ -396,7 +400,7 @@ def scenario_us_regression():
 
 def scenario_crypto_e2e():
     print("\n[Scenario I] Crypto E2E: BUY -> SELL -> reconciliation, deterministic executed_at")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, manager = _build_engine(tmp)
 
         buy_trade = _submit_crypto(
@@ -443,7 +447,7 @@ def scenario_crypto_e2e():
 
 def scenario_invalid_executed_at_fails_safe():
     print("\n[Scenario X] unparsable executed_at is rejected, not silently treated as market-open")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         before = _row_counts(repos)
         raised = None

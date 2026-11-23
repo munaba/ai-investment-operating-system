@@ -64,6 +64,10 @@ import tempfile
 import traceback
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
@@ -183,7 +187,7 @@ def _snapshot_trading_state(graph) -> Dict[str, Any]:
 # Scenario 1 -- success is treated as success (no exception, normal return)
 # ---------------------------------------------------------------------------
 def scenario_success_is_treated_as_success() -> None:
-    with tempfile.TemporaryDirectory() as tmp_dir, _EnvSandbox() as env:
+    with scenario_tempdir() as tmp_dir, _EnvSandbox() as env:
         env.set(bot_token="tok-ok", chat_id="chat-ok")
         graph = _build_graph(tmp_dir)
         graph.telegram_notification_channel._notification_service._http_client = FakeHttpClient(
@@ -213,7 +217,7 @@ def scenario_success_is_treated_as_success() -> None:
 # Scenario 2 -- failure is treated as failure (raises, does not return)
 # ---------------------------------------------------------------------------
 def scenario_failure_is_treated_as_failure() -> None:
-    with tempfile.TemporaryDirectory() as tmp_dir, _EnvSandbox() as env:
+    with scenario_tempdir() as tmp_dir, _EnvSandbox() as env:
         # Missing bot token -> NotificationService._require_credential
         # raises internally -> execute() returns a failed ServiceResult.
         env.set(bot_token=None, chat_id="chat-ok")
@@ -239,7 +243,7 @@ def scenario_business_level_failure_also_propagates() -> None:
     """Not just missing-credential failures -- a business-level Telegram
     API failure (e.g. 'chat not found') must propagate identically,
     proving this isn't special-cased to the credential-missing path."""
-    with tempfile.TemporaryDirectory() as tmp_dir, _EnvSandbox() as env:
+    with scenario_tempdir() as tmp_dir, _EnvSandbox() as env:
         env.set(bot_token="tok-ok", chat_id="chat-ok")
         graph = _build_graph(tmp_dir)
         graph.telegram_notification_channel._notification_service._http_client = FakeHttpClient(
@@ -268,7 +272,7 @@ def scenario_business_level_failure_also_propagates() -> None:
 # Scenario 3 -- failure reason is still knowable
 # ---------------------------------------------------------------------------
 def scenario_failure_reason_is_knowable() -> None:
-    with tempfile.TemporaryDirectory() as tmp_dir, _EnvSandbox() as env:
+    with scenario_tempdir() as tmp_dir, _EnvSandbox() as env:
         env.set(bot_token=None, chat_id=None)
         graph = _build_graph(tmp_dir)
 
@@ -299,7 +303,7 @@ def scenario_failure_reason_is_knowable() -> None:
 # Scenario 4 -- no silent success anywhere in the chain
 # ---------------------------------------------------------------------------
 def scenario_no_silent_success_at_any_layer() -> None:
-    with tempfile.TemporaryDirectory() as tmp_dir, _EnvSandbox() as env:
+    with scenario_tempdir() as tmp_dir, _EnvSandbox() as env:
         env.set(bot_token=None, chat_id="chat-ok")
         graph = _build_graph(tmp_dir)
 
@@ -331,7 +335,7 @@ def scenario_no_silent_success_at_any_layer() -> None:
 # Scenario 5 -- failed notification never mutates trading state
 # ---------------------------------------------------------------------------
 def scenario_failure_does_not_mutate_trading_state() -> None:
-    with tempfile.TemporaryDirectory() as tmp_dir, _EnvSandbox() as env:
+    with scenario_tempdir() as tmp_dir, _EnvSandbox() as env:
         env.set(bot_token=None, chat_id=None)
         graph = _build_graph(tmp_dir)
 

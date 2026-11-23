@@ -48,6 +48,10 @@ from Database.models import Trade  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -140,7 +144,7 @@ def _open_short(service, symbol="EURUSD"):
 # ---------------------------------------------------------------------------
 def scenario_a_long_stop_loss_valid():
     print("\n[Scenario A] LONG stop_loss below average_price is valid")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         position = _open_long(service)
 
@@ -154,7 +158,7 @@ def scenario_a_long_stop_loss_valid():
 # ---------------------------------------------------------------------------
 def scenario_b_long_stop_loss_invalid_above():
     print("\n[Scenario B] LONG stop_loss above average_price is rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         position = _open_long(service)
 
@@ -173,7 +177,7 @@ def scenario_b_long_stop_loss_invalid_above():
 # ---------------------------------------------------------------------------
 def scenario_c_long_take_profit_valid():
     print("\n[Scenario C] LONG take_profit above average_price is valid")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         position = _open_long(service)
 
@@ -186,7 +190,7 @@ def scenario_c_long_take_profit_valid():
 # ---------------------------------------------------------------------------
 def scenario_d_long_take_profit_invalid_below():
     print("\n[Scenario D] LONG take_profit below average_price is rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         position = _open_long(service)
 
@@ -205,7 +209,7 @@ def scenario_d_long_take_profit_invalid_below():
 # ---------------------------------------------------------------------------
 def scenario_e_short_stop_loss_valid():
     print("\n[Scenario E] SHORT stop_loss above average_price is valid")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         position = _open_short(service)
         check(position.direction == "SHORT", "opened position is SHORT")
@@ -220,7 +224,7 @@ def scenario_e_short_stop_loss_valid():
 # ---------------------------------------------------------------------------
 def scenario_f_short_stop_loss_invalid_below():
     print("\n[Scenario F] SHORT stop_loss below average_price is rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         position = _open_short(service)
 
@@ -239,7 +243,7 @@ def scenario_f_short_stop_loss_invalid_below():
 # ---------------------------------------------------------------------------
 def scenario_g_short_take_profit_valid():
     print("\n[Scenario G] SHORT take_profit below average_price is valid")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         position = _open_short(service)
 
@@ -252,7 +256,7 @@ def scenario_g_short_take_profit_valid():
 # ---------------------------------------------------------------------------
 def scenario_h_short_take_profit_invalid_above():
     print("\n[Scenario H] SHORT take_profit above average_price is rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         position = _open_short(service)
 
@@ -271,7 +275,7 @@ def scenario_h_short_take_profit_invalid_above():
 # ---------------------------------------------------------------------------
 def scenario_i_equal_stop_loss_rejected():
     print("\n[Scenario I] stop_loss == average_price is rejected for LONG and SHORT")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
 
         long_position = _open_long(service)
@@ -296,7 +300,7 @@ def scenario_i_equal_stop_loss_rejected():
 # ---------------------------------------------------------------------------
 def scenario_j_equal_take_profit_rejected():
     print("\n[Scenario J] take_profit == average_price is rejected for LONG and SHORT")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
 
         long_position = _open_long(service)
@@ -321,7 +325,7 @@ def scenario_j_equal_take_profit_rejected():
 # ---------------------------------------------------------------------------
 def scenario_k_persistence():
     print("\n[Scenario K] valid SHORT stop_loss/take_profit round-trip through the repository")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
         position = _open_short(service)
 
@@ -338,7 +342,7 @@ def scenario_k_persistence():
 # ---------------------------------------------------------------------------
 def scenario_l_direction_unchanged():
     print("\n[Scenario L] set_stop_loss_take_profit() never mutates Position.direction")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
 
         long_position = _open_long(service)
@@ -355,7 +359,7 @@ def scenario_l_direction_unchanged():
 # ---------------------------------------------------------------------------
 def scenario_m_direction_aware_proof():
     print("\n[Scenario M] LONG/SHORT stop_loss rules are true mirror images, not blanket acceptance")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo, _ = _build_service(tmp)
 
         long_below = _open_long(service, tmp_symbol="BBCA1")

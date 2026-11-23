@@ -424,9 +424,12 @@ def scenario_provenance_single_construction_site() -> None:
 # Provenance: no new ApplicationGraph field was added for this step.
 # ---------------------------------------------------------------------------
 def scenario_provenance_no_new_applicationgraph_field() -> None:
-    graph_source = inspect.getsource(composition_root_module.ApplicationGraph)
+    # Check the declared dataclass fields, not raw source text: the class
+    # body's comments may legitimately mention permission_context.
+    import dataclasses
+    graph_fields = {f.name for f in dataclasses.fields(composition_root_module.ApplicationGraph)}
     check(
-        "permission_context" not in graph_source,
+        "permission_context" not in graph_fields,
         "ApplicationGraph declares no permission_context field -- identity "
         "is proven via the composition seam, not a new production field",
     )

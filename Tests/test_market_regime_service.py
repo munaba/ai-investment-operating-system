@@ -109,7 +109,7 @@ class _FakeTicker:
         self._history_df = history_df
         self._raise_error = raise_error
 
-    def history(self, period: str = "6mo", interval: str = "1d") -> pd.DataFrame:
+    def history(self, period: str = "6mo", interval: str = "1d", timeout: float = 30) -> pd.DataFrame:
         if self._raise_error:
             raise RuntimeError(f"simulated provider failure for {self._symbol}")
         if self._history_df is None:

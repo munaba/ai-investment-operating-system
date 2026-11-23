@@ -124,6 +124,10 @@ from Services.paper_review_service import (  # noqa: E402
     NOT_AVAILABLE,
     PaperReviewService,
 )
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -162,7 +166,7 @@ class _FakeTicker:
     def __init__(self, history_df: Optional[pd.DataFrame]) -> None:
         self._history_df = history_df
 
-    def history(self, period: str = "6mo", interval: str = "1d") -> pd.DataFrame:
+    def history(self, period: str = "6mo", interval: str = "1d", timeout: float = 30) -> pd.DataFrame:
         return self._history_df if self._history_df is not None else pd.DataFrame()
 
 
@@ -334,7 +338,7 @@ def _make_success_brief(brief_repo, *, symbol="BBCA", entry=9500.0, stop=9300.0,
 
 def scenario_empty_review_period():
     print("\n[Scenario 1] empty review period: no journal entries at all -> honest all-zero result")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s1.db")
         result = ctx["review_service"].review("paper-id")
 
@@ -355,7 +359,7 @@ def scenario_empty_review_period():
 
 def scenario_unknown_account_raises():
     print("\n[Scenario 1b] unknown account_id raises ValidationError, never a fabricated result")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s1b.db")
         raised = None
         try:
@@ -372,7 +376,7 @@ def scenario_unknown_account_raises():
 
 def scenario_take_skip_wait_counts():
     print("\n[Scenario 2] TAKE/SKIP/WAIT counts match real, persisted JournalEntry rows exactly")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s2.db")
         b1 = _make_success_brief(ctx["brief"], symbol="BBCA")
         b2 = _make_success_brief(ctx["brief"], symbol="ASII")
@@ -392,7 +396,7 @@ def scenario_take_skip_wait_counts():
 
 def scenario_period_filter():
     print("\n[Scenario 2b] since/until filters real JournalEntry.decided_at correctly")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s2b.db")
         b1 = _make_success_brief(ctx["brief"], symbol="BBCA")
         b2 = _make_success_brief(ctx["brief"], symbol="ASII")
@@ -419,7 +423,7 @@ def scenario_period_filter():
 
 def scenario_full_trace_approved_paper():
     print("\n[Scenario 3] ACCEPTED TAKE that was approved-and-submitted traces end to end")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s3.db")
         brief_id = _make_success_brief(ctx["brief"], symbol="BBCA")
         entry = ctx["journal_service"].record_decision(brief_id, DECISION_TAKE)
@@ -449,7 +453,7 @@ def scenario_full_trace_approved_paper():
 
 def scenario_skip_never_links():
     print("\n[Scenario 3b] a SKIP decision never has a link, regardless of review")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s3b.db")
         brief_id = _make_success_brief(ctx["brief"], symbol="BBCA")
         ctx["journal_service"].record_decision(brief_id, DECISION_SKIP)
@@ -467,7 +471,7 @@ def scenario_skip_never_links():
 
 def scenario_strategy_attribution():
     print("\n[Scenario 4] strategy_breakdown is the real StrategyPerformanceService output, byte-for-byte")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s4.db")
         order1 = ctx["order"].create(
             account_id="paper-id", symbol="BBCA", action="BUY", quantity=100.0,
@@ -512,7 +516,7 @@ def scenario_strategy_attribution():
 
 def scenario_strategy_not_available_when_unwired():
     print("\n[Scenario 4b] strategy_breakdown is NOT_AVAILABLE when no StrategyPerformanceService was injected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s4b.db")
         result = ctx["review_service_no_optionals"].review("paper-id")
         check(result.strategy_breakdown == NOT_AVAILABLE, "strategy_breakdown == NOT_AVAILABLE, never fabricated")
@@ -527,7 +531,7 @@ def scenario_strategy_not_available_when_unwired():
 
 def scenario_market_regime_attribution():
     print("\n[Scenario 5] market_regime_breakdown is the real MarketRegimeAttributionService output, byte-for-byte")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s5.db", histories={"BBCA": _ranging_history()})
         order1 = ctx["order"].create(
             account_id="paper-id", symbol="BBCA", action="BUY", quantity=100.0,
@@ -579,7 +583,7 @@ def scenario_market_regime_attribution():
 
 def scenario_adherence_followed_when_outcome_exists():
     print("\n[Scenario 6] adherence == FOLLOWED once a real outcome is recorded on an executed TAKE")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s6.db")
         brief_id = _make_success_brief(ctx["brief"], symbol="BBCA")
         entry = ctx["journal_service"].record_decision(brief_id, DECISION_TAKE)
@@ -600,7 +604,7 @@ def scenario_adherence_followed_when_outcome_exists():
 
 def scenario_adherence_outcome_pending_and_not_executed():
     print("\n[Scenario 7] adherence == OUTCOME_PENDING when no outcome yet, NOT_EXECUTED when never approved")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s7.db")
 
         # Executed TAKE, no outcome recorded yet.
@@ -631,7 +635,7 @@ def scenario_adherence_outcome_pending_and_not_executed():
 
 def scenario_adherence_not_applicable_for_skip_wait_and_rejected():
     print("\n[Scenario 7b] adherence == NOT_APPLICABLE for SKIP/WAIT/RISK_REJECTED decisions")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s7b.db")
         b_skip = _make_success_brief(ctx["brief"], symbol="BBCA")
         b_wait = _make_success_brief(ctx["brief"], symbol="ASII")
@@ -655,7 +659,7 @@ def scenario_adherence_not_applicable_for_skip_wait_and_rejected():
 
 def scenario_valuation_freshness():
     print("\n[Scenario 8] valuation_freshness counts come verbatim from real PortfolioSnapshot rows")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s8.db")
         ctx["portfolio_snapshot"].create(
             account_id="paper-id", cash=100_000_000.0, market_value=0.0, equity=100_000_000.0,
@@ -689,7 +693,7 @@ def scenario_valuation_freshness():
 
 def scenario_traceability_preserved():
     print("\n[Scenario 9] every id/timestamp on a DecisionTrace resolves back to a real, matching row")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s9.db")
         brief_id = _make_success_brief(ctx["brief"], symbol="BBCA")
         entry = ctx["journal_service"].record_decision(brief_id, DECISION_TAKE, note="conviction trade")
@@ -724,7 +728,7 @@ def scenario_traceability_preserved():
 
 def scenario_restart_safe():
     print("\n[Scenario 10] a brand-new PaperReviewService over the same on-disk file reproduces an identical result")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s10.db")
         brief_id = _make_success_brief(ctx["brief"], symbol="BBCA")
         ctx["journal_service"].record_decision(brief_id, DECISION_TAKE)

@@ -87,6 +87,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -199,7 +203,7 @@ def _submit(engine, *, symbol, action, quantity, requested_price, stop_loss):
 def scenario_long_lifecycle():
     print("\n[Scenarios A/C/E/G] Forex LONG open -> add -> partial reduce -> close, "
           "reconciling after every step")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, reconciliation, repos = _build_engine(Path(tmp) / "long.db")
 
         # -- A: LONG open --------------------------------------------------
@@ -262,7 +266,7 @@ def scenario_long_lifecycle():
 def scenario_short_lifecycle():
     print("\n[Scenarios B/D/F/H] Forex SHORT open -> add -> partial reduce -> close, "
           "reconciling after every step")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, reconciliation, repos = _build_engine(Path(tmp) / "short.db")
 
         # -- B: SHORT open (SELL with no OPEN position, Forex-only) ------
@@ -324,7 +328,7 @@ def scenario_short_lifecycle():
 def scenario_restart_recovery():
     print("\n[Restart/recovery] Forex state survives a fresh DB connection and "
           "still reconciles CONSISTENT")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "restart.db"
         engine, reconciliation, repos = _build_engine(db_path)
 
@@ -382,7 +386,7 @@ def scenario_restart_recovery():
 
 def scenario_i_stop_loss_corruption():
     print("\n[Scenario I] Forex LONG stop-loss corruption is detected, not repaired")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, reconciliation, repos = _build_engine(Path(tmp) / "corrupt_sl.db")
 
         _submit(
@@ -429,7 +433,7 @@ def scenario_i_stop_loss_corruption():
 
 def scenario_j_direction_corruption():
     print("\n[Scenario J] Forex position direction corruption is detected, not repaired")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, reconciliation, repos = _build_engine(Path(tmp) / "corrupt_dir.db")
 
         _submit(
@@ -479,7 +483,7 @@ def scenario_j_direction_corruption():
 def scenario_k_risk_state_mismatch():
     print("\n[Scenario K] Forex position quantity mismatch is detected (generic "
           "Trade<->Position invariant, unmodified, still covers Forex positions)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, reconciliation, repos = _build_engine(Path(tmp) / "corrupt_qty.db")
 
         _submit(

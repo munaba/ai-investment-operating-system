@@ -116,6 +116,10 @@ from Services.sustained_use_review_service import (  # noqa: E402
     STATUS_NOT_AVAILABLE,
     SustainedUseReviewService,
 )
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -260,7 +264,7 @@ def _fresh_fixture(tmp_dir: str) -> Fixture:
 
 def scenario_empty_window_report():
     print("\n[Scenario 1] empty ACTIVE window -> honest report, no error")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         review_service = fx.build_review_service(
@@ -301,7 +305,7 @@ def scenario_empty_window_report():
 
 def scenario_populated_window_report():
     print("\n[Scenario 2] populated window -> real evidence values render in the report")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         fx.seed_account("paper-id")
@@ -354,7 +358,7 @@ def scenario_populated_window_report():
 
 def scenario_exact_values_preserved():
     print("\n[Scenario 3] exact evidence values are preserved byte-for-byte, never recalculated")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
 
@@ -392,7 +396,7 @@ def scenario_exact_values_preserved():
 
 def scenario_limitation_states_preserved():
     print("\n[Scenario 4] every known_limitations entry (and its exact status) is preserved in the report")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         review_service = fx.build_review_service(
@@ -424,7 +428,7 @@ def scenario_limitation_states_preserved():
 
 def scenario_traceability_preserved():
     print("\n[Scenario 5] source record ids/timestamps remain traceable in the rendered report")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
 
@@ -467,7 +471,7 @@ def scenario_traceability_preserved():
 
 def scenario_restart_identical_report():
     print("\n[Scenario 6] restart-safe: a brand-new service+report pair reproduces an identical report body")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "aios.db"
         fx = Fixture(db_path)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
@@ -517,7 +521,7 @@ def scenario_restart_identical_report():
 
 def scenario_no_order_trade_creation():
     print("\n[Scenario 7] building a report never creates an Order or a Trade")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         fx.seed_account("paper-id")
@@ -542,7 +546,7 @@ def scenario_no_order_trade_creation():
 
 def scenario_no_journal_risk_window_mutation():
     print("\n[Scenario 8] building a report never changes journal/risk/window/audit state")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         fx.seed_account("paper-id")

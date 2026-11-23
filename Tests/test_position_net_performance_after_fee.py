@@ -60,6 +60,10 @@ from Repository.persistence.account_repository import AccountRepository  # noqa:
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -127,7 +131,7 @@ def _trade(trade_id=1, order_id=1, account_id="paper-id", symbol="BBCA",
 
 def scenario_migration_adds_column_default_zero():
     print("\n[Scenario 1] migration adds buy_fee_accumulated, default 0.0 on a fresh row")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, _, account_repo, position_repo, _, _ = _build(tmp)
 
         created = position_repo.create(
@@ -150,7 +154,7 @@ def scenario_migration_adds_column_default_zero():
 
 def scenario_repository_persists_supplied_value():
     print("\n[Scenario 2] PositionRepository.create/update persist a caller-supplied buy_fee_accumulated exactly")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, _, account_repo, position_repo, _, _ = _build(tmp)
 
         created = position_repo.create(
@@ -187,7 +191,7 @@ def scenario_repository_persists_supplied_value():
 
 def scenario_first_buy_seeds_accumulator_with_trade_fee():
     print("\n[Scenario 3] first BUY seeds buy_fee_accumulated with that trade's fee")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, _, account_repo, position_repo, _, _ = _build(tmp)
         manager = PositionManager(position_repo)
 
@@ -200,7 +204,7 @@ def scenario_first_buy_seeds_accumulator_with_trade_fee():
 
 def scenario_buy_merge_adds_fee_to_accumulator():
     print("\n[Scenario 4] a BUY merge ADDS the new trade's fee to the existing accumulator")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, _, account_repo, position_repo, _, _ = _build(tmp)
         manager = PositionManager(position_repo)
 
@@ -220,7 +224,7 @@ def scenario_buy_merge_adds_fee_to_accumulator():
 
 def scenario_partial_sell_realizes_proportional_fee():
     print("\n[Scenario 5] a partial SELL realizes the BUY fee proportionally to sold quantity")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, _, account_repo, position_repo, _, _ = _build(tmp)
         manager = PositionManager(position_repo)
 
@@ -251,7 +255,7 @@ def scenario_partial_sell_realizes_proportional_fee():
 
 def scenario_full_sell_leaves_accumulator_exactly_zero():
     print("\n[Scenario 6] a full SELL always leaves buy_fee_accumulated == 0.0 exactly")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, _, account_repo, position_repo, _, _ = _build(tmp)
         manager = PositionManager(position_repo)
 
@@ -267,7 +271,7 @@ def scenario_full_sell_leaves_accumulator_exactly_zero():
 def scenario_sell_then_reopen_starts_accumulator_fresh():
     print("\n[Scenario 7] a fresh BUY reopening after a CLOSE starts buy_fee_accumulated at that trade's fee, "
           "never carries over from the closed position")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, _, account_repo, position_repo, _, _ = _build(tmp)
         manager = PositionManager(position_repo)
 
@@ -283,7 +287,7 @@ def scenario_sell_then_reopen_starts_accumulator_fresh():
 
 def scenario_multiple_partial_sells_accumulate_correctly():
     print("\n[Scenario 8] two successive partial SELLs each realize their own proportional share")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, _, account_repo, position_repo, _, _ = _build(tmp)
         manager = PositionManager(position_repo)
 
@@ -303,7 +307,7 @@ def scenario_multiple_partial_sells_accumulate_correctly():
 
 def scenario_set_stop_loss_take_profit_preserves_accumulator():
     print("\n[Scenario 9] set_stop_loss_take_profit() passes buy_fee_accumulated through unchanged")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, _, account_repo, position_repo, _, _ = _build(tmp)
         manager = PositionManager(position_repo)
 
@@ -318,7 +322,7 @@ def scenario_set_stop_loss_take_profit_preserves_accumulator():
 
 def scenario_reconciliation_replays_buy_fee_accumulator_consistent():
     print("\n[Scenario 10] ReconciliationEngine replays buy_fee_accumulated and reports CONSISTENT")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, _, account_repo, position_repo, order_repo, trade_repo = _build(tmp)
         manager = PositionManager(position_repo)
         reconciler = ReconciliationEngine(order_repo, trade_repo, account_repo, position_repo)
@@ -367,7 +371,7 @@ def scenario_reconciliation_replays_buy_fee_accumulator_consistent():
 
 def scenario_reconciliation_flags_buy_fee_accumulator_mismatch():
     print("\n[Scenario 11] ReconciliationEngine flags a manufactured buy_fee_accumulated mismatch")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, _, account_repo, position_repo, order_repo, trade_repo = _build(tmp)
         manager = PositionManager(position_repo)
         reconciler = ReconciliationEngine(order_repo, trade_repo, account_repo, position_repo)

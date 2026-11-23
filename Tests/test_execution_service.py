@@ -52,6 +52,10 @@ from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -110,7 +114,7 @@ def _create_order(order_repo, status="PENDING", **overrides):
 
 def scenario_pending_to_filled_happy_path():
     print("\n[Scenario 1] PENDING -> FILLED happy path")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, order_repo, trade_repo = _build_service(tmp)
         order = _create_order(order_repo)
 
@@ -145,7 +149,7 @@ def scenario_pending_to_filled_happy_path():
 
 def scenario_exactly_one_trade_created():
     print("\n[Scenario 2] exactly one Trade is created")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, order_repo, trade_repo = _build_service(tmp)
         order = _create_order(order_repo)
 
@@ -157,7 +161,7 @@ def scenario_exactly_one_trade_created():
 
 def scenario_non_pending_statuses_rejected():
     print("\n[Scenario 3] any status other than PENDING is rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, order_repo, trade_repo = _build_service(tmp)
 
         for status in ("NEW", "VALIDATED", "REJECTED", "CANCELLED", "EXPIRED", "PARTIALLY_FILLED"):
@@ -178,7 +182,7 @@ def scenario_non_pending_statuses_rejected():
 
 def scenario_already_filled_order_rejected_idempotency():
     print("\n[Scenario 4] an already-FILLED order cannot be executed again")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, order_repo, trade_repo = _build_service(tmp)
         order = _create_order(order_repo)
 
@@ -198,7 +202,7 @@ def scenario_already_filled_order_rejected_idempotency():
 
 def scenario_missing_order_rejected():
     print("\n[Scenario 5] a non-existent order_id is rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, order_repo, trade_repo = _build_service(tmp)
 
         raised = False
@@ -211,7 +215,7 @@ def scenario_missing_order_rejected():
 
 def scenario_end_to_end_create_order_then_execute_order_chain():
     print("\n[Scenario 7] full OrderLifecycleService.create_order() -> ExecutionService.execute_order() chain")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, order_repo, trade_repo = _build_service(tmp)
         lifecycle_service = OrderLifecycleService(order_repo)
 
@@ -237,7 +241,7 @@ def scenario_end_to_end_create_order_then_execute_order_chain():
 
 def scenario_no_account_or_position_dependency():
     print("\n[Scenario 6] no Account/Position dependency exists on the service")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, _, _ = _build_service(tmp)
         attrs = sorted(vars(service).keys())
         # Activation 3.3 STEP 2 (explicit contract change): ExecutionService

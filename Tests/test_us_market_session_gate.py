@@ -65,6 +65,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -167,7 +171,7 @@ def _restore_market(old) -> None:
 
 def scenario_us_regular_session_allowed():
     print("\n[Scenario A] US regular session (Tue 2026-01-06 10:00 ET) -> order allowed")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, currency="USD", asset_class="stock_us", cash=100_000.0)
         old = _with_market("us")
         try:
@@ -179,7 +183,7 @@ def scenario_us_regular_session_allowed():
 
 def scenario_us_pre_market_rejected():
     print("\n[Scenario B] US pre-market (Tue 2026-01-06 08:00 ET) -> rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, currency="USD", asset_class="stock_us", cash=100_000.0)
         old = _with_market("us")
         before = _row_counts(repos)
@@ -196,7 +200,7 @@ def scenario_us_pre_market_rejected():
 
 def scenario_us_after_hours_rejected():
     print("\n[Scenario C] US after-hours (Tue 2026-01-06 17:00 ET) -> rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, currency="USD", asset_class="stock_us", cash=100_000.0)
         old = _with_market("us")
         before = _row_counts(repos)
@@ -213,7 +217,7 @@ def scenario_us_after_hours_rejected():
 
 def scenario_us_weekend_rejected():
     print("\n[Scenario D] US weekend (Sat 2026-01-03 10:00 ET) -> rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, currency="USD", asset_class="stock_us", cash=100_000.0)
         old = _with_market("us")
         before = _row_counts(repos)
@@ -230,7 +234,7 @@ def scenario_us_weekend_rejected():
 
 def scenario_us_holiday_rejected():
     print("\n[Scenario E] US holiday (New Year's Day 2026-01-01 10:00 ET) -> rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, currency="USD", asset_class="stock_us", cash=100_000.0)
         old = _with_market("us")
         before = _row_counts(repos)
@@ -251,7 +255,7 @@ def scenario_us_dst_boundary():
         "on the Monday before (EST, UTC-5) and the Monday after (EDT, UTC-4) both "
         "classify as regular session and are both allowed"
     )
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, currency="USD", asset_class="stock_us", cash=100_000.0)
         old = _with_market("us")
         try:
@@ -272,7 +276,7 @@ def scenario_idx_unaffected_by_us_session_gate():
         "weekend/holiday UTC timestamps that reject a 'us' order still succeed "
         "for 'idx' (gate 17 is skipped entirely for non-'us' markets)"
     )
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, currency="IDR", asset_class="stock_id", cash=1_000_000_000.0)
         old = _with_market("idx")
         try:

@@ -31,7 +31,7 @@ class FakeYFinanceTicker:
         self.info = {}
         self.news = []
 
-    def history(self, period: str = "6mo", interval: str = "1d"):
+    def history(self, period: str = "6mo", interval: str = "1d", timeout: float = 30):
         raise AssertionError(
             "FakeYFinanceTicker.history() should never be called by a "
             "wiring-only test."

@@ -150,25 +150,39 @@ def scenario_reuse_same_actor_across_calls() -> None:
 # ---------------------------------------------------------------------------
 def scenario_default_path_still_fresh_actor_per_call() -> None:
     executor = _build_executor()
+    runtime = executor._runtime
 
-    result1 = executor.execute("echo", "call-1")
-    result2 = executor.execute("echo", "call-2")
+    # The one-shot path now terminates and archives its Actor when the
+    # call finishes (so Runtime bookkeeping no longer grows), so observe
+    # each Actor at terminate() time, before it is archived.
+    seen = []  # (actor_id, event count before termination)
+    original_terminate = runtime.terminate
+
+    def spying_terminate(actor_id, *args, **kwargs):
+        events, _state = runtime.replay(actor_id)
+        seen.append((actor_id, len(events)))
+        return original_terminate(actor_id, *args, **kwargs)
+
+    runtime.terminate = spying_terminate
+    try:
+        result1 = executor.execute("echo", "call-1")
+        result2 = executor.execute("echo", "call-2")
+    finally:
+        runtime.terminate = original_terminate
 
     check(result1 == "echo-result" and result2 == "echo-result", "both calls succeed")
 
-    # Executor doesn't return the actor_id it minted internally when
-    # actor_id is omitted, so we prove freshness structurally: the
-    # Runtime's bookkeeping must show two distinct Actors, each with
-    # exactly one genesis-derived tool-call trajectory (4 events:
-    # genesis + INTENT + DECISION + EFFECT_COMPLETED).
-    all_actor_ids = list(executor._runtime._cursors.keys())
-    check(len(all_actor_ids) == 2, f"two distinct Actors exist (got {len(all_actor_ids)})")
-    for actor_id in all_actor_ids:
-        events, _state = executor._runtime.replay(actor_id)
+    # Each call minted its own Actor with exactly one genesis-derived
+    # tool-call trajectory (4 events: genesis + INTENT + DECISION +
+    # EFFECT_COMPLETED).
+    actor_ids = [actor_id for actor_id, _n in seen]
+    check(len(set(actor_ids)) == 2, f"two distinct Actors exist (got {len(set(actor_ids))})")
+    for actor_id, n_events in seen:
         check(
-            len(events) == 4,
-            f"Actor {actor_id} has exactly one tool-call trajectory (got {len(events)} events)",
+            n_events == 4,
+            f"Actor {actor_id} has exactly one tool-call trajectory (got {n_events} events)",
         )
+    check(not runtime._cursors, f"one-shot Actors are archived after use (left {len(runtime._cursors)})")
 
 
 # ---------------------------------------------------------------------------

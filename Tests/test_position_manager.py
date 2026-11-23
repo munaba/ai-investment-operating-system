@@ -45,6 +45,10 @@ from Database.models import Trade  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -102,7 +106,7 @@ def _trade(trade_id=1, order_id=1, account_id="paper-id", symbol="BBCA",
 
 def scenario_first_buy_creates_position():
     print("\n[Scenario 1] first BUY creates a new OPEN Position")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
         trade = _trade(action="BUY", quantity=100.0, fill_price=9500.0)
 
@@ -120,7 +124,7 @@ def scenario_first_buy_creates_position():
 
 def scenario_second_buy_merges_weighted_average():
     print("\n[Scenario 2] second BUY merges into the OPEN position, weighted average")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
         service.apply_trade(_trade(action="BUY", quantity=100.0, fill_price=9500.0))
 
@@ -137,7 +141,7 @@ def scenario_second_buy_merges_weighted_average():
 
 def scenario_sell_partial_reduces_quantity():
     print("\n[Scenario 3] SELL partial reduces quantity, leaves average_price untouched")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
         service.apply_trade(_trade(action="BUY", quantity=100.0, fill_price=9500.0))
 
@@ -155,7 +159,7 @@ def scenario_sell_partial_reduces_quantity():
 
 def scenario_sell_full_closes_position():
     print("\n[Scenario 4] SELL full drives quantity to zero and closes the Position")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
         service.apply_trade(_trade(action="BUY", quantity=100.0, fill_price=9500.0))
 
@@ -175,7 +179,7 @@ def scenario_sell_full_closes_position():
 
 def scenario_sell_partial_then_partial_accumulates_realized_pnl():
     print("\n[Scenario 4b] two successive partial SELLs accumulate realized_pnl, average_price never moves")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
         service.apply_trade(_trade(action="BUY", quantity=100.0, fill_price=9500.0))
 
@@ -200,7 +204,7 @@ def scenario_sell_partial_then_partial_accumulates_realized_pnl():
 
 def scenario_sell_without_position_rejected():
     print("\n[Scenario 5] SELL with no OPEN position raises ValidationError")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
 
         raised = False
@@ -215,7 +219,7 @@ def scenario_sell_without_position_rejected():
 
 def scenario_oversell_rejected():
     print("\n[Scenario 6] SELL for more than currently held raises ValidationError, no write")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
         service.apply_trade(_trade(action="BUY", quantity=50.0, fill_price=9500.0))
 
@@ -232,7 +236,7 @@ def scenario_oversell_rejected():
 
 def scenario_buy_after_closed_creates_new_position():
     print("\n[Scenario 7] BUY on a CLOSED position creates a new Position (never merges into it)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
         service.apply_trade(_trade(action="BUY", quantity=100.0, fill_price=9500.0))
         closed = service.apply_trade(_trade(action="SELL", quantity=100.0, fill_price=9800.0))
@@ -251,7 +255,7 @@ def scenario_buy_after_closed_creates_new_position():
 
 def scenario_unknown_action_rejected():
     print("\n[Scenario 8] an unknown trade.action is rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
 
         raised = False
@@ -266,7 +270,7 @@ def scenario_unknown_action_rejected():
 
 def scenario_new_position_has_no_stop_loss_take_profit():
     print("\n[Scenario 10] a brand-new Position (first BUY) has no stop_loss/take_profit configured")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, _ = _build_service(tmp)
         position = service.apply_trade(_trade(action="BUY", quantity=100.0, fill_price=9500.0))
         check(position.stop_loss is None, "fresh Position's stop_loss is None")
@@ -275,7 +279,7 @@ def scenario_new_position_has_no_stop_loss_take_profit():
 
 def scenario_set_stop_loss_take_profit_persists():
     print("\n[Scenario 11] set_stop_loss_take_profit() persists valid LONG levels")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
         position = service.apply_trade(_trade(action="BUY", quantity=100.0, fill_price=9500.0))
 
@@ -295,7 +299,7 @@ def scenario_set_stop_loss_take_profit_persists():
 
 def scenario_set_stop_loss_take_profit_allows_null():
     print("\n[Scenario 12] set_stop_loss_take_profit(None, None) is valid and stores NULL")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, _ = _build_service(tmp)
         position = service.apply_trade(_trade(action="BUY", quantity=100.0, fill_price=9500.0))
 
@@ -307,7 +311,7 @@ def scenario_set_stop_loss_take_profit_allows_null():
 
 def scenario_set_stop_loss_take_profit_rejects_invalid_long_levels():
     print("\n[Scenario 13] set_stop_loss_take_profit() rejects invalid LONG levels, no write happens")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
         position = service.apply_trade(_trade(action="BUY", quantity=100.0, fill_price=9500.0))
 
@@ -339,7 +343,7 @@ def scenario_set_stop_loss_take_profit_rejects_invalid_long_levels():
 
 def scenario_buy_merge_preserves_stop_loss_take_profit():
     print("\n[Scenario 14] a BUY merge preserves the existing stop_loss/take_profit unchanged")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
         position = service.apply_trade(_trade(action="BUY", quantity=100.0, fill_price=9500.0))
         service.set_stop_loss_take_profit(position.position_id, stop_loss=9000.0, take_profit=10000.0)
@@ -353,7 +357,7 @@ def scenario_buy_merge_preserves_stop_loss_take_profit():
 
 def scenario_sell_preserves_stop_loss_take_profit():
     print("\n[Scenario 15] a partial SELL preserves the existing stop_loss/take_profit unchanged")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, repo = _build_service(tmp)
         position = service.apply_trade(_trade(action="BUY", quantity=100.0, fill_price=9500.0))
         service.set_stop_loss_take_profit(position.position_id, stop_loss=9000.0, take_profit=10000.0)
@@ -369,7 +373,7 @@ def scenario_no_account_or_trade_dependency():
     print("\n[Scenario 9] no Trade/Order repository dependency exists on the service "
           "(Activation 11.12: an OPTIONAL account_repository collaborator was added, "
           "defaulting to None -- see test_activation11_12_forex_short_position_manager.py)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service, _ = _build_service(tmp)
         attrs = sorted(vars(service).keys())
         check(

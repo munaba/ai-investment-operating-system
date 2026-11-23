@@ -34,19 +34,32 @@ def main() -> int:
         print(f"  INFO - DNS resolution unavailable for {host}: {exc}")
     check(dns_ok, f"DNS resolves market-data host {host}")
 
-    url = os.environ.get(
-        "AIOS_MARKET_DATA_HEALTH_URL",
-        "https://query1.finance.yahoo.com/v8/finance/chart/BBCA.JK?range=5d&interval=1d",
-    )
-    try:
-        with urllib.request.urlopen(url, timeout=10) as response:
-            status = response.status
-            body = response.read(128)
-        check(status == 200, f"market-data provider returned HTTP 200 (got {status})")
-        check(bool(body), "market-data provider returned a non-empty response")
-    except (OSError, urllib.error.URLError, TimeoutError) as exc:
-        print(f"  INFO - Provider request unavailable: {exc}")
-        raise AssertionError("market-data provider is not reachable from this runtime") from exc
+    url = os.environ.get("AIOS_MARKET_DATA_HEALTH_URL")
+    if url:
+        # Explicit operator-supplied health URL: probe it directly.
+        try:
+            with urllib.request.urlopen(url, timeout=10) as response:
+                status = response.status
+                body = response.read(128)
+            check(status == 200, f"market-data provider returned HTTP 200 (got {status})")
+            check(bool(body), "market-data provider returned a non-empty response")
+        except (OSError, urllib.error.URLError, TimeoutError) as exc:
+            print(f"  INFO - Provider request unavailable: {exc}")
+            raise AssertionError("market-data provider is not reachable from this runtime") from exc
+    else:
+        # Default: go through the same client production uses. A bare
+        # urllib request to Yahoo is answered with HTTP 429 even when
+        # yfinance (and therefore the scanner) works, which made this
+        # preflight fail on a healthy machine.
+        from Repository.external.stock_data_repository import StockDataRepository
+
+        try:
+            history = StockDataRepository().get_history("BBCA.JK", period="5d", interval="1d", timeout=15)
+        except Exception as exc:  # noqa: BLE001 -- any failure means "not reachable"
+            print(f"  INFO - Provider request unavailable: {exc}")
+            raise AssertionError("market-data provider is not reachable from this runtime") from exc
+        check(history is not None and len(history) > 0,
+              f"market-data provider returned real bars for BBCA.JK (got {0 if history is None else len(history)})")
 
     print("ACTIVATION 2 PRODUCTION PREFLIGHT: PASS")
     return 0

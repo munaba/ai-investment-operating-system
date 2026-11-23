@@ -68,6 +68,10 @@ from Database.migrations_accounts import ACCOUNTS_MIGRATIONS  # noqa: E402
 from Database.migrations import MigrationRunner  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -98,7 +102,7 @@ def _fresh_account_repository(tmp: str) -> AccountRepository:
 
 def scenario_a_direct_bootstrap_creates_usd_forex_paper_account():
     print("\n[Scenario A] direct bootstrap: first call creates the default Forex USD paper account")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _fresh_account_repository(tmp)
 
         account, created = ensure_default_forex_account(repo)
@@ -121,7 +125,7 @@ def scenario_a_direct_bootstrap_creates_usd_forex_paper_account():
 
 def scenario_b_direct_bootstrap_idempotent_on_rerun():
     print("\n[Scenario B] direct bootstrap: second call is idempotent -- no duplicate row")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _fresh_account_repository(tmp)
 
         first_account, first_created = ensure_default_forex_account(repo)
@@ -140,7 +144,7 @@ def scenario_b_direct_bootstrap_idempotent_on_rerun():
 
 def scenario_does_not_disturb_other_default_accounts():
     print("\n[Scenario] pre-existing IDR/crypto/US accounts are unaffected -- additive only")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _fresh_account_repository(tmp)
 
         paper_account, paper_created = ensure_default_paper_account(repo)
@@ -207,7 +211,7 @@ def _accounts(db_path: Path):
 
 def scenario_c_cli_creates_forex_account():
     print("\n[Scenario C] python main.py init-forex creates forex-usd via real CLI dispatch")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "cli_init_forex.db"
 
         init_result = _run_cli(db_path, "init")
@@ -231,7 +235,7 @@ def scenario_c_cli_creates_forex_account():
 
 def scenario_d_cli_idempotent():
     print("\n[Scenario D] python main.py init-forex run twice is idempotent")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "cli_init_forex_idempotent.db"
         _run_cli(db_path, "init")
 
@@ -248,7 +252,7 @@ def scenario_d_cli_idempotent():
 
 def scenario_e_plain_init_does_not_create_forex_account():
     print("\n[Scenario E] python main.py init alone never creates forex-usd")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "cli_init_only_forex.db"
 
         init_result = _run_cli(db_path, "init")
@@ -264,7 +268,7 @@ def scenario_e_plain_init_does_not_create_forex_account():
 
 def scenario_f_init_us_does_not_create_forex_account():
     print("\n[Scenario F] python main.py init-us does not unexpectedly create forex-usd")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "cli_init_us_isolation.db"
 
         _run_cli(db_path, "init")
@@ -293,7 +297,7 @@ def scenario_g_init_crypto_does_not_create_forex_account():
     # the isolation check still runs against a canonical, migrated DB.
     from Core.init_crypto_command import run_init_crypto  # noqa: E402 (local import, test-only)
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "cli_init_crypto_isolation.db"
 
         init_result = _run_cli(db_path, "init")
@@ -313,7 +317,7 @@ def scenario_g_init_crypto_does_not_create_forex_account():
 
 def scenario_h_account_metadata_exact():
     print("\n[Scenario H] forex-usd account metadata matches expected exact values")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "cli_metadata_forex.db"
         _run_cli(db_path, "init")
         _run_cli(db_path, "init-forex")

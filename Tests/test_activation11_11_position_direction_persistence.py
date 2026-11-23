@@ -49,6 +49,10 @@ from Database.position_constants import POSITION_DIRECTIONS  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -90,7 +94,7 @@ def _build_repository(tmp_dir: str):
 
 def scenario_a_default_direction_is_long():
     print("\n[Scenario A] create() without explicit direction defaults to LONG")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         created = repo.create("paper-id", "BBCA", 100.0, 9500.0, 0.0, "open")
         check(created.direction == "LONG", "create() returns direction == 'LONG' by default")
@@ -101,7 +105,7 @@ def scenario_a_default_direction_is_long():
 
 def scenario_b_explicit_long_round_trips():
     print("\n[Scenario B] explicit direction='LONG' persists and reads back exactly")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         created = repo.create(
             account_id="paper-id",
@@ -120,7 +124,7 @@ def scenario_b_explicit_long_round_trips():
 
 def scenario_c_explicit_short_round_trips():
     print("\n[Scenario C] explicit direction='SHORT' persists and reads back exactly")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         created = repo.create(
             account_id="paper-id",
@@ -139,7 +143,7 @@ def scenario_c_explicit_short_round_trips():
 
 def scenario_d_update_changes_direction():
     print("\n[Scenario D] update() persists a direction change (persistence contract only, not production reversal)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         created = repo.create(
             account_id="paper-id",
@@ -166,7 +170,7 @@ def scenario_d_update_changes_direction():
 
 def scenario_e_invalid_direction_rejected():
     print("\n[Scenario E] invalid direction is rejected by the repository")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         try:
             repo.create(
@@ -214,7 +218,7 @@ def scenario_e_invalid_direction_rejected():
 
 def scenario_f_existing_rows_default_to_long_after_migration():
     print("\n[Scenario F] a Position row created before version=18 backfills to direction='LONG'")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "positions_direction_migration.db")
         db = SQLiteDatabase(cfg)
         db.connect()
@@ -277,7 +281,7 @@ def scenario_f_existing_rows_default_to_long_after_migration():
 
 def scenario_g_direction_survives_restart():
     print("\n[Scenario G] direction survives closing and reopening the database")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "positions_direction_restart.db"
         cfg = DatabaseConfig(db_path=db_path)
         db = SQLiteDatabase(cfg)

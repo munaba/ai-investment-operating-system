@@ -44,6 +44,10 @@ from Database.migrations_accounts import ACCOUNTS_MIGRATIONS  # noqa: E402
 from Database.migrations import MigrationRunner  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -71,7 +75,7 @@ def _fresh_account_repository(tmp: str) -> AccountRepository:
 
 def scenario_creates_usd_crypto_paper_account():
     print("\n[Scenario 1] first call creates the default crypto USD paper account")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _fresh_account_repository(tmp)
 
         account, created = ensure_default_crypto_account(repo)
@@ -94,7 +98,7 @@ def scenario_creates_usd_crypto_paper_account():
 
 def scenario_idempotent_on_rerun():
     print("\n[Scenario 2] second call is idempotent -- no duplicate row")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _fresh_account_repository(tmp)
 
         first_account, first_created = ensure_default_crypto_account(repo)
@@ -113,7 +117,7 @@ def scenario_idempotent_on_rerun():
 
 def scenario_does_not_disturb_default_paper_account():
     print("\n[Scenario 3] pre-existing IDR paper account is unaffected -- additive only")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _fresh_account_repository(tmp)
 
         paper_account, paper_created = ensure_default_paper_account(repo)

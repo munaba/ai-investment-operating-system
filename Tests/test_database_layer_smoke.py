@@ -16,6 +16,10 @@ from Database import (
     MigrationRunner,
     SQLiteDatabase,
 )
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -34,7 +38,7 @@ def check(condition: bool, description: str) -> None:
 
 def scenario_connect_disconnect_health_check():
     print("\n[Scenario 1] connect/disconnect/health_check basic lifecycle")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "test1.db")
         db = SQLiteDatabase(cfg)
         check(not db.is_connected, "not connected before connect()")
@@ -49,7 +53,7 @@ def scenario_connect_disconnect_health_check():
 
 def scenario_execute_and_query_result_shape():
     print("\n[Scenario 2] execute() normalizes to QueryResult")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "test2.db")
         db = SQLiteDatabase(cfg)
         db.connect()
@@ -64,7 +68,7 @@ def scenario_execute_and_query_result_shape():
 
 def scenario_transaction_commit():
     print("\n[Scenario 3] transaction commits on clean exit")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "test3.db")
         db = SQLiteDatabase(cfg)
         manager = DatabaseManager(db, cfg)
@@ -79,7 +83,7 @@ def scenario_transaction_commit():
 
 def scenario_transaction_rollback_on_exception():
     print("\n[Scenario 4] transaction rolls back on exception")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "test4.db")
         db = SQLiteDatabase(cfg)
         manager = DatabaseManager(db, cfg)
@@ -97,7 +101,7 @@ def scenario_transaction_rollback_on_exception():
 
 def scenario_migration_runner():
     print("\n[Scenario 5] MigrationRunner applies pending migrations exactly once")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "test5.db")
         db = SQLiteDatabase(cfg)
         db.connect()
@@ -138,7 +142,7 @@ def scenario_migration_runner():
 
 def scenario_thread_local_connections():
     print("\n[Scenario 6] each thread gets its own connection")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg = DatabaseConfig(db_path=Path(tmp) / "test6.db")
         db = SQLiteDatabase(cfg)
         db.connect()

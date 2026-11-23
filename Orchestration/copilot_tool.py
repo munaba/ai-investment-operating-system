@@ -113,7 +113,7 @@ module itself (out of scope for this task).
 
 from __future__ import annotations
 
-from typing import Any, Mapping
+from typing import Any, Mapping, Optional
 
 from Orchestration.base_tool import BaseTool
 from Orchestration.tool_descriptor import ToolDescriptor

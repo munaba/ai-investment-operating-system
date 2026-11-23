@@ -561,5 +561,15 @@ def main() -> int:
     return 0 if _FAIL == 0 else 1
 
 
+def _close_dbs_after(fn):
+    """Run the script body, then close every SQLiteDatabase it opened
+    (instead of leaving them to the leak-detection finalizer at exit)."""
+    try:
+        return fn()
+    finally:
+        from Database.sqlite_database import close_all_instances
+        close_all_instances()
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(_close_dbs_after(main))

@@ -107,6 +107,10 @@ from Services.sustained_use_review_service import (  # noqa: E402
     STATUS_NOT_AVAILABLE,
     SustainedUseReviewService,
 )
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -251,7 +255,7 @@ def _fresh_fixture(tmp_dir: str) -> Fixture:
 
 def scenario_empty_active_window():
     print("\n[Scenario 1] empty ACTIVE window -> honest all-zero / NOT_AVAILABLE result")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         service = fx.build_service(with_optional=False, with_paper_review=False,
@@ -308,7 +312,7 @@ def scenario_empty_active_window():
 
 def scenario_no_window_raises():
     print("\n[Scenario 2] no ACTIVE window and no window_id supplied -> ValidationError, never a guess")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         service = fx.build_service(with_optional=False, with_paper_review=False,
                                     with_reconciliation=False, with_daily_performance=False,
@@ -333,7 +337,7 @@ def scenario_no_window_raises():
 
 def scenario_scheduler_availability_evidence():
     print("\n[Scenario 3] scheduler job success/failure evidence, filtered to the window's trading-date range")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
 
@@ -387,7 +391,7 @@ def scenario_scheduler_availability_evidence():
 
 def scenario_freshness_evidence():
     print("\n[Scenario 4] freshness degradation/recovery audit evidence")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
 
@@ -426,7 +430,7 @@ def scenario_freshness_evidence():
 
 def scenario_alert_dedup_evidence():
     print("\n[Scenario 5] alert SEND/SUPPRESS(_NO_CHANGE/_RATE_LIMITED)/FAILED evidence")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
 
@@ -484,7 +488,7 @@ def scenario_alert_dedup_evidence():
 
 def scenario_telegram_command_evidence():
     print("\n[Scenario 6] Telegram command audit evidence")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
 
@@ -521,7 +525,7 @@ def scenario_telegram_command_evidence():
 
 def scenario_plan_journal_and_paper_linkage():
     print("\n[Scenario 7] DecisionBrief + JournalEntry + BriefApproval->Order->Trade linkage")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         fx.seed_account("paper-id")
@@ -589,7 +593,7 @@ def scenario_plan_journal_and_paper_linkage():
 
 def scenario_reconciliation_available_and_unavailable():
     print("\n[Scenario 8] paper reconciliation available/unavailable")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         fx.seed_account("paper-id")
@@ -623,7 +627,7 @@ def scenario_reconciliation_available_and_unavailable():
 
 def scenario_drawdown_available_and_unavailable():
     print("\n[Scenario 9] drawdown/process AVAILABLE / INSUFFICIENT_DATA / NOT_AVAILABLE")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         fx.seed_account("paper-id")
@@ -665,7 +669,7 @@ def scenario_drawdown_available_and_unavailable():
 
 def scenario_strategy_regime_available_and_unavailable():
     print("\n[Scenario 10] strategy/regime AVAILABLE (pass-through) / NOT_AVAILABLE")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         fx.seed_account("paper-id")
@@ -704,7 +708,7 @@ def scenario_strategy_regime_available_and_unavailable():
 
 def scenario_exact_boundary_filtering():
     print("\n[Scenario 11] exact start/end boundary filtering (inclusive both ends)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
 
@@ -735,7 +739,7 @@ def scenario_exact_boundary_filtering():
 
 def scenario_external_blocked_always_present():
     print("\n[Scenario 12] EXTERNAL_BLOCKED evidence is always present regardless of what else is wired")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         fx.seed_account("paper-id")
@@ -758,7 +762,7 @@ def scenario_external_blocked_always_present():
 
 def scenario_restart_safety():
     print("\n[Scenario 13] restart-safe: a brand-new service instance reproduces an identical review")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "aios.db"
         fx = Fixture(db_path)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
@@ -795,7 +799,7 @@ def scenario_restart_safety():
 
 def scenario_no_trading_state_mutation():
     print("\n[Scenario 14] SustainedUseReviewService never mutates any trading/audit state")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         fx.seed_account("paper-id")
@@ -850,7 +854,7 @@ def scenario_no_trading_state_mutation():
 
 def scenario_overall_status_complete_vs_partial():
     print("\n[Scenario 15] overall_evidence_status: COMPLETE_EVIDENCE only when every optional dimension is wired+populated")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         fx.open_window("2026-08-24T00:00:00", "2026-09-23T23:59:59")
         fx.seed_account("paper-id")

@@ -85,6 +85,10 @@ from Services.decision_brief_service import (  # noqa: E402
     ALL_STATUSES,
     STATUS_SUCCESS,
 )
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -231,7 +235,7 @@ def _make_non_success_brief(brief_repo: DecisionBriefRepository, status: str, *,
 
 def scenario_non_success_rejected():
     print("\n[Scenario 1] every non-SUCCESS brief status is rejected before any order is submitted")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg, service, repos = _build(tmp, "s1.db")
 
         non_success_statuses = sorted(ALL_STATUSES - {STATUS_SUCCESS})
@@ -264,7 +268,7 @@ def scenario_non_success_rejected():
 
 def scenario_approval_not_explicit_true_rejected():
     print("\n[Scenario 2] approved=False (and None) is rejected even for a genuinely SUCCESS brief")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg, service, repos = _build(tmp, "s2.db")
         brief_id = _make_success_brief(repos["brief"])
 
@@ -303,7 +307,7 @@ def scenario_approval_not_explicit_true_rejected():
 
 def scenario_success_and_approved_submits_one_order():
     print("\n[Scenario 3] SUCCESS brief + explicit approved=True submits exactly one real paper order")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg, service, repos = _build(tmp, "s3.db")
         brief_id = _make_success_brief(repos["brief"])
 
@@ -330,7 +334,7 @@ def scenario_success_and_approved_submits_one_order():
 
 def scenario_linkage_persisted():
     print("\n[Scenario 4] brief/order/trade linkage is persisted correctly")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg, service, repos = _build(tmp, "s4.db")
         brief_id = _make_success_brief(repos["brief"])
 
@@ -361,7 +365,7 @@ def scenario_linkage_persisted():
 
 def scenario_one_brief_one_link_no_duplicate_submission():
     print("\n[Scenario 5] one brief can be linked at most once; repeated approval never submits a second order")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg, service, repos = _build(tmp, "s5.db")
         brief_id = _make_success_brief(repos["brief"])
 
@@ -397,7 +401,7 @@ def scenario_one_brief_one_link_no_duplicate_submission():
 
 def scenario_readable_after_restart():
     print("\n[Scenario 6] brief_approvals row survives a full application restart")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg, service, repos = _build(tmp, "s6.db")
         brief_id = _make_success_brief(repos["brief"])
         result = service.approve_and_submit(
@@ -433,7 +437,7 @@ def scenario_readable_after_restart():
 
 def scenario_linkage_failure_does_not_roll_back_trade():
     print("\n[Scenario 7] a failing brief_approvals write is never propagated and never rolls back the committed trade")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg, service, repos = _build(tmp, "s7.db")
         # Rebuild the service with a failing brief_approval_repository
         # wired in, reusing the same underlying repos/engine.

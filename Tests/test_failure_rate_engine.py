@@ -58,6 +58,10 @@ from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.snapshot_repository import SnapshotRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -120,7 +124,7 @@ def _order_kwargs(**overrides) -> dict:
 
 def scenario_empty_database_is_zero_never_divide_by_zero():
     print("\n[Scenario 1] No recorded outcomes -> every rate is 0.0, no ZeroDivisionError")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, _, _ = _build(tmp)
         result = engine.calculate()
 
@@ -136,7 +140,7 @@ def scenario_empty_database_is_zero_never_divide_by_zero():
 
 def scenario_scan_failure_rate_from_recorded_snapshots():
     print("\n[Scenario 2] Scan failure rate == recorded error snapshots / total snapshots")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, snapshot_repo, _ = _build(tmp)
 
         snapshot_repo.create("2026-08-14T09:00:00+00:00", "BBCA", "BUY", "HIGH", 1, 1, status="success")
@@ -153,7 +157,7 @@ def scenario_scan_failure_rate_from_recorded_snapshots():
 
 def scenario_order_failure_rate_excludes_in_flight_and_non_rejection_lifecycle():
     print("\n[Scenario 3] Order failure rate == REJECTED / resolved orders; NEW/VALIDATED excluded; CANCELLED/EXPIRED count as resolved, not failures")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, _, order_repo = _build(tmp)
 
         order_repo.create(**_order_kwargs(status="FILLED", filled_price=9_500.0, filled_quantity=100.0, reason="filled"))
@@ -175,7 +179,7 @@ def scenario_order_failure_rate_excludes_in_flight_and_non_rejection_lifecycle()
 
 def scenario_combined_is_scan_plus_order():
     print("\n[Scenario 4] Combined totals/failures/rate == scan + order")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, snapshot_repo, order_repo = _build(tmp)
 
         snapshot_repo.create("2026-08-14T09:00:00+00:00", "BBCA", "BUY", "HIGH", 1, 1, status="success")
@@ -196,7 +200,7 @@ def scenario_combined_is_scan_plus_order():
 
 def scenario_calculate_is_read_only():
     print("\n[Scenario 5] calculate() performs zero writes to any table")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, snapshot_repo, order_repo = _build(tmp)
         snapshot_repo.create("2026-08-14T09:00:00+00:00", "BBCA", "BUY", "HIGH", 1, 1, status="success")
         order_repo.create(**_order_kwargs(status="REJECTED", reason="insufficient cash"))

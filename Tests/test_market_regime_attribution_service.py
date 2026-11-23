@@ -87,6 +87,10 @@ from Repository.persistence.order_repository import OrderRepository  # noqa: E40
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
 from Repository.persistence.watchlist_repository import WatchlistRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -156,7 +160,7 @@ class _FakeTicker:
     def __init__(self, history_df: Optional[pd.DataFrame]) -> None:
         self._history_df = history_df
 
-    def history(self, period: str = "6mo", interval: str = "1d") -> pd.DataFrame:
+    def history(self, period: str = "6mo", interval: str = "1d", timeout: float = 30) -> pd.DataFrame:
         return self._history_df if self._history_df is not None else pd.DataFrame()
 
 
@@ -254,7 +258,7 @@ def _row_counts(db_path):
 
 def scenario_unknown_account_raises_validation_error():
     print("\n[Scenario 1] get_performance_by_regime() on an unknown account_id raises ValidationError")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(Path(tmp) / "s1.db", histories={})
         raised = False
         try:
@@ -266,7 +270,7 @@ def scenario_unknown_account_raises_validation_error():
 
 def scenario_zero_data_returns_empty_dict():
     print("\n[Scenario 2] an account with no trades at all returns an empty dict")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(Path(tmp) / "s2.db", histories={})
         _make_account(ctx["account_repository"])
         result = ctx["service"].get_performance_by_regime("paper")
@@ -275,7 +279,7 @@ def scenario_zero_data_returns_empty_dict():
 
 def scenario_regime_based_on_opening_trade_timestamp_no_lookahead():
     print("\n[Scenario 3] regime attribution uses each episode's OPENING trade timestamp -- no lookahead")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         symbol = "BBCA"
         histories = {symbol: _choppy_then_trending_history()}
         ctx = _build(Path(tmp) / "s3.db", histories=histories)
@@ -314,7 +318,7 @@ def scenario_regime_based_on_opening_trade_timestamp_no_lookahead():
 
 def scenario_two_distinct_real_regimes_same_and_different_symbols():
     print("\n[Scenario 4] at least 2 distinct REAL regimes observed across closed episodes, from real OHLCV")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         trending_symbol = "TRND"
         volatile_symbol = "VOLT"
         histories = {
@@ -349,7 +353,7 @@ def scenario_two_distinct_real_regimes_same_and_different_symbols():
 
 def scenario_market_condition_variety_from_real_watchlist():
     print("\n[Scenario 5] get_market_condition_variety() reports real, currently-observed variety (>= 2 regimes)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         trending_symbol = "TRND"
         volatile_symbol = "VOLT"
         thin_symbol = "THIN"
@@ -375,7 +379,7 @@ def scenario_market_condition_variety_from_real_watchlist():
 
 def scenario_empty_watchlist_is_honest_zero():
     print("\n[Scenario 6] an empty watchlist honestly reports all-zero variety, never a guessed variety")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(Path(tmp) / "s6.db", histories={})
         variety = ctx["service"].get_market_condition_variety()
         check(variety["regime_count"] == 0, "empty watchlist -> zero regime_count")
@@ -386,7 +390,7 @@ def scenario_empty_watchlist_is_honest_zero():
 
 def scenario_open_position_excluded():
     print("\n[Scenario 7] an account with trades but zero CLOSED episodes returns an empty dict")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         histories = {"BBRI": _choppy_then_trending_history()}
         ctx = _build(Path(tmp) / "s7.db", histories=histories)
         _make_account(ctx["account_repository"])
@@ -398,7 +402,7 @@ def scenario_open_position_excluded():
 
 def scenario_deterministic_and_read_only():
     print("\n[Scenario 8] deterministic + read-only: repeated calls yield equal results and no DB writes")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         trending_symbol = "TRND"
         histories = {trending_symbol: _choppy_then_trending_history()}
         ctx = _build(Path(tmp) / "s8.db", histories=histories)

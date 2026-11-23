@@ -30,6 +30,20 @@ from Tests.integration_test import test_instantiation_and_health_checks
 # module names (the dot truncates the module at "test_phase_i_gate3"), so they
 # cannot be imported. Pre-existing condition, not introduced by this work.
 collect_ignore = ["test_phase_i_gate3.1_datetime.py"]
+# Retired sprint snapshot scripts; see Tests/archive/README.md.
+collect_ignore_glob = ["archive/*"]
+
+
+@pytest.fixture(autouse=True)
+def isolate_default_db_path(tmp_path, monkeypatch):
+    """Point DB_PATH at a per-test temp file.
+
+    Without this, any test that calls ``build_application()`` or
+    ``DatabaseConfig.from_env()`` opens (and, if missing, creates) the live
+    ``data/investment_platform.db``. Tests that deliberately read the live DB
+    use an explicit path and open it read-only.
+    """
+    monkeypatch.setenv("DB_PATH", str(tmp_path / "test_default.db"))
 
 
 @pytest.fixture(scope="session", autouse=True)

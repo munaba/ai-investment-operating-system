@@ -37,6 +37,10 @@ from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -95,7 +99,7 @@ def _seed_order(order_repo: OrderRepository, account_id: str = "paper-id", symbo
 
 def scenario_create_and_get():
     print("\n[Scenario 1] create / get_by_id happy path")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         trade_repo, order_repo = _build_repository(tmp)
         order_id = _seed_order(order_repo)
 
@@ -127,7 +131,7 @@ def scenario_create_and_get():
 
 def scenario_list_by_account_and_list_all():
     print("\n[Scenario 2] list_by_account() / list_all()")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         trade_repo, order_repo = _build_repository(tmp)
         order_id_1 = _seed_order(order_repo, symbol="BBCA")
         order_id_2 = _seed_order(order_repo, symbol="TLKM")
@@ -149,7 +153,7 @@ def scenario_list_by_account_and_list_all():
 
 def scenario_list_by_order_supports_partial_fills():
     print("\n[Scenario 3] list_by_order() returns multiple trades for one order (partial fills)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         trade_repo, order_repo = _build_repository(tmp)
         order_id = _seed_order(order_repo, symbol="BBCA")
 
@@ -181,7 +185,7 @@ def scenario_foreign_key_violations_raise_repository_error():
     print("\n[Scenario 5] invalid order_id/account_id raise RepositoryError (existing exception, no new class)")
     from Core.exceptions import RepositoryError  # noqa: E402
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         trade_repo, order_repo = _build_repository(tmp)
         order_id = _seed_order(order_repo)
 

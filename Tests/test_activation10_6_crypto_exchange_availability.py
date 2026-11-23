@@ -88,6 +88,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -300,7 +304,7 @@ def scenario_policy_pure_checks_and_config():
 def scenario_default_available():
     print("\n[Scenario A] default available -> crypto BUY continues to work")
     _clear_env()
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         try:
             trade = _submit_crypto(engine, idempotency_key="crypto-avail-a")
@@ -317,7 +321,7 @@ def scenario_default_available():
 def scenario_explicit_unavailable():
     print("\n[Scenario B] explicit unavailable -> crypto BUY rejected, zero financial-state mutation")
     _clear_env()
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         before = _row_counts(repos)
         account_before = repos["account"].get_by_id(CRYPTO_ACCOUNT_ID)
@@ -349,7 +353,7 @@ def scenario_explicit_unavailable():
 def scenario_recovery():
     print("\n[Scenario C] recovery -- same valid crypto BUY succeeds once available again")
     _clear_env()
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
 
         os.environ[CRYPTO_EXCHANGE_AVAILABLE_ENV_VAR] = "false"
@@ -378,7 +382,7 @@ def scenario_recovery():
 def scenario_sell_unavailable():
     print("\n[Scenario D] SELL unavailable -> rejected with zero financial-state mutation")
     _clear_env()
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
 
         # Pre-create a position while available.
@@ -426,7 +430,7 @@ def scenario_sell_unavailable():
 def scenario_idx_isolation():
     print("\n[Scenario E] IDX isolation -- crypto unavailable does not leak into IDX")
     _clear_env()
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         os.environ[CRYPTO_EXCHANGE_AVAILABLE_ENV_VAR] = "false"
         os.environ["AIOS_MARKET"] = "idx"
@@ -456,7 +460,7 @@ def scenario_idx_isolation():
 def scenario_us_isolation():
     print("\n[Scenario F] US isolation -- crypto unavailable does not leak into US")
     _clear_env()
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         os.environ[CRYPTO_EXCHANGE_AVAILABLE_ENV_VAR] = "false"
         os.environ["AIOS_MARKET"] = "us"
@@ -488,7 +492,7 @@ def scenario_us_isolation():
 def scenario_crypto_e2e_available():
     print("\n[Scenario E2E] Crypto BUY -> SELL -> reconciliation while available")
     _clear_env()
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, manager = _build_engine(tmp)
         try:
             buy_trade = _submit_crypto(engine, idempotency_key="crypto-avail-e2e-buy", action="BUY", quantity=1.0)

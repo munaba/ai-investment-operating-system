@@ -101,16 +101,6 @@ def declared_precision(raw_text: str) -> Optional[int]:
     return len(trailing)
 
 
-def _abs_tolerance_for(raw_text: str) -> Optional[Decimal]:
-    """Half-ULP band implied by the precision the claim's text declares."""
-    places = declared_precision(raw_text)
-    if places is None:
-        return None
-    return Decimal(str(DECLARED_PRECISION_ABSOLUTE_TOLERANCE)) * (
-        Decimal(10) ** -places
-    )
-
-
 #: Magnitude words a claim may attach to a number. The extracted value is
 #: scaled, so the same quantization rule then decides grounded vs
 #: hallucination. Indonesian and English spellings share a factor.

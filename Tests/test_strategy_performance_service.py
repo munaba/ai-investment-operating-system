@@ -65,6 +65,10 @@ from Repository.persistence.account_repository import AccountRepository  # noqa:
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -165,7 +169,7 @@ def _row_counts(db_path):
 
 def scenario_unknown_account_raises_validation_error():
     print("\n[Scenario 1] get_performance_by_strategy() on an unknown account_id raises ValidationError")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(Path(tmp) / "s1.db")
         raised = False
         try:
@@ -177,7 +181,7 @@ def scenario_unknown_account_raises_validation_error():
 
 def scenario_zero_data_returns_empty_dict():
     print("\n[Scenario 2] zero/empty data: an account with no trades at all returns an empty dict")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(Path(tmp) / "s2.db")
         _make_account(ctx["account_repository"])
         result = ctx["service"].get_performance_by_strategy("paper")
@@ -186,7 +190,7 @@ def scenario_zero_data_returns_empty_dict():
 
 def scenario_single_strategy_episode():
     print("\n[Scenario 3] single-strategy episode: manual BUY -> manual SELL aggregates under 'manual'")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(Path(tmp) / "s3.db")
         _make_account(ctx["account_repository"])
         _fill(ctx, "paper", "BBCA", "BUY", 100.0, 9000.0, "2026-08-01T09:00:00+00:00")
@@ -204,7 +208,7 @@ def scenario_single_strategy_episode():
 
 def scenario_single_strategy_episode_recommendation_following():
     print("\n[Scenario 4] single-strategy episode: every trade carries analysis_snapshot_id -> 'recommendation_following'")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(Path(tmp) / "s4.db")
         _make_account(ctx["account_repository"])
         _fill(ctx, "paper", "ASII", "BUY", 50.0, 6000.0, "2026-08-01T09:00:00+00:00", analysis_snapshot_id=7)
@@ -220,7 +224,7 @@ def scenario_single_strategy_episode_recommendation_following():
 
 def scenario_mixed_strategy_episode():
     print("\n[Scenario 5] mixed-strategy episode: manual opening BUY + recommendation_following add-on BUY -> 'mixed'")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(Path(tmp) / "s5.db")
         _make_account(ctx["account_repository"])
         _fill(ctx, "paper", "TLKM", "BUY", 60.0, 3000.0, "2026-08-01T09:00:00+00:00")  # manual (no snapshot)
@@ -234,7 +238,7 @@ def scenario_mixed_strategy_episode():
 
 def scenario_multiple_episodes_multiple_symbols():
     print("\n[Scenario 6] multiple episodes across multiple symbols land in the correct strategy groups")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(Path(tmp) / "s6.db")
         _make_account(ctx["account_repository"])
 
@@ -263,7 +267,7 @@ def scenario_multiple_episodes_multiple_symbols():
 
 def scenario_open_position_excluded():
     print("\n[Scenario 7] an account with trades but zero CLOSED episodes returns an empty dict")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(Path(tmp) / "s7.db")
         _make_account(ctx["account_repository"])
         _fill(ctx, "paper", "BBRI", "BUY", 100.0, 4000.0, "2026-08-01T09:00:00+00:00")
@@ -274,7 +278,7 @@ def scenario_open_position_excluded():
 
 def scenario_deterministic_and_read_only():
     print("\n[Scenario 8] deterministic replay + no DB writes across repeated calls")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(Path(tmp) / "s8.db")
         _make_account(ctx["account_repository"])
         _fill(ctx, "paper", "BBCA", "BUY", 100.0, 9000.0, "2026-08-01T09:00:00+00:00")

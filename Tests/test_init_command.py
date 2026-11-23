@@ -113,6 +113,26 @@ def _table_names(db_path: Path) -> List[str]:
         con.close()
 
 
+def _expected_full_schema() -> set:
+    """Tables a complete init must produce, derived from the canonical
+    registry (applied directly, not via run_init) so this list cannot go
+    stale when a new migration domain is registered."""
+    from Database.database_config import DatabaseConfig
+    from Database.migrations import MigrationRunner
+    from Database.migration_registry import all_migrations
+    from Database.sqlite_database import SQLiteDatabase
+
+    with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+        ref_path = Path(tmp) / "reference.db"
+        db = SQLiteDatabase(DatabaseConfig(db_path=ref_path))
+        db.connect()
+        try:
+            MigrationRunner(db).apply([m for m, _domain in all_migrations()])
+        finally:
+            db.disconnect()
+        return set(_table_names(ref_path))
+
+
 def scenario_a_fresh_database() -> None:
     print("\n[Scenario A] Fresh database")
     from Database.database_config import DatabaseConfig
@@ -201,8 +221,8 @@ def scenario_c_partial_migration() -> None:
         check(rc == 0, f"init exits 0 when resuming a partial migration state, got {rc}")
         tables_after = set(_table_names(db_path))
         check(
-            tables_after == {"schema_migrations", "watchlist", "accounts", "positions", "orders", "trades", "ranking_snapshots", "order_idempotency_keys", "portfolio_snapshots", "order_approvals"},
-            "remaining pending migrations (orders/trades/snapshots/idempotency/portfolio_snapshots/order_approvals) applied, existing ones untouched",
+            tables_after == _expected_full_schema(),
+            "remaining pending migrations applied (full registry schema), existing ones untouched",
         )
 
 
@@ -280,7 +300,7 @@ def scenario_e_recovery() -> None:
 
         tables = set(_table_names(db_path))
         check(
-            tables == {"schema_migrations", "watchlist", "accounts", "positions", "orders", "trades", "ranking_snapshots", "order_idempotency_keys", "portfolio_snapshots", "order_approvals"},
+            tables == _expected_full_schema(),
             "final schema is complete and consistent after recovery",
         )
         expected_versions = {m.version for m, _domain in real}

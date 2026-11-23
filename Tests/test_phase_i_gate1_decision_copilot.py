@@ -324,7 +324,18 @@ def run_cases():
     check("DecisionCopilotSkill" not in comp_module_level, "DecisionCopilotSkill not imported at module level (allowed only inside functions)")
     check("DecisionCopilotSkill" not in reg, "DecisionCopilotSkill absent from skill_registry.py")
 
+
+def _close_dbs_after(fn):
+    """Run the script body, then close every SQLiteDatabase it opened
+    (instead of leaving them to the leak-detection finalizer at exit)."""
+    try:
+        return fn()
+    finally:
+        from Database.sqlite_database import close_all_instances
+        close_all_instances()
+
+
 if __name__ == "__main__":
-    run_cases()
+    _close_dbs_after(run_cases)
     print(f"\nTotal: {_PASS + _FAIL}, Passed: {_PASS}, Failed: {_FAIL}")
     sys.exit(0 if _FAIL == 0 else 1)

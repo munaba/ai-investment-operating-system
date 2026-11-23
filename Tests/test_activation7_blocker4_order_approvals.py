@@ -85,6 +85,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -228,7 +232,7 @@ def _submit_kwargs(**overrides) -> dict:
 
 def scenario_approval_recorded_and_linked():
     print("\n[Scenario 1] approval is recorded, with correct Order/Trade/Account linkage")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg, engine, repos = _build(tmp, "s1.db")
 
         trade = engine.submit_order(**_submit_kwargs())
@@ -249,7 +253,7 @@ def scenario_approval_recorded_and_linked():
 
 def scenario_timestamp_is_real():
     print("\n[Scenario 2] recorded_at is a real, parseable UTC timestamp -- never blank, never fabricated")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         from datetime import datetime, timezone
 
         cfg, engine, repos = _build(tmp, "s2.db")
@@ -272,7 +276,7 @@ def scenario_timestamp_is_real():
 
 def scenario_readable_after_restart():
     print("\n[Scenario 3] approval row survives a full application restart")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg, engine, repos = _build(tmp, "s3.db")
         trade = engine.submit_order(**_submit_kwargs())
 
@@ -306,7 +310,7 @@ def scenario_readable_after_restart():
 
 def scenario_no_approval_row_for_rejected_order():
     print("\n[Scenario 4] no order_approvals row is ever written for a pre-trade-rejected order")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg, engine, repos = _build(tmp, "s4.db")
 
         # 4a. gate 3 itself: user_approval missing/False.
@@ -353,7 +357,7 @@ def scenario_no_approval_row_for_rejected_order():
 
 def scenario_trading_behavior_unchanged():
     print("\n[Scenario 5] trading behaviour is identical whether or not order_approval_repository is wired in")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg_a, engine_with, repos_with = _build(tmp, "s5a.db")
         trade_with = engine_with.submit_order(**_submit_kwargs())
 
@@ -396,7 +400,7 @@ def scenario_trading_behavior_unchanged():
 
 def scenario_audit_write_failure_does_not_roll_back_trade():
     print("\n[Scenario 6] a failing order_approvals write is logged, never propagated, and never rolls back the committed trade")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         failing_repo = _FailingApprovalRepository()
         cfg, engine, repos = _build(tmp, "s6.db", order_approval_repository=failing_repo)
 
@@ -437,7 +441,7 @@ def scenario_audit_write_failure_does_not_roll_back_trade():
 
 def scenario_sell_recorded_same_as_buy():
     print("\n[Scenario 7] a SELL trade's approval is recorded exactly like a BUY's")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         cfg, engine, repos = _build(tmp, "s7.db")
 
         buy_trade = engine.submit_order(**_submit_kwargs(idempotency_key="req-sell-setup"))

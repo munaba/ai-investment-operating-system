@@ -66,10 +66,14 @@ def _check_data_freshness(db_config: DatabaseConfig) -> Section:
         )
 
     uri = f"file:{path.as_posix()}?mode=ro"
-    try:
-        import sqlite3
+    import sqlite3
+    from contextlib import closing
 
-        with sqlite3.connect(uri, uri=True, timeout=5.0) as conn:
+    try:
+        # closing(): sqlite3's own context manager only commits/rolls back
+        # and leaves the connection open, which on Windows keeps the
+        # database file locked after `doctor` returns.
+        with closing(sqlite3.connect(uri, uri=True, timeout=5.0)) as conn:
             row = conn.execute(
                 "SELECT MAX(scan_time) FROM ranking_snapshots"
             ).fetchone()

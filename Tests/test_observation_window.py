@@ -40,6 +40,10 @@ from Database.models import ObservationWindow  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.observation_window_repository import ObservationWindowRepository  # noqa: E402
 from Services.observation_window_service import ObservationWindowService  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -69,7 +73,7 @@ def _build_service(db_path: Path) -> ObservationWindowService:
 
 def scenario_create_open_returns_active_window():
     print("\n[Scenario 1] open() creates an ACTIVE ObservationWindow")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service = _build_service(Path(tmp) / "obs.db")
         window = service.open(
             start_at="2026-07-01T00:00:00",
@@ -88,7 +92,7 @@ def scenario_create_open_returns_active_window():
 
 def scenario_retrieve_after_restart():
     print("\n[Scenario 2] a persisted window survives a fresh repository instance (restart survival)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "obs.db"
         service = _build_service(db_path)
         opened = service.open(
@@ -117,7 +121,7 @@ def scenario_retrieve_after_restart():
 
 def scenario_close_preserves_original_fields():
     print("\n[Scenario 3] close() transitions to CLOSED and preserves original timestamps")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service = _build_service(Path(tmp) / "obs.db")
         opened = service.open(
             start_at="2026-05-01T00:00:00",
@@ -148,7 +152,7 @@ def scenario_close_preserves_original_fields():
 
 def scenario_invalid_date_range_rejected():
     print("\n[Scenario 4] open() rejects an invalid date range")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service = _build_service(Path(tmp) / "obs.db")
 
         raised_equal = False
@@ -177,7 +181,7 @@ def scenario_invalid_date_range_rejected():
 
 def scenario_timezone_preserved():
     print("\n[Scenario 5] the operator-supplied timezone is preserved verbatim")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "obs.db"
         service = _build_service(db_path)
         opened = service.open(
@@ -208,7 +212,7 @@ def scenario_timezone_preserved():
 
 def scenario_duplicate_active_window_rejected():
     print("\n[Scenario 6] a second open() while one window is ACTIVE is rejected deterministically")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         service = _build_service(Path(tmp) / "obs.db")
         first = service.open(start_at="2026-03-01T00:00:00", end_at="2026-03-31T00:00:00", timezone_name="Asia/Jakarta")
 
@@ -260,7 +264,7 @@ def scenario_no_trading_state_modified():
     for sql_term in ["INSERT INTO orders", "INSERT INTO trades", "INSERT INTO positions", "INSERT INTO risk_limits"]:
         check(sql_term not in repo_source, f"observation_window_repository.py does not execute {sql_term!r}")
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "obs.db"
         service = _build_service(db_path)
         service.open(start_at="2026-02-01T00:00:00", end_at="2026-02-28T00:00:00", timezone_name="Asia/Jakarta")

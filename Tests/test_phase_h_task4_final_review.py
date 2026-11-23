@@ -126,6 +126,10 @@ from Services.sustained_use_final_review_service import (  # noqa: E402
     SustainedUseFinalReviewService,
 )
 from Services.sustained_use_review_service import SustainedUseReviewService  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -280,7 +284,7 @@ def _fresh_fixture(tmp_dir: str) -> Fixture:
 
 def scenario_feedback_persists():
     print("\n[Scenario 1] operator feedback persists")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window()
         service = fx.build_service()
@@ -315,7 +319,7 @@ def scenario_feedback_persists():
 
 def scenario_restart_safe_feedback():
     print("\n[Scenario 2] restart-safe feedback")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "aios.db"
         fx1 = Fixture(db_path)
         window_id = fx1.open_window()
@@ -342,7 +346,7 @@ def scenario_restart_safe_feedback():
 
 def scenario_final_review_record_persists():
     print("\n[Scenario 3] final-review record persists (create-then-update-in-place)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window()
         service = fx.build_service()
@@ -374,7 +378,7 @@ def scenario_final_review_record_persists():
 
 def scenario_evidence_link_persists():
     print("\n[Scenario 4] evidence link (operator_feedback_ids) persists and is never fabricated")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window()
         service = fx.build_service()
@@ -404,7 +408,7 @@ def scenario_evidence_link_persists():
 
 def scenario_initial_decision_is_pending():
     print("\n[Scenario 5] initial human_decision is PENDING")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window()
         service = fx.build_service()
@@ -445,21 +449,21 @@ def _decide_with_sufficient_evidence(fx: Fixture, decision: str, description: st
 
 def scenario_explicit_continue():
     print("\n[Scenario 6] explicit CONTINUE")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         _decide_with_sufficient_evidence(fx, FINAL_REVIEW_DECISION_CONTINUE, "CONTINUE")
 
 
 def scenario_explicit_simplify():
     print("\n[Scenario 7] explicit SIMPLIFY")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         _decide_with_sufficient_evidence(fx, FINAL_REVIEW_DECISION_SIMPLIFY, "SIMPLIFY")
 
 
 def scenario_explicit_authorize_future_investigation():
     print("\n[Scenario 8] explicit AUTHORIZE_FUTURE_INVESTIGATION")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         _decide_with_sufficient_evidence(
             fx, FINAL_REVIEW_DECISION_AUTHORIZE_FUTURE_INVESTIGATION, "AUTHORIZE_FUTURE_INVESTIGATION"
@@ -473,7 +477,7 @@ def scenario_explicit_authorize_future_investigation():
 
 def scenario_insufficient_evidence_gate():
     print("\n[Scenario 9] insufficient-evidence gate rejects non-PENDING when scheduled_job_count == 0")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window()
         service = fx.build_service()
@@ -518,7 +522,7 @@ def scenario_insufficient_evidence_gate():
 
 def scenario_decision_cannot_be_inferred():
     print("\n[Scenario 10] decision cannot be inferred -- unknown/omitted values are rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window()
         fx.seed_scheduler_job_run(window_id)
@@ -601,7 +605,7 @@ def scenario_no_llm_provider_influence():
         "no provider/LLM/agent parameter exists to inject one through",
     )
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window()
         fx.seed_scheduler_job_run(window_id)
@@ -643,7 +647,7 @@ def scenario_no_trading_mutation():
     check(not bad_params,
           f"SustainedUseFinalReviewService's constructor takes no order/trade/position/execution/risk parameter (actual params: {sorted(ctor_params)})")
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window()
         fx.seed_scheduler_job_run(window_id)
@@ -671,7 +675,7 @@ def scenario_no_risk_limit_mutation():
     hits = [m for m in imported if "risk_limit" in m.lower() or "risk_ledger" in m.lower()]
     check(not hits, f"service imports no risk-limit/risk-ledger module (actual imports: {sorted(imported)})")
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window()
         fx.seed_scheduler_job_run(window_id)
@@ -691,7 +695,7 @@ def scenario_no_permission_mutation():
     hits = [m for m in imported if "allowlist" in m.lower() or "telegram_inbound_state" in m.lower()]
     check(not hits, f"service imports no permission/allowlist module (actual imports: {sorted(imported)})")
 
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window()
         fx.seed_scheduler_job_run(window_id)
@@ -713,7 +717,7 @@ def scenario_no_permission_mutation():
 
 def scenario_duplicate_conflicting_decisions():
     print("\n[Scenario 15] duplicate/conflicting decisions handled deterministically")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         fx = _fresh_fixture(tmp)
         window_id = fx.open_window()
         fx.seed_scheduler_job_run(window_id)

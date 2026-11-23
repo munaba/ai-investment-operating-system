@@ -76,6 +76,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -177,7 +181,7 @@ def _default_kwargs(**overrides) -> dict:
 
 def scenario_buy_acceptance():
     print("\n[Scenario 1] BUY acceptance gate: Order FILLED, fields correct, cash/position correct, CONSISTENT")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         starting_cash = 100_000_000.0
         engine, reconciler, repos = _build(tmp, cash=starting_cash)
 
@@ -210,7 +214,7 @@ def scenario_buy_acceptance():
 
 def scenario_sell_partial_acceptance():
     print("\n[Scenario 2] SELL partial acceptance gate: quantity/cash/realized P/L correct, CONSISTENT")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         starting_cash = 100_000_000.0
         engine, reconciler, repos = _build(tmp, cash=starting_cash)
 
@@ -249,7 +253,7 @@ def scenario_sell_partial_acceptance():
 
 def scenario_sell_full_acceptance():
     print("\n[Scenario 3] SELL full acceptance gate: Position CLOSED, realized P/L persisted, performance computable, CONSISTENT")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         starting_cash = 100_000_000.0
         engine, reconciler, repos = _build(tmp, cash=starting_cash)
 
@@ -292,7 +296,7 @@ def scenario_sell_full_acceptance():
 
 def scenario_failure_insufficient_cash():
     print("\n[Scenario 4] Failure acceptance gate: insufficient cash -- no Trade, Order not FILLED, cash/position VALUE unchanged")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         starting_cash = 100_000.0
         engine, reconciler, repos = _build(tmp, cash=starting_cash)
 
@@ -320,7 +324,7 @@ def scenario_failure_insufficient_cash():
 
 def scenario_failure_oversell():
     print("\n[Scenario 5] Failure acceptance gate: oversell -- no Trade, Order not FILLED, cash/position VALUE unchanged")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         starting_cash = 100_000_000.0
         engine, reconciler, repos = _build(tmp, cash=starting_cash)
 
@@ -356,7 +360,7 @@ def scenario_failure_oversell():
 
 def scenario_restart_reconciliation():
     print("\n[Scenario 6] Restart acceptance gate: Account.cash and Position survive reconnect, and reconcile CONSISTENT through the fresh connection")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         starting_cash = 100_000_000.0
         engine, _, repos = _build(tmp, cash=starting_cash)
 
@@ -396,7 +400,7 @@ def scenario_restart_reconciliation():
 
 def scenario_cash_not_verifiable_without_anchor():
     print("\n[Scenario 7] Trade<->Cash invariant is reported not_verifiable when starting_cash is omitted -- never silently skipped or forced to pass")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, reconciler, repos = _build(tmp)
         engine.submit_order(**_default_kwargs())
 
@@ -418,7 +422,7 @@ def scenario_cash_not_verifiable_without_anchor():
 
 def scenario_reconciliation_engine_is_read_only():
     print("\n[Scenario 8] ReconciliationEngine performs zero writes -- row counts unchanged after reconcile_account()")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, reconciler, repos = _build(tmp)
         engine.submit_order(**_default_kwargs())
 
@@ -440,7 +444,7 @@ def scenario_reconciliation_engine_is_read_only():
 
 def scenario_unknown_account_is_inconsistent():
     print("\n[Scenario 9] Unknown account is reported INCONSISTENT, not an exception")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, reconciler, _ = _build(tmp)
         result = reconciler.reconcile_account("ghost-account")
         check(result.status == "INCONSISTENT", "unknown account_id: INCONSISTENT")

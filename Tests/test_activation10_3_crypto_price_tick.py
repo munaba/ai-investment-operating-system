@@ -78,6 +78,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -283,7 +287,7 @@ def scenario_policy_pure_checks():
 
 def scenario_engine_rejects_invalid_tick():
     print("\n[Scenario B] engine rejects a crypto price not aligned to the configured tick")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine,
@@ -298,7 +302,7 @@ def scenario_engine_rejects_invalid_tick():
 
 def scenario_engine_rejects_invalid_tick_env_override():
     print("\n[Scenario B2] engine rejects an off-tick price under an env-var override tick")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         os.environ["CRYPTO_BTC_USD_PRICE_TICK"] = "0.5"
         try:
@@ -322,7 +326,7 @@ def scenario_engine_rejects_invalid_tick_env_override():
 
 def scenario_engine_accepts_valid_tick_buy():
     print("\n[Scenario A/D] engine accepts BUY with a valid tick price -> Order/Trade/Position/Cash")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         account_before = repos["account"].get_by_id(CRYPTO_ACCOUNT_ID)
 
@@ -350,7 +354,7 @@ def scenario_engine_accepts_valid_tick_buy():
 
 def scenario_engine_accepts_valid_tick_sell():
     print("\n[Scenario E] engine accepts SELL with a valid tick price")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, manager = _build_engine(tmp)
 
         os.environ["AIOS_MARKET"] = "crypto"
@@ -400,7 +404,7 @@ def scenario_engine_accepts_valid_tick_sell():
 
 def scenario_rejected_price_creates_no_order():
     print("\n[Scenario F] rejected off-tick price leaves order/trade/cash/position counts unchanged")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         before = _row_counts(repos)
         account_before = repos["account"].get_by_id(CRYPTO_ACCOUNT_ID)
@@ -430,7 +434,7 @@ def scenario_rejected_price_creates_no_order():
 
 def scenario_tick_and_minimum_notional_interaction():
     print("\n[Scenario G] price tick and minimum-notional validation do not conflict")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
 
         # G1: a valid-tick price whose notional is below the
@@ -486,7 +490,7 @@ def scenario_quantity_policy_regression():
 
 def scenario_idx_price_behavior_unaffected():
     print("\n[Scenario I] IDX price behavior is unaffected by crypto price-tick policy")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
 
         os.environ["AIOS_MARKET"] = "idx"
@@ -515,7 +519,7 @@ def scenario_idx_price_behavior_unaffected():
 
 def scenario_us_price_behavior_unaffected():
     print("\n[Scenario J] US (Activation 9) price/order behavior is unaffected by crypto price-tick policy")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
 
         os.environ["AIOS_MARKET"] = "us"

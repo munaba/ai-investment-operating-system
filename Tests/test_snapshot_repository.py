@@ -32,6 +32,10 @@ from Database.migrations_snapshots import SNAPSHOTS_MIGRATIONS  # noqa: E402
 from Database.models import RankingSnapshot  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.snapshot_repository import SnapshotRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -60,7 +64,7 @@ def _build_repository(tmp_dir: str) -> SnapshotRepository:
 
 def scenario_create_returns_ranking_snapshot():
     print("\n[Scenario 1] create() happy path returns a RankingSnapshot")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         snapshot = repo.create(
             scan_time="2026-08-01T09:00:00+00:00",
@@ -82,7 +86,7 @@ def scenario_create_returns_ranking_snapshot():
 
 def scenario_snapshot_id_is_repository_generated():
     print("\n[Scenario 2] snapshot_id is repository-generated, never caller-supplied")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         first = repo.create(
             scan_time="2026-08-01T09:00:00+00:00",
@@ -110,7 +114,7 @@ def scenario_snapshot_id_is_repository_generated():
 
 def scenario_list_by_scan_time():
     print("\n[Scenario 3] list_by_scan_time() returns only that scan's rows, ordered by rank")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         scan_a = "2026-08-01T09:00:00+00:00"
         scan_b = "2026-08-01T10:00:00+00:00"
@@ -129,7 +133,7 @@ def scenario_list_by_scan_time():
 
 def scenario_list_latest():
     print("\n[Scenario 4] list_latest() returns only the most recent scan_time's rows")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         scan_a = "2026-08-01T09:00:00+00:00"
         scan_b = "2026-08-01T10:00:00+00:00"
@@ -145,7 +149,7 @@ def scenario_list_latest():
 
 def scenario_list_latest_empty_table():
     print("\n[Scenario 5] list_latest() on an empty table returns an empty list, not an error")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         results = repo.list_latest()
         check(results == [], "list_latest() on an empty table returns an empty list")
@@ -153,7 +157,7 @@ def scenario_list_latest_empty_table():
 
 def scenario_list_all():
     print("\n[Scenario 6] list_all() returns every row, ordered by snapshot_id ascending")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         first = repo.create(
             scan_time="2026-08-01T09:00:00+00:00", symbol="BBCA",
@@ -173,7 +177,7 @@ def scenario_list_all():
 
 def scenario_get_by_id():
     print("\n[Scenario 6b] get_by_id() -- Activation 5.6 addition")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(tmp)
         created = repo.create(
             scan_time="2026-08-01T09:00:00+00:00", symbol="BBCA",

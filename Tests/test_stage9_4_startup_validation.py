@@ -59,6 +59,12 @@ from typing import List, Optional
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+# These scenarios exercise the Gemini provider's required variables. Pin
+# the provider before Core.config loads any operator .env (load_dotenv
+# never overrides an already-set variable), so ACTIVE_PROVIDER=ollama in
+# a developer's .env cannot silently switch the checked variable set.
+os.environ["ACTIVE_PROVIDER"] = "gemini"
+
 from Core.exceptions import ConfigurationError
 from Core.startup_validation import REQUIRED_RUNTIME_ENV_VARS, validate_runtime_environment
 import Core.composition_root as composition_root_module
@@ -276,6 +282,13 @@ class _FakeApp:
         self.provider_name = "fake-provider"
         self.agent = _FakeAgent()
         self.manual_scan_service = _FakeManualScanService()
+
+    # main() now uses ``with build_application() as app:``.
+    def __enter__(self) -> "_FakeApp":
+        return self
+
+    def __exit__(self, *exc_info) -> None:
+        return None
 
 
 def _instrumented_main_run(scripted_inputs: List[str]) -> List[str]:

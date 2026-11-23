@@ -53,6 +53,10 @@ from Database.migrations_orders import ORDERS_MIGRATIONS  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.account_repository import AccountRepository  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -113,7 +117,7 @@ def _order_kwargs(**overrides) -> dict:
 
 def scenario_empty_database_is_zero_never_divide_by_zero():
     print("\n[Scenario 1] No recorded orders -> execution_rate is 0.0, no ZeroDivisionError")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, _ = _build(tmp)
         result = engine.calculate()
 
@@ -126,7 +130,7 @@ def scenario_empty_database_is_zero_never_divide_by_zero():
 
 def scenario_execution_rate_excludes_in_flight_orders():
     print("\n[Scenario 2] execution_rate == FILLED / resolved orders; NEW/VALIDATED/PENDING excluded")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, order_repo = _build(tmp)
 
         order_repo.create(**_order_kwargs(status="FILLED", filled_price=9_500.0, filled_quantity=100.0, reason="filled"))
@@ -149,7 +153,7 @@ def scenario_execution_rate_excludes_in_flight_orders():
 
 def scenario_partially_filled_counted_but_not_folded_into_filled():
     print("\n[Scenario 3] PARTIALLY_FILLED counts toward resolved_total, reported separately, never folded into filled_orders")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, order_repo = _build(tmp)
 
         order_repo.create(**_order_kwargs(status="FILLED", filled_price=9_500.0, filled_quantity=100.0, reason="filled"))
@@ -172,7 +176,7 @@ def scenario_partially_filled_counted_but_not_folded_into_filled():
 
 def scenario_calculate_is_read_only():
     print("\n[Scenario 4] calculate() performs zero writes to any table")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, order_repo = _build(tmp)
         order_repo.create(**_order_kwargs(status="FILLED", filled_price=9_500.0, filled_quantity=100.0, reason="filled"))
         order_repo.create(**_order_kwargs(status="REJECTED", reason="insufficient cash"))

@@ -69,7 +69,6 @@ def main() -> None:
     # Build new baseline
     now_utc = datetime.now(timezone.utc)
     # Convert to WIB (UTC+7)
-    from datetime import timedelta
     now_wib = now_utc + timedelta(hours=7)
     timestamp = now_wib.strftime("%Y-%m-%dT%H:%M+07:00")
     

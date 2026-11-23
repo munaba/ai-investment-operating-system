@@ -38,6 +38,10 @@ from Database.models import DecisionBrief  # noqa: E402
 from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.decision_brief_repository import DecisionBriefRepository  # noqa: E402
 from Repository.persistence.snapshot_repository import SnapshotRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -90,7 +94,7 @@ def _build_repository_with_snapshot(db_path: Path) -> tuple[DecisionBriefReposit
 
 def scenario_create_success_returns_decision_brief():
     print("\n[Scenario 1] create() SUCCESS happy path returns a DecisionBrief")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo, snapshot_id = _build_repository_with_snapshot(Path(tmp) / "briefs.db")
         brief = repo.create(
             symbol="BBCA",
@@ -116,7 +120,7 @@ def scenario_create_success_returns_decision_brief():
 
 def scenario_create_non_success_has_no_plan():
     print("\n[Scenario 2] create() non-SUCCESS status round-trips with no plan fields")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo, snapshot_id = _build_repository_with_snapshot(Path(tmp) / "briefs.db")
         brief = repo.create(
             symbol="TLKM",
@@ -136,7 +140,7 @@ def scenario_create_non_success_has_no_plan():
 
 def scenario_brief_id_is_repository_generated():
     print("\n[Scenario 3] brief_id is repository-generated, never caller-supplied")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(Path(tmp) / "briefs.db")
         first = repo.create(symbol="BBCA", generated_at="2026-08-22T09:00:00+00:00", status="NO_TRADE", reason="x")
         second = repo.create(symbol="TLKM", generated_at="2026-08-22T09:05:00+00:00", status="NO_TRADE", reason="x")
@@ -150,7 +154,7 @@ def scenario_brief_id_is_repository_generated():
 
 def scenario_get_latest_for_symbol():
     print("\n[Scenario 4] get_latest_for_symbol() returns the most recently generated brief")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(Path(tmp) / "briefs.db")
         repo.create(symbol="BBCA", generated_at="2026-08-22T09:00:00+00:00", status="NO_TRADE", reason="x")
         newest = repo.create(symbol="BBCA", generated_at="2026-08-22T10:00:00+00:00", status="NO_TRADE", reason="y")
@@ -164,7 +168,7 @@ def scenario_get_latest_for_symbol():
 
 def scenario_list_by_symbol_and_list_all():
     print("\n[Scenario 5] list_by_symbol() / list_all() ordering")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(Path(tmp) / "briefs.db")
         b1 = repo.create(symbol="BBCA", generated_at="2026-08-22T09:00:00+00:00", status="NO_TRADE", reason="x")
         b2 = repo.create(symbol="TLKM", generated_at="2026-08-22T09:05:00+00:00", status="NO_TRADE", reason="x")
@@ -184,7 +188,7 @@ def scenario_list_by_symbol_and_list_all():
 
 def scenario_get_by_id():
     print("\n[Scenario 6] get_by_id() returns the exact row or None")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         repo = _build_repository(Path(tmp) / "briefs.db")
         created = repo.create(symbol="BBCA", generated_at="2026-08-22T09:00:00+00:00", status="NO_TRADE", reason="x")
         fetched = repo.get_by_id(created.brief_id)
@@ -195,7 +199,7 @@ def scenario_get_by_id():
 
 def scenario_brief_survives_restart():
     print("\n[Scenario 7] a persisted brief survives a fresh repository instance (restart survival)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "briefs.db"
         repo, snapshot_id = _build_repository_with_snapshot(db_path)
         created = repo.create(

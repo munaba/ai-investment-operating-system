@@ -49,6 +49,10 @@ from Database.sqlite_database import SQLiteDatabase  # noqa: E402
 from Repository.persistence.decision_brief_repository import DecisionBriefRepository  # noqa: E402
 from Repository.persistence.journal_repository import JournalRepository  # noqa: E402
 from Repository.persistence.risk_limits_repository import RiskLimitsRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -93,7 +97,7 @@ def _make_brief_id(brief_repo: DecisionBriefRepository, symbol: str = "BBCA") ->
 
 def scenario_risk_limits_singleton_insert_then_update():
     print("\n[Scenario 1] RiskLimitsRepository is a mutable singleton row")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_managers(Path(tmp) / "ledger.db")
         repo = RiskLimitsRepository(manager)
 
@@ -129,7 +133,7 @@ def scenario_risk_limits_singleton_insert_then_update():
 
 def scenario_risk_limits_allowed_symbols_round_trip():
     print("\n[Scenario 2] RiskLimitsRepository persists exactly what the caller supplies")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_managers(Path(tmp) / "ledger.db")
         repo = RiskLimitsRepository(manager)
 
@@ -162,7 +166,7 @@ def scenario_risk_limits_allowed_symbols_round_trip():
 
 def scenario_risk_limits_survives_restart():
     print("\n[Scenario 3] a saved RiskLimits row survives a fresh repository instance (restart survival)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "ledger.db"
         manager = _build_managers(db_path)
         repo = RiskLimitsRepository(manager)
@@ -190,7 +194,7 @@ def scenario_risk_limits_survives_restart():
 
 def scenario_journal_create_is_append_only():
     print("\n[Scenario 4] JournalRepository.create() is append-only")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_managers(Path(tmp) / "ledger.db")
         brief_repo = DecisionBriefRepository(manager)
         journal_repo = JournalRepository(manager)
@@ -225,7 +229,7 @@ def scenario_journal_create_is_append_only():
 
 def scenario_journal_record_outcome_only_touches_outcome_columns():
     print("\n[Scenario 5] record_outcome() only updates the five outcome columns")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_managers(Path(tmp) / "ledger.db")
         brief_repo = DecisionBriefRepository(manager)
         journal_repo = JournalRepository(manager)
@@ -267,7 +271,7 @@ def scenario_journal_record_outcome_only_touches_outcome_columns():
 
 def scenario_journal_brief_id_is_fk_enforced():
     print("\n[Scenario 6] journal_entries.brief_id is FK-enforced against decision_briefs")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_managers(Path(tmp) / "ledger.db")
         journal_repo = JournalRepository(manager)
 
@@ -288,7 +292,7 @@ def scenario_journal_brief_id_is_fk_enforced():
 
 def scenario_journal_listing_and_ordering():
     print("\n[Scenario 7] list_by_symbol/list_by_brief_id/list_all ordering")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager = _build_managers(Path(tmp) / "ledger.db")
         brief_repo = DecisionBriefRepository(manager)
         journal_repo = JournalRepository(manager)
@@ -330,7 +334,7 @@ def scenario_journal_listing_and_ordering():
 
 def scenario_journal_entry_survives_restart():
     print("\n[Scenario 8] a journal entry survives a fresh repository instance (restart survival)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "ledger.db"
         manager = _build_managers(db_path)
         brief_repo = DecisionBriefRepository(manager)

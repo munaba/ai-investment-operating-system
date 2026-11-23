@@ -71,6 +71,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -223,7 +227,7 @@ def _expect_pretrade_rejection(engine, repos, reason: str, description: str, **o
 # ---------------------------------------------------------------------------
 def scenario_a_buy_missing_stop():
     print("\n[Scenario A] Forex BUY without stop_loss rejects, zero writes")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_FOREX_STOP_LOSS_REQUIRED,
@@ -237,7 +241,7 @@ def scenario_a_buy_missing_stop():
 # ---------------------------------------------------------------------------
 def scenario_b_sell_missing_stop():
     print("\n[Scenario B] Forex SELL without stop_loss rejects, zero writes")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_FOREX_STOP_LOSS_REQUIRED,
@@ -251,7 +255,7 @@ def scenario_b_sell_missing_stop():
 # ---------------------------------------------------------------------------
 def scenario_c_buy_valid_stop():
     print("\n[Scenario C] Forex BUY with valid LONG stop succeeds, persists direction+stop")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         trade = engine.submit_order(**_forex_kwargs(action="BUY", stop_loss=1.0950))
         check(isinstance(trade, Trade), "submit_order() returns a Trade")
@@ -267,7 +271,7 @@ def scenario_c_buy_valid_stop():
 # ---------------------------------------------------------------------------
 def scenario_d_sell_valid_stop():
     print("\n[Scenario D] Forex SELL with valid SHORT stop succeeds, persists direction+stop")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         trade = engine.submit_order(**_forex_kwargs(action="SELL", stop_loss=1.1050))
         check(isinstance(trade, Trade), "submit_order() returns a Trade")
@@ -283,7 +287,7 @@ def scenario_d_sell_valid_stop():
 # ---------------------------------------------------------------------------
 def scenario_e_buy_invalid_direction():
     print("\n[Scenario E] Forex BUY with stop above entry rejects, zero writes")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_INVALID_FOREX_STOP_LOSS,
@@ -297,7 +301,7 @@ def scenario_e_buy_invalid_direction():
 # ---------------------------------------------------------------------------
 def scenario_f_sell_invalid_direction():
     print("\n[Scenario F] Forex SELL with stop below entry rejects, zero writes")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_INVALID_FOREX_STOP_LOSS,
@@ -311,7 +315,7 @@ def scenario_f_sell_invalid_direction():
 # ---------------------------------------------------------------------------
 def scenario_g_existing_long_next_order():
     print("\n[Scenario G] a second BUY on an existing LONG validates stop_loss against LONG")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         engine.submit_order(**_forex_kwargs(
             action="BUY", requested_price=1.1000, stop_loss=1.0950, idempotency_key="g-req-1"
@@ -344,7 +348,7 @@ def scenario_g_existing_long_next_order():
 # ---------------------------------------------------------------------------
 def scenario_h_existing_short_next_order():
     print("\n[Scenario H] a second SELL on an existing SHORT validates stop_loss against SHORT")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         engine.submit_order(**_forex_kwargs(
             action="SELL", requested_price=1.1000, stop_loss=1.1050, idempotency_key="h-req-1"
@@ -372,7 +376,7 @@ def scenario_h_existing_short_next_order():
 # ---------------------------------------------------------------------------
 def scenario_i_persistence():
     print("\n[Scenario I] stop_loss round-trips exactly through PositionRepository")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         engine.submit_order(**_forex_kwargs(action="SELL", requested_price=1.1000, stop_loss=1.1075))
 
@@ -387,7 +391,7 @@ def scenario_i_persistence():
 # ---------------------------------------------------------------------------
 def scenario_j_no_direction_mutation():
     print("\n[Scenario J] a valid stop_loss order never mutates Position.direction")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         engine.submit_order(**_forex_kwargs(action="BUY", requested_price=1.1000, stop_loss=1.0950))
         before = repos["position"].get_open_position("forex-id", "EURUSD")
@@ -405,7 +409,7 @@ def scenario_j_no_direction_mutation():
 # ---------------------------------------------------------------------------
 def scenario_k_idx_regression():
     print("\n[Scenario K] existing IDX order without stop_loss is unaffected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         trade = engine.submit_order(
             account_id="paper-id",
@@ -433,7 +437,7 @@ def scenario_l_us_regression():
     previous_market_env = os.environ.get("AIOS_MARKET")
     os.environ["AIOS_MARKET"] = "us"
     try:
-        with tempfile.TemporaryDirectory() as tmp:
+        with scenario_tempdir() as tmp:
             engine, repos = _build_engine(tmp)
             trade = engine.submit_order(
                 account_id="us-usd",
@@ -465,7 +469,7 @@ def scenario_m_crypto_regression():
     previous_market_env = os.environ.get("AIOS_MARKET")
     os.environ["AIOS_MARKET"] = "crypto"
     try:
-        with tempfile.TemporaryDirectory() as tmp:
+        with scenario_tempdir() as tmp:
             engine, repos = _build_engine(tmp)
             trade = engine.submit_order(
                 account_id="crypto-usd",

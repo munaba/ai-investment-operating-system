@@ -79,6 +79,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -205,7 +209,7 @@ def _expect_pretrade_rejection(engine, repos, reason: str, description: str, **o
 
 def scenario_happy_path_buy_returns_trade():
     print("\n[Scenario 1] valid BUY order end-to-end: submit_order() returns a Trade")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
 
         result = engine.submit_order(**_default_kwargs())
@@ -235,7 +239,7 @@ def scenario_happy_path_buy_returns_trade():
 
 def scenario_happy_path_sell_with_position_returns_trade():
     print("\n[Scenario 2] valid SELL order with sufficient open position returns a Trade")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         repos["position"].create(
             account_id="paper-id",
@@ -257,7 +261,7 @@ def scenario_happy_path_sell_with_position_returns_trade():
 
 def scenario_rejected_order_raises_and_never_executes():
     print("\n[Scenario 3] pre-trade passes but OrderLifecycleService structurally rejects: no Trade")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
 
         raised = False
@@ -282,7 +286,7 @@ def scenario_rejected_order_raises_and_never_executes():
 
 def scenario_pretrade_gate_1_account_not_found():
     print("\n[Scenario 4] Gate 1 -- account aktif: unknown account rejected, zero writes")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_ACCOUNT_NOT_FOUND,
@@ -292,7 +296,7 @@ def scenario_pretrade_gate_1_account_not_found():
 
 def scenario_pretrade_gate_2_evidence_missing():
     print("\n[Scenario 5] Gate 2 -- signal/evidence tersedia: falsy evidence rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_EVIDENCE_MISSING,
@@ -306,7 +310,7 @@ def scenario_pretrade_gate_2_evidence_missing():
 
 def scenario_pretrade_gate_3_approval_missing():
     print("\n[Scenario 6] Gate 3 -- user approval tersedia: non-True approval rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_APPROVAL_MISSING,
@@ -320,7 +324,7 @@ def scenario_pretrade_gate_3_approval_missing():
 
 def scenario_pretrade_gate_4_invalid_symbol():
     print("\n[Scenario 7] Gate 4 -- symbol valid: blank symbol rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_INVALID_SYMBOL,
@@ -330,7 +334,7 @@ def scenario_pretrade_gate_4_invalid_symbol():
 
 def scenario_pretrade_gate_5_invalid_quantity():
     print("\n[Scenario 8] Gate 5 -- quantity valid: non-positive quantity rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_INVALID_QUANTITY,
@@ -344,7 +348,7 @@ def scenario_pretrade_gate_5_invalid_quantity():
 
 def scenario_pretrade_gate_6_invalid_lot_size():
     print("\n[Scenario 9] Gate 6 -- IDX lot size valid: non-multiple-of-100 rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_INVALID_LOT_SIZE,
@@ -354,7 +358,7 @@ def scenario_pretrade_gate_6_invalid_lot_size():
 
 def scenario_pretrade_gate_7_invalid_price():
     print("\n[Scenario 10] Gate 7 -- price positif: non-positive price rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_INVALID_PRICE,
@@ -368,7 +372,7 @@ def scenario_pretrade_gate_7_invalid_price():
 
 def scenario_pretrade_gate_8_insufficient_cash():
     print("\n[Scenario 11] Gate 8 -- available cash: BUY beyond cash rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, cash=100_000.0)
 
         # Activation 3.9 STEP 2: strengthen the existing row-count-only
@@ -389,7 +393,7 @@ def scenario_pretrade_gate_8_insufficient_cash():
 
 def scenario_pretrade_gate_9_insufficient_position():
     print("\n[Scenario 12] Gate 9 -- available position untuk SELL: SELL without position rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_INSUFFICIENT_POSITION,
@@ -401,7 +405,7 @@ def scenario_pretrade_gate_9_insufficient_position():
         )
 
     print("  [12b] SELL more than the open position quantity also rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         repos["position"].create(
             account_id="paper-id", symbol="BBCA", quantity=100.0,
@@ -431,7 +435,7 @@ def scenario_pretrade_gate_9_insufficient_position():
 
 def scenario_pretrade_gate_10_duplicate_idempotency():
     print("\n[Scenario 13] Gate 10 -- duplicate request/idempotency: reused key rejected on 2nd call")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
 
         first = engine.submit_order(**_default_kwargs(idempotency_key="dup-key"))
@@ -451,7 +455,7 @@ def scenario_pretrade_gate_10_duplicate_idempotency():
         check(len(trades) == 1, "exactly one Trade exists across both attempts -- duplicate never produced a second Trade")
 
     print("  [13b] blank idempotency_key also rejected as duplicate-reason")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_DUPLICATE_REQUEST,
@@ -461,7 +465,7 @@ def scenario_pretrade_gate_10_duplicate_idempotency():
 
 def scenario_pretrade_gate_11_risk_limit():
     print("\n[Scenario 14] Gate 11 -- risk limit: order value above ceiling rejected")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, max_order_value=500_000.0)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_RISK_LIMIT_EXCEEDED,
@@ -471,7 +475,7 @@ def scenario_pretrade_gate_11_risk_limit():
 
 def scenario_pretrade_gate_12_kill_switch():
     print("\n[Scenario 15] Gate 12 -- kill switch: engaged switch blocks everything")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, kill_switch=True)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_KILL_SWITCH_ENGAGED,
@@ -481,7 +485,7 @@ def scenario_pretrade_gate_12_kill_switch():
 
 def scenario_pretrade_gate_13_market_kill_switch():
     print("\n[Scenario 15b] Gate 13 -- market kill switch: halted active market blocks everything")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, halted_markets=frozenset({"idx"}))
         old_market = os.environ.get("AIOS_MARKET")
         os.environ["AIOS_MARKET"] = "idx"
@@ -499,7 +503,7 @@ def scenario_pretrade_gate_13_market_kill_switch():
 
 def scenario_pretrade_gate_13_market_kill_switch_other_market_unaffected():
     print("\n[Scenario 15c] Gate 13 -- market kill switch only blocks the halted market, not others")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, halted_markets=frozenset({"us"}))
         old_market = os.environ.get("AIOS_MARKET")
         os.environ["AIOS_MARKET"] = "idx"
@@ -515,7 +519,7 @@ def scenario_pretrade_gate_13_market_kill_switch_other_market_unaffected():
 
 def scenario_pretrade_gate_14_symbol_kill_switch():
     print("\n[Scenario 15d] Gate 14 -- symbol kill switch: halted symbol blocks that symbol")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, halted_symbols=frozenset({"BBCA"}))
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_SYMBOL_KILL_SWITCH_ENGAGED,
@@ -525,7 +529,7 @@ def scenario_pretrade_gate_14_symbol_kill_switch():
 
 def scenario_pretrade_gate_14_symbol_kill_switch_case_insensitive():
     print("\n[Scenario 15e] Gate 14 -- symbol kill switch compares case-insensitively")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, halted_symbols=frozenset({"bbca"}))
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_SYMBOL_KILL_SWITCH_ENGAGED,
@@ -535,7 +539,7 @@ def scenario_pretrade_gate_14_symbol_kill_switch_case_insensitive():
 
 def scenario_pretrade_gate_14_symbol_kill_switch_other_symbol_unaffected():
     print("\n[Scenario 15f] Gate 14 -- symbol kill switch only blocks the halted symbol, not others")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, halted_symbols=frozenset({"TLKM"}))
         result = engine.submit_order(**_default_kwargs(idempotency_key="symbol-unaffected"))
         check(isinstance(result, Trade), "'BBCA' not in halted symbol set ('TLKM'): order proceeds normally")
@@ -543,7 +547,7 @@ def scenario_pretrade_gate_14_symbol_kill_switch_other_symbol_unaffected():
 
 def scenario_pretrade_gate_15_daily_loss_limit():
     print("\n[Scenario 15g] Gate 15 -- daily loss kill switch: accumulated realized loss blocks new BUYs")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, max_daily_loss=1_000_000.0)
         # Seed a closed position carrying a realized loss that already
         # meets the configured ceiling -- mirrors how a real losing
@@ -567,7 +571,7 @@ def scenario_pretrade_gate_15_daily_loss_limit():
 
 def scenario_pretrade_gate_15_daily_loss_limit_does_not_block_sell():
     print("\n[Scenario 15h] Gate 15 -- daily loss kill switch never blocks SELL")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, max_daily_loss=1_000_000.0)
         repos["position"].create(
             account_id="paper-id",
@@ -596,7 +600,7 @@ def scenario_pretrade_gate_15_daily_loss_limit_does_not_block_sell():
 
 def scenario_pretrade_gate_15_daily_loss_limit_not_yet_breached():
     print("\n[Scenario 15i] Gate 15 -- daily loss kill switch does not fire below the ceiling")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, max_daily_loss=1_000_000.0)
         repos["position"].create(
             account_id="paper-id",
@@ -612,7 +616,7 @@ def scenario_pretrade_gate_15_daily_loss_limit_not_yet_breached():
 
 def scenario_pretrade_gate_16_max_position_value():
     print("\n[Scenario 15j] Gate 16 -- position kill switch: resulting position value ceiling blocks a BUY")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, max_position_value=500_000.0)
         # default kwargs: BBCA, quantity=100, requested_price=9500 ->
         # resulting value 950,000 > 500,000 ceiling, no existing position.
@@ -624,7 +628,7 @@ def scenario_pretrade_gate_16_max_position_value():
 
 def scenario_pretrade_gate_16_max_position_value_includes_existing_position():
     print("\n[Scenario 15k] Gate 16 -- position kill switch adds this order onto an existing open position")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, max_position_value=2_000_000.0)
         repos["position"].create(
             account_id="paper-id",
@@ -641,7 +645,7 @@ def scenario_pretrade_gate_16_max_position_value_includes_existing_position():
 
 def scenario_pretrade_gate_16_max_position_value_does_not_block_sell():
     print("\n[Scenario 15l] Gate 16 -- position kill switch never blocks SELL")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, max_position_value=500_000.0)
         repos["position"].create(
             account_id="paper-id",
@@ -659,7 +663,7 @@ def scenario_pretrade_gate_16_max_position_value_does_not_block_sell():
 
 def scenario_gate_13_16_disabled_by_default():
     print("\n[Scenario 15m] Gates 13-16 are no-ops when not configured (defaults preserve pre-8.4 behavior)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)  # no halted_markets/halted_symbols/max_daily_loss/max_position_value
         result = engine.submit_order(**_default_kwargs(idempotency_key="defaults-unaffected"))
         check(isinstance(result, Trade), "engine built with no Activation 8.4 config: order proceeds exactly as before")
@@ -667,7 +671,7 @@ def scenario_gate_13_16_disabled_by_default():
 
 def scenario_gate_order_first_match_wins():
     print("\n[Scenario 16] gate order: account check (gate 1) fires before evidence check (gate 2)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         raised_reason = None
         try:
@@ -682,7 +686,7 @@ def scenario_gate_order_first_match_wins():
 
 def scenario_engine_holds_only_its_collaborators():
     print("\n[Scenario 17] engine depends on exactly its 5 Repository/Service collaborators + 2 config values + 1 policy")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, _ = _build_engine(tmp)
         attrs = sorted(vars(engine).keys())
         # Activation 3.3 STEP 2 (explicit contract change): the engine
@@ -756,7 +760,7 @@ def scenario_engine_holds_only_its_collaborators():
 
 def scenario_restart_persistence():
     print("\n[Scenario 18] restart persistence: reopening the same DB file preserves state")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp)
         result = engine.submit_order(**_default_kwargs(idempotency_key="restart-key"))
 

@@ -516,9 +516,19 @@ def main() -> int:
             os.environ["AIOS_MARKET"] = previous_market_env
 
 
+def _close_dbs_after(fn):
+    """Run the script body, then close every SQLiteDatabase it opened
+    (instead of leaving them to the leak-detection finalizer at exit)."""
+    try:
+        return fn()
+    finally:
+        from Database.sqlite_database import close_all_instances
+        close_all_instances()
+
+
 if __name__ == "__main__":
     try:
-        sys.exit(main())
+        sys.exit(_close_dbs_after(main))
     except Exception:
         traceback.print_exc()
         sys.exit(1)

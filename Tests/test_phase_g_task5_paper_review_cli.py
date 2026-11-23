@@ -83,6 +83,10 @@ from Services.journal_service import (  # noqa: E402
     JournalService,
 )
 from Services.paper_review_service import PaperReviewService  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -249,7 +253,7 @@ def _run_cli(db_path: Path, *args: str) -> subprocess.CompletedProcess:
 
 def scenario_full_chain_traced_by_cli():
     print("\n[Scenario 1] SUCCESS brief -> approval -> order/trade -> outcome is traced end to end by the real CLI")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s1.db")
         app = ctx["app"]
         before_counts = _order_trade_counts(app)
@@ -305,7 +309,7 @@ def scenario_full_chain_traced_by_cli():
 
 def scenario_skip_wait_never_execute():
     print("\n[Scenario 2] SKIP/WAIT decisions remain non-executed -- never linked, in-process or via CLI")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s2.db")
         app = ctx["app"]
         before_counts = _order_trade_counts(app)
@@ -343,7 +347,7 @@ def scenario_skip_wait_never_execute():
 
 def scenario_strategy_and_adherence_match_source():
     print("\n[Scenario 3] CLI's strategy breakdown and adherence counts match the real persisted source records")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s3.db")
         app = ctx["app"]
 
@@ -419,7 +423,7 @@ def scenario_strategy_and_adherence_match_source():
 
 def scenario_stale_valuation_labelled_stale_in_cli():
     print("\n[Scenario 4] a stale PortfolioSnapshot.valuation_status stays labelled STALE, in the real CLI output")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s4.db")
         app = ctx["app"]
         app.portfolio_snapshot_repository.create(
@@ -452,7 +456,7 @@ def scenario_stale_valuation_labelled_stale_in_cli():
 
 def scenario_restart_safe():
     print("\n[Scenario 5] a brand-new build_application() call over the same on-disk db reproduces an identical review")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         ctx = _build(tmp, "s5.db")
         app = ctx["app"]
         brief_id = _make_success_brief(ctx["brief"], symbol="BBCA")

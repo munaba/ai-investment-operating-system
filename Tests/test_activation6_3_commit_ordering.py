@@ -78,6 +78,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -201,7 +205,7 @@ def _committed_state(repos: Dict[str, Any], account_id: str = "paper-id") -> Dic
 # Scenario 1 -- successful order -> DB commit -> ORDER_EXECUTED sent
 # ---------------------------------------------------------------------------
 def scenario_success_commits_then_notifies() -> None:
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = _make_db_path(tmp)
         manager = _open_manager(db_path)
         _apply_migrations(manager)
@@ -247,7 +251,7 @@ def scenario_success_commits_then_notifies() -> None:
 # Scenario 2 -- final idempotency write fails -> no ORDER_EXECUTED sent
 # ---------------------------------------------------------------------------
 def scenario_final_write_failure_blocks_notification() -> None:
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = _make_db_path(tmp)
         manager = _open_manager(db_path)
         _apply_migrations(manager)
@@ -303,7 +307,7 @@ def scenario_final_write_failure_blocks_notification() -> None:
 # Scenario 3 -- notification fails AFTER commit -> trading state unaffected
 # ---------------------------------------------------------------------------
 def scenario_notification_failure_does_not_roll_back_trade() -> None:
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = _make_db_path(tmp)
         manager = _open_manager(db_path)
         _apply_migrations(manager)
@@ -341,7 +345,7 @@ def scenario_notification_failure_does_not_roll_back_trade() -> None:
 # Scenario 4 -- restart (fresh connection) still shows correct state
 # ---------------------------------------------------------------------------
 def scenario_restart_preserves_correct_state() -> None:
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = _make_db_path(tmp)
         manager = _open_manager(db_path)
         _apply_migrations(manager)
@@ -392,7 +396,7 @@ def scenario_restart_preserves_correct_state() -> None:
 # Scenario 5 -- no duplicate ORDER_EXECUTED
 # ---------------------------------------------------------------------------
 def scenario_no_duplicate_order_executed() -> None:
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = _make_db_path(tmp)
         manager = _open_manager(db_path)
         _apply_migrations(manager)

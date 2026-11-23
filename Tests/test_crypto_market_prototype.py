@@ -19,10 +19,15 @@ def main():
         os.environ["AIOS_MARKET"] = "crypto"
         check("crypto symbol passthrough", resolve_provider_symbol("BTC-USD") == "BTC-USD")
         check("crypto symbol passthrough ETH", resolve_provider_symbol("ETH-USD") == "ETH-USD")
-        check("crypto allocation fractional", _compute_allocation_quantity(100_000_000, 0.01, 100_000.0, 1, market="crypto") == 10.0)
+        # Crypto uses lot_size=1 whole units (main.py paper command); the
+        # prototype's market= keyword and fractional quantities were dropped.
+        check("crypto allocation whole units", _compute_allocation_quantity(100_000_000, 0.01, 100_000.0, 1) == 10)
+        check("crypto allocation floors to a whole unit", _compute_allocation_quantity(100_000_000, 0.01, 30_000.0, 1) == 33)
         check("crypto cli market accepted", _configure_cli_market(["--market", "crypto"]) == 0)
         check("crypto env configured", os.environ.get("AIOS_MARKET") == "crypto")
-        check("crypto lot env safe", os.environ.get("EXECUTION_LOT_SIZE") == "1")
+        # _configure_cli_market clears any IDX lot override for crypto
+        # (gate 6 skips the lot check for crypto entirely).
+        check("crypto lot env safe", os.environ.get("EXECUTION_LOT_SIZE") in (None, "1"))
         os.environ["AIOS_MARKET"] = "idx"
         check("idx suffix preserved", resolve_provider_symbol("BBCA") == "BBCA.JK")
     finally:

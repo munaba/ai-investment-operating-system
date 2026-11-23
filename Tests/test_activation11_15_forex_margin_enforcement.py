@@ -68,6 +68,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -191,7 +195,7 @@ def _expect_pretrade_rejection(engine, repos, reason: str, description: str, **o
 # ---------------------------------------------------------------------------
 def scenario_a_buy_insufficient_margin():
     print("\n[Scenario A] Forex BUY insufficient margin rejects, zero writes, cash unchanged")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         # cash 10,000 < required_margin 10,000 * 1.1000 = 11,000
         engine, repos = _build_engine(tmp, forex_cash=10_000.0)
         _expect_pretrade_rejection(
@@ -206,7 +210,7 @@ def scenario_a_buy_insufficient_margin():
 # ---------------------------------------------------------------------------
 def scenario_b_buy_exact_margin():
     print("\n[Scenario B] Forex BUY with cash == required margin succeeds")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         # cash 11,000 == required_margin 10,000 * 1.1000 = 11,000
         engine, repos = _build_engine(tmp, forex_cash=11_000.0)
         trade = engine.submit_order(**_forex_kwargs(
@@ -232,7 +236,7 @@ def scenario_b_buy_exact_margin():
 # ---------------------------------------------------------------------------
 def scenario_c_buy_spare_margin():
     print("\n[Scenario C] Forex BUY with cash > required margin succeeds")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, forex_cash=50_000.0)
         trade = engine.submit_order(**_forex_kwargs(
             action="BUY", quantity=10_000.0, requested_price=1.1000, stop_loss=1.0950,
@@ -251,7 +255,7 @@ def scenario_c_buy_spare_margin():
 # ---------------------------------------------------------------------------
 def scenario_d_sell_short_insufficient_margin():
     print("\n[Scenario D] Forex SELL opening SHORT with insufficient margin rejects, zero writes")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, forex_cash=10_000.0)
         _expect_pretrade_rejection(
             engine, repos, PRETRADE_REASON_FOREX_INSUFFICIENT_MARGIN,
@@ -265,7 +269,7 @@ def scenario_d_sell_short_insufficient_margin():
 # ---------------------------------------------------------------------------
 def scenario_e_sell_short_exact_margin():
     print("\n[Scenario E] Forex SELL opening SHORT with cash == required margin succeeds")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, forex_cash=11_000.0)
         trade = engine.submit_order(**_forex_kwargs(
             action="SELL", quantity=10_000.0, requested_price=1.1000, stop_loss=1.1050,
@@ -290,7 +294,7 @@ def scenario_e_sell_short_exact_margin():
 # ---------------------------------------------------------------------------
 def scenario_f_sell_adds_to_short_incremental_only():
     print("\n[Scenario F] Forex SELL adding to an existing SHORT margin-checks only the increment")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         # Opening SELL: 5,000 @ 1.1000 -> required_margin 5,500, cash exactly covers it.
         engine, repos = _build_engine(tmp, forex_cash=5_500.0)
         engine.submit_order(**_forex_kwargs(
@@ -328,7 +332,7 @@ def scenario_f_sell_adds_to_short_incremental_only():
 # ---------------------------------------------------------------------------
 def scenario_g_sell_reduces_long_no_margin_required():
     print("\n[Scenario G] Forex SELL fully reducing an existing LONG is never margin-checked")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         # cash intentionally far below the gross sell notional
         # (10,000 * 1.1000 = 11,000) a fresh BUY-equivalent margin
         # check would require -- the LONG position itself is seeded
@@ -372,7 +376,7 @@ def scenario_g_sell_reduces_long_no_margin_required():
 # ---------------------------------------------------------------------------
 def scenario_h_buy_reduces_short_no_margin_required():
     print("\n[Scenario H] Forex BUY partially reducing an existing SHORT is never margin-checked")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         # Existing SHORT is larger (8,000) than the reducing BUY
         # (4,000). Cash (5,000) is deliberately: (a) sufficient for
         # the actual BUY debit this reducing trade needs
@@ -417,7 +421,7 @@ def scenario_h_buy_reduces_short_no_margin_required():
 # ---------------------------------------------------------------------------
 def scenario_i_idx_regression():
     print("\n[Scenario I] existing IDX order is unaffected by the Forex margin gate")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos = _build_engine(tmp, forex_cash=0.0)
         cfg = DatabaseConfig(db_path=Path(tmp) / "forex_margin_enforcement.db")
         # Reuse the same engine's account_repository to add a second,

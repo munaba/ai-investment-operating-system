@@ -240,35 +240,21 @@ def _apply_all_migrations(db_path: Path) -> None:
     """Apply every domain's migrations to ``db_path`` via the existing,
     unmodified per-domain runner functions -- never via Core.doctor,
     which must never do this itself."""
+    import importlib
+
     from Database.database_config import DatabaseConfig
+    from Database.migration_registry import MIGRATION_MODULES
     from Database.migrations import MigrationRunner
-    from Database.migrations_accounts import ACCOUNTS_MIGRATIONS
-    from Database.migrations_idempotency import IDEMPOTENCY_MIGRATIONS
-    from Database.migrations_order_approvals import ORDER_APPROVALS_MIGRATIONS
-    from Database.migrations_orders import ORDERS_MIGRATIONS
-    from Database.migrations_portfolio_snapshots import PORTFOLIO_SNAPSHOTS_MIGRATIONS
-    from Database.migrations_positions import POSITIONS_MIGRATIONS
-    from Database.migrations_snapshots import SNAPSHOTS_MIGRATIONS
-    from Database.migrations_trades import TRADES_MIGRATIONS
-    from Database.migrations_watchlist import WATCHLIST_MIGRATIONS
     from Database.sqlite_database import SQLiteDatabase
 
     database = SQLiteDatabase(DatabaseConfig(db_path=db_path))
     database.connect()
     try:
         runner = MigrationRunner(database)
-        for migrations in (
-            WATCHLIST_MIGRATIONS,
-            ACCOUNTS_MIGRATIONS,
-            POSITIONS_MIGRATIONS,
-            ORDERS_MIGRATIONS,
-            TRADES_MIGRATIONS,
-            SNAPSHOTS_MIGRATIONS,
-            IDEMPOTENCY_MIGRATIONS,
-            PORTFOLIO_SNAPSHOTS_MIGRATIONS,
-            ORDER_APPROVALS_MIGRATIONS,
-        ):
-            runner.apply(migrations)
+        # Each domain's own tuple, applied domain by domain -- the same
+        # thing the per-domain run_*_migrations.py scripts do.
+        for _domain, module_path, attr in MIGRATION_MODULES:
+            runner.apply(getattr(importlib.import_module(module_path), attr))
     finally:
         database.disconnect()
 
@@ -291,7 +277,7 @@ def scenario_f_database_ready() -> None:
             database_section, migrations_section = doctor._check_database_and_migrations(db_config)
 
         check(database_section.status == doctor.READY, f"Database section is READY once the file exists, got {database_section.status}")
-        check(migrations_section.status == doctor.READY, f"Migrations section is READY once all 9 are applied, got {migrations_section.status}")
+        check(migrations_section.status == doctor.READY, f"Migrations section is READY once every registered domain is applied, got {migrations_section.status}")
         after_bytes = db_path.read_bytes()
         check(before_bytes == after_bytes, "doctor's read-only inspection left the database file byte-for-byte unchanged")
     finally:

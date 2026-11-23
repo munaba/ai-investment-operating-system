@@ -77,6 +77,10 @@ from Repository.persistence.order_idempotency_repository import (  # noqa: E402
 from Repository.persistence.order_repository import OrderRepository  # noqa: E402
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -294,7 +298,7 @@ def scenario_policy_pure_checks():
 
 def scenario_engine_rejects_invalid_precision():
     print("\n[Scenario B] engine rejects a crypto quantity exceeding supported precision")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine,
@@ -308,7 +312,7 @@ def scenario_engine_rejects_invalid_precision():
 
 def scenario_engine_rejects_invalid_step():
     print("\n[Scenario C] engine rejects a crypto quantity not aligned to step size")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         # 0.0025 has 4 decimal digits -> also fails BTC-USD's
         # quantity_precision=3, but every value here is at minimum
@@ -337,7 +341,7 @@ def scenario_engine_rejects_invalid_step():
 
 def scenario_engine_rejects_below_minimum_notional():
     print("\n[Scenario D] engine rejects a crypto order below minimum notional")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         _expect_pretrade_rejection(
             engine,
@@ -357,7 +361,7 @@ def scenario_engine_rejects_below_minimum_notional():
 
 def scenario_engine_accepts_exact_minimum_notional_buy():
     print("\n[Scenario E/G] engine accepts BUY exactly at minimum notional -> Order/Trade/Position/Cash")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
         account_before = repos["account"].get_by_id(CRYPTO_ACCOUNT_ID)
 
@@ -405,7 +409,7 @@ def scenario_engine_accepts_exact_minimum_notional_buy():
 
 def scenario_engine_accepts_larger_valid_buy_then_sell():
     print("\n[Scenario F/H/I/J] larger BUY, then SELL, reconciliation stays consistent")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, manager = _build_engine(tmp)
 
         os.environ["AIOS_MARKET"] = "crypto"
@@ -478,7 +482,7 @@ def scenario_engine_accepts_larger_valid_buy_then_sell():
 
 def scenario_idx_lot_rule_unaffected():
     print("\n[Scenario K] IDX lot-size rule is unaffected by crypto quantity policy")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
 
         os.environ["AIOS_MARKET"] = "idx"
@@ -526,7 +530,7 @@ def scenario_idx_lot_rule_unaffected():
 
 def scenario_us_fractional_policy_unaffected():
     print("\n[Scenario L] US fractional-share policy is unaffected by crypto quantity policy")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         engine, repos, _ = _build_engine(tmp)
 
         os.environ["AIOS_MARKET"] = "us"

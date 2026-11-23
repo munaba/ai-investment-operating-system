@@ -106,6 +106,10 @@ from Repository.persistence.portfolio_snapshot_repository import (  # noqa: E402
 )
 from Repository.persistence.position_repository import PositionRepository  # noqa: E402
 from Repository.persistence.trade_repository import TradeRepository  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -304,7 +308,7 @@ def _detach_capture(logger_name: str, handler: _ListLogHandler) -> None:
 
 def scenario_notification_failure_is_logged_not_silent():
     print("\n[Scenario 1] Blocker 1: ORDER_EXECUTED notification failure is logged, not swallowed silently")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         channel = _RaisingChannel()
         cfg, engine, app, repos = _build(tmp, "s1.db", price=9600.0, channel=channel)
 
@@ -328,7 +332,7 @@ def scenario_notification_failure_is_logged_not_silent():
 
 def scenario_trading_state_fully_committed_despite_notification_failure():
     print("\n[Scenario 2] Blocker 1: trading state (Order/Trade/Account/Position/idempotency) is fully committed even though notification failed")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         channel = _RaisingChannel()
         cfg, engine, app, repos = _build(tmp, "s2.db", price=9600.0, channel=channel)
 
@@ -353,7 +357,7 @@ def scenario_trading_state_fully_committed_despite_notification_failure():
 
 def scenario_working_channel_still_receives_event():
     print("\n[Scenario 3] Blocker 1 regression check: a working notification channel still receives ORDER_EXECUTED normally")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         channel = _RecordingChannel()
         cfg, engine, app, repos = _build(tmp, "s3.db", price=9600.0, channel=channel)
 
@@ -376,7 +380,7 @@ def scenario_working_channel_still_receives_event():
 
 def scenario_snapshot_is_really_persisted_from_production_flow():
     print("\n[Scenario 4] Blocker 2: main._run_post_trade_snapshot_and_reconciliation() really persists a PortfolioSnapshot from real state")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         channel = _RecordingChannel()
         cfg, engine, app, repos = _build(tmp, "s4.db", price=9700.0, channel=channel)
 
@@ -405,7 +409,7 @@ def scenario_snapshot_is_really_persisted_from_production_flow():
 
 def scenario_reconciliation_reports_consistent_on_healthy_account():
     print("\n[Scenario 5] Blocker 3: reconciliation genuinely runs and reports CONSISTENT (no false failure) on a healthy account")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         channel = _RecordingChannel()
         cfg, engine, app, repos = _build(tmp, "s5.db", price=9700.0, channel=channel)
         engine.submit_order(**_submit_kwargs())
@@ -431,7 +435,7 @@ def scenario_reconciliation_reports_consistent_on_healthy_account():
 
 def scenario_inconsistency_is_detected_and_surfaced_as_failure():
     print("\n[Scenario 6] Blocker 3: a genuine Order<->Trade corruption is actually detected, printed, logged, and returns non-zero")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         channel = _RecordingChannel()
         cfg, engine, app, repos = _build(tmp, "s6.db", price=9700.0, channel=channel)
         trade = engine.submit_order(**_submit_kwargs())
@@ -477,7 +481,7 @@ def scenario_inconsistency_is_detected_and_surfaced_as_failure():
 
 def scenario_reconciliation_check_does_not_mutate_trading_state():
     print("\n[Scenario 7] Blocker 3: detecting INCONSISTENT does not itself corrupt/mutate/fix any further trading state (read-only)")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         channel = _RecordingChannel()
         cfg, engine, app, repos = _build(tmp, "s7.db", price=9700.0, channel=channel)
         trade = engine.submit_order(**_submit_kwargs())

@@ -49,6 +49,10 @@ from Repository.persistence.decision_brief_repository import DecisionBriefReposi
 from Repository.persistence.journal_repository import JournalRepository  # noqa: E402
 from Repository.persistence.risk_limits_repository import RiskLimitsRepository  # noqa: E402
 from Services.journal_service import JournalService  # noqa: E402
+try:
+    from _script_db import scenario_tempdir  # run as a script from Tests/
+except ImportError:  # pragma: no cover -- imported as Tests.<module>
+    from Tests._script_db import scenario_tempdir
 
 _PASS = 0
 _FAIL = 0
@@ -117,7 +121,7 @@ def _set_limits(limits_repo: RiskLimitsRepository, **overrides):
 
 def scenario_take_accepted_within_limits():
     print("\n[Scenario 1] TAKE within limits is ACCEPTED and records planned_r")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, brief_repo, limits_repo, _, service = _build(Path(tmp) / "svc.db")
         _set_limits(limits_repo)
         brief = _success_brief(brief_repo)
@@ -131,7 +135,7 @@ def scenario_take_accepted_within_limits():
 
 def scenario_take_rejected_exceeds_limits():
     print("\n[Scenario 2] TAKE exceeding max risk per trade is RISK_REJECTED")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, brief_repo, limits_repo, _, service = _build(Path(tmp) / "svc.db")
         _set_limits(limits_repo, reference_capital=100000.0, max_risk_per_trade_percent=0.5)  # cap = 500.0
         brief = _success_brief(brief_repo, risk_amount=1000.0)
@@ -148,7 +152,7 @@ def scenario_take_rejected_exceeds_limits():
 
 def scenario_skip_and_wait_always_accepted():
     print("\n[Scenario 3] SKIP/WAIT are always ACCEPTED, never carry planned_r")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, brief_repo, limits_repo, _, service = _build(Path(tmp) / "svc.db")
         # No limits configured at all -- would RISK_REJECT any TAKE.
         brief = _success_brief(brief_repo)
@@ -165,7 +169,7 @@ def scenario_skip_and_wait_always_accepted():
 
 def scenario_take_against_non_success_brief_rejected():
     print("\n[Scenario 4] TAKE against a non-SUCCESS brief is RISK_REJECTED, no planned_r")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, brief_repo, limits_repo, _, service = _build(Path(tmp) / "svc.db")
         _set_limits(limits_repo)
         brief = brief_repo.create(
@@ -181,7 +185,7 @@ def scenario_take_against_non_success_brief_rejected():
 
 def scenario_invalid_decision_and_brief_id_raise_value_error():
     print("\n[Scenario 5] invalid decision / missing brief_id raise ValueError")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, brief_repo, limits_repo, _, service = _build(Path(tmp) / "svc.db")
         _set_limits(limits_repo)
         brief = _success_brief(brief_repo)
@@ -203,7 +207,7 @@ def scenario_invalid_decision_and_brief_id_raise_value_error():
 
 def scenario_max_trades_per_day_enforced_via_real_history():
     print("\n[Scenario 6] max trades/day is enforced against real, persisted journal history")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, brief_repo, limits_repo, _, service = _build(Path(tmp) / "svc.db")
         _set_limits(limits_repo, max_trades_per_day=2)
 
@@ -222,7 +226,7 @@ def scenario_max_trades_per_day_enforced_via_real_history():
 
 def scenario_loss_streak_cooldown_enforced_via_real_outcomes():
     print("\n[Scenario 7] loss-streak cooldown is enforced against real recorded outcomes")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, brief_repo, limits_repo, journal_repo, service = _build(Path(tmp) / "svc.db")
         _set_limits(limits_repo, loss_streak_cooldown=2, max_trades_per_day=10)
 
@@ -244,7 +248,7 @@ def scenario_loss_streak_cooldown_enforced_via_real_outcomes():
 
 def scenario_realized_r_only_when_genuinely_calculable():
     print("\n[Scenario 8] realized_r is computed only when genuinely calculable")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, brief_repo, limits_repo, _, service = _build(Path(tmp) / "svc.db")
         _set_limits(limits_repo)
 
@@ -279,7 +283,7 @@ def scenario_realized_r_only_when_genuinely_calculable():
 
 def scenario_outcome_only_allowed_on_accepted_take():
     print("\n[Scenario 9] record_outcome() only allowed on an ACCEPTED TAKE")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         _, brief_repo, limits_repo, _, service = _build(Path(tmp) / "svc.db")
         _set_limits(limits_repo)
         brief = _success_brief(brief_repo)
@@ -323,7 +327,7 @@ def scenario_outcome_only_allowed_on_accepted_take():
 
 def scenario_restart_safety_of_stats_and_history():
     print("\n[Scenario 10] restart persistence: stats/history are derived fresh from real, persisted rows")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         db_path = Path(tmp) / "svc.db"
         manager, brief_repo, limits_repo, journal_repo, service = _build(db_path)
         _set_limits(limits_repo, max_trades_per_day=2)
@@ -361,7 +365,7 @@ def scenario_restart_safety_of_stats_and_history():
 
 def scenario_recording_any_decision_never_creates_paper_order():
     print("\n[Scenario 11] recording a journal decision -- of any kind -- never creates a paper order")
-    with tempfile.TemporaryDirectory() as tmp:
+    with scenario_tempdir() as tmp:
         manager, brief_repo, limits_repo, journal_repo, service = _build(Path(tmp) / "svc.db")
         _set_limits(limits_repo)
         brief = _success_brief(brief_repo)
