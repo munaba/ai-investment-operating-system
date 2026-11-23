@@ -1,0 +1,4 @@
+# Dashboard-only dependencies (Streamlit Community Cloud reads this file).
+# The dashboard reads Dashboard/data/snapshot.json and never imports AIOS code.
+streamlit>=1.57,<2
+pandas>=2.2,<4

@@ -6,6 +6,7 @@ __pycache__/
 # Virtual Environment
 venv/
 .venv/
+.venv*/
 env/
 
 # Environment
@@ -23,42 +24,32 @@ logs/
 *.db-shm
 *.sqlite
 *.sqlite3
+# Live database folder (root only; Dashboard/data/ holds the public export)
+/data/
+
+# Streamlit local secrets
+.streamlit/secrets.toml
 
 # VS Code
 .vscode/
+.VSCodeCounter/
 
-# Pytest
+# Test caches
 .pytest_cache/
+.hypothesis/
 
 # OS
 .DS_Store
 Thumbs.db
 
 # ===== Secrets: never commit real credentials =====
-# Dashboard auth (BCrypt hash + username) lives in gitignored environment files.
-# Use appsettings.Production.json (gitignored) or `dotnet user-secrets`.
 cookies.txt
 *cookies.txt
-appsettings.json
-appsettings.*.json
-!appsettings.json.example
-!appsettings.*.json.example
 secrets.json
 
-# Helper dev yang meng-hash password
-aios_dashboard_csharp/Tests/GenerateHash.cs
-aios_dashboard_csharp/Tests/HashGen.cs
-aios_dashboard_csharp/reset-password/
-
-# ===== .NET build output =====
-[Bb]in/
-[Oo]bj/
-
 # Build artifacts & temp files
-node_modules/
 dist/
 build/
-.VSCodeCounter/
 scratch/
 _reference/
 *.bak
@@ -77,10 +68,7 @@ test_output.txt
 /Master Prompt (Roadmap).md
 /AIOS_Personal_IDX_Decision_Agent_Roadmap.md
 /AIOS_Day_Trade_Decision_Copilot_Roadmap.md
-/AIOS_FRONTEND_ROADMAP.md
 /AGENTS.md
 /_guidelines.md
 /IDEA.md
 Evaluation/run_eval_report.json
-
-data/

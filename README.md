@@ -21,7 +21,6 @@ AIOS is a personal research and learning project. It is not a broker, not an aut
 ### Prerequisites
 
 - Python 3.14 (tested)
-- .NET 8 SDK (for the dashboard)
 - SQLite
 
 ### Install
@@ -41,30 +40,18 @@ cp .env.example .env          # Windows cmd: copy .env.example .env
 ### Database
 
 ```bash
-python run_watchlist_migrations.py
-python run_position_migrations.py
-python run_order_migrations.py
-python run_trade_migrations.py
-python run_snapshot_migrations.py
-python run_portfolio_snapshot_migrations.py
-python run_account_migrations.py
-python run_risk_ledger_migrations.py
-python run_decision_brief_migrations.py
-python run_observation_window_migrations.py
-python run_sustained_use_final_review_migrations.py
-python run_brief_approval_migrations.py
-python run_daily_performance_migrations.py
-python run_idempotency_migrations.py
-python run_llm_output_audit_migrations.py
-python run_scheduler_migrations.py
-python run_telegram_control_migrations.py
-python run_valuation_observation_migrations.py
+python main.py init      # applies every pending migration (all 20 domains, in version order)
+python main.py doctor    # read-only check: environment, database, migrations, data freshness
 ```
+
+`init` reads the canonical list in `Database/migration_registry.py`; a test fails if a
+`Database/migrations_*.py` module is ever left out of it. The per-domain
+`run_*_migrations.py` scripts still exist for applying a single domain by hand.
 
 ### Deployment order
 
 - **Back up the DB first** — use the SQLite backup API or copy `data/investment_platform.db`.
-- Run `python run_snapshot_migrations.py` before any scan.
+- Run `python main.py init` before any scan, then confirm with `python main.py doctor`.
 - Migrate the DB first, then deploy new code.
 - No auto-migration at startup — the operator runs migrations manually.
 - Details: [Docs/DEPLOYMENT.md](Docs/DEPLOYMENT.md).
@@ -77,39 +64,39 @@ Python copilot (interactive REPL):
 python main.py
 ```
 
-C# dashboard (Blazor Server, .NET 8):
+### Dashboard (Streamlit, read-only)
+
+The dashboard never touches the live database. A small exporter reads it in SQLite
+read-only mode and writes `Dashboard/data/snapshot.json`; the Streamlit app only reads
+that file, so it can be hosted publicly (e.g. Streamlit Community Cloud with main file
+`Dashboard/streamlit_app.py`).
 
 ```bash
-cd aios_dashboard_csharp
-cp appsettings.json.example appsettings.json   # then set DashboardAuth:Username and a BCrypt PasswordHash
-dotnet restore
-dotnet run                                     # default: http://localhost:5000
-dotnet run --project reset-password            # generate password hash (hidden input)
+python Dashboard/export_snapshot.py               # refresh the snapshot (AIOS venv)
+
+python -m venv .venv-dashboard                    # separate, lightweight venv
+.venv-dashboard\Scripts\activate
+pip install -r Dashboard/requirements.txt
+streamlit run Dashboard/streamlit_app.py          # http://localhost:8501
 ```
 
-Login is fail-closed: with no password hash configured, nobody can sign in. `appsettings.json` is git-ignored. The example config binds Kestrel to `0.0.0.0:5000` (reachable from your LAN); change the URL to `http://localhost:5000` if you do not want that.
+Pages: overview, scans and signals, decision briefs, paper trading, system health.
+Telegram state, raw audit payloads and free-text operator feedback are never exported.
 
 ## Testing
 
 ```bash
 pip install -r requirements-dev.txt
-PYTHONPATH=. python -m pytest -q          # 204 passed
+PYTHONPATH=. python -m pytest -q          # 276 passed with a local data/ database
 ```
 
 `hypothesis` is also required by `Evaluation/run_eval.py` (property-based L2 checks). PowerShell: `$env:PYTHONPATH="."; python -m pytest -q`.
 
-Two evaluation tests are skipped when the local `data/` database is absent.
+Tests never write to the live database: `Tests/conftest.py` points `DB_PATH` at a temporary file, and the few tests that read `data/investment_platform.db` open it read-only (and are skipped when it is absent).
 
-Standalone gate scripts (not collected by pytest, run each from the repo root with `PYTHONPATH=.`; 350 checks in total):
+`Tests/` also holds about 300 standalone scenario scripts (no `def test_`, so pytest does not collect them); run one from the repo root with `PYTHONPATH=.` and `DB_PATH` pointing at a scratch database. Retired sprint-snapshot scripts live in `Tests/archive/` (see its README).
 
-| Script | Checks |
-|--------|--------|
-| `Tests/test_phase_i_gate1_decision_copilot.py` | 120 |
-| `Tests/test_phase_i_gate3_cli_bridge.py` | 83 |
-| `Tests/test_phase_i_gate3.1_datetime.py` | 65 |
-| `Tests/test_phase_a_decision_copilot.py` | 45 |
-| `Tests/test_activation12_2_permission_enforcer.py` | 26 |
-| `Tests/test_activation12_3_permission_wiring.py` | 11 |
+Dashboard smoke test (dashboard venv): `python -m pytest Dashboard/test_dashboard.py -q`.
 
 ## Important: Market Calendar Coverage
 
@@ -140,14 +127,15 @@ The evaluation harness covers layers L1–L5; see `Evaluation/README.md`. Latest
 | `Database/` | DB manager |
 | `Tests/` | pytest suite and standalone gate scripts |
 | `Evaluation/` | Evaluation harness, golden cases |
-| `aios_dashboard_csharp/` | Blazor Server dashboard |
+| `Dashboard/` | Read-only Streamlit dashboard and snapshot exporter |
 
 Scheduler details: `README_SCHEDULER.md`.
 
 ## Engineering notes
 
-- 269 pytest tests
+- 270+ pytest tests
 - Global test for migration-version uniqueness (caught a version collision)
+- Migration registry completeness test (caught `init` skipping 10 of 20 domains)
 - v34: guarded unique index on ranking_snapshots (scan_time, symbol); clear RepositoryError if the index is missing
 - Retry classifier rebuilt as an allowlist (27 tests; 21 fail on the old logic)
 - Deterministic evaluation harness; insufficient data reports DATA_TIDAK_CUKUP instead of a false pass
