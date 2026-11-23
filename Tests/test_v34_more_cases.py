@@ -110,6 +110,9 @@ def test_live_db_migration_copy_full():
     tmp = tempfile.mkdtemp()
     dst = os.path.join(tmp, "copy.db")
     c1 = sqlite3.connect(f"file:{os.path.abspath(src)}?mode=ro", uri=True)
+    # Row count of the live copy at test time; a fixed number (it was 94)
+    # breaks as soon as the scheduler writes another scan.
+    source_count = c1.execute("SELECT COUNT(*) FROM ranking_snapshots").fetchone()[0]
     c2 = sqlite3.connect(dst)
     c1.backup(c2)
     c1.close()
@@ -121,7 +124,8 @@ def test_live_db_migration_copy_full():
     runner = MigrationRunner(db)
     runner.apply([m for m in SNAPSHOTS_MIGRATIONS if m.version == 34])
     cnt = db.execute("SELECT COUNT(*) AS c FROM ranking_snapshots").rows[0]["c"]
-    assert cnt == 94
+    # v34 only adds a unique index; it must not drop or duplicate rows.
+    assert cnt == source_count
     idx = db.execute("SELECT name FROM sqlite_master WHERE type='index' AND name='ux_ranking_snapshots_scan_time_symbol'").rows
     assert idx
     ver = _schema_version(db)

@@ -5,6 +5,7 @@ Membuktikan run_eval.py dapat dijalankan, exit code benar, dan report JSON valid
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -20,11 +21,15 @@ def test_run_eval_executes_and_produces_report():
     if not (_PROJ / "data" / "investment_platform.db").exists():
         pytest.skip("requires populated local data/ database")
 
+    # conftest points DB_PATH at an empty per-test database; the harness
+    # is meant to evaluate the real local data, which it opens read-only.
+    env = {**os.environ, "AIOS_EVAL_DB_PATH": str(_PROJ / "data" / "investment_platform.db")}
     result = subprocess.run(
         [_PY, str(_PROJ / "Evaluation" / "run_eval.py")],
         cwd=_PROJ,
         capture_output=True,
         text=True,
+        env=env,
     )
     
     # Exit code 0 expected (L1 informational, L5 DATA_TIDAK_CUKUP — no failures)
