@@ -49,6 +49,7 @@ class Snapshot:
     applied_migrations: list[int]
     expected_migrations: list[int]
     tables: dict[str, pd.DataFrame]
+    signal_evaluation: dict
 
     def table(self, name: str) -> pd.DataFrame:
         return self.tables.get(name, pd.DataFrame())
@@ -99,6 +100,7 @@ def load_snapshot(path: str = str(SNAPSHOT_PATH), url: str = SNAPSHOT_URL) -> Sn
         applied_migrations=list(migrations.get("applied", [])),
         expected_migrations=list(migrations.get("expected", [])),
         tables=tables,
+        signal_evaluation=raw.get("signal_evaluation", {"status": "UNAVAILABLE", "error": "not exported yet"}),
     )
 
 

@@ -1,5 +1,5 @@
 {
- "exported_at": "2026-11-23T15:31:29+00:00",
+ "exported_at": "2026-11-23T15:58:15+00:00",
  "migrations": {
   "applied": [
    1,
@@ -27,9 +27,12 @@
    25,
    26,
    27,
+   28,
+   29,
    30,
    31,
    32,
+   33,
    34
   ],
   "expected": [
@@ -1807,6 +1810,763 @@
     "decided_by": "operator",
     "created_at": "2026-08-25T05:05:06.951301+00:00",
     "updated_at": "2026-09-24T17:58:08.703747+00:00"
+   }
+  ]
+ },
+ "signal_evaluation": {
+  "status": "OK",
+  "rules": {
+   "horizon_trading_days": 5,
+   "min_buy_signals": 30,
+   "hit_rate_threshold": 0.5,
+   "registered_on": "2026-11-24"
+  },
+  "official": {
+   "verdict": "DATA_TIDAK_CUKUP",
+   "by_recommendation": {
+    "BUY": {
+     "completed": 0,
+     "pending": 0
+    },
+    "WAIT": {
+     "completed": 0,
+     "pending": 0
+    },
+    "SELL": {
+     "completed": 0,
+     "pending": 0
+    }
+   }
+  },
+  "exploratory": {
+   "verdict": "DATA_TIDAK_CUKUP",
+   "by_recommendation": {
+    "BUY": {
+     "completed": 27,
+     "pending": 6,
+     "mean_return": 0.005793013469653955,
+     "mean_excess": 0.0016784527437369763,
+     "hit_rate": 0.5185185185185185
+    },
+    "WAIT": {
+     "completed": 25,
+     "pending": 5,
+     "mean_return": -0.007335031477962244,
+     "mean_excess": 0.0024673160088429617
+    },
+    "SELL": {
+     "completed": 1,
+     "pending": 0,
+     "mean_return": -0.22368421052631582,
+     "mean_excess": -0.05425110280082754,
+     "hit_rate": 1.0
+    }
+   }
+  },
+  "signals": [
+   {
+    "scan_date": "2026-08-22T00:00:00.000",
+    "symbol": "ANTM",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": -0.0344827586,
+    "benchmark_return": 0.0258552904,
+    "excess_return": -0.0603380491,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-22T00:00:00.000",
+    "symbol": "AUTO",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0935483565,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.067693066,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-22T00:00:00.000",
+    "symbol": "BBCA",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.035247097,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.0093918066,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-22T00:00:00.000",
+    "symbol": "BBRI",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0628930818,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.0370377913,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-22T00:00:00.000",
+    "symbol": "BMRI",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0285714724,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.002716182,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-22T00:00:00.000",
+    "symbol": "BRIS",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": -0.0083102493,
+    "benchmark_return": 0.0258552904,
+    "excess_return": -0.0341655398,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-22T00:00:00.000",
+    "symbol": "BBNI",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0516304348,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.0257751443,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-22T00:00:00.000",
+    "symbol": "BBTN",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0247933884,
+    "benchmark_return": 0.0258552904,
+    "excess_return": -0.001061902,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-22T00:00:00.000",
+    "symbol": "AKRA",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0071942446,
+    "benchmark_return": 0.0258552904,
+    "excess_return": -0.0186610458,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-22T00:00:00.000",
+    "symbol": "ASII",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0271399212,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.0012846308,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-23T00:00:00.000",
+    "symbol": "ASII",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0271399212,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.0012846308,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-23T00:00:00.000",
+    "symbol": "AKRA",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0071942446,
+    "benchmark_return": 0.0258552904,
+    "excess_return": -0.0186610458,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-23T00:00:00.000",
+    "symbol": "BBTN",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0247933884,
+    "benchmark_return": 0.0258552904,
+    "excess_return": -0.001061902,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-23T00:00:00.000",
+    "symbol": "BBNI",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0516304348,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.0257751443,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-23T00:00:00.000",
+    "symbol": "BRIS",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": -0.0083102493,
+    "benchmark_return": 0.0258552904,
+    "excess_return": -0.0341655398,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-23T00:00:00.000",
+    "symbol": "AUTO",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0935483565,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.067693066,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-23T00:00:00.000",
+    "symbol": "BBRI",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0628930818,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.0370377913,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-23T00:00:00.000",
+    "symbol": "BBCA",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.035247097,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.0093918066,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-23T00:00:00.000",
+    "symbol": "ANTM",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": -0.0344827586,
+    "benchmark_return": 0.0258552904,
+    "excess_return": -0.0603380491,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-23T00:00:00.000",
+    "symbol": "BMRI",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-24T00:00:00.000",
+    "exit_date": "2026-09-01T00:00:00.000",
+    "forward_return": 0.0285714724,
+    "benchmark_return": 0.0258552904,
+    "excess_return": 0.002716182,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-24T00:00:00.000",
+    "symbol": "BBTN",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-26T00:00:00.000",
+    "exit_date": "2026-09-02T00:00:00.000",
+    "forward_return": 0.0165975104,
+    "benchmark_return": 0.0315115977,
+    "excess_return": -0.0149140874,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-24T00:00:00.000",
+    "symbol": "BBNI",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-26T00:00:00.000",
+    "exit_date": "2026-09-02T00:00:00.000",
+    "forward_return": 0.0597826087,
+    "benchmark_return": 0.0315115977,
+    "excess_return": 0.028271011,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-24T00:00:00.000",
+    "symbol": "ASII",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-26T00:00:00.000",
+    "exit_date": "2026-09-02T00:00:00.000",
+    "forward_return": 0.0125522576,
+    "benchmark_return": 0.0315115977,
+    "excess_return": -0.0189593401,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-24T00:00:00.000",
+    "symbol": "BRIS",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-26T00:00:00.000",
+    "exit_date": "2026-09-02T00:00:00.000",
+    "forward_return": 0.0112359551,
+    "benchmark_return": 0.0315115977,
+    "excess_return": -0.0202756427,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-24T00:00:00.000",
+    "symbol": "BMRI",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-26T00:00:00.000",
+    "exit_date": "2026-09-02T00:00:00.000",
+    "forward_return": 0.0480769162,
+    "benchmark_return": 0.0315115977,
+    "excess_return": 0.0165653185,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-24T00:00:00.000",
+    "symbol": "BBRI",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-26T00:00:00.000",
+    "exit_date": "2026-09-02T00:00:00.000",
+    "forward_return": 0.0830670927,
+    "benchmark_return": 0.0315115977,
+    "excess_return": 0.0515554949,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-24T00:00:00.000",
+    "symbol": "AUTO",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-26T00:00:00.000",
+    "exit_date": "2026-09-02T00:00:00.000",
+    "forward_return": 0.0830671252,
+    "benchmark_return": 0.0315115977,
+    "excess_return": 0.0515555275,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-24T00:00:00.000",
+    "symbol": "ANTM",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-26T00:00:00.000",
+    "exit_date": "2026-09-02T00:00:00.000",
+    "forward_return": -0.0411392405,
+    "benchmark_return": 0.0315115977,
+    "excess_return": -0.0726508382,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-24T00:00:00.000",
+    "symbol": "AKRA",
+    "recommendation": "BUY",
+    "entry_date": "2026-08-26T00:00:00.000",
+    "exit_date": "2026-09-02T00:00:00.000",
+    "forward_return": 0.021978022,
+    "benchmark_return": 0.0315115977,
+    "excess_return": -0.0095335758,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-08-24T00:00:00.000",
+    "symbol": "BBCA",
+    "recommendation": "WAIT",
+    "entry_date": "2026-08-26T00:00:00.000",
+    "exit_date": "2026-09-02T00:00:00.000",
+    "forward_return": 0.0552554817,
+    "benchmark_return": 0.0315115977,
+    "excess_return": 0.0237438839,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "BBNI",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": -0.0645994832,
+    "benchmark_return": -0.0382094124,
+    "excess_return": -0.0263900708,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "ASII",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": -0.0321284381,
+    "benchmark_return": -0.0382094124,
+    "excess_return": 0.0060809743,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "BRIS",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": -0.0867052023,
+    "benchmark_return": -0.0382094124,
+    "excess_return": -0.0484957899,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "BMRI",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": -0.0394466098,
+    "benchmark_return": -0.0382094124,
+    "excess_return": -0.0012371973,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "BBTN",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": -0.049382716,
+    "benchmark_return": -0.0382094124,
+    "excess_return": -0.0111733036,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "BBCA",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": -0.0423076923,
+    "benchmark_return": -0.0382094124,
+    "excess_return": -0.0040982799,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "ANTM",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": 0.0156739812,
+    "benchmark_return": -0.0382094124,
+    "excess_return": 0.0538833936,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "AKRA",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": -0.0364238411,
+    "benchmark_return": -0.0382094124,
+    "excess_return": 0.0017855714,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "AUTO",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": 0.0150601998,
+    "benchmark_return": -0.0382094124,
+    "excess_return": 0.0532696122,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "BBRI",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": -0.0294117647,
+    "benchmark_return": -0.0382094124,
+    "excess_return": 0.0087976477,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "BRIS",
+    "recommendation": "WAIT",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": -0.0638297872,
+    "benchmark_return": -0.0245226994,
+    "excess_return": -0.0393070878,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "BBNI",
+    "recommendation": "BUY",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": -0.0173410405,
+    "benchmark_return": -0.0245226994,
+    "excess_return": 0.0071816589,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "ASII",
+    "recommendation": "BUY",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": 0.0059730685,
+    "benchmark_return": -0.0245226994,
+    "excess_return": 0.0304957679,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "BMRI",
+    "recommendation": "BUY",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": -0.0268292683,
+    "benchmark_return": -0.0245226994,
+    "excess_return": -0.0023065689,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "BBTN",
+    "recommendation": "WAIT",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": -0.0460829493,
+    "benchmark_return": -0.0245226994,
+    "excess_return": -0.0215602499,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "BBCA",
+    "recommendation": "BUY",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": -0.0245901639,
+    "benchmark_return": -0.0245226994,
+    "excess_return": -6.74645e-05,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "AUTO",
+    "recommendation": "BUY",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": 0.0058997185,
+    "benchmark_return": -0.0245226994,
+    "excess_return": 0.0304224179,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "ANTM",
+    "recommendation": "BUY",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": -0.0461538462,
+    "benchmark_return": -0.0245226994,
+    "excess_return": -0.0216311467,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "AKRA",
+    "recommendation": "BUY",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": -0.0296052632,
+    "benchmark_return": -0.0245226994,
+    "excess_return": -0.0050825638,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "BBRI",
+    "recommendation": "BUY",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": -0.0096463023,
+    "benchmark_return": -0.0245226994,
+    "excess_return": 0.0148763972,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-10T00:00:00.000",
+    "symbol": "BBCA",
+    "recommendation": "BUY",
+    "entry_date": "2026-10-12T00:00:00.000",
+    "exit_date": "2026-10-19T00:00:00.000",
+    "forward_return": -0.1899159664,
+    "benchmark_return": -0.1694331077,
+    "excess_return": -0.0204828587,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-10T00:00:00.000",
+    "symbol": "BMRI",
+    "recommendation": "WAIT",
+    "entry_date": "2026-10-12T00:00:00.000",
+    "exit_date": "2026-10-19T00:00:00.000",
+    "forward_return": -0.1620947631,
+    "benchmark_return": -0.1694331077,
+    "excess_return": 0.0073383446,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-10T00:00:00.000",
+    "symbol": "TLKM",
+    "recommendation": "SELL",
+    "entry_date": "2026-10-12T00:00:00.000",
+    "exit_date": "2026-10-19T00:00:00.000",
+    "forward_return": -0.2236842105,
+    "benchmark_return": -0.1694331077,
+    "excess_return": -0.0542511028,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "BMRI",
+    "recommendation": "WAIT",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "BBRI",
+    "recommendation": "WAIT",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "AKRA",
+    "recommendation": "WAIT",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "BBTN",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "BBCA",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "ASII",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "BRIS",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "ANTM",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "TLKM",
+    "recommendation": "WAIT",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "AUTO",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "BBNI",
+    "recommendation": "WAIT",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
    }
   ]
  }

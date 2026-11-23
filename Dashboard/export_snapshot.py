@@ -43,9 +43,12 @@ EXPORTED_TABLES: dict[str, str] = {
 }
 
 
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+
 def _expected_migration_versions() -> list[int]:
     """Versions declared in the canonical registry (empty if unavailable)."""
-    sys.path.insert(0, str(REPO_ROOT))
     try:
         from Database.migration_registry import all_migrations
     except Exception:  # noqa: BLE001 -- export still works without it
@@ -53,7 +56,17 @@ def _expected_migration_versions() -> list[int]:
     return [m.version for m, _domain in all_migrations()]
 
 
-def export(db_path: Path, out_path: Path) -> dict:
+def _signal_evaluation(db_path: Path) -> dict:
+    """Pre-registered signal evaluation (needs Yahoo prices); never fails the export."""
+    try:
+        from Evaluation.signal_evaluation import evaluate, load_signals
+
+        return {"status": "OK", **evaluate(load_signals(db_path))}
+    except Exception as exc:  # noqa: BLE001 -- offline, Yahoo down, missing deps
+        return {"status": "UNAVAILABLE", "error": f"{type(exc).__name__}: {exc}"}
+
+
+def export(db_path: Path, out_path: Path, with_evaluation: bool = True) -> dict:
     if not db_path.is_file():
         raise SystemExit(f"Database not found: {db_path}")
 
@@ -75,6 +88,8 @@ def export(db_path: Path, out_path: Path) -> dict:
         "migrations": {"applied": applied, "expected": _expected_migration_versions()},
         "tables": tables,
     }
+    if with_evaluation:
+        snapshot["signal_evaluation"] = _signal_evaluation(db_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(snapshot, indent=1, ensure_ascii=False), encoding="utf-8")
     return snapshot
@@ -84,9 +99,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--db", type=Path, default=DEFAULT_DB, help="SQLite database to read (read-only)")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT, help="JSON file to write")
+    parser.add_argument("--no-evaluation", action="store_true", help="skip the signal evaluation (no network)")
     args = parser.parse_args()
 
-    snapshot = export(args.db, args.out)
+    snapshot = export(args.db, args.out, with_evaluation=not args.no_evaluation)
     counts = ", ".join(f"{name}={len(rows)}" for name, rows in snapshot["tables"].items() if rows)
     print(f"Wrote {args.out} ({counts})")
     return 0

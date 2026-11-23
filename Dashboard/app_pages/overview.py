@@ -1,3 +1,4 @@
+import pandas as pd
 import streamlit as st
 
 from aios_data import format_time, latest_scan, require_snapshot
@@ -72,12 +73,21 @@ with right:
         if scans.empty:
             st.info("No scans recorded yet.")
         else:
+            # One label per scan, in time order. Scans seconds apart get the
+            # seconds appended so they don't merge into one bar.
+            times = sorted(scans["scan_time"].unique())
+            short = [t.strftime("%d %b %H:%M") for t in times]
+            labels = [
+                t.strftime("%d %b %H:%M:%S") if short.count(s) > 1 else s
+                for t, s in zip(times, short, strict=True)
+            ]
+            label_of = dict(zip(times, labels, strict=True))
             per_scan = (
                 scans.assign(
-                    scan=scans["scan_time"].dt.strftime("%d %b %H:%M"),
+                    scan=pd.Categorical(scans["scan_time"].map(label_of), categories=labels, ordered=True),
                     recommendation=scans["recommendation"].fillna("NONE"),
                 )
-                .groupby(["scan", "recommendation"], sort=False)
+                .groupby(["scan", "recommendation"], observed=True)
                 .size()
                 .reset_index(name="count")
             )

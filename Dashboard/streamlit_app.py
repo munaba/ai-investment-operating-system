@@ -26,6 +26,12 @@ page = st.navigation(
             help="Every recorded watchlist scan: ranking, recommendation, confidence and the evidence behind it.",
         ),
         st.Page(
+            "app_pages/signals.py",
+            title="Signal track record",
+            icon=":material/fact_check:",
+            help="Pre-registered test of whether BUY signals beat the watchlist over the next five trading days.",
+        ),
+        st.Page(
             "app_pages/briefs.py",
             title="Decision briefs",
             icon=":material/assignment:",
