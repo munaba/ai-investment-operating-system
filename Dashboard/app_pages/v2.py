@@ -40,6 +40,7 @@ with left:
             last = rebalances["signal_date"].max()
             current = rebalances[rebalances["signal_date"] == last].sort_values("rank").head(10)
             st.caption(f"Rebalance from closes up to {last}. Entry at the next close, hold 20 trading days.")
+            st.space("small")  # keeps the table toolbar off the caption on phones
             st.dataframe(
                 current.assign(version=["v2, v3" if r <= 5 else "v3" for r in current["rank"]],
                                score=current["score"] * 100)[["symbol", "score", "version"]],

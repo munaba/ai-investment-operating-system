@@ -1,5 +1,4 @@
 import streamlit as st
-
 from aios_data import format_time, require_snapshot
 from ui import page_footer
 
@@ -16,6 +15,19 @@ if accounts.empty:
     st.stop()
 
 account = accounts.iloc[0]
+if positions.empty and trades.empty and equity_history.empty:
+    # One honest line instead of five identical tiles and three empty tables.
+    with st.container(border=True):
+        st.markdown("**No paper trades yet**")
+        st.markdown(
+            f"The paper account holds its starting balance of **Rp {account['equity']:,.0f}**. "
+            "Trades appear here once a decision brief is approved and executed on paper: positions, "
+            "fills with fees and tax, and equity over time."
+        )
+        st.page_link("app_pages/briefs.py", label="See the decision briefs", icon=":material/arrow_forward:")
+    page_footer()
+    st.stop()
+
 with st.container(horizontal=True):
     st.metric("Cash", f"Rp {account['cash']:,.0f}", border=True)
     st.metric("Equity", f"Rp {account['equity']:,.0f}", border=True)

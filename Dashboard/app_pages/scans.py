@@ -1,7 +1,6 @@
 import json
 
 import streamlit as st
-
 from aios_data import format_time, require_snapshot
 from ui import as_badges, page_footer, rec_badge_column
 
@@ -36,7 +35,12 @@ st.dataframe(
         "recommendation": rec_badge_column(),
         "confidence": "Confidence",
         "priority": st.column_config.NumberColumn("Priority", width="small"),
-        "score": st.column_config.ProgressColumn("Score", min_value=0, max_value=100, format="%d"),
+        # Real scores sit around 10-40, so a 0-100 bar made every stock look weak.
+        "score": st.column_config.ProgressColumn(
+            "Score", min_value=0, format="%d",
+            max_value=max(float(scan["score"].max()) if scan["score"].notna().any() else 1.0, 1.0),
+            help="Bar relative to the highest score in this scan.",
+        ),
         "status": "Status",
         "error_message": "Error",
     },

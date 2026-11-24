@@ -1,9 +1,10 @@
 import json
 
+import pandas as pd
 import streamlit as st
-
 from aios_data import format_time, require_snapshot
 from ui import page_footer
+from v2_data import format_short
 
 snapshot = require_snapshot()
 jobs = snapshot.table("scheduler_job_runs")
@@ -55,7 +56,7 @@ with st.container(border=True):
 
         st.dataframe(
             jobs.sort_values("started_at", ascending=False).assign(
-                started_at=lambda f: f["started_at"].map(format_time),
+                started_at=lambda f: f["started_at"].map(format_short),
                 detail=lambda f: f["detail"].map(_summary),
             )[["trading_date", "job_type", "status", "attempt", "started_at", "detail"]],
             hide_index=True,
@@ -77,23 +78,35 @@ with left:
         if windows.empty:
             st.info("No observation window recorded.")
         else:
+            dates = {c: pd.to_datetime(windows[c], errors="coerce").dt.date for c in ("start_at", "end_at")}
             st.dataframe(
-                windows[["window_id", "start_at", "end_at", "status"]],
+                windows.assign(**dates)[["window_id", "start_at", "end_at", "status"]],
                 hide_index=True,
+                column_config={
+                    "window_id": st.column_config.NumberColumn("ID", width="small"),
+                    "start_at": st.column_config.DateColumn("From", format="D MMM YYYY"),
+                    "end_at": st.column_config.DateColumn("To", format="D MMM YYYY"),
+                    "status": "Status",
+                },
                 alt="Operator observation windows",
             )
-with right:
-    with st.container(border=True):
-        st.subheader("Final review", anchor=False)
-        if reviews.empty:
-            st.info("No final review recorded.")
-        else:
-            st.dataframe(
-                reviews.assign(decided_at=reviews["decided_at"].map(format_time))[
-                    ["review_id", "evidence_status", "human_decision", "decided_at"]
-                ],
-                hide_index=True,
-                alt="Final review decisions",
-            )
+with right, st.container(border=True):
+    st.subheader("Final review", anchor=False)
+    if reviews.empty:
+        st.info("No final review recorded.")
+    else:
+        st.dataframe(
+            reviews.assign(decided_at=reviews["decided_at"].map(format_time))[
+                ["review_id", "evidence_status", "human_decision", "decided_at"]
+            ],
+            hide_index=True,
+            column_config={
+                "review_id": st.column_config.NumberColumn("ID", width="small"),
+                "evidence_status": "Evidence",
+                "human_decision": "Decision",
+                "decided_at": "Decided",
+            },
+            alt="Final review decisions",
+        )
 
 page_footer()
