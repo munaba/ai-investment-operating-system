@@ -140,3 +140,50 @@ based on it (IC-weighted, top 5, 20-day hold; `--today` prints current
 picks) must be pre-registered and judged on live signals like v1.
 Survivorship bias (today's liquid names) and the IDX cost estimate are the
 main known distortions.
+
+### Robustness over every rebalance schedule (2026-11-24)
+
+A single 20-day schedule turned out to be fragile: shifting the rebalance
+dates by two sessions moved the IC-weighted composite's IDX holdout from
++1.08% to +0.27% per period. `factor_research.py --robust` therefore runs
+each logic on all 20 possible schedules (top 5, hold 20, net of costs:
+IDX 0.4%, US 0.1% round trip). Mean net excess per period, and the number
+of schedules that were positive:
+
+| Logic | IDX selection | IDX holdout | US selection | US holdout |
+|---|---|---|---|---|
+| Trend vs. 200-day average | +1.94% (20/20) | +1.17% (18/20) | +0.19% (17/20) | +2.31% (19/20) |
+| Momentum 60 days | +1.28% (20/20) | +0.97% (20/20) | 0.00% (10/20) | +1.00% (15/20) |
+| IC-weighted composite | +1.61% (20/20) | +0.54% (16/20) | -0.19% (9/20) | +0.23% (12/20) |
+| Evidence composite | +2.29% (20/20) | -0.84% (2/20) | -0.29% (5/20) | +0.21% (11/20) |
+| v1-like 1-day return | -0.29% (8/20) | -0.20% (8/20) | +0.14% (12/20) | +0.76% (16/20) |
+
+Selection criterion, using selection periods only: positive on at least 85%
+of schedules in both markets. Only the trend rule passes (IDX 20/20, US
+17/20); its holdouts agree (18/20, 19/20). The best-looking selection
+result (evidence composite) collapses in the holdout, the usual sign of a
+lucky fit. Honest caveat: several holdouts were viewed earlier the same
+day before this criterion was written down, and both universes are
+today's liquid names (survivorship bias favours trend and momentum,
+strongly so for US large caps).
+
+## v2 registration (2026-11-24, before any v2 signal was stored)
+
+These rules are fixed. Changing them requires a new, dated section; v2
+results keep being reported under these rules.
+
+| Item | Rule |
+|---|---|
+| Model | `Business/factor_model.py`, `MODEL_VERSION = "v2.0"`. Score = close / 200-day simple moving average - 1 on the signal date. |
+| Universe | `IDX.universe` (59 liquid IDX stocks) and `US.universe` (100 large US stocks; 99 returned data on 2026-11-24) as committed with this section. A stock needs 252 completed sessions of closes to be ranked. |
+| Signal date | The last completed session before the run date in the market's own time zone (`python main.py v2 rank --market idx\|us`). Scheduled runs: IDX about 08:30 WIB, US about 20:45 WIB, Monday to Friday. |
+| Rebalance | The first stored ranking per market is a rebalance. After that, a signal date is a rebalance when at least 20 completed sessions have passed since the previous rebalance signal date. Only rebalances have picks. |
+| Picks | The 5 highest scores on a rebalance date, equal weight. |
+| Outcome per pick | Entry at the close of the first session after the signal date; exit at the close 20 sessions after entry. Excess = pick return minus the equal-weight mean return of all stocks ranked that date over the same entry and exit. Net = excess minus the round-trip cost (IDX 0.4%, US 0.1%) for picks not held at the previous rebalance. |
+| Verdict, per market | Fewer than 30 completed picks (about six rebalances): `DATA_TIDAK_CUKUP`. Otherwise `PASS` if mean net excess > 0 **and** more than 50% of picks have net excess > 0; else `FAIL`. |
+| v1 | Keeps running unchanged on IDX as the comparison; its own registration above stays in force. |
+
+Known limitations: survivorship-biased universes, a small sample (30 picks
+are a minimum, not proof), picks within one rebalance move together, and
+Yahoo daily data. A `PASS` means "worth trading on paper", not a proven
+edge.

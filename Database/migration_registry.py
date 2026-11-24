@@ -59,6 +59,7 @@ MIGRATION_MODULES: Sequence[Tuple[str, str, str]] = (
     ("observation_window", "Database.migrations_observation_window", "OBSERVATION_WINDOW_MIGRATIONS"),
     ("sustained_use_final_review", "Database.migrations_sustained_use_final_review", "SUSTAINED_USE_FINAL_REVIEW_MIGRATIONS"),
     ("llm_output_audit", "Database.migrations_llm_output_audit", "LLM_OUTPUT_AUDIT_MIGRATIONS"),
+    ("v2_rankings", "Database.migrations_v2_rankings", "V2_RANKINGS_MIGRATIONS"),
 )
 
 

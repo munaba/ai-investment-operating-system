@@ -302,6 +302,76 @@ def _run_watchlist_remove(app, tickers: list[str]) -> int:
     return 0
 
 
+def _run_v2_command(app, argv: list[str]) -> int:
+    """``python main.py v2 rank --market idx|us [--as-of YYYY-MM-DD]``.
+
+    Runs the pre-registered v2 ranking (Business/factor_model.py) for one
+    market from sessions completed before ``--as-of`` (default: today in
+    the market's own time zone), stores it in ``v2_rankings`` and, on a new
+    rebalance date, sends the picks as one notification. Re-running for a
+    stored signal date changes nothing.
+    """
+    from zoneinfo import ZoneInfo
+
+    from Business.factor_model import HOLD, MARKETS
+    from Business.notification_event import NotificationEventType
+    from Business.v2_ranking_service import V2RankingService
+    from Repository.persistence.v2_ranking_repository import V2RankingRepository
+
+    usage = "Usage: python main.py v2 rank --market idx|us [--as-of YYYY-MM-DD]"
+    if not argv or argv[0] != "rank":
+        print(usage)
+        return 2
+    args = argv[1:]
+    options = dict(zip(args[::2], args[1::2]))
+    if len(args) % 2 or set(options) - {"--market", "--as-of"} or options.get("--market") not in MARKETS:
+        print(usage)
+        return 2
+    market = MARKETS[options["--market"]]
+    now = datetime.now(timezone.utc)
+    try:
+        as_of = date.fromisoformat(options["--as-of"]) if "--as-of" in options else now.astimezone(
+            ZoneInfo(market.timezone)).date()
+    except ValueError:
+        print(usage)
+        return 2
+
+    service = V2RankingService(V2RankingRepository(app.database_manager))
+    try:
+        result = service.run(market, as_of, now)
+    except Exception as exc:  # noqa: BLE001 -- report cleanly, non-zero exit
+        print(f"V2 RANK FAILED market={market.name}: {exc}")
+        return 1
+
+    label = market.name.upper()
+    print(f"V2 RANK market={market.name} signal_date={result.signal_date} ranked={result.ranked} "
+          f"rebalance={result.is_rebalance} already_stored={result.already_stored}")
+    if result.is_rebalance:
+        print(f"  picks (hold {HOLD} sessions): {', '.join(result.picks)}")
+    else:
+        print(f"  no rebalance: {result.sessions_since_rebalance} of {HOLD} sessions since the last one")
+    print("  top 10: " + ", ".join(f"{s} {v:+.1%}" for s, v in result.top))
+
+    if result.is_rebalance and not result.already_stored:
+        message = (
+            f"AIOS v2 picks {label} (closes up to {result.signal_date}, hold {HOLD} trading days):\n"
+            + "\n".join(f"{i}. {s}" for i, s in enumerate(result.picks, 1))
+            + "\nRule: highest close vs 200-day average. Research signal, not financial advice."
+        )
+        try:
+            app.notification_manager.notify(NotificationEvent(
+                event_type=NotificationEventType.NEW_SIGNAL,
+                timestamp=now.isoformat(),
+                title=f"AIOS v2 picks {label}",
+                message=message,
+                metadata={"market": market.name, "signal_date": result.signal_date, "picks": result.picks},
+            ))
+            print("  notification sent")
+        except Exception as exc:  # noqa: BLE001 -- picks are stored either way
+            print(f"  notification failed: {exc}")
+    return 0
+
+
 def _run_watchlist_command(app, argv: list[str]) -> int:
     if not argv:
         print("Usage: python main.py watchlist <add|remove|list> [TICKER ...]")
@@ -3974,6 +4044,11 @@ if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "watchlist":
         with build_application() as _app:
             sys.exit(_run_watchlist_command(_app, sys.argv[2:]))
+    # v2 signal: "v2 rank --market idx|us" ranks a market with the
+    # pre-registered v2 rule and stores it (see _run_v2_command).
+    if len(sys.argv) > 1 and sys.argv[1] == "v2":
+        with build_application() as _app:
+            sys.exit(_run_v2_command(_app, sys.argv[2:]))
     # Activation 12, Phase 3: "preference set/get/list" is a one-shot argv
     # command, dispatched here -- same pattern as "watchlist" immediately
     # above. Needs a real ``app`` (the already-built ``app.memory_store``),
