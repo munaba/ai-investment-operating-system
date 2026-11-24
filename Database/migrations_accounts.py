@@ -22,7 +22,7 @@ Not wired to ``Core.composition_root`` or ``main.py`` (same A2 scope
 decision as watchlist: no composition-root changes, no automatic
 migration run, no wiring). A caller passes ``ACCOUNTS_MIGRATIONS`` to
 ``MigrationRunner(database).apply(ACCOUNTS_MIGRATIONS)`` explicitly --
-see ``run_account_migrations.py``.
+see ``main.py init``.
 """
 
 from __future__ import annotations

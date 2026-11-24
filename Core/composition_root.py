@@ -480,7 +480,7 @@ class ApplicationGraph:
     #: touched by this addition. Applying
     #: ``Database.migrations_accounts.ACCOUNTS_MIGRATIONS`` to a real
     #: database remains a separate, manual, unchanged operator step
-    #: (``run_account_migrations.py``) -- this field being constructible
+    #: (``main.py init``) -- this field being constructible
     #: does not imply the underlying ``accounts`` table already exists
     #: on whatever database file ``database_manager`` points at.
     account_repository: AccountRepository
@@ -499,7 +499,7 @@ class ApplicationGraph:
     #: exists yet to consume it. Applying
     #: ``Database.migrations_positions.POSITIONS_MIGRATIONS`` to a
     #: real database remains a separate, manual, unchanged operator
-    #: step (``run_position_migrations.py``) -- this field being
+    #: step (``main.py init``) -- this field being
     #: constructible does not imply the underlying ``positions`` table
     #: already exists on whatever database file ``database_manager``
     #: points at.
@@ -520,7 +520,7 @@ class ApplicationGraph:
     #: ``PaperTradingEngine`` business logic exists yet to consume it.
     #: Applying ``Database.migrations_orders.ORDERS_MIGRATIONS`` to a
     #: real database remains a separate, manual, unchanged operator
-    #: step (``run_order_migrations.py``) -- this field being
+    #: step (``main.py init``) -- this field being
     #: constructible does not imply the underlying ``orders`` table
     #: already exists on whatever database file ``database_manager``
     #: points at.
@@ -543,7 +543,7 @@ class ApplicationGraph:
     #: yet to consume it. Applying
     #: ``Database.migrations_trades.TRADES_MIGRATIONS`` to a real
     #: database remains a separate, manual, unchanged operator step
-    #: (``run_trade_migrations.py``) -- this field being constructible
+    #: (``main.py init``) -- this field being constructible
     #: does not imply the underlying ``trades`` table already exists
     #: on whatever database file ``database_manager`` points at.
     trade_repository: TradeRepository
@@ -567,7 +567,7 @@ class ApplicationGraph:
     #: of ``RankingEngine.rank()``'s output into this repository.
     #: Applying ``Database.migrations_snapshots.SNAPSHOTS_MIGRATIONS``
     #: to a real database remains a separate, manual, unchanged
-    #: operator step (``run_snapshot_migrations.py``) -- this field
+    #: operator step (``main.py init``) -- this field
     #: being constructible does not imply the underlying
     #: ``ranking_snapshots`` table already exists on whatever database
     #: file ``database_manager`` points at.
@@ -584,7 +584,7 @@ class ApplicationGraph:
     #: as a Tool; consumed only by ``main.py``'s ``brief`` command.
     #: Applying ``Database.migrations_decision_briefs`` to a real
     #: database remains a separate, manual, unchanged operator step
-    #: (``run_decision_brief_migrations.py``).
+    #: (``main.py init``).
     decision_brief_service: DecisionBriefService
 
     #: Phase C addition (additive only, "Personal Risk Ledger +
@@ -598,7 +598,7 @@ class ApplicationGraph:
     #: ``trading_decision_agent``, and not registered as a Tool.
     #: Applying ``Database.migrations_risk_ledger`` to a real database
     #: remains a separate, manual operator step
-    #: (``run_risk_ledger_migrations.py``).
+    #: (``main.py init``).
     risk_limits_repository: RiskLimitsRepository
 
     #: Phase C addition (additive only, "Personal Risk Ledger +
@@ -614,7 +614,7 @@ class ApplicationGraph:
     #: ``main.py``'s ``journal``/``risk-limits`` commands. Applying
     #: ``Database.migrations_risk_ledger`` to a real database remains
     #: a separate, manual operator step
-    #: (``run_risk_ledger_migrations.py``).
+    #: (``main.py init``).
     journal_service: JournalService
 
     #: Phase D addition (additive only, "Proactive IDX Scheduler
@@ -633,7 +633,7 @@ class ApplicationGraph:
     #: ``main.py``'s ``scheduler idx-tick``/``scheduler simulate-day``
     #: commands. Applying ``Database.migrations_scheduler`` to a real
     #: database remains a separate, manual, unchanged operator step
-    #: (``run_scheduler_migrations.py``).
+    #: (``main.py init``).
     idx_daily_scheduler: IDXDailyScheduler
 
     #: Phase D addition (additive only): the new ``HealthAuditService``,
@@ -860,7 +860,7 @@ class ApplicationGraph:
     #: shared ``database_manager`` -- see :func:`_build_watchlist_repository`.
     #: Mirrors ``account_repository``/``position_repository``/etc.
     #: exactly: never a second ``DatabaseManager``, no migration run
-    #: here (``python run_watchlist_migrations.py`` remains the
+    #: here (``python main.py init`` remains the
     #: operator's explicit step). Not yet passed into ``agent`` or any
     #: other collaborator -- consumed only by ``WatchlistScanner``
     #: (built outside this module), which receives this exact instance.
@@ -1313,7 +1313,7 @@ class ApplicationGraph:
     #: only by ``main.py``'s ``observation-window open/show/close``
     #: commands. Applying ``Database.migrations_observation_window``
     #: to a real database remains a separate, manual operator step
-    #: (``run_observation_window_migrations.py``). Does NOT unlock
+    #: (``main.py init``). Does NOT unlock
     #: live execution and makes no automatic period selection -- the
     #: operator must select the window explicitly.
     observation_window_service: ObservationWindowService
@@ -1502,7 +1502,7 @@ def _build_account_repository(database_manager: DatabaseManager) -> AccountRepos
 
     Deliberately does NOT run ``ACCOUNTS_MIGRATIONS``: applying the
     ``accounts`` table migration remains the operator's explicit,
-    manual step (``python run_account_migrations.py``), same scope
+    manual step (``python main.py init``), same scope
     decision already documented on that script and on
     ``Database.migrations_accounts``. This function only makes
     ``AccountRepository`` reachable from the production graph for the
@@ -1530,7 +1530,7 @@ def _build_watchlist_repository(database_manager: DatabaseManager) -> WatchlistR
     Deliberately does NOT run ``Database.migrations_watchlist.
     WATCHLIST_MIGRATIONS``: applying the ``watchlist`` table migration
     remains the operator's explicit, manual step
-    (``python run_watchlist_migrations.py``), same scope decision
+    (``python main.py init``), same scope decision
     already documented on that script. This function only makes
     ``WatchlistRepository`` reachable from the production graph for
     the first time -- it does not change when or how the schema itself
@@ -1826,7 +1826,7 @@ def _build_position_repository(database_manager: DatabaseManager) -> PositionRep
 
     Deliberately does NOT run ``POSITIONS_MIGRATIONS``: applying the
     ``positions`` table migration remains the operator's explicit,
-    manual step (``python run_position_migrations.py``), same scope
+    manual step (``python main.py init``), same scope
     decision already documented on that script and on
     ``Database.migrations_positions``.
 
@@ -1856,7 +1856,7 @@ def _build_order_repository(database_manager: DatabaseManager) -> OrderRepositor
 
     Deliberately does NOT run ``ORDERS_MIGRATIONS``: applying the
     ``orders`` table migration remains the operator's explicit, manual
-    step (``python run_order_migrations.py``), same scope decision
+    step (``python main.py init``), same scope decision
     already documented on that script and on
     ``Database.migrations_orders``.
 
@@ -1886,7 +1886,7 @@ def _build_trade_repository(database_manager: DatabaseManager) -> TradeRepositor
 
     Deliberately does NOT run ``TRADES_MIGRATIONS``: applying the
     ``trades`` table migration remains the operator's explicit, manual
-    step (``python run_trade_migrations.py``), same scope decision
+    step (``python main.py init``), same scope decision
     already documented on that script and on
     ``Database.migrations_trades``.
 
@@ -1917,7 +1917,7 @@ def _build_snapshot_repository(database_manager: DatabaseManager) -> SnapshotRep
 
     Deliberately does NOT run ``SNAPSHOTS_MIGRATIONS``: applying the
     ``ranking_snapshots`` table migration remains the operator's
-    explicit, manual step (``python run_snapshot_migrations.py``), same
+    explicit, manual step (``python main.py init``), same
     scope decision already documented on that script and on
     ``Database.migrations_snapshots``.
 
@@ -2002,7 +2002,7 @@ def _build_decision_brief_service(
 
     Runs no migration: applying ``Database.migrations_decision_briefs``
     to a real database remains a separate, manual, unchanged operator
-    step (``run_decision_brief_migrations.py``).
+    step (``main.py init``).
     """
     brief_repository = DecisionBriefRepository(database_manager)
     decision_brief_policy = DecisionBriefPolicy()
@@ -2023,7 +2023,7 @@ def _build_risk_limits_repository(database_manager: DatabaseManager) -> RiskLimi
     module: the same shared ``database_manager`` instance, never a
     second ``DatabaseManager``. Applying
     ``Database.migrations_risk_ledger`` to a real database remains a
-    separate, manual operator step (``run_risk_ledger_migrations.py``).
+    separate, manual operator step (``main.py init``).
     """
     return RiskLimitsRepository(database_manager)
 
@@ -2051,7 +2051,7 @@ def _build_journal_service(
 
     Runs no migration: applying ``Database.migrations_risk_ledger`` to
     a real database remains a separate, manual operator step
-    (``run_risk_ledger_migrations.py``).
+    (``main.py init``).
     """
     brief_repository = DecisionBriefRepository(database_manager)
     journal_repository = JournalRepository(database_manager)
@@ -2079,7 +2079,7 @@ def _build_observation_window_service(database_manager: DatabaseManager) -> Obse
     Runs no migration: applying
     ``Database.migrations_observation_window`` to a real database
     remains a separate, manual operator step
-    (``run_observation_window_migrations.py``).
+    (``main.py init``).
     """
     window_repository = ObservationWindowRepository(database_manager)
     return ObservationWindowService(window_repository=window_repository)
@@ -2159,7 +2159,7 @@ def _build_sustained_use_final_review_service(
     Runs no migration: applying
     ``Database.migrations_sustained_use_final_review`` to a real
     database remains a separate, manual operator step
-    (``run_sustained_use_final_review_migrations.py``).
+    (``main.py init``).
     """
     window_repository = ObservationWindowRepository(database_manager)
     operator_feedback_repository = OperatorFeedbackRepository(database_manager)
@@ -2201,7 +2201,7 @@ def _build_idx_daily_scheduler(
 
     Runs no migration: applying ``Database.migrations_scheduler`` to a
     real database remains a separate, manual operator step
-        (``run_scheduler_migrations.py``).
+        (``main.py init``).
 
         Gate 4 Phase I: also builds an evidence_adapter (DecisionCopilotSkill
         wrapped by ``EvidenceProfileJobAdapter``) so the scheduler can run
@@ -2333,7 +2333,7 @@ def _build_telegram_command_audit_repository(
     mirroring every other Repository ``_build_*`` function in this
     module (e.g. :func:`_build_watchlist_repository`) -- never a
     second ``DatabaseManager``. No migration is run here (``python
-    run_telegram_control_migrations.py`` remains the operator's
+    main.py init`` remains the operator's
     explicit step, exactly like every other domain migration script).
     """
     return TelegramCommandAuditRepository(database_manager)
@@ -2585,7 +2585,7 @@ def _build_order_idempotency_repository(
 
     Deliberately does NOT run ``IDEMPOTENCY_MIGRATIONS``: applying the
     ``order_idempotency_keys`` table migration remains the operator's
-    explicit, manual step (``python run_idempotency_migrations.py``,
+    explicit, manual step (``python main.py init``,
     or ``python main.py init`` which now includes it via
     ``Database.migration_registry``), same scope decision already
     documented on every other ``run_*_migrations.py`` script.

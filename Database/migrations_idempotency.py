@@ -28,7 +28,7 @@ Not wired to ``Core.composition_root`` or ``main.py`` for migration
 *execution* -- same scope decision as every other domain (no automatic
 migration run at startup). A caller passes ``IDEMPOTENCY_MIGRATIONS``
 to ``MigrationRunner(database).apply(IDEMPOTENCY_MIGRATIONS)``
-explicitly -- see ``run_idempotency_migrations.py``. It IS wired into
+explicitly -- see ``main.py init``. It IS wired into
 ``Database.migration_registry.MIGRATION_MODULES`` so ``python main.py
 init``/``doctor`` picks it up automatically, same as every other
 already-registered domain.

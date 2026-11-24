@@ -119,8 +119,8 @@ def _build(tmp_dir: str, db_name: str):
     ``BRIEF_APPROVALS_MIGRATIONS``/``RISK_LEDGER_MIGRATIONS``/
     ``PORTFOLIO_SNAPSHOT_VALUATION_STATUS_MIGRATIONS`` are applied
     here because they are separate, manual, operator-run migrations
-    in this repository (``run_brief_approval_migrations.py`` /
-    ``run_risk_ledger_migrations.py``) -- ``build_application()``
+    in this repository (``main.py init`` /
+    ``main.py init``) -- ``build_application()``
     itself never runs a migration (LOCKED convention, see every
     ``_build_*_repository`` docstring in ``Core.composition_root``).
     Every other table (accounts/positions/orders/trades/snapshots/

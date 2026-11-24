@@ -40,7 +40,7 @@ same manual-operator-step convention as
 ``DECISION_BRIEFS_MIGRATIONS``: a caller passes
 ``OBSERVATION_WINDOW_MIGRATIONS`` to
 ``MigrationRunner(database).apply(OBSERVATION_WINDOW_MIGRATIONS)``
-explicitly (see ``run_observation_window_migrations.py``). Deliberately
+explicitly (see ``main.py init``). Deliberately
 NOT added to ``Database.migration_registry.MIGRATION_MODULES`` in this
 phase, for the same reason -- ``python main.py init`` behavior for
 existing domains is left untouched.

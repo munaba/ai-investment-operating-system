@@ -38,7 +38,7 @@ manual-operator-step convention as ``ORDERS_MIGRATIONS``/
 ``SNAPSHOTS_MIGRATIONS``/etc: a caller passes
 ``DECISION_BRIEFS_MIGRATIONS`` to
 ``MigrationRunner(database).apply(DECISION_BRIEFS_MIGRATIONS)``
-explicitly (see ``run_decision_brief_migrations.py``), and it is
+explicitly (see ``main.py init``), and it is
 additionally registered in ``Database.migration_registry.
 MIGRATION_MODULES`` so ``python main.py init`` picks it up like every
 other domain.

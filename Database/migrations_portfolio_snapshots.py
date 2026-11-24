@@ -85,7 +85,7 @@ Registered in ``Database.migration_registry.MIGRATION_MODULES``
 ``python main.py init`` and ``Core.doctor``, so ``portfolio_snapshots``
 is now created automatically by ``init`` and reported on by ``doctor``
 like every other domain, instead of being reachable only via the
-standalone ``run_portfolio_snapshot_migrations.py`` script.
+standalone ``main.py init`` script.
 ``Tests.test_doctor_command._apply_all_migrations`` and its "all N
 applied" bookkeeping were updated in the same change (7 -> 8 domains)
 per the Activation 1.3 rule that registry changes and their dependent

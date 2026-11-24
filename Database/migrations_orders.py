@@ -62,7 +62,7 @@ Not wired to ``Core.composition_root`` or ``main.py`` for migration
 *execution* (same scope decision as accounts/watchlist/positions): no
 automatic migration run at startup. A caller passes
 ``ORDERS_MIGRATIONS`` to ``MigrationRunner(database).apply(
-ORDERS_MIGRATIONS)`` explicitly -- see ``run_order_migrations.py``.
+ORDERS_MIGRATIONS)`` explicitly -- see ``main.py init``.
 """
 
 from __future__ import annotations

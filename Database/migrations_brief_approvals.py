@@ -59,7 +59,7 @@ docstring) for every domain added after Activation 7 Blocker #4
 ``MIGRATION_MODULES`` either): a caller applies
 ``BRIEF_APPROVALS_MIGRATIONS`` explicitly via
 ``MigrationRunner(database).apply(BRIEF_APPROVALS_MIGRATIONS)`` (see
-``run_brief_approval_migrations.py``). ``Database.migration_registry``
+``main.py init``). ``Database.migration_registry``
 itself is untouched by this Phase G task, per the roadmap's "do not
 modify Phase A-F" instruction covering shared infrastructure.
 """

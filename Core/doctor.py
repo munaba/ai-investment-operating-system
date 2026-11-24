@@ -314,7 +314,7 @@ def _check_database_and_migrations(db_config: DatabaseConfig) -> tuple[Section, 
                 detail=(
                     "Database not initialized -- no migrations can have run. "
                     "Not a migration failure; run the domain migration scripts "
-                    "(e.g. run_watchlist_migrations.py) or a future Activation "
+                    "(e.g. main.py init) or a future Activation "
                     "1.3 unified runner to initialize."
                 ),
             )
@@ -666,7 +666,7 @@ def _check_telegram_inbound_control_plane(db_config: DatabaseConfig) -> Section:
                         status=BLOCKED,
                         detail=(
                             f"missing table(s): {', '.join(sorted(missing_tables))} -- "
-                            "run `python run_telegram_control_migrations.py`"
+                            "run `python main.py init`"
                         ),
                     )
                 )

@@ -39,6 +39,6 @@ def test_create_missing_unique_index_raises_helpful_error(tmp_path):
                 priority=1,
                 rank=1,
             )
-        assert "run_snapshot_migrations.py" in str(exc_info.value)
+        assert "main.py init" in str(exc_info.value)
     finally:
         db.close_all()

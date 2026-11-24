@@ -107,8 +107,8 @@ test file would make that already-passing regression test fail --
 and this Activation's own rules forbid changing behavior/tests
 outside its own roadmap scope. This migration therefore stays
 reachable only via the explicit, standalone
-``run_daily_performance_migrations.py`` script, exactly mirroring how
-``run_portfolio_snapshot_migrations.py`` works today -- no automatic
+``main.py init`` script, exactly mirroring how
+``main.py init`` works today -- no automatic
 migration run at startup, no composition-root wiring, no change to
 ``python main.py init``'s observed domain count. A future Activation
 can add the registry entry (and update the doctor test's hardcoded

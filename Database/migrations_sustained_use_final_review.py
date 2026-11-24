@@ -39,7 +39,7 @@ manual-operator-step convention as
 ``OBSERVATION_WINDOW_MIGRATIONS``: a caller passes
 ``SUSTAINED_USE_FINAL_REVIEW_MIGRATIONS`` to
 ``MigrationRunner(database).apply(SUSTAINED_USE_FINAL_REVIEW_MIGRATIONS)``
-explicitly (see ``run_sustained_use_final_review_migrations.py``).
+explicitly (see ``main.py init``).
 Deliberately NOT added to ``Database.migration_registry.
 MIGRATION_MODULES`` in this phase, for the same reason --
 ``python main.py init`` behavior for existing domains is left

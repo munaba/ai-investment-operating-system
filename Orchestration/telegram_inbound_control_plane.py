@@ -314,7 +314,7 @@ class TelegramInboundControlPlane:
         ``UpdateOutcome`` for that update alone (processing continues
         with the next update). A durable-offset read failure (e.g. the
         ``telegram_inbound_state``/``telegram_command_audit`` tables
-        not yet migrated -- see ``run_telegram_control_migrations.py``)
+        not yet migrated -- see ``main.py init``)
         is treated the same way as a ``getUpdates`` fetch failure: it
         becomes ``polling_failed=True`` with the underlying detail
         preserved, never an unhandled exception. ``Core.doctor``'s own
@@ -335,7 +335,7 @@ class TelegramInboundControlPlane:
                 polling_failed=True,
                 polling_error=(
                     f"could not read the durable polling offset: {exc}. Run "
-                    "'python run_telegram_control_migrations.py' if the "
+                    "'python main.py init' if the "
                     "telegram_control tables are not yet migrated."
                 ),
                 updates=[],

@@ -135,7 +135,7 @@ class SnapshotRepository(BasePersistenceRepository):
                 raise RepositoryError(
                     "SnapshotRepository.create() failed: the unique index "
                     "ux_ranking_snapshots_scan_time_symbol is missing. "
-                    "Run `python run_snapshot_migrations.py` before using "
+                    "Run `python main.py init` before using "
                     "create()."
                 ) from exc
             raise

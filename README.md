@@ -131,7 +131,7 @@ The evaluation harness covers layers L1–L5; see `Evaluation/README.md`. Latest
 | `Evaluation/` | Evaluation harness, golden cases |
 | `Dashboard/` | Read-only Streamlit dashboard and snapshot exporter |
 
-Scheduler details: `README_SCHEDULER.md`.
+Scheduler details: [Docs/SCHEDULER.md](Docs/SCHEDULER.md).
 
 ## Engineering notes
 

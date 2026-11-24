@@ -64,7 +64,7 @@ Not wired to ``Core.composition_root`` or ``main.py`` for migration
 *execution* (same scope decision as accounts/watchlist/positions/
 orders/trades): no automatic migration run at startup. A caller passes
 ``SNAPSHOTS_MIGRATIONS`` to ``MigrationRunner(database).apply(
-SNAPSHOTS_MIGRATIONS)`` explicitly -- see ``run_snapshot_migrations.py``.
+SNAPSHOTS_MIGRATIONS)`` explicitly -- see ``main.py init``.
 """
 
 from __future__ import annotations

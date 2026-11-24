@@ -41,7 +41,7 @@ Not wired to ``Core.composition_root`` or ``main.py`` for migration
 *execution* (same scope decision as accounts/watchlist: no automatic
 migration run at startup). A caller passes ``POSITIONS_MIGRATIONS`` to
 ``MigrationRunner(database).apply(POSITIONS_MIGRATIONS)`` explicitly --
-see ``run_position_migrations.py``.
+see ``main.py init``.
 """
 
 from __future__ import annotations

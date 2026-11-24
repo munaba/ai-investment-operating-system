@@ -38,7 +38,7 @@ Not wired to automatic migration running by itself -- follows the same
 manual-operator-step convention as ``RISK_LEDGER_MIGRATIONS``: a
 caller passes ``SCHEDULER_MIGRATIONS`` to
 ``MigrationRunner(database).apply(SCHEDULER_MIGRATIONS)`` explicitly
-(see ``run_scheduler_migrations.py``). Deliberately NOT added to
+(see ``main.py init``). Deliberately NOT added to
 ``Database.migration_registry.MIGRATION_MODULES`` in this phase,
 mirroring ``migrations_risk_ledger``/``migrations_decision_briefs`` --
 ``python main.py init`` behavior for existing domains is left

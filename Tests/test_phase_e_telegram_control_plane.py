@@ -71,7 +71,7 @@ Scenarios:
      applied but NOT the Phase E telegram_control ones (versions
      25/26): both poll_once() and the CLI must fail cleanly (a
      reported failure with an actionable message pointing at
-     "python run_telegram_control_migrations.py"), never an unhandled
+     "python main.py init"), never an unhandled
      RepositoryError traceback. Fixed in this Task 7 pass (the one
      exception to "verification only, no Task 1-6 modification" this
      suite's own real-CLI-proof run against the operator's exact
@@ -980,7 +980,7 @@ def scenario_l_no_broker_or_paper_order():
 # ---------------------------------------------------------------------
 # Scenario M -- unmigrated database (regression for the operator-
 # reported traceback on "telegram status"/"telegram poll" against a
-# database that never had run_telegram_control_migrations.py applied)
+# database that never had main.py init applied)
 # ---------------------------------------------------------------------
 
 
@@ -1037,7 +1037,7 @@ def scenario_m_unmigrated_database_regression():
         check(not raised, "poll_once() never raises against an unmigrated telegram_control database")
         check(result is not None and result.polling_failed is True, "poll_once() reports polling_failed=True on a missing table")
         check(
-            result is not None and result.polling_error is not None and "run_telegram_control_migrations" in result.polling_error,
+            result is not None and result.polling_error is not None and "main.py init" in result.polling_error,
             "poll_once()'s polling_error names the exact remediation command",
         )
         check(
@@ -1068,7 +1068,7 @@ def scenario_m_unmigrated_database_regression():
         )
         check(status_proc.returncode == 1, f"'telegram status' against an unmigrated database exits 1 (got {status_proc.returncode})")
         check(
-            "run_telegram_control_migrations" in status_proc.stdout,
+            "main.py init" in status_proc.stdout,
             "'telegram status' points the operator at the exact remediation command",
         )
 
@@ -1086,7 +1086,7 @@ def scenario_m_unmigrated_database_regression():
         )
         check(poll_proc.returncode == 1, f"'telegram poll' against an unmigrated database exits 1 (got {poll_proc.returncode})")
         check(
-            "run_telegram_control_migrations" in poll_proc.stdout,
+            "main.py init" in poll_proc.stdout,
             "'telegram poll' points the operator at the exact remediation command",
         )
 

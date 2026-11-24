@@ -4,12 +4,12 @@
 
 ### Order (CRITICAL)
 1. **BACKUP FIRST** - Before any migration on live DB, create a backup (use SQLite backup API or copy `data/investment_platform.db`).
-2. **Run snapshot migrations BEFORE any scan** - `python run_snapshot_migrations.py` must be run before `python main.py scan` or any operation that inserts into `ranking_snapshots`. 
+2. **Run snapshot migrations BEFORE any scan** - `python main.py init` must be run before `python main.py scan` or any operation that inserts into `ranking_snapshots`. 
 3. **Verify** - Confirm migration applied (check `schema_migrations` table for expected version).
 
 ### Why
 - `SnapshotRepository.create()` uses `INSERT ... ON CONFLICT(scan_time, symbol) DO NOTHING` which requires a UNIQUE constraint/index. Without `ux_ranking_snapshots_scan_time_symbol`, `create()` will raise `ON CONFLICT clause does not match any PRIMARY KEY or UNIQUE constraint` and crash.
-- `python run_snapshot_migrations.py` applies ONLY `SNAPSHOTS_MIGRATIONS` (see `run_snapshot_migrations.py`).
+- `python main.py init` applies ONLY `SNAPSHOTS_MIGRATIONS` (see `main.py init`).
 - `python main.py init` applies all domain migrations via the migration registry (`_canonical_migrations()`).
 
 ### No Auto-Migration on Startup
@@ -20,7 +20,7 @@
 ### Manual Migration Commands
 ```bash
 # Apply only snapshot migrations (required before first scan if v34 not applied)
-python run_snapshot_migrations.py
+python main.py init
 
 # Apply all migrations
 python main.py init

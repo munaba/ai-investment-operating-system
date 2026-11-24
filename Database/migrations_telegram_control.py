@@ -31,7 +31,7 @@ same manual-operator-step convention as
 ``migrations_scheduler``/``migrations_risk_ledger``: a caller passes
 ``TELEGRAM_CONTROL_MIGRATIONS`` to
 ``MigrationRunner(database).apply(TELEGRAM_CONTROL_MIGRATIONS)``
-explicitly (see ``run_telegram_control_migrations.py``). Deliberately
+explicitly (see ``main.py init``). Deliberately
 NOT added to ``Database.migration_registry.MIGRATION_MODULES`` in this
 task, mirroring every prior manual-migration domain -- ``python
 main.py init`` behavior is left untouched, per the "preserve Phase

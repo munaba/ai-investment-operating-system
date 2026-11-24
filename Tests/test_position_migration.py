@@ -16,14 +16,14 @@ def run_position_migrations() -> int:
     """Apply ``POSITIONS_MIGRATIONS`` to the production database.
 
     Manual, standalone operation (same scope decision as
-    ``run_account_migrations.py``/``run_watchlist_migrations.py``):
+    ``main.py init``/``main.py init``):
     this function is never called by ``main.py``,
     ``Core.composition_root``, ``Core.startup_validation``, or any
     ``Repository.*`` module. An operator runs this file directly
-    (``python run_position_migrations.py``) when the positions schema
+    (``python main.py init``) when the positions schema
     needs to be applied to a real database.
 
-    Construction order (fixed, mirrors ``run_account_migrations.py``):
+    Construction order (fixed, mirrors ``main.py init``):
     ``DatabaseConfig.from_env()`` -> ``SQLiteDatabase(config)`` ->
     ``connect()`` -> ``MigrationRunner(database)`` ->
     ``apply(POSITIONS_MIGRATIONS)`` -> ``disconnect()`` (always, via

@@ -70,7 +70,7 @@ Not wired to ``Core.composition_root`` or ``main.py`` for migration
 *execution* (same scope decision as accounts/watchlist/positions/
 orders): no automatic migration run at startup. A caller passes
 ``TRADES_MIGRATIONS`` to ``MigrationRunner(database).apply(
-TRADES_MIGRATIONS)`` explicitly -- see ``run_trade_migrations.py``.
+TRADES_MIGRATIONS)`` explicitly -- see ``main.py init``.
 """
 
 from __future__ import annotations

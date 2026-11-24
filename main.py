@@ -2168,7 +2168,7 @@ def _run_telegram_status_command(app, argv: list[str]) -> int:
     except RepositoryError as exc:
         print(
             "Polling state: UNAVAILABLE -- telegram_control tables are not migrated "
-            f"(run 'python run_telegram_control_migrations.py'). Detail: {exc}"
+            f"(run 'python main.py init'). Detail: {exc}"
         )
         print("Recent commands: UNAVAILABLE -- see above")
         return 1
@@ -2183,7 +2183,7 @@ def _run_telegram_status_command(app, argv: list[str]) -> int:
     except RepositoryError as exc:
         print(
             "Recent commands: UNAVAILABLE -- telegram_control tables are not migrated "
-            f"(run 'python run_telegram_control_migrations.py'). Detail: {exc}"
+            f"(run 'python main.py init'). Detail: {exc}"
         )
         return 1
 

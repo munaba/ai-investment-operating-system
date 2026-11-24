@@ -41,7 +41,7 @@ same manual-operator-step convention as
 ``DECISION_BRIEFS_MIGRATIONS``/etc: a caller passes
 ``RISK_LEDGER_MIGRATIONS`` to
 ``MigrationRunner(database).apply(RISK_LEDGER_MIGRATIONS)`` explicitly
-(see ``run_risk_ledger_migrations.py``). Deliberately NOT added to
+(see ``main.py init``). Deliberately NOT added to
 ``Database.migration_registry.MIGRATION_MODULES`` in this phase,
 mirroring ``migrations_decision_briefs`` (Phase B), which is also not
 registered there -- ``python main.py init`` behavior for existing
