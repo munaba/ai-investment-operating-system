@@ -123,7 +123,8 @@ if (-not $SkipJobs) {
     )
     foreach ($job in $jobs) {
         if ($existing.ContainsKey($job.Name)) { Write-Host "  exists: $($job.Name)"; continue }
-        & hermes cron create --name $job.Name @($job.Args) | Out-Null
+        & hermes cron create --name $job.Name @($job.Args)
+        if ($LASTEXITCODE -ne 0) { Write-Warning "FAILED to create: $($job.Name) (exit $LASTEXITCODE). Fix the error above, then run this script again."; continue }
         Write-Host "  created: $($job.Name)"
     }
     if (-not $existing.ContainsKey('AIOS daily audit')) {
@@ -134,8 +135,9 @@ if (-not $SkipJobs) {
         $modelArgs = if ($NoNineRouter) { @('--pin') } else { @('--model', 'HERMES', '--provider', 'custom:9router') }
         & hermes cron create --name 'AIOS daily audit' --deliver telegram --catch-up off --timezone Asia/Jakarta `
             --workdir $AuditDir @modelArgs --no-wrap-response --paused `
-            '30 7,12,20 * * *' $prompt | Out-Null
-        Write-Host "  created: AIOS daily audit ($(if ($NoNineRouter) { 'Hermes main model, pinned' } else { 'HERMES via 9router' }))"
+            '30 7,12,20 * * *' $prompt
+        if ($LASTEXITCODE -ne 0) { Write-Warning "FAILED to create: AIOS daily audit (exit $LASTEXITCODE). Fix the error above, then run this script again." }
+        else { Write-Host "  created: AIOS daily audit ($(if ($NoNineRouter) { 'Hermes main model, pinned' } else { 'HERMES via 9router' }))" }
     }
 }
 
