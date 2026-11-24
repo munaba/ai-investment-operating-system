@@ -4,9 +4,7 @@ import streamlit as st
 from aios_data import WIB, format_time, latest_scan, require_snapshot
 from ui import (
     REPO_URL,
-    as_badges,
     page_footer,
-    rec_badge_column,
     recommendations_per_scan_chart,
     with_rec,
 )
@@ -21,14 +19,6 @@ markets = v2_markets(snapshot)
 # getattr: a hot-reloaded page can briefly run against the previous aios_data
 # module (Streamlit Cloud redeploy) that lacks this field.
 v2_eval = getattr(snapshot, "v2_evaluation", None) or {}
-
-# --- What this is, for a first-time visitor ---------------------------------
-st.markdown(
-    "AIOS ranks liquid **Indonesian and US stocks** every trading day with a simple trend rule "
-    "(close vs. its 200-day average), buys the top picks on paper every 20 trading days, and is "
-    "judged only on live results against rules fixed in advance. It runs unattended and never "
-    f"places real orders. [How it works and the rules]({METHOD_URL})"
-)
 
 # --- Key numbers ------------------------------------------------------------
 current_v1 = latest_scan(snapshot)
@@ -74,75 +64,59 @@ by_market = {m.market: m for m in markets}
 for column, name in zip(st.columns(len(MARKET_NAMES), gap="medium"), MARKET_NAMES, strict=True):
     m = by_market.get(name)
     with column, st.container(border=True, height="stretch"):
-        st.markdown(f"**{MARKET_NAMES[name]}**")
+        date = f" :gray[{pd.Timestamp(m.rebalance_date).strftime('%d %b')}]" if m is not None and m.rebalance_date else ""
+        st.markdown(f"**{MARKET_NAMES[name]}**{date}")
         if m is None or m.picks.empty:
-            st.caption(f"No picks yet. The first ranking runs at {SCHEDULE[name]} on the next "
-                       "trading day and its picks appear here.")
+            st.caption(f"First ranking at {SCHEDULE[name]}")
             continue
-        st.caption(f"Rebalanced on closes of {m.rebalance_date}; held 20 trading days.")
-        st.space("small")  # keeps the table toolbar off the caption on phones
-        top5 = m.picks[m.picks["rank"] <= 5]
+        top5 = m.picks[m.picks["rank"] <= 5].assign(score=lambda d: d["score"] * 100)
         st.dataframe(
-            top5.assign(score=top5["score"] * 100)[["symbol", "score"]],
+            top5[["rank", "symbol", "score"]],
             hide_index=True,
             column_config={
-                "symbol": st.column_config.TextColumn("v2 pick", width="small"),
-                "score": st.column_config.NumberColumn("vs 200-day avg", format="%+.1f%%"),
+                "rank": st.column_config.NumberColumn("#", width="small"),
+                "symbol": st.column_config.TextColumn("Symbol", width="small"),
+                "score": st.column_config.ProgressColumn(
+                    "vs 200-day avg", format="%+.1f%%", min_value=0,
+                    max_value=max(float(top5["score"].max()), 1.0),
+                    help="How far the close is above its 200-day average."),
             },
             alt=f"Current v2 picks for {m.market.upper()}",
         )
         extra = list(m.picks[m.picks["rank"] > 5]["symbol"])
         if extra:
-            st.caption("v3 also holds: " + ", ".join(extra))
+            st.markdown(":gray[v3 +] " + " ".join(f":gray-badge[{s}]" for s in extra))
 st.page_link("app_pages/v2.py", label="Rankings and track record", icon=":material/arrow_forward:")
 
 # --- v1, kept as the comparison ---------------------------------------------
 with st.container(border=True):
-    st.subheader("v1 scanner (comparison)", anchor=False)
     if current_v1.empty:
-        st.info("No v1 scans recorded yet.")
+        st.markdown("**v1 scanner** :gray[comparison]")
+        st.caption("No scans yet")
     else:
         counts = with_rec(current_v1)["recommendation"].value_counts()
         buy, wait, sell = (int(counts.get(r, 0)) for r in ("BUY", "WAIT", "SELL"))
         st.markdown(
-            f"The original rule-based scanner still runs every 30 minutes on 11 IDX stocks. "
-            f"Last scan **{format_time(last_scan_time)}**: :blue-badge[{buy} BUY] "
-            f":orange-badge[{wait} WAIT] :violet-badge[{sell} SELL]. Backtests showed its price "
-            "input has no edge; it stays as the baseline v2 must beat."
+            f"**v1 scanner** :gray[{format_time(last_scan_time)}]  \n"
+            f":blue-badge[{buy} BUY] :orange-badge[{wait} WAIT] :violet-badge[{sell} SELL]"
         )
-        st.space("small")  # keeps the table toolbar off the paragraph on phones
-        left, right = st.columns([2, 3], gap="medium")
-        with left:
-            top_score = float(current_v1["score"].max()) if current_v1["score"].notna().any() else 1.0
-            st.dataframe(
-                as_badges(current_v1)[["symbol", "recommendation", "score"]],
-                hide_index=True,
-                column_config={
-                    "symbol": st.column_config.TextColumn("Stock", width="small"),
-                    "recommendation": rec_badge_column(),
-                    "score": st.column_config.ProgressColumn(
-                        "Score", min_value=0, max_value=max(top_score, 1.0), format="%d",
-                        help="Bar relative to the highest score in this scan."),
-                },
-                alt="Latest v1 scan: each stock's recommendation and score",
-            )
-        with right:
-            day = scans["scan_time"].dt.date
-            last_of_day = scans[scans["scan_time"] == scans.groupby(day)["scan_time"].transform("max")]
-            order = [d.strftime("%d %b") for d in sorted(day.unique())]
-            per_day = (
-                with_rec(last_of_day)
-                .assign(scan=last_of_day["scan_time"].dt.strftime("%d %b"))
-                .value_counts(["scan", "recommendation"], sort=False)
-                .reset_index(name="count")
-            )
-            st.altair_chart(
-                recommendations_per_scan_chart(per_day, order),
-                alt="Count of BUY, WAIT, SELL and no-signal stocks in the last v1 scan of each trading day",
-            )
+        day = scans["scan_time"].dt.date
+        last_of_day = scans[scans["scan_time"] == scans.groupby(day)["scan_time"].transform("max")]
+        order = [d.strftime("%d %b") for d in sorted(day.unique())]
+        per_day = (
+            with_rec(last_of_day)
+            .assign(scan=last_of_day["scan_time"].dt.strftime("%d %b"))
+            .value_counts(["scan", "recommendation"], sort=False)
+            .reset_index(name="count")
+        )
+        st.altair_chart(
+            recommendations_per_scan_chart(per_day, order),
+            alt="Count of BUY, WAIT, SELL and no-signal stocks in the last v1 scan of each trading day",
+        )
 
 with st.expander("How AIOS works", icon=":material/info:"):
     st.markdown(
+        f"[Full rules]({METHOD_URL})\n\n"
         "1. **Rank.** Each trading morning (IDX 08:30 WIB, US 20:45 WIB) AIOS ranks a fixed list of "
         "liquid stocks by how far the close is above its 200-day average.\n"
         "2. **Rebalance.** Every 20 trading days the top 5 (v2) and top 10 (v3) become the picks, "
@@ -155,7 +129,6 @@ with st.expander("How AIOS works", icon=":material/info:"):
     )
 
 st.caption(
-    f"Read-only export of the AIOS database, {format_time(snapshot.exported_at)}. "
-    "Times are shown in WIB (UTC+7)."
+    f"Updated {format_time(snapshot.exported_at)} · WIB (UTC+7) · not investment advice"
 )
 page_footer()
