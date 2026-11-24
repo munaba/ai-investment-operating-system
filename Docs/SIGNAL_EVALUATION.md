@@ -109,3 +109,34 @@ monthly holding period is the one direction worth a longer look. It is not
 proven: t is about 1, six rules were tried, and the 40-stock list is today's
 liquid names (survivorship bias in its favour). A v2 built on it would need
 its own pre-registration, probably with a 20-day horizon.
+
+### Factor research for v2 (2026-11-24, exploratory)
+
+`Evaluation/factor_research.py` (tests: `Tests/test_factor_research.py`)
+ranks 59 liquid IDX stocks on nine factors (momentum, residual momentum,
+52-week high, trend, low volatility, reversal, liquidity, and a v1-like
+1-day return), buys the top 5 at the next close every 20 trading days,
+holds 20 days and charges 0.4% round trip on changed names. Seven years of
+Yahoo data; rebalances from 2020-12 to 2024-12 are the selection period,
+2025-01 to 2026-10 the holdout. Candidates: single factors, a composite
+fixed from published evidence, an IC-weighted composite whose weights come
+only from earlier outcomes, and a ridge regression retrained each period on
+earlier outcomes (a small stand-in for Qlib's Alpha158 + LightGBM).
+
+Net excess per 20-day period, selection / holdout, in four configurations
+(top 5 / hold 20, top 10, hold 10, top 3):
+
+| Logic | Holdout results | Note |
+|---|---|---|
+| IC-weighted walk-forward | +1.08%, +0.90%, +0.31%, +0.61% | The only logic positive in every holdout (and every selection period). Holdout hit rate 60-64%. t below 1.1 everywhere. |
+| Ridge walk-forward | -1.26%, -0.66%, -1.38%, -1.79% | Strong in selection, negative in every holdout: overfitting. |
+| v1-like (1-day return) | -2.36%, -1.81%, +0.11%, -2.70% | Buying yesterday's risers loses to the universe. |
+| "Best on selection" | evidence composite, residual momentum, momentum 120d skip 20 | The selection winner changes with the configuration, and two of them were negative in some holdouts. |
+
+Reading: picking the best backtest is unreliable here; an adaptive
+weighting learned only from past outcomes held up best. That was noticed
+after looking at the holdouts, so it is a hypothesis, not a result. A v2
+based on it (IC-weighted, top 5, 20-day hold; `--today` prints current
+picks) must be pre-registered and judged on live signals like v1.
+Survivorship bias (today's liquid names) and the IDX cost estimate are the
+main known distortions.
