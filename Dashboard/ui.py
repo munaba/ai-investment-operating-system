@@ -61,6 +61,26 @@ def recommendations_per_scan_chart(per_scan: pd.DataFrame, order: list[str]) -> 
     )
 
 
+def signal_history_chart(history: pd.DataFrame) -> alt.LayerChart:
+    """Score per scan for one stock: a neutral line for the trend, with each
+    scan's point coloured by the recommendation it produced."""
+    base = alt.Chart(history).encode(  # ty: ignore[missing-attribute]
+        x=alt.X("scan_time:T", title="Scan time (WIB)"),
+        y=alt.Y("score:Q", title="Score (0–100)", scale=alt.Scale(domain=[0, 100])),
+    )
+    line = base.mark_line(color="#64748b", strokeWidth=1.5, opacity=0.6)
+    dots = base.mark_circle(size=70, opacity=0.9, stroke="#0F172A", strokeWidth=1).encode(
+        color=rec_legend_color(),
+        tooltip=[
+            alt.Tooltip("scan_time:T", title="Scan", format="%d %b %Y %H:%M"),
+            "recommendation:N",
+            alt.Tooltip("score:Q", title="Score", format=".0f"),
+            alt.Tooltip("rank:Q", title="Rank"),
+        ],
+    )
+    return (line + dots).properties(height=300)
+
+
 def excess_return_chart(points: pd.DataFrame) -> alt.LayerChart:
     """Excess return per completed signal, with the zero line that separates
     'beat the watchlist' from 'lagged it'."""

@@ -27,6 +27,13 @@ page = st.navigation(
             help="Every recorded watchlist scan: ranking, recommendation, confidence and the evidence behind it.",
         ),
         st.Page(
+            "app_pages/stock.py",
+            title="Stock detail",
+            icon=":material/candlestick_chart:",
+            url_path="stock",
+            help="One stock across every scan: signal history, evaluated outcomes, evidence and briefs.",
+        ),
+        st.Page(
             "app_pages/signals.py",
             title="Signal track record",
             icon=":material/fact_check:",

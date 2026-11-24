@@ -17,6 +17,7 @@ APP = Path(__file__).resolve().parent / "streamlit_app.py"
 PAGES = [
     "app_pages/overview.py",
     "app_pages/scans.py",
+    "app_pages/stock.py",
     "app_pages/signals.py",
     "app_pages/briefs.py",
     "app_pages/paper.py",
