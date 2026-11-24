@@ -1,0 +1,51 @@
+name: tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core:
+    name: Core tests (unit + scenario scripts)
+    # Development and production run on Windows; test there too.
+    runs-on: windows-latest
+    timeout-minutes: 45
+    env:
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt -r requirements-dev.txt
+      - name: Unit tests
+        run: python -m pytest -q -p no:cacheprovider -m "not script"
+      - name: Scenario scripts (each in its own process, private migrated database)
+        run: python -m pytest -q -p no:cacheprovider -m script
+
+  dashboard:
+    name: Dashboard smoke tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: Dashboard/requirements.txt
+      - name: Install dependencies
+        run: python -m pip install -r Dashboard/requirements.txt pytest
+      - name: Every page renders, also on a snapshot full of NULLs
+        run: python -m pytest Dashboard/test_dashboard.py -q -c /dev/null -p no:cacheprovider
