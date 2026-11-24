@@ -2280,7 +2280,11 @@ def _freshness_policy_covering_scan_interval(policy, scan_interval_seconds: floa
         return policy
     from Core.logger import get_logger
 
-    get_logger(__name__).warning(
+    # Only an operator-set value is worth a warning; widening the built-in
+    # default is the expected path and would otherwise log on every tick.
+    explicit = config.get("DATA_FRESHNESS_WINDOW_SECONDS") not in (None, "")
+    log = get_logger(__name__).warning if explicit else get_logger(__name__).debug
+    log(
         "DATA_FRESHNESS_WINDOW_SECONDS=%.0f is shorter than the session-scan interval "
         "plus headroom; using %.0f s so on-schedule data is not reported STALE",
         policy.freshness_window_seconds,
