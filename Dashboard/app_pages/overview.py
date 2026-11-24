@@ -96,8 +96,7 @@ with right:
                     scan=pd.Categorical(scans["scan_time"].map(label_of), categories=labels, ordered=True),
                     recommendation=scans["recommendation"].fillna("NONE"),
                 )
-                .groupby(["scan", "recommendation"], observed=True)
-                .size()
+                .value_counts(["scan", "recommendation"], sort=False)
                 .reset_index(name="count")
             )
             st.bar_chart(

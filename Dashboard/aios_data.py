@@ -101,9 +101,12 @@ def load_snapshot(path: str = str(SNAPSHOT_PATH), url: str = SNAPSHOT_URL) -> Sn
                 frame[column] = _to_wib(frame[column])
         tables[name] = frame
 
+    exported_at = pd.Timestamp(raw["exported_at"])
+    if not isinstance(exported_at, pd.Timestamp):  # NaT: unusable export
+        return None
     migrations = raw.get("migrations", {})
     return Snapshot(
-        exported_at=pd.Timestamp(raw["exported_at"]).tz_convert(WIB),
+        exported_at=exported_at.tz_convert(WIB),
         applied_migrations=list(migrations.get("applied", [])),
         expected_migrations=list(migrations.get("expected", [])),
         tables=tables,
