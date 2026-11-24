@@ -353,9 +353,11 @@ def _run_v2_command(app, argv: list[str]) -> int:
     print("  top 10: " + ", ".join(f"{s} {v:+.1%}" for s, v in result.top))
 
     if result.is_rebalance and not result.already_stored:
+        v3_extra = [s for s, _ in result.top[len(result.picks):10]]
         message = (
             f"AIOS v2 picks {label} (closes up to {result.signal_date}, hold {HOLD} trading days):\n"
             + "\n".join(f"{i}. {s}" for i, s in enumerate(result.picks, 1))
+            + (f"\nv3 (top 10) adds: {', '.join(v3_extra)}" if v3_extra else "")
             + "\nRule: highest close vs 200-day average. Research signal, not financial advice."
         )
         try:

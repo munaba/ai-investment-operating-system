@@ -227,3 +227,43 @@ Decision rule:
    the best pick" wins. If none passes, v2 stays and that is recorded.
    A winner is registered as v3 in a new dated section and runs alongside
    v2; it does not replace v2's registration.
+
+### v3 test results (2026-11-24, `Evaluation/v3_research.py`)
+
+Measures pooled over all 20 schedules: mean net excess per 20 days, share
+of schedules positive, net excess without each period's best pick, share
+of picks beating the universe, and the mean worst drawdown (absolute).
+
+| Candidate | IDX dev | US dev | IDX validation (52 unseen) | US validation (146 unseen) |
+|---|---|---|---|---|
+| A v2 top 5 | +1.72%, 100%, -2.00%, 51%, -37% | +0.80%, 100%, -1.61%, 49%, -28% | +3.85%, 100%, -3.24%, 45%, -42% | +2.61%, 100%, -2.22%, 52%, -31% |
+| B top 10 | +0.82%, 100%, -1.40%, 49%, -33% | +0.21%, 85%, -1.24%, 48%, -24% | +2.76%, 100%, -1.75%, 45%, -41% | +1.36%, 100%, -1.44%, 50%, -26% |
+| C top 10 + regime | +0.59%, 95%, -1.02%, 49%, -36% | +0.30%, 95%, -1.03%, 48%, -24% | +2.60%, 100%, -1.55%, 45%, -46% | +1.53%, 100%, -1.05%, 51%, -26% |
+| D top 10 low vol | +0.36%, 95% | -0.67%, 0% | (not qualified) | |
+| E trend / vol | +0.84%, 100% | -0.04%, 50% | (not qualified) | |
+| F C + D | +0.21%, 80% | -0.51%, 0% | (not qualified) | |
+
+Stage 1 qualified B and C. Stage 2: B passed (positive on every schedule,
+better on two of three measures in both validation markets); C missed on
+IDX (only one of three: deeper drawdown). Decision under the rule: **B**.
+
+Reading:
+
+* The v2 trend rule generalises: on 198 stocks never used before it was
+  positive on all 20 schedules in both markets. This is the strongest
+  evidence so far that v2 is not a lucky fit.
+* No candidate raised the share of picks that beat the universe (45-52%
+  everywhere). Trend following earns from a few large winners; that is the
+  nature of the signal, not a bug.
+* B trades return for robustness: about half v2's mean excess, less
+  dependence on the single best pick, and a shallower drawdown.
+
+## v3 registration (2026-11-24)
+
+v3 = the v2 ranking with the **top 10** picks instead of 5. Everything
+else is the v2 registration: model, universes, signal dates, rebalance
+dates, entry, exit, costs and the verdict rule (30 completed picks per
+market, mean net excess > 0 and more than 50% of picks with positive net
+excess). v3 picks are the rows ranked 1-10 on v2 rebalance dates in
+`v2_rankings`, so both versions come from the same stored rankings. v2
+keeps its own registration and verdict; v3 runs alongside it.
