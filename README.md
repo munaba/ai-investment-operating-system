@@ -50,7 +50,7 @@ python main.py doctor    # read-only check: environment, database, migrations, d
 
 ### Deployment order
 
-- **Back up the DB first** — use the SQLite backup API or copy `data/investment_platform.db`.
+- **Back up the DB first** — `python main.py backup` (SQLite online backup API, read-only source, integrity-checked). `python main.py backup --keep 14` also deletes all but the newest 14 backups in `data/backups/`; the scheduled job runs that after each trading day's closing review.
 - Run `python main.py init` before any scan, then confirm with `python main.py doctor`.
 - Migrate the DB first, then deploy new code.
 - No auto-migration at startup — the operator runs migrations manually.
@@ -87,7 +87,7 @@ Telegram state, raw audit payloads and free-text operator feedback are never exp
 
 ```bash
 pip install -r requirements-dev.txt
-PYTHONPATH=. python -m pytest -q          # 276 passed with a local data/ database
+PYTHONPATH=. python -m pytest -q          # 290+ passed with a local data/ database
 ```
 
 `hypothesis` is also required by `Evaluation/run_eval.py` (property-based L2 checks). PowerShell: `$env:PYTHONPATH="."; python -m pytest -q`.
@@ -135,7 +135,9 @@ Scheduler details: `README_SCHEDULER.md`.
 
 ## Engineering notes
 
-- 270+ pytest tests
+- 290+ pytest tests
+- Session scans throttled to one per 30 minutes (`AIOS_SESSION_SCAN_MIN_INTERVAL_MINUTES`) so a 5-minute scheduler tick does not hammer the market-data provider
+- Credentials are redacted from stored error text (`Core/redaction.py`); the public dashboard export uses a column allowlist
 - Global test for migration-version uniqueness (caught a version collision)
 - Migration registry completeness test (caught `init` skipping 10 of 20 domains)
 - v34: guarded unique index on ranking_snapshots (scan_time, symbol); clear RepositoryError if the index is missing

@@ -39,7 +39,7 @@ from Core.startup_validation import validate_runtime_environment
 from Core.request_defaults import DEFAULT_INTERVAL, DEFAULT_MAX_NEWS, DEFAULT_PERIOD
 from Orchestration.autonomous_agent import AutonomousAgentStatus
 from Orchestration.autonomous_host import AutonomousHost
-from Database.backup import create_backup, verify_backup
+from Database.backup import create_backup, prune_backups, verify_backup
 from Database.database_config import DatabaseConfig
 from Database.models import RankingSnapshot
 from Orchestration.autonomous_agent import AutonomousAgentError
@@ -752,9 +752,14 @@ def _run_backup_command(argv: list[str]) -> int:
     success. Prints a clean, labelled outcome either way -- no raw
     traceback -- and returns a non-zero status on failure.
     """
+    usage = "usage: python main.py backup [--keep N]"
+    keep = None
     if argv:
-        print(f"Unknown backup argument(s): {argv!r} (usage: python main.py backup)")
-        return 1
+        if len(argv) == 2 and argv[0] == "--keep" and argv[1].isdigit() and int(argv[1]) >= 1:
+            keep = int(argv[1])
+        else:
+            print(f"Unknown backup argument(s): {argv!r} ({usage})")
+            return 1
 
     db_config = DatabaseConfig.from_env()
     try:
@@ -784,6 +789,10 @@ def _run_backup_command(argv: list[str]) -> int:
     print(f"  source : {db_config.db_path}")
     print(f"  backup : {backup_path}")
     print("  verified: OK (PRAGMA integrity_check passed)")
+    if keep is not None:
+        # Only after the new backup verified: a failed run never deletes old ones.
+        pruned = prune_backups(db_config.db_path, keep)
+        print(f"  retention: kept newest {keep}, deleted {len(pruned)}")
     return 0
 
 

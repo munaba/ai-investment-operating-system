@@ -222,3 +222,45 @@ def restore_backup(backup_path: Path, target_db_path: Path) -> Path:
     shutil.copyfile(str(backup_path), str(target_db_path))
     logger.info("Database restored: '%s' -> '%s'", backup_path, target_db_path)
     return target_db_path
+
+
+def prune_backups(db_path: Path, keep: int, backup_dir: Optional[Path] = None) -> list[Path]:
+    """Delete all but the newest ``keep`` backups of ``db_path``.
+
+    Amendment (2026-11-24) to this module's original "never deletes"
+    scope, for the scheduled daily backup: retention is opt-in (only
+    ``python main.py backup --keep N`` calls this) and only touches files
+    that :func:`create_backup` itself names -- ``<stem>_<UTC timestamp>.db``
+    in the backup directory. Anything else in that directory, including
+    manual copies with other names, is never deleted.
+
+    Args:
+        db_path: The live database the backups were taken from.
+        keep: How many of the newest backups to keep (must be >= 1).
+        backup_dir: Defaults to :func:`default_backup_dir`.
+
+    Returns:
+        The paths that were deleted, oldest first.
+    """
+    if keep < 1:
+        raise ValueError("keep must be at least 1")
+    db_path = Path(db_path)
+    target_dir = Path(backup_dir) if backup_dir is not None else default_backup_dir(db_path)
+    if not target_dir.is_dir():
+        return []
+
+    ours = []
+    for candidate in target_dir.glob(f"{db_path.stem}_*.db"):
+        stamp = candidate.stem[len(db_path.stem) + 1:]
+        try:
+            datetime.strptime(stamp, _BACKUP_TIMESTAMP_FORMAT)
+        except ValueError:
+            continue  # not a file create_backup() named
+        ours.append(candidate)
+
+    ours.sort(key=lambda p: p.name)  # timestamps sort chronologically
+    doomed = ours[:-keep]
+    for path in doomed:
+        path.unlink()
+        logger.info("Pruned old backup '%s'", path)
+    return doomed

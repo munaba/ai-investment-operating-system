@@ -1,5 +1,5 @@
 {
- "exported_at": "2026-11-23T15:58:15+00:00",
+ "exported_at": "2026-11-24T02:11:21+00:00",
  "migrations": {
   "applied": [
    1,
@@ -1541,6 +1541,160 @@
     "score_breakdown_json": "{\"recommendation\": \"WAIT\", \"recommendation_weight\": 2, \"recommendation_contribution\": 20, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bearish\", \"technical_contribution\": -2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"weak\", \"fundamental_quality_contribution\": -2}",
     "evidence_summary": "Recommendation: WAIT\nConfidence: MEDIUM\n\nStrengths:\n- undervalued fundamentals\n\nRisks:\n- bearish price trend\n- weak company quality\n\nReason: mixed evidence: price=bearish, news=neutral, fundamental=undervalued",
     "error_message": null
+   },
+   {
+    "snapshot_id": 124,
+    "scan_time": "2026-11-24T02:00:55.519129+00:00",
+    "symbol": "ANTM",
+    "status": "success",
+    "recommendation": "BUY",
+    "confidence": "MEDIUM",
+    "priority": 1,
+    "rank": 1,
+    "score": 38,
+    "score_breakdown_json": "{\"recommendation\": \"BUY\", \"recommendation_weight\": 3, \"recommendation_contribution\": 30, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bullish\", \"technical_contribution\": 2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"strong\", \"fundamental_quality_contribution\": 2}",
+    "evidence_summary": "Recommendation: BUY\nConfidence: MEDIUM\n\nStrengths:\n- bullish price trend\n- undervalued fundamentals\n- strong company quality\n\nRisks:\n- No major risk detected\n\nReason: aligned bullish evidence: price=bullish, news=neutral, fundamental=undervalued",
+    "error_message": null
+   },
+   {
+    "snapshot_id": 125,
+    "scan_time": "2026-11-24T02:00:55.519129+00:00",
+    "symbol": "BBCA",
+    "status": "success",
+    "recommendation": "BUY",
+    "confidence": "MEDIUM",
+    "priority": 1,
+    "rank": 2,
+    "score": 38,
+    "score_breakdown_json": "{\"recommendation\": \"BUY\", \"recommendation_weight\": 3, \"recommendation_contribution\": 30, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bullish\", \"technical_contribution\": 2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"strong\", \"fundamental_quality_contribution\": 2}",
+    "evidence_summary": "Recommendation: BUY\nConfidence: MEDIUM\n\nStrengths:\n- bullish price trend\n- undervalued fundamentals\n- strong company quality\n\nRisks:\n- No major risk detected\n\nReason: aligned bullish evidence: price=bullish, news=neutral, fundamental=undervalued",
+    "error_message": null
+   },
+   {
+    "snapshot_id": 126,
+    "scan_time": "2026-11-24T02:00:55.519129+00:00",
+    "symbol": "BRIS",
+    "status": "success",
+    "recommendation": "BUY",
+    "confidence": "MEDIUM",
+    "priority": 1,
+    "rank": 3,
+    "score": 38,
+    "score_breakdown_json": "{\"recommendation\": \"BUY\", \"recommendation_weight\": 3, \"recommendation_contribution\": 30, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bullish\", \"technical_contribution\": 2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"strong\", \"fundamental_quality_contribution\": 2}",
+    "evidence_summary": "Recommendation: BUY\nConfidence: MEDIUM\n\nStrengths:\n- bullish price trend\n- undervalued fundamentals\n- strong company quality\n\nRisks:\n- No major risk detected\n\nReason: aligned bullish evidence: price=bullish, news=neutral, fundamental=undervalued",
+    "error_message": null
+   },
+   {
+    "snapshot_id": 127,
+    "scan_time": "2026-11-24T02:00:55.519129+00:00",
+    "symbol": "ASII",
+    "status": "success",
+    "recommendation": "BUY",
+    "confidence": "MEDIUM",
+    "priority": 1,
+    "rank": 4,
+    "score": 34,
+    "score_breakdown_json": "{\"recommendation\": \"BUY\", \"recommendation_weight\": 3, \"recommendation_contribution\": 30, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bullish\", \"technical_contribution\": 2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"weak\", \"fundamental_quality_contribution\": -2}",
+    "evidence_summary": "Recommendation: BUY\nConfidence: MEDIUM\n\nStrengths:\n- bullish price trend\n- undervalued fundamentals\n\nRisks:\n- weak company quality\n\nReason: aligned bullish evidence: price=bullish, news=neutral, fundamental=undervalued",
+    "error_message": null
+   },
+   {
+    "snapshot_id": 128,
+    "scan_time": "2026-11-24T02:00:55.519129+00:00",
+    "symbol": "AUTO",
+    "status": "success",
+    "recommendation": "BUY",
+    "confidence": "MEDIUM",
+    "priority": 1,
+    "rank": 5,
+    "score": 34,
+    "score_breakdown_json": "{\"recommendation\": \"BUY\", \"recommendation_weight\": 3, \"recommendation_contribution\": 30, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bullish\", \"technical_contribution\": 2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"weak\", \"fundamental_quality_contribution\": -2}",
+    "evidence_summary": "Recommendation: BUY\nConfidence: MEDIUM\n\nStrengths:\n- bullish price trend\n- undervalued fundamentals\n\nRisks:\n- weak company quality\n\nReason: aligned bullish evidence: price=bullish, news=neutral, fundamental=undervalued",
+    "error_message": null
+   },
+   {
+    "snapshot_id": 129,
+    "scan_time": "2026-11-24T02:00:55.519129+00:00",
+    "symbol": "BBTN",
+    "status": "success",
+    "recommendation": "BUY",
+    "confidence": "MEDIUM",
+    "priority": 1,
+    "rank": 6,
+    "score": 34,
+    "score_breakdown_json": "{\"recommendation\": \"BUY\", \"recommendation_weight\": 3, \"recommendation_contribution\": 30, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bullish\", \"technical_contribution\": 2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"weak\", \"fundamental_quality_contribution\": -2}",
+    "evidence_summary": "Recommendation: BUY\nConfidence: MEDIUM\n\nStrengths:\n- bullish price trend\n- undervalued fundamentals\n\nRisks:\n- weak company quality\n\nReason: aligned bullish evidence: price=bullish, news=neutral, fundamental=undervalued",
+    "error_message": null
+   },
+   {
+    "snapshot_id": 130,
+    "scan_time": "2026-11-24T02:00:55.519129+00:00",
+    "symbol": "AKRA",
+    "status": "success",
+    "recommendation": "WAIT",
+    "confidence": "MEDIUM",
+    "priority": 1,
+    "rank": 7,
+    "score": 24,
+    "score_breakdown_json": "{\"recommendation\": \"WAIT\", \"recommendation_weight\": 2, \"recommendation_contribution\": 20, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bearish\", \"technical_contribution\": -2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"strong\", \"fundamental_quality_contribution\": 2}",
+    "evidence_summary": "Recommendation: WAIT\nConfidence: MEDIUM\n\nStrengths:\n- undervalued fundamentals\n- strong company quality\n\nRisks:\n- bearish price trend\n\nReason: mixed evidence: price=bearish, news=neutral, fundamental=undervalued",
+    "error_message": null
+   },
+   {
+    "snapshot_id": 131,
+    "scan_time": "2026-11-24T02:00:55.519129+00:00",
+    "symbol": "BBRI",
+    "status": "success",
+    "recommendation": "WAIT",
+    "confidence": "MEDIUM",
+    "priority": 1,
+    "rank": 8,
+    "score": 24,
+    "score_breakdown_json": "{\"recommendation\": \"WAIT\", \"recommendation_weight\": 2, \"recommendation_contribution\": 20, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bearish\", \"technical_contribution\": -2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"strong\", \"fundamental_quality_contribution\": 2}",
+    "evidence_summary": "Recommendation: WAIT\nConfidence: MEDIUM\n\nStrengths:\n- undervalued fundamentals\n- strong company quality\n\nRisks:\n- bearish price trend\n\nReason: mixed evidence: price=bearish, news=neutral, fundamental=undervalued",
+    "error_message": null
+   },
+   {
+    "snapshot_id": 132,
+    "scan_time": "2026-11-24T02:00:55.519129+00:00",
+    "symbol": "BMRI",
+    "status": "success",
+    "recommendation": "WAIT",
+    "confidence": "MEDIUM",
+    "priority": 1,
+    "rank": 9,
+    "score": 24,
+    "score_breakdown_json": "{\"recommendation\": \"WAIT\", \"recommendation_weight\": 2, \"recommendation_contribution\": 20, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bearish\", \"technical_contribution\": -2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"strong\", \"fundamental_quality_contribution\": 2}",
+    "evidence_summary": "Recommendation: WAIT\nConfidence: MEDIUM\n\nStrengths:\n- undervalued fundamentals\n- strong company quality\n\nRisks:\n- bearish price trend\n\nReason: mixed evidence: price=bearish, news=neutral, fundamental=undervalued",
+    "error_message": null
+   },
+   {
+    "snapshot_id": 133,
+    "scan_time": "2026-11-24T02:00:55.519129+00:00",
+    "symbol": "TLKM",
+    "status": "success",
+    "recommendation": "WAIT",
+    "confidence": "MEDIUM",
+    "priority": 1,
+    "rank": 10,
+    "score": 24,
+    "score_breakdown_json": "{\"recommendation\": \"WAIT\", \"recommendation_weight\": 2, \"recommendation_contribution\": 20, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bearish\", \"technical_contribution\": -2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"strong\", \"fundamental_quality_contribution\": 2}",
+    "evidence_summary": "Recommendation: WAIT\nConfidence: MEDIUM\n\nStrengths:\n- undervalued fundamentals\n- strong company quality\n\nRisks:\n- bearish price trend\n\nReason: mixed evidence: price=bearish, news=neutral, fundamental=undervalued",
+    "error_message": null
+   },
+   {
+    "snapshot_id": 134,
+    "scan_time": "2026-11-24T02:00:55.519129+00:00",
+    "symbol": "BBNI",
+    "status": "success",
+    "recommendation": "WAIT",
+    "confidence": "MEDIUM",
+    "priority": 1,
+    "rank": 11,
+    "score": 20,
+    "score_breakdown_json": "{\"recommendation\": \"WAIT\", \"recommendation_weight\": 2, \"recommendation_contribution\": 20, \"confidence\": \"MEDIUM\", \"confidence_weight\": 2, \"confidence_contribution\": 2, \"technical_trend\": \"bearish\", \"technical_contribution\": -2, \"sentiment\": \"neutral\", \"sentiment_contribution\": 0, \"fundamental_valuation\": \"undervalued\", \"fundamental_valuation_contribution\": 2, \"fundamental_quality\": \"weak\", \"fundamental_quality_contribution\": -2}",
+    "evidence_summary": "Recommendation: WAIT\nConfidence: MEDIUM\n\nStrengths:\n- undervalued fundamentals\n\nRisks:\n- bearish price trend\n- weak company quality\n\nReason: mixed evidence: price=bearish, news=neutral, fundamental=undervalued",
+    "error_message": null
    }
   ],
   "decision_briefs": [
@@ -1715,6 +1869,36 @@
     "finished_at": "2026-11-23T14:33:12.366253+00:00",
     "next_retry_at": null,
     "detail": "{\"status\": \"STALE\", \"age_seconds\": 7900484.422961, \"notification\": \"SUPPRESS_NO_CHANGE\"}"
+   },
+   {
+    "job_type": "pre_market_check",
+    "trading_date": "2026-11-24",
+    "status": "SUCCESS",
+    "attempt": 1,
+    "started_at": "2026-11-24T01:45:54.214491+00:00",
+    "finished_at": "2026-11-24T01:45:54.214491+00:00",
+    "next_retry_at": null,
+    "detail": "{\"session\": \"pre_market\", \"message\": \"pre-market readiness check complete\"}"
+   },
+   {
+    "job_type": "session_scan",
+    "trading_date": "2026-11-24",
+    "status": "SUCCESS",
+    "attempt": 1,
+    "started_at": "2026-11-24T02:00:55.519129+00:00",
+    "finished_at": "2026-11-24T02:00:55.519129+00:00",
+    "next_retry_at": null,
+    "detail": "{\"generated_at\": \"2026-11-24T02:00:55.519129+00:00\", \"total_symbols\": 11, \"notification\": \"SENT\"}"
+   },
+   {
+    "job_type": "data_health_check",
+    "trading_date": "2026-11-24",
+    "status": "SUCCESS",
+    "attempt": 15,
+    "started_at": "2026-11-24T02:10:55.475939+00:00",
+    "finished_at": "2026-11-24T02:10:55.475939+00:00",
+    "next_retry_at": null,
+    "detail": "{\"status\": \"FRESH\", \"age_seconds\": 599.95681, \"notification\": \"SUPPRESS_NO_CHANGE\"}"
    }
   ],
   "watchlist": [
@@ -1766,7 +1950,6 @@
   "accounts": [
    {
     "account_id": "paper",
-    "account_name": "Munaba",
     "mode": "paper",
     "currency": "IDR",
     "asset_class": "stock_id",
@@ -1790,7 +1973,6 @@
     "start_at": "2026-08-24T00:00:00",
     "end_at": "2026-09-23T23:59:59",
     "timezone": "Asia/Jakarta",
-    "note": "Phase H real observation",
     "status": "CLOSED",
     "created_at": "2026-08-23T08:37:40.935692+00:00",
     "closed_at": "2026-09-24T15:22:57.029697+00:00"
@@ -1802,14 +1984,8 @@
     "observation_window_id": 1,
     "reviewed_at": "2026-09-24T17:58:08.702229+00:00",
     "evidence_status": "PARTIAL_EVIDENCE",
-    "known_limitations": "[\"[INSUFFICIENT_DATA] drawdown_process: 'drawdown_process' evidence was not computed: the required collaborator is available, but no matching persisted records exist within this observation window yet.\", \"[EXTERNAL_BLOCKED] broker_live_market_investigation: A real market/broker investigation is explicitly out of scope for Phase H Task 2 by design -- it is a separate, future, human-authorized decision, never attempted by this service.\", \"[AVAILABLE] methodology: Every timestamp filter in this service is a plain ISO-8601 string comparison against the window's own start_at/end_at (inclusive), the same convention already used by JournalService/PaperReviewService -- it does not re-interpret start_at/end_at against window.timezone before comparing them to UTC-stamped persisted records.\", \"[AVAILABLE] methodology: Strategy/market-regime breakdowns reused from PaperReviewService (when available) reflect StrategyPerformanceService/MarketRegimeAttributionService's own account-wide history, not a computation scoped to this window -- neither engine accepts a date range today.\"]",
-    "operator_feedback_ids": "[1]",
     "human_decision": "CONTINUE",
-    "decision_note": "Operator decision CONTINUE based on healthy operational pipeline during observation window. Limited trading activity accepted as period limitation, not technical failure. Next stage to preserve fail-closed permission boundaries and paper/read-only copilot behavior.",
-    "decided_at": "2026-09-24T17:55:29.084088+00:00",
-    "decided_by": "operator",
-    "created_at": "2026-08-25T05:05:06.951301+00:00",
-    "updated_at": "2026-09-24T17:58:08.703747+00:00"
+    "decided_at": "2026-09-24T17:55:29.084088+00:00"
    }
   ]
  },
@@ -1826,11 +2002,11 @@
    "by_recommendation": {
     "BUY": {
      "completed": 0,
-     "pending": 0
+     "pending": 6
     },
     "WAIT": {
      "completed": 0,
-     "pending": 0
+     "pending": 5
     },
     "SELL": {
      "completed": 0,
@@ -1845,14 +2021,14 @@
      "completed": 27,
      "pending": 6,
      "mean_return": 0.005793013469653955,
-     "mean_excess": 0.0016784527437369763,
+     "mean_excess": 0.0016784527437369774,
      "hit_rate": 0.5185185185185185
     },
     "WAIT": {
      "completed": 25,
      "pending": 5,
      "mean_return": -0.007335031477962244,
-     "mean_excess": 0.0024673160088429617
+     "mean_excess": 0.00246731600884296
     },
     "SELL": {
      "completed": 1,
@@ -2196,6 +2372,17 @@
    },
    {
     "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "BBTN",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": -0.049382716,
+    "benchmark_return": -0.0382094124,
+    "excess_return": -0.0111733036,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
     "symbol": "BBNI",
     "recommendation": "WAIT",
     "entry_date": "2026-09-14T00:00:00.000",
@@ -2240,24 +2427,13 @@
    },
    {
     "scan_date": "2026-09-11T00:00:00.000",
-    "symbol": "BBTN",
+    "symbol": "BBRI",
     "recommendation": "WAIT",
     "entry_date": "2026-09-14T00:00:00.000",
     "exit_date": "2026-09-21T00:00:00.000",
-    "forward_return": -0.049382716,
+    "forward_return": -0.0294117647,
     "benchmark_return": -0.0382094124,
-    "excess_return": -0.0111733036,
-    "status": "complete"
-   },
-   {
-    "scan_date": "2026-09-11T00:00:00.000",
-    "symbol": "BBCA",
-    "recommendation": "WAIT",
-    "entry_date": "2026-09-14T00:00:00.000",
-    "exit_date": "2026-09-21T00:00:00.000",
-    "forward_return": -0.0423076923,
-    "benchmark_return": -0.0382094124,
-    "excess_return": -0.0040982799,
+    "excess_return": 0.0087976477,
     "status": "complete"
    },
    {
@@ -2273,17 +2449,6 @@
    },
    {
     "scan_date": "2026-09-11T00:00:00.000",
-    "symbol": "AKRA",
-    "recommendation": "WAIT",
-    "entry_date": "2026-09-14T00:00:00.000",
-    "exit_date": "2026-09-21T00:00:00.000",
-    "forward_return": -0.0364238411,
-    "benchmark_return": -0.0382094124,
-    "excess_return": 0.0017855714,
-    "status": "complete"
-   },
-   {
-    "scan_date": "2026-09-11T00:00:00.000",
     "symbol": "AUTO",
     "recommendation": "WAIT",
     "entry_date": "2026-09-14T00:00:00.000",
@@ -2295,13 +2460,46 @@
    },
    {
     "scan_date": "2026-09-11T00:00:00.000",
-    "symbol": "BBRI",
+    "symbol": "BBCA",
     "recommendation": "WAIT",
     "entry_date": "2026-09-14T00:00:00.000",
     "exit_date": "2026-09-21T00:00:00.000",
-    "forward_return": -0.0294117647,
+    "forward_return": -0.0423076923,
     "benchmark_return": -0.0382094124,
-    "excess_return": 0.0087976477,
+    "excess_return": -0.0040982799,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-09-11T00:00:00.000",
+    "symbol": "AKRA",
+    "recommendation": "WAIT",
+    "entry_date": "2026-09-14T00:00:00.000",
+    "exit_date": "2026-09-21T00:00:00.000",
+    "forward_return": -0.0364238411,
+    "benchmark_return": -0.0382094124,
+    "excess_return": 0.0017855714,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "BBTN",
+    "recommendation": "WAIT",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": -0.0460829493,
+    "benchmark_return": -0.0245226994,
+    "excess_return": -0.0215602499,
+    "status": "complete"
+   },
+   {
+    "scan_date": "2026-10-05T00:00:00.000",
+    "symbol": "BMRI",
+    "recommendation": "BUY",
+    "entry_date": "2026-10-06T00:00:00.000",
+    "exit_date": "2026-10-13T00:00:00.000",
+    "forward_return": -0.0268292683,
+    "benchmark_return": -0.0245226994,
+    "excess_return": -0.0023065689,
     "status": "complete"
    },
    {
@@ -2339,35 +2537,13 @@
    },
    {
     "scan_date": "2026-10-05T00:00:00.000",
-    "symbol": "BMRI",
+    "symbol": "BBRI",
     "recommendation": "BUY",
     "entry_date": "2026-10-06T00:00:00.000",
     "exit_date": "2026-10-13T00:00:00.000",
-    "forward_return": -0.0268292683,
+    "forward_return": -0.0096463023,
     "benchmark_return": -0.0245226994,
-    "excess_return": -0.0023065689,
-    "status": "complete"
-   },
-   {
-    "scan_date": "2026-10-05T00:00:00.000",
-    "symbol": "BBTN",
-    "recommendation": "WAIT",
-    "entry_date": "2026-10-06T00:00:00.000",
-    "exit_date": "2026-10-13T00:00:00.000",
-    "forward_return": -0.0460829493,
-    "benchmark_return": -0.0245226994,
-    "excess_return": -0.0215602499,
-    "status": "complete"
-   },
-   {
-    "scan_date": "2026-10-05T00:00:00.000",
-    "symbol": "BBCA",
-    "recommendation": "BUY",
-    "entry_date": "2026-10-06T00:00:00.000",
-    "exit_date": "2026-10-13T00:00:00.000",
-    "forward_return": -0.0245901639,
-    "benchmark_return": -0.0245226994,
-    "excess_return": -6.74645e-05,
+    "excess_return": 0.0148763972,
     "status": "complete"
    },
    {
@@ -2405,13 +2581,13 @@
    },
    {
     "scan_date": "2026-10-05T00:00:00.000",
-    "symbol": "BBRI",
+    "symbol": "BBCA",
     "recommendation": "BUY",
     "entry_date": "2026-10-06T00:00:00.000",
     "exit_date": "2026-10-13T00:00:00.000",
-    "forward_return": -0.0096463023,
+    "forward_return": -0.0245901639,
     "benchmark_return": -0.0245226994,
-    "excess_return": 0.0148763972,
+    "excess_return": -6.74645e-05,
     "status": "complete"
    },
    {
@@ -2449,7 +2625,7 @@
    },
    {
     "scan_date": "2026-11-23T00:00:00.000",
-    "symbol": "BMRI",
+    "symbol": "BBNI",
     "recommendation": "WAIT",
     "entry_date": null,
     "exit_date": null,
@@ -2460,7 +2636,18 @@
    },
    {
     "scan_date": "2026-11-23T00:00:00.000",
-    "symbol": "BBRI",
+    "symbol": "TLKM",
+    "recommendation": "WAIT",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-23T00:00:00.000",
+    "symbol": "BMRI",
     "recommendation": "WAIT",
     "entry_date": null,
     "exit_date": null,
@@ -2493,8 +2680,8 @@
    },
    {
     "scan_date": "2026-11-23T00:00:00.000",
-    "symbol": "BBCA",
-    "recommendation": "BUY",
+    "symbol": "BBRI",
+    "recommendation": "WAIT",
     "entry_date": null,
     "exit_date": null,
     "forward_return": null,
@@ -2526,7 +2713,7 @@
    },
    {
     "scan_date": "2026-11-23T00:00:00.000",
-    "symbol": "ANTM",
+    "symbol": "BBCA",
     "recommendation": "BUY",
     "entry_date": null,
     "exit_date": null,
@@ -2537,8 +2724,8 @@
    },
    {
     "scan_date": "2026-11-23T00:00:00.000",
-    "symbol": "TLKM",
-    "recommendation": "WAIT",
+    "symbol": "ANTM",
+    "recommendation": "BUY",
     "entry_date": null,
     "exit_date": null,
     "forward_return": null,
@@ -2558,7 +2745,117 @@
     "status": "pending"
    },
    {
-    "scan_date": "2026-11-23T00:00:00.000",
+    "scan_date": "2026-11-24T00:00:00.000",
+    "symbol": "TLKM",
+    "recommendation": "WAIT",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-24T00:00:00.000",
+    "symbol": "ANTM",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-24T00:00:00.000",
+    "symbol": "BBCA",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-24T00:00:00.000",
+    "symbol": "BRIS",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-24T00:00:00.000",
+    "symbol": "ASII",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-24T00:00:00.000",
+    "symbol": "AUTO",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-24T00:00:00.000",
+    "symbol": "BBTN",
+    "recommendation": "BUY",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-24T00:00:00.000",
+    "symbol": "AKRA",
+    "recommendation": "WAIT",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-24T00:00:00.000",
+    "symbol": "BBRI",
+    "recommendation": "WAIT",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-24T00:00:00.000",
+    "symbol": "BMRI",
+    "recommendation": "WAIT",
+    "entry_date": null,
+    "exit_date": null,
+    "forward_return": null,
+    "benchmark_return": null,
+    "excess_return": null,
+    "status": "pending"
+   },
+   {
+    "scan_date": "2026-11-24T00:00:00.000",
     "symbol": "BBNI",
     "recommendation": "WAIT",
     "entry_date": null,
