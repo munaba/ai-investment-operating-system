@@ -144,9 +144,10 @@ class IDXMarketCalendar:
         year and alert, because treating its weekdays as trading days
         risks false-positive ticks on real national holidays.
 
-        TODO (manual input, do NOT invent): populate ``IDX_NATIONAL_
-        HOLIDAYS_2027`` from the official BEI / SKB 3 Menteri announcement
-        once published, then extend this check.
+        2027 is covered through ``IDX_NATIONAL_HOLIDAYS_2027``, which
+        ``load_idx_market_calendar`` always includes. Add the next year's
+        table from the official SKB 3 Menteri and BEI announcements (do
+        not invent dates) before that year starts.
         """
         if year == 2026:
             return True
@@ -297,13 +298,55 @@ IDX_NATIONAL_HOLIDAYS_2026: FrozenSet[date] = frozenset(
 )
 
 
+#: IDX non-trading dates for 2027, transcribed from the Joint Decree (SKB)
+#: Menaker/Menag/MenPAN-RB No. 1205/3/2 Tahun 2026 on national holidays and
+#: cuti bersama 2027 (signed 2026-09-15, published by Setneg) and the BEI
+#: trading-holiday announcement Peng-00169/BEI.POP/09-2026 (2026-09-16).
+#: Check: 261 weekdays - 20 weekday holidays = 241 trading days, matching
+#: BEI's published count; March has 15 trading days, trading resumes
+#: Tuesday 2027-03-16 after Idulfitri. Weekend dates are kept for
+#: completeness. Lunar dates may shift on the government's announcement;
+#: use ``IDX_MARKET_HOLIDAYS`` to add a date (it is unioned, not replaced).
+IDX_NATIONAL_HOLIDAYS_2027: FrozenSet[date] = frozenset(
+    {
+        date(2027, 1, 1),  # Tahun Baru 2027 Masehi (Jumat)
+        date(2027, 1, 5),  # Isra Mikraj Nabi Muhammad SAW 1448 H (Selasa)
+        date(2027, 2, 5),  # Cuti bersama: Tahun Baru Imlek (Jumat)
+        date(2027, 2, 6),  # Tahun Baru Imlek 2578 Kongzili (Sabtu)
+        date(2027, 3, 8),  # Hari Suci Nyepi, Tahun Baru Saka 1949 (Senin)
+        date(2027, 3, 9),  # Cuti bersama: Idulfitri (Selasa)
+        date(2027, 3, 10),  # Idulfitri 1448 H (Rabu)
+        date(2027, 3, 11),  # Idulfitri 1448 H (Kamis)
+        date(2027, 3, 12),  # Cuti bersama: Idulfitri (Jumat)
+        date(2027, 3, 15),  # Cuti bersama: Idulfitri (Senin)
+        date(2027, 3, 25),  # Cuti bersama: Wafat Yesus Kristus (Kamis)
+        date(2027, 3, 26),  # Wafat Yesus Kristus (Jumat)
+        date(2027, 3, 28),  # Kebangkitan Yesus Kristus / Paskah (Minggu)
+        date(2027, 5, 1),  # Hari Buruh Internasional (Sabtu)
+        date(2027, 5, 6),  # Kenaikan Yesus Kristus (Kamis)
+        date(2027, 5, 17),  # Iduladha 1448 H (Senin)
+        date(2027, 5, 18),  # Cuti bersama: Iduladha (Selasa)
+        date(2027, 5, 19),  # Cuti bersama: Waisak (Rabu)
+        date(2027, 5, 20),  # Hari Raya Waisak 2571 BE (Kamis)
+        date(2027, 6, 1),  # Hari Lahir Pancasila (Selasa)
+        date(2027, 6, 6),  # 1 Muharam, Tahun Baru Islam 1449 H (Minggu)
+        date(2027, 8, 15),  # Maulid Nabi Muhammad SAW (Minggu)
+        date(2027, 8, 17),  # Proklamasi Kemerdekaan RI (Selasa)
+        date(2027, 12, 24),  # Cuti bersama: Natal (Jumat)
+        date(2027, 12, 25),  # Kelahiran Yesus Kristus / Natal (Sabtu)
+        date(2027, 12, 26),  # Isra Mikraj Nabi Muhammad SAW 1449 H (Minggu)
+        date(2027, 12, 31),  # Libur bursa akhir tahun (BEI Peng-00169/BEI.POP/09-2026)
+    }
+)
+
+
 def load_idx_market_calendar(env_get=None) -> IDXMarketCalendar:
     """Build an ``IDXMarketCalendar`` reading holiday overrides from
     the ``IDX_MARKET_HOLIDAYS`` env var (comma-separated ``YYYY-MM-DD``
     dates), if present.
 
-    The built-in :data:`IDX_NATIONAL_HOLIDAYS_2026` table is always
-    applied first, so a missing env var cannot make the scheduler treat
+    The built-in :data:`IDX_NATIONAL_HOLIDAYS_2026` and
+    :data:`IDX_NATIONAL_HOLIDAYS_2027` tables are always applied first, so a missing env var cannot make the scheduler treat
     a national holiday as an ordinary trading day. Env-supplied dates
     are unioned on top of it (operator overrides, e.g. cuti bersama).
 
@@ -325,5 +368,5 @@ def load_idx_market_calendar(env_get=None) -> IDXMarketCalendar:
         env_get = _config.get_str
     raw = env_get("IDX_MARKET_HOLIDAYS", "") or ""
     return IDXMarketCalendar(
-        holiday_dates=IDX_NATIONAL_HOLIDAYS_2026 | _parse_holiday_env(raw)
+        holiday_dates=IDX_NATIONAL_HOLIDAYS_2026 | IDX_NATIONAL_HOLIDAYS_2027 | _parse_holiday_env(raw)
     )

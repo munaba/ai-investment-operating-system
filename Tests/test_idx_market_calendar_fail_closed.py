@@ -20,13 +20,31 @@ class TestYearCoverage:
         assert cal.is_trading_day(date(2026, 1, 5))  # Monday, not a holiday
         assert not cal.is_trading_day(date(2026, 1, 1))  # New Year's Day
 
-    def test_2027_year_outside_coverage_returns_false_fail_closed(self) -> None:
-        """For years outside 2026 without holidays provided, weekdays are fail-closed to False."""
+    def test_2027_is_covered_by_the_built_in_table(self) -> None:
+        """2027 holidays come from the SKB 3 Menteri and BEI announcements."""
         cal = load_idx_market_calendar()
-        # 2027-01-01 is Friday - but outside coverage, no operator override → False
-        assert cal.is_trading_day(date(2027, 1, 1)) is False
-        # 2027-01-04 is Monday - outside coverage, no override → False
-        assert cal.is_trading_day(date(2027, 1, 4)) is False
+        assert cal.covers_year(2027)
+        assert cal.is_trading_day(date(2027, 1, 1)) is False  # Tahun Baru
+        assert cal.is_trading_day(date(2027, 1, 4)) is True  # ordinary Monday
+
+    def test_2027_matches_bei_241_trading_days(self) -> None:
+        """BEI Peng-00169/BEI.POP/09-2026: 241 trading days in 2027."""
+        from datetime import timedelta
+
+        cal = load_idx_market_calendar()
+        days = [date(2027, 1, 1) + timedelta(days=i) for i in range(365)]
+        assert sum(cal.is_trading_day(d) for d in days) == 241
+        march = [d for d in days if d.month == 3]
+        assert sum(cal.is_trading_day(d) for d in march) == 15
+        assert cal.is_trading_day(date(2027, 3, 16)) is True  # first session after Idulfitri
+        assert cal.is_trading_day(date(2027, 12, 31)) is False
+
+    def test_2028_year_outside_coverage_returns_false_fail_closed(self) -> None:
+        """For years without holidays provided, weekdays are fail-closed to False."""
+        cal = load_idx_market_calendar()
+        # 2028-01-03 is Monday - outside coverage, no override -> False
+        assert cal.is_trading_day(date(2028, 1, 3)) is False
+        assert not cal.covers_year(2028)
 
     def test_2025_year_outside_coverage_fail_closed(self) -> None:
         """2025 is also outside the 2026 holiday table - fail-closed."""
@@ -55,13 +73,12 @@ class TestFailClosedBehavior:
     unless the operator has explicitly added holidays for that year.
     """
 
-    def test_current_behavior_fail_closed_2027(self) -> None:
-        """Document fail-closed behavior: 2027 without operator override returns False."""
+    def test_current_behavior_fail_closed_2028(self) -> None:
+        """Document fail-closed behavior: 2028 without operator override returns False."""
         cal = load_idx_market_calendar()
-        # 2027-01-01 is Friday - New Year's Day
-        # Current behavior: False (fail-closed, no 2027 holidays provided)
-        result = cal.is_trading_day(date(2027, 1, 1))
-        assert result is False, "Implementation is now fail-closed for years outside 2026"
+        # 2028-01-04 is Tuesday; no 2028 holidays provided -> fail-closed
+        result = cal.is_trading_day(date(2028, 1, 4))
+        assert result is False, "Implementation is fail-closed for years without holiday data"
 
     def test_manual_holiday_override_works(self) -> None:
         """Operator can add 2027 holidays via constructor."""
