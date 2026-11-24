@@ -29,7 +29,10 @@ age_days = (
     None
     if last_scan_time is None
     else int(np.busday_count(
-        last_scan_time.date(), pd.Timestamp.now(tz=WIB).date(), holidays=snapshot.market_holidays
+        last_scan_time.date(), pd.Timestamp.now(tz=WIB).date(),
+        # getattr: a hot-reloaded page can briefly run against the previous
+        # aios_data module (Streamlit Cloud redeploy) that lacks this field.
+        holidays=getattr(snapshot, "market_holidays", []),
     ))
 )
 counts = with_rec(current)["recommendation"].value_counts() if not current.empty else pd.Series(dtype=int)
