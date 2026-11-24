@@ -53,6 +53,7 @@ from __future__ import annotations
 import ast
 import os
 import sys
+import tempfile
 import types as pytypes
 from pathlib import Path
 from typing import Any, List
@@ -143,7 +144,9 @@ os.environ.setdefault("GEMINI_MODEL", "gemini-2.0-flash")
 
 from Providers.gemini_vision_provider import GeminiVisionProvider  # noqa: E402
 
-_CHART_PATH = "/tmp/test_stage_l142_chart.png"
+# The system temp folder: "/tmp" only exists on Windows when the current
+# drive happens to have a 	mp folder (it did on the dev PC, not on CI).
+_CHART_PATH = str(Path(tempfile.gettempdir()) / "test_stage_l142_chart.png")
 _CHART_BYTES = b"\x89PNG-fake-bytes"
 
 
