@@ -7,7 +7,10 @@ from ui import REPO_URL, page_footer
 
 snapshot = require_snapshot()
 rankings = snapshot.table("v2_rankings")
-evaluation = snapshot.v2_evaluation
+# getattr: a hot-reloaded page can briefly run against the previous
+# aios_data module (Streamlit Cloud redeploy) that lacks this field.
+evaluation = getattr(snapshot, "v2_evaluation", None) or {
+    "status": "UNAVAILABLE", "error": "the app is still reloading; refresh in a minute"}
 
 st.caption(
     "v2 ranks liquid stocks by how far the close is above its 200-day average and buys the top 5 "
