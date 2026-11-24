@@ -2213,7 +2213,12 @@ def _build_idx_daily_scheduler(
     notification_dedup_repository = NotificationDedupRepository(database_manager)
     audit_event_repository = AuditEventRepository(database_manager)
     idx_market_calendar = load_idx_market_calendar()
-    data_freshness_policy = load_data_freshness_policy()
+    # A 5-minute cron would otherwise trigger ~64 full Yahoo scans per
+    # trading day. Default 30 minutes; set 0 to scan on every tick.
+    session_scan_min_interval_seconds = 60.0 * config.get_float("AIOS_SESSION_SCAN_MIN_INTERVAL_MINUTES", 30.0)
+    data_freshness_policy = _freshness_policy_covering_scan_interval(
+        load_data_freshness_policy(), session_scan_min_interval_seconds
+    )
     notification_dedup_policy = load_notification_dedup_policy()
 
     # Gate 4 Phase I: evidence_adapter for job #6
@@ -2248,11 +2253,40 @@ def _build_idx_daily_scheduler(
         notification_manager=notification_manager,
         account_id=account_id,
         evidence_adapter=evidence_adapter,
-        # A 5-minute cron would otherwise trigger ~64 full Yahoo scans per
-        # trading day. Default 30 minutes; set 0 to scan on every tick.
-        session_scan_min_interval_seconds=60.0
-        * config.get_float("AIOS_SESSION_SCAN_MIN_INTERVAL_MINUTES", 30.0),
+        session_scan_min_interval_seconds=session_scan_min_interval_seconds,
     )
+
+
+#: Headroom added on top of the session-scan interval when deriving the
+#: minimum freshness window: one 5-minute tick, the scan-interval
+#: tolerance, and the scan's own run time.
+_FRESHNESS_HEADROOM_SECONDS: float = 900.0
+
+
+def _freshness_policy_covering_scan_interval(policy, scan_interval_seconds: float):
+    """Widen ``policy`` so data cannot go STALE between two on-schedule scans.
+
+    The 15-minute default window was shorter than the 30-minute scan
+    interval, so every regular session flipped FRESH/STALE all day and
+    paged Telegram on each flip (2026-11-24 production log: 61 of 98
+    health checks STALE, 8 freshness alerts). A window must cover the
+    gap between scans plus headroom; a shorter configured value is
+    raised, with a warning, instead of producing guaranteed noise.
+    """
+    from Business.data_freshness_policy import DataFreshnessPolicy
+
+    floor = scan_interval_seconds + _FRESHNESS_HEADROOM_SECONDS if scan_interval_seconds > 0 else 0.0
+    if policy.freshness_window_seconds >= floor:
+        return policy
+    from Core.logger import get_logger
+
+    get_logger(__name__).warning(
+        "DATA_FRESHNESS_WINDOW_SECONDS=%.0f is shorter than the session-scan interval "
+        "plus headroom; using %.0f s so on-schedule data is not reported STALE",
+        policy.freshness_window_seconds,
+        floor,
+    )
+    return DataFreshnessPolicy(freshness_window_seconds=floor)
 
 
 def _build_health_audit_service(database_manager: DatabaseManager) -> HealthAuditService:

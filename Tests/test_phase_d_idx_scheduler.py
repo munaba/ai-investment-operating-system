@@ -367,6 +367,24 @@ def scenario_c2_session_scan_min_interval():
         check(scan.call_count == 3, "the interval never carries over to the next trading day")
 
 
+def scenario_c3_session_scan_interval_tolerance():
+    print("\n[Scenario C3] a tick a few seconds early still counts as on schedule")
+    with scenario_tempdir() as tmp:
+        scan = FakeManualScanService()
+        stack = _build_stack(Path(tmp) / "phase_d.db", scan_service=scan,
+                             session_scan_min_interval_seconds=1800.0)
+        scheduler = stack["scheduler"]
+
+        # Production 2026-11-24: scan finished 09:00:57, next cron tick at
+        # 09:30:55 was skipped for being 2s early -> 35-minute cadence.
+        scheduler.tick(_utc(*_MON, 2, 0, 57))
+        scheduler.tick(_utc(*_MON, 2, 30, 55))
+        check(scan.call_count == 2, "a tick 2s before the interval elapses still scans")
+        early = _outcome_map(scheduler.tick(_utc(*_MON, 2, 35, 55)))[JOB_SESSION_SCAN]
+        check(scan.call_count == 2 and early.outcome == "SKIPPED",
+              "a tick 5 minutes after a scan is still skipped")
+
+
 # ---------------------------------------------------------------------
 # Scenario D -- data-health check (no fetch, freshness evaluation)
 # ---------------------------------------------------------------------
@@ -514,7 +532,8 @@ def scenario_g_degradation_recovery():
     print("\n[Scenario G] degradation/recovery (data-freshness alert)")
     with scenario_tempdir() as tmp:
         notifier = FakeNotificationManager()
-        stack = _build_stack(Path(tmp) / "phase_d.db", notification_manager=notifier)
+        stack = _build_stack(Path(tmp) / "phase_d.db", notification_manager=notifier,
+                             scan_service=FakeManualScanService(fail_calls={2}))
         scheduler = stack["scheduler"]
 
         # Tick 1: first-ever tick. session_scan succeeds (FRESH candidate,
@@ -525,26 +544,52 @@ def scenario_g_degradation_recovery():
         sent_after_fresh = len(_freshness_alerts(notifier))
         check(sent_after_fresh == 1, "first-ever data_freshness evaluation (FRESH) is sent unconditionally")
 
-        # Tick 2: well past the 900s freshness window, during lunch break
-        # (no new scan in between) -> STALE -> signature flips to
-        # DEGRADED -> genuinely changed signature, rate-limit window
-        # elapsed since tick 1 -> exactly one degrade alert.
-        t_stale = LUNCH_UTC(*_MON)
+        # Lunch break: data ages past the window, but no scan may run, so
+        # this is expected -- reported, never alerted.
+        lunch = _outcome_map(scheduler.tick(LUNCH_UTC(*_MON)))[JOB_DATA_HEALTH_CHECK]
+        check('"status": "STALE"' in lunch.detail and "SUPPRESS_MARKET_CLOSED" in lunch.detail,
+              "STALE during the lunch break is reported but not alerted")
+        check(len(_freshness_alerts(notifier)) == sent_after_fresh, "no freshness alert outside the regular session")
+
+        # Session 2 opens but the scan fails -> genuinely stale while the
+        # market is open -> exactly one degrade alert.
+        t_stale = SESSION2_UTC(*_MON)
         scheduler.tick(t_stale)
         sent_after_degraded = len(_freshness_alerts(notifier))
-        check(sent_after_degraded == sent_after_fresh + 1, "exactly one alert fires on the FRESH->DEGRADED transition")
+        check(sent_after_degraded == sent_after_fresh + 1,
+              "exactly one alert fires when data is stale during the open session")
 
         # A second degraded tick shortly after must NOT re-alert (dedup:
         # identical DEGRADED signature).
         scheduler.tick(t_stale + timedelta(seconds=5))
         check(len(_freshness_alerts(notifier)) == sent_after_degraded, "repeated DEGRADED evaluations do not re-alert")
 
-        # Recovery: a fresh scan again (next session) -> data_health_check
-        # reads FRESH -> signature flips back -> exactly one recovery alert.
-        t_open2 = SESSION2_UTC(*_MON)
-        scheduler.tick(t_open2)
+        # Recovery: the retried scan succeeds -> FRESH -> one recovery alert
+        # (35 min later, past the 30-minute alert rate limit).
+        scheduler.tick(t_stale + timedelta(minutes=35))
         check(len(_freshness_alerts(notifier)) == sent_after_degraded + 1,
               "exactly one alert fires on the DEGRADED->FRESH recovery")
+
+        # After the close the data ages again; still no alert.
+        scheduler.tick(CLOSE_UTC(*_MON))
+        check(len(_freshness_alerts(notifier)) == sent_after_degraded + 1,
+              "no freshness alert after the market closes")
+
+
+def scenario_g2_uncovered_year_alert():
+    print("\n[Scenario G2] a calendar year without holiday coverage alerts once, never crashes")
+    with scenario_tempdir() as tmp:
+        notifier = FakeNotificationManager()
+        stack = _build_stack(Path(tmp) / "phase_d.db", notification_manager=notifier)
+        scheduler = stack["scheduler"]
+        monday_2099 = _utc(2099, 1, 5, 2, 30)
+        result = scheduler.tick(monday_2099)
+        check(result.jobs == (), "an uncovered year runs no job (fail-closed)")
+        alerts = [e for e in notifier.sent if e.title == "IDX Calendar: 2099 not covered"]
+        check(len(alerts) == 1, "exactly one 'year not covered' alert is sent")
+        scheduler.tick(monday_2099 + timedelta(minutes=5))
+        alerts = [e for e in notifier.sent if e.title == "IDX Calendar: 2099 not covered"]
+        check(len(alerts) == 1, "later ticks the same year do not re-alert")
 
 
 # ---------------------------------------------------------------------
@@ -711,10 +756,12 @@ def main() -> int:
     scenario_b_premarket_idempotency()
     scenario_c_session_scan_gating()
     scenario_c2_session_scan_min_interval()
+    scenario_c3_session_scan_interval_tolerance()
     scenario_d_data_health_check()
     scenario_e_retry_backoff()
     scenario_f_notification_dedup()
     scenario_g_degradation_recovery()
+    scenario_g2_uncovered_year_alert()
     scenario_h_market_close_once()
     scenario_i_daily_review_once()
     scenario_j_restart_persistence()

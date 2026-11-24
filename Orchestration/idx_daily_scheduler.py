@@ -136,6 +136,18 @@ SKIP_NON_TRADING_DAY: str = "non_trading_day"
 DEFAULT_RETRY_BASE_SECONDS: float = 60.0
 DEFAULT_RETRY_MAX_SECONDS: float = 3600.0
 
+#: Slack allowed when comparing a tick against the session-scan minimum
+#: interval. Cron ticks land a second or two either side of the 5-minute
+#: mark, so without it a 30-minute interval skips the tick that arrives
+#: 2s "early" and the real cadence drifts to 35 minutes (observed in the
+#: 2026-11-24 production log: 10 scans instead of 12).
+SESSION_SCAN_INTERVAL_TOLERANCE_SECONDS: float = 60.0
+
+#: ``notification`` value reported by ``data_health_check`` outside the
+#: regular session. Data is expected to age while no scan may run
+#: (pre-market, lunch break, after hours), so it is not alert-worthy.
+NOTIFICATION_SUPPRESS_MARKET_CLOSED: str = "SUPPRESS_MARKET_CLOSED"
+
 
 def _parse_iso8601(value: str) -> datetime:
     from datetime import timezone as _timezone
@@ -500,7 +512,7 @@ class IDXDailyScheduler:
             return "awaiting retry backoff from a prior failed attempt this session"
         if self._session_scan_min_interval_seconds > 0 and row.status == JOB_STATUS_SUCCESS and row.finished_at:
             next_allowed = _parse_iso8601(row.finished_at) + timedelta(seconds=self._session_scan_min_interval_seconds)
-            if now < next_allowed:
+            if now + timedelta(seconds=SESSION_SCAN_INTERVAL_TOLERANCE_SECONDS) < next_allowed:
                 return f"minimum scan interval: next scan at or after {next_allowed.isoformat()}"
         return None
 
@@ -582,6 +594,18 @@ class IDXDailyScheduler:
         last_good = self._load_last_good_session_scan_observation()
         result = self._freshness_policy.evaluate(candidate=last_good, now=now, last_good=last_good)
 
+        if not self._calendar.is_market_open(now):
+            # No scan may run outside the regular session, so ageing data
+            # is expected, not a degradation. Leave the dedup state alone
+            # so the next in-session evaluation compares against the last
+            # real alert (the 2026-11-24 log showed 8 FRESH/STALE pings in
+            # one day, several of them at lunch and after the close).
+            return {
+                "status": result.status,
+                "age_seconds": result.age_seconds,
+                "notification": NOTIFICATION_SUPPRESS_MARKET_CLOSED,
+            }
+
         new_signature = "FRESH" if result.status == FRESH else "DEGRADED"
         state = self._dedup_repo.get_dedup_state(ALERT_DATA_FRESHNESS)
         decision = self._dedup_policy.evaluate(state=state, new_signature=new_signature, now=now)
@@ -654,21 +678,19 @@ class IDXDailyScheduler:
 
         def build_event():
             return NotificationEvent(
-                event_type=NotificationEventType.ALERT,
+                event_type=NotificationEventType.SCAN_FAILED,
+                timestamp=now.isoformat(),
                 title=f"IDX Calendar: {year} not covered",
-                body=(
+                message=(
                     f"The IDX market calendar has no holiday coverage for {year}. "
                     f"Add {year} holidays via IDX_MARKET_HOLIDAYS env var. "
                     f"Until then, the scheduler will treat every day as non-trading (fail-closed)."
                 ),
+                metadata={"year": year},
             )
 
-        decision = self._dedup_policy.should_send_notification(
-            alert_type=alert_type,
-            new_signature=new_signature,
-            prior_signature=None,
-            prior_sent_at=None,
-        )
+        state = self._dedup_repo.get_dedup_state(alert_type)
+        decision = self._dedup_policy.evaluate(state=state, new_signature=new_signature, now=now)
 
         self._apply_dedup_decision(
             alert_type=alert_type,
