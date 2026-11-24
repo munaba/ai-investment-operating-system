@@ -4,11 +4,14 @@
 
 .DESCRIPTION
     Run once on the new machine, in PowerShell, after installing Git,
-    Python 3.14, Node.js, 9router (npm i -g 9router) and Hermes. It:
+    Python 3.14, Node.js, 9router (npm i -g 9router) and Hermes. With
+    -NoNineRouter, 9router and Node.js are not needed: the audit job then
+    uses Hermes's own main model (set it first with `hermes model`). It:
       1. clones the repository (or reuses an existing checkout),
       2. creates .venv and installs requirements.txt,
       3. sets AIOS_REPO for this user,
-      4. installs the Hermes wrapper scripts and the 9router autostart,
+      4. installs the Hermes wrapper scripts and (unless -NoNineRouter)
+         the 9router autostart,
       5. keeps the machine awake on AC power with the lid closed,
       6. creates the audit worktree,
       7. creates the four AIOS Hermes jobs PAUSED (resumed by
@@ -17,13 +20,18 @@
 
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File ops\setup_server.ps1 -RepoDir C:\AIOS
+
+.EXAMPLE
+    # Hermes's built-in model instead of 9router (run `hermes model` first)
+    powershell -ExecutionPolicy Bypass -File ops\setup_server.ps1 -RepoDir C:\AIOS -NoNineRouter
 #>
 param(
     [string]$RepoDir = (Join-Path $env:USERPROFILE 'AIOS'),
     [string]$AuditDir = '',
     [string]$RepoUrl = 'https://github.com/munaba/ai-investment-operating-system.git',
     [switch]$SkipPower,
-    [switch]$SkipJobs
+    [switch]$SkipJobs,
+    [switch]$NoNineRouter
 )
 $ErrorActionPreference = 'Stop'
 if (-not $AuditDir) { $AuditDir = "$RepoDir-hermes" }
@@ -36,8 +44,10 @@ function Require($command, $hint) {
 Step 'Checking prerequisites'
 Require git 'Install Git for Windows.'
 Require py 'Install Python 3.14 from python.org (includes the py launcher).'
-Require node 'Install Node.js LTS.'
-Require 9router 'Run: npm install -g 9router, then start it once and sign in.'
+if (-not $NoNineRouter) {
+    Require node 'Install Node.js LTS.'
+    Require 9router 'Run: npm install -g 9router, then start it once and sign in.'
+}
 Require hermes 'Install Hermes and sign in to Telegram there first.'
 $hermesScripts = Join-Path $env:LOCALAPPDATA 'hermes\scripts'
 if (-not (Test-Path $hermesScripts)) { throw "Hermes scripts folder not found: $hermesScripts" }
@@ -65,6 +75,7 @@ Step 'Hermes wrapper scripts'
 Copy-Item (Join-Path $RepoDir 'ops\hermes\*.py') $hermesScripts -Force
 Get-ChildItem (Join-Path $RepoDir 'ops\hermes\*.py') | ForEach-Object { Write-Host "  $($_.Name)" }
 
+if (-not $NoNineRouter) {
 Step '9router autostart at logon'
 $autostart = Join-Path $env:LOCALAPPDATA '9router-autostart'
 New-Item -ItemType Directory -Force $autostart | Out-Null
@@ -76,6 +87,7 @@ $link.Arguments = '"' + (Join-Path $autostart 'start-9router.vbs') + '"'
 $link.WorkingDirectory = $autostart
 $link.Save()
 Write-Host '  Startup shortcut created. For restarts without anyone logging in, enable auto-login (netplwiz).'
+}
 
 if (-not $SkipPower) {
     Step 'Power: never sleep on AC, lid close does nothing'
@@ -110,10 +122,13 @@ if (-not $SkipJobs) {
     if (-not $existing.ContainsKey('AIOS daily audit')) {
         $prompt = (Get-Content (Join-Path $RepoDir 'ops\hermes\daily_audit_prompt.txt') -Raw)
         $prompt = $prompt.Replace('F:\AIOS-hermes', $AuditDir).Replace('F:\My Son', $RepoDir)
+        # 9router: pin the HERMES route. Otherwise pin Hermes's current main
+        # model (`hermes model`), so a later default change does not move it.
+        $modelArgs = if ($NoNineRouter) { @('--pin') } else { @('--model', 'HERMES', '--provider', 'custom:9router') }
         & hermes cron create --name 'AIOS daily audit' --deliver telegram --catch-up off --timezone Asia/Jakarta `
-            --workdir $AuditDir --model HERMES --provider custom:9router --no-wrap-response --paused `
+            --workdir $AuditDir @modelArgs --no-wrap-response --paused `
             '30 7,12,20 * * *' $prompt | Out-Null
-        Write-Host '  created: AIOS daily audit'
+        Write-Host "  created: AIOS daily audit ($(if ($NoNineRouter) { 'Hermes main model, pinned' } else { 'HERMES via 9router' }))"
     }
 }
 

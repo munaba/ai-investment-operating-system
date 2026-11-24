@@ -29,6 +29,17 @@ SQLite database, so two machines would produce two diverging databases.
    powershell -ExecutionPolicy Bypass -File C:\AIOS\ops\setup_server.ps1 -RepoDir C:\AIOS
    ```
 
+   **Without 9router** (Hermes's built-in model, e.g. hy4-flash-free): skip
+   Node.js and 9router, pick the model with `hermes model` first, then add
+   `-NoNineRouter`. The audit job is pinned to that model; the other three
+   jobs run scripts and use no model at all. AIOS itself uses
+   `ACTIVE_PROVIDER` from `.env`, not 9router.
+
+   ```powershell
+   hermes model
+   powershell -ExecutionPolicy Bypass -File C:\AIOS\ops\setup_server.ps1 -RepoDir C:\AIOS -NoNineRouter
+   ```
+
    This creates `.venv`, installs the scripts and autostart, keeps the
    laptop awake on AC power with the lid closed, and creates the jobs
    **paused**.
