@@ -80,34 +80,29 @@ pip install -r Dashboard/requirements.txt
 streamlit run Dashboard/streamlit_app.py          # http://localhost:8501
 ```
 
-Pages: overview, scans and signals, decision briefs, paper trading, system health.
+Pages: overview (v2/v3 picks first), v2/v3 picks, v1 scanner (comparison), stock detail, v1 track record, decision briefs, paper trading, system health.
 Telegram state, raw audit payloads and free-text operator feedback are never exported.
 
 ## Testing
 
 ```bash
 pip install -r requirements-dev.txt
-PYTHONPATH=. python -m pytest -q          # 290+ passed with a local data/ database
+PYTHONPATH=. python -m pytest -q          # 300+ passed with a local data/ database
 ```
 
 `hypothesis` is also required by `Evaluation/run_eval.py` (property-based L2 checks). PowerShell: `$env:PYTHONPATH="."; python -m pytest -q`.
 
 Tests never write to the live database: `Tests/conftest.py` points `DB_PATH` at a temporary file, and the few tests that read `data/investment_platform.db` open it read-only (and are skipped when it is absent).
 
-`Tests/` also holds about 300 standalone scenario scripts (no `def test_`, so pytest does not collect them); run one from the repo root with `PYTHONPATH=.` and `DB_PATH` pointing at a scratch database. Retired sprint-snapshot scripts live in `Tests/archive/` (see its README).
+`Tests/` also holds about 300 standalone scenario scripts (no `def test_`); `Tests/conftest.py` runs them as pytest items with `-m script` (each gets a private migrated DB, ~4.5 min; `-m "not script"` for quick runs). To run one by hand from the repo root with `PYTHONPATH=.` and `DB_PATH` pointing at a scratch database. Retired sprint-snapshot scripts live in `Tests/archive/` (see its README).
 
 Dashboard smoke test (dashboard venv): `python -m pytest Dashboard/test_dashboard.py -q`.
 
-## Important: Market Calendar Coverage
+## Market calendar coverage
 
-**IDX trading calendar currently covers 2026 only.** Before 2027-01-01, populate `Business/idx_market_calendar.py::IDX_NATIONAL_HOLIDAYS_2027` from official sources:
+The IDX calendar covers **2026 and 2027** (`Business/idx_market_calendar.py`, from the SKB 3 Menteri and BEI circular; 241 trading days in 2027). Before 2028-01-01, add `IDX_NATIONAL_HOLIDAYS_2028` from official sources only (BEI, SKB 3 Menteri). Do not fabricate holiday dates.
 
-- Bursa Efek Indonesia (BEI) official trading calendar
-- SKB 3 Menteri (joint decree on national holidays)
-
-The scheduler operates **fail-closed** for years without coverage: any date outside 2026 returns `False` for `is_trading_day()` unless overridden via constructor or `TRADING_CALENDAR_OVERRIDE_ALLOW_UNKNOWN_YEARS=1`. An alert fires once per uncovered year when the scheduler ticks.
-
-**Do not fabricate holiday dates.** Obtain them from authoritative government/exchange sources only.
+The scheduler is **fail-closed** for uncovered years: `is_trading_day()` returns `False` unless overridden via constructor or `TRADING_CALENDAR_OVERRIDE_ALLOW_UNKNOWN_YEARS=1`. An alert fires once per uncovered year.
 
 ## Evaluation
 
@@ -135,7 +130,7 @@ Scheduler details: [Docs/SCHEDULER.md](Docs/SCHEDULER.md).
 
 ## Engineering notes
 
-- 290+ pytest tests
+- 300+ pytest tests plus 304 scenario scripts run as pytest items (`-m script`; CI runs them in parallel on Windows)
 - Session scans throttled to one per 30 minutes (`AIOS_SESSION_SCAN_MIN_INTERVAL_MINUTES`) so a 5-minute scheduler tick does not hammer the market-data provider
 - Credentials are redacted from stored error text (`Core/redaction.py`); the public dashboard export uses a column allowlist
 - Global test for migration-version uniqueness (caught a version collision)
@@ -154,7 +149,8 @@ This is an AI-directed development workflow, not a claim that every line was wri
 - **Phases A–G**: complete (scanner, analysis, copilot, paper trading, notifications)
 - **Phase H**: sustained-use review (observation windows, evidence assembly)
 - **Phase I**: evidence profile analysis job added
-- **Parked**: US stocks, crypto, forex (IDX only)
+- **Signals**: v2 (rank by close / SMA200 - 1, top 5, 20-day hold) and v3 (top 10 of the same ranking) are live for IDX and US, pre-registered in `Docs/SIGNAL_EVALUATION.md`; v1 keeps running on IDX as comparison. First v2/v3 outcomes ~late Dec 2026; no edge is claimed until the pre-registered verdicts exist.
+- **Parked**: crypto, forex
 
 ## Author
 
@@ -162,4 +158,4 @@ Muhammad Nabil Baihaqi - GitHub: github.com/munaba - LinkedIn: linkedin.com/in/m
 
 ## License
 
-No license has been chosen yet; all rights reserved.
+MIT — see [LICENSE](LICENSE).
