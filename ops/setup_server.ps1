@@ -49,8 +49,15 @@ if (-not $NoNineRouter) {
     Require 9router 'Run: npm install -g 9router, then start it once and sign in.'
 }
 Require hermes 'Install Hermes and sign in to Telegram there first.'
-$hermesScripts = Join-Path $env:LOCALAPPDATA 'hermes\scripts'
-if (-not (Test-Path $hermesScripts)) { throw "Hermes scripts folder not found: $hermesScripts" }
+# Hermes keeps job scripts under its home: $env:HERMES_HOME, else
+# %LOCALAPPDATA%\hermes (the PC), else ~\.hermes. The scripts folder itself
+# may not exist yet on a fresh install, so it is created.
+$hermesHome = @($env:HERMES_HOME, (Join-Path $env:LOCALAPPDATA 'hermes'), (Join-Path $env:USERPROFILE '.hermes')) |
+    Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+if (-not $hermesHome) { throw 'Hermes home not found. Start Hermes once (hermes model) so it creates its folder, then run this again.' }
+$hermesScripts = Join-Path $hermesHome 'scripts'
+New-Item -ItemType Directory -Force $hermesScripts | Out-Null
+Write-Host "  Hermes scripts folder: $hermesScripts"
 
 Step "Repository at $RepoDir"
 if (-not (Test-Path (Join-Path $RepoDir '.git'))) {
