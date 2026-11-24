@@ -1,2 +1,5 @@
 pytest>=9.0.3,<10
 hypothesis>=6.112.0,<6.113
+
+# Runs the 304 scenario scripts in parallel: pytest -m script -n auto
+pytest-xdist>=3.6,<4

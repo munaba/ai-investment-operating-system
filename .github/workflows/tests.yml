@@ -19,8 +19,8 @@ jobs:
     env:
       PYTHONIOENCODING: utf-8
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.14"
           cache: pip
@@ -32,15 +32,15 @@ jobs:
       - name: Unit tests
         run: python -m pytest -q -p no:cacheprovider -m "not script"
       - name: Scenario scripts (each in its own process, private migrated database)
-        run: python -m pytest -q -p no:cacheprovider -m script
+        run: python -m pytest -q -p no:cacheprovider -m script -n auto
 
   dashboard:
     name: Dashboard smoke tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.14"
           cache: pip
