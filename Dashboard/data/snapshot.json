@@ -1,5 +1,5 @@
 {
- "exported_at": "2026-11-24T02:11:21+00:00",
+ "exported_at": "2026-11-24T02:30:58+00:00",
  "migrations": {
   "applied": [
    1,
@@ -70,6 +70,30 @@
    34
   ]
  },
+ "market_holidays": [
+  "2026-01-01",
+  "2026-01-16",
+  "2026-02-17",
+  "2026-03-19",
+  "2026-03-20",
+  "2026-03-21",
+  "2026-03-22",
+  "2026-03-23",
+  "2026-03-24",
+  "2026-04-03",
+  "2026-05-01",
+  "2026-05-14",
+  "2026-05-27",
+  "2026-05-31",
+  "2026-06-01",
+  "2026-06-07",
+  "2026-06-16",
+  "2026-08-17",
+  "2026-08-25",
+  "2026-12-24",
+  "2026-12-25",
+  "2026-12-31"
+ ],
  "tables": {
   "ranking_snapshots": [
    {
@@ -1881,24 +1905,24 @@
     "detail": "{\"session\": \"pre_market\", \"message\": \"pre-market readiness check complete\"}"
    },
    {
-    "job_type": "session_scan",
-    "trading_date": "2026-11-24",
-    "status": "SUCCESS",
-    "attempt": 1,
-    "started_at": "2026-11-24T02:00:55.519129+00:00",
-    "finished_at": "2026-11-24T02:00:55.519129+00:00",
-    "next_retry_at": null,
-    "detail": "{\"generated_at\": \"2026-11-24T02:00:55.519129+00:00\", \"total_symbols\": 11, \"notification\": \"SENT\"}"
-   },
-   {
     "job_type": "data_health_check",
     "trading_date": "2026-11-24",
     "status": "SUCCESS",
-    "attempt": 15,
-    "started_at": "2026-11-24T02:10:55.475939+00:00",
-    "finished_at": "2026-11-24T02:10:55.475939+00:00",
+    "attempt": 18,
+    "started_at": "2026-11-24T02:25:55.453053+00:00",
+    "finished_at": "2026-11-24T02:25:55.453053+00:00",
     "next_retry_at": null,
-    "detail": "{\"status\": \"FRESH\", \"age_seconds\": 599.95681, \"notification\": \"SUPPRESS_NO_CHANGE\"}"
+    "detail": "{\"status\": \"STALE\", \"age_seconds\": 1499.933924, \"notification\": \"SUPPRESS_RATE_LIMITED\"}"
+   },
+   {
+    "job_type": "session_scan",
+    "trading_date": "2026-11-24",
+    "status": "RUNNING",
+    "attempt": 2,
+    "started_at": "2026-11-24T02:30:55.640885+00:00",
+    "finished_at": null,
+    "next_retry_at": null,
+    "detail": null
    }
   ],
   "watchlist": [

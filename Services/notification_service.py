@@ -273,9 +273,11 @@ class NotificationService(BaseService):
         except NotificationServiceError:
             raise
         except Exception as exc:  # noqa: BLE001 - normalize any transport-level error
+            # requests quotes the webhook URL, which contains the webhook token.
             raise NotificationServiceError(
-                "Discord webhook request failed", details={"error": str(exc)}
-            ) from exc
+                "Discord webhook request failed",
+                details={"error": f"{type(exc).__name__}: {redact_secrets(exc)}"},
+            ) from None
 
         status_code = getattr(response, "status_code", None)
         if status_code not in _DISCORD_SUCCESS_STATUS_CODES:
@@ -348,7 +350,8 @@ class NotificationService(BaseService):
         except Exception as exc:
             # requests quotes the URL, which contains the bot token.
             raise NotificationServiceError(
-                "Telegram API request failed", details={"error": redact_secrets(exc)}
+                "Telegram API request failed",
+                details={"error": f"{type(exc).__name__}: {redact_secrets(exc)}"},
             ) from None
 
         body: Optional[Dict[str, Any]]

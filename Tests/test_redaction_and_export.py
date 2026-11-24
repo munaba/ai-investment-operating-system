@@ -34,6 +34,72 @@ def test_other_credential_shapes_are_redacted() -> None:
     assert "q=1" in redacted
 
 
+def test_key_pattern_needs_a_word_boundary() -> None:
+    assert redact_secrets("monkey=banana turnkey=yes") == "monkey=banana turnkey=yes"
+    assert "secret" not in redact_secrets("GET /x?key=secret&page=2")
+
+
+def test_log_lines_are_redacted_by_the_formatter() -> None:
+    import logging
+
+    from Core.logger import RedactingFormatter
+
+    record = logging.LogRecord("t", logging.WARNING, __file__, 1, "send failed: %s", (_REQUESTS_ERROR,), None)
+    line = RedactingFormatter("%(message)s").format(record)
+    assert _FAKE_TOKEN not in line
+    assert "redacted-telegram-token" in line
+
+
+def test_discord_transport_error_does_not_carry_the_webhook_token() -> None:
+    from Services.notification_service import NotificationService, NotificationServiceError
+
+    webhook = "https://discord.com/api/webhooks/123456789012/AbCdEfGhIjKlMnOpQrStUvWxYz012345"
+
+    class Boom:
+        def post(self, url, **_kw):
+            raise ConnectionError(f"Max retries exceeded with url: {url}")
+
+    try:
+        NotificationService._send_discord(Boom(), webhook, "hi", None, None)
+    except NotificationServiceError as exc:
+        text = str(exc)
+    else:  # pragma: no cover
+        raise AssertionError("expected NotificationServiceError")
+    assert "AbCdEfGhIjKlMnOpQrStUvWxYz012345" not in text
+    assert "ConnectionError" in text
+
+
+def test_db_writers_redact_error_text(tmp_path: Path) -> None:
+    from Database.database_config import DatabaseConfig
+    from Database.database_manager import DatabaseManager
+    from Database.migration_registry import all_migrations
+    from Database.migrations import MigrationRunner
+    from Database.sqlite_database import SQLiteDatabase
+    from Repository.persistence.audit_event_repository import AuditEventRepository
+    from Repository.persistence.scheduler_state_repository import SchedulerStateRepository
+    from Repository.persistence.telegram_command_audit_repository import TelegramCommandAuditRepository
+
+    cfg = DatabaseConfig(db_path=tmp_path / "w.db")
+    db = SQLiteDatabase(cfg)
+    db.connect()
+    try:
+        MigrationRunner(db).apply([m for m, _ in all_migrations()])
+        manager = DatabaseManager(db, cfg)
+        AuditEventRepository(manager).record("job_failed", created_at="t", payload={"error": _REQUESTS_ERROR})
+        state = SchedulerStateRepository(manager)
+        state.start("market_close_recap", "2026-11-24", started_at="t")
+        state.mark_failed("market_close_recap", "2026-11-24", finished_at="t", detail=_REQUESTS_ERROR)
+        TelegramCommandAuditRepository(manager).record("/x", status="ERROR", received_at="t", detail=_REQUESTS_ERROR)
+        stored = " ".join(
+            str(r) for table in ("audit_events", "scheduler_job_runs", "telegram_command_audit")
+            for r in db.execute(f"SELECT * FROM {table}").rows
+        )
+    finally:
+        db.disconnect()
+    assert _FAKE_TOKEN not in stored
+    assert stored.count("redacted-telegram-token") == 3
+
+
 def test_plain_text_is_unchanged() -> None:
     assert redact_secrets("market data provider not reachable (BBCA.JK)") == (
         "market data provider not reachable (BBCA.JK)"

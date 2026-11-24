@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import sqlite3
+import sys
 from contextlib import closing
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -18,6 +19,12 @@ from typing import Callable, Dict, Iterable, Optional
 from zoneinfo import ZoneInfo
 
 import pandas as pd
+
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:  # so `python Evaluation/signal_evaluation.py` works
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from Business.idx_market_calendar import IDX_MARKET_TIMEZONE_NAME  # noqa: E402
 
 # ---- Pre-registered rules (Docs/SIGNAL_EVALUATION.md). Do not edit. --------
 HORIZON_TRADING_DAYS = 5
@@ -27,14 +34,13 @@ REGISTERED_ON = date(2026, 11, 24)
 RECOMMENDATIONS = ("BUY", "WAIT", "SELL")
 # ---------------------------------------------------------------------------
 
-WIB = "Asia/Jakarta"
+WIB = IDX_MARKET_TIMEZONE_NAME  # same trading-date zone as the scheduler
 INSUFFICIENT = "DATA_TIDAK_CUKUP"
 
 #: symbol -> Series of daily closes indexed by date (datetime.date)
 Closes = Dict[str, pd.Series]
 PriceFetcher = Callable[[Iterable[str], date, date], Closes]
 
-_REPO_ROOT = Path(__file__).resolve().parent.parent
 _DEFAULT_DB = _REPO_ROOT / "data" / "investment_platform.db"
 
 

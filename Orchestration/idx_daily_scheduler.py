@@ -66,7 +66,10 @@ import hashlib
 import json
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Dict, Optional
+from typing import TYPE_CHECKING, Any, Dict, Optional
+
+if TYPE_CHECKING:  # annotation only; no runtime import
+    from Database.models import SchedulerJobRun
 
 from Business.daily_report_orchestrator import DailyReportOrchestrator
 from Business.data_freshness_policy import (
@@ -141,6 +144,17 @@ def _parse_iso8601(value: str) -> datetime:
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=_timezone.utc)
     return parsed
+
+
+def _backoff_pending(row: Optional[SchedulerJobRun], now: datetime) -> bool:
+    """True while a FAILED job's retry backoff (``next_retry_at``) has not
+    elapsed -- the one retry rule shared by run-once and repeatable jobs."""
+    return (
+        row is not None
+        and row.status == JOB_STATUS_FAILED
+        and bool(row.next_retry_at)
+        and now < _parse_iso8601(row.next_retry_at)
+    )
 
 
 @dataclass(frozen=True)
@@ -366,11 +380,7 @@ class IDXDailyScheduler:
         if self._state_repo.has_succeeded(job_type, trading_date):
             return False
         row = self._state_repo.get(job_type, trading_date)
-        if row is None:
-            return True
-        if row.status == JOB_STATUS_FAILED and row.next_retry_at:
-            return now >= _parse_iso8601(row.next_retry_at)
-        return True
+        return not _backoff_pending(row, now)
 
     def _run_once(self, job_type: str, trading_date: str, now: datetime, work_fn) -> JobOutcome:
         """Run a run-once-per-day job if its gate allows it this tick,
@@ -486,7 +496,7 @@ class IDXDailyScheduler:
         row = self._state_repo.get(JOB_SESSION_SCAN, trading_date)
         if row is None:
             return None
-        if row.status == JOB_STATUS_FAILED and row.next_retry_at and now < _parse_iso8601(row.next_retry_at):
+        if _backoff_pending(row, now):
             return "awaiting retry backoff from a prior failed attempt this session"
         if self._session_scan_min_interval_seconds > 0 and row.status == JOB_STATUS_SUCCESS and row.finished_at:
             next_allowed = _parse_iso8601(row.finished_at) + timedelta(seconds=self._session_scan_min_interval_seconds)

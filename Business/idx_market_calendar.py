@@ -51,6 +51,12 @@ SESSION_2_OPEN: time = time(13, 30)
 SESSION_2_CLOSE: time = time(15, 49)
 POST_CLOSE_END: time = time(16, 0)
 
+#: Friday schedule (published BEI trading hours): Session I ends at 11:30
+#: and Session II starts at 14:00 to leave room for Friday prayers. The
+#: opening and closing times are the same as Monday-Thursday.
+FRIDAY_SESSION_1_CLOSE: time = time(11, 30)
+FRIDAY_SESSION_2_OPEN: time = time(14, 0)
+
 SESSION_CLOSED: str = "closed"
 SESSION_PRE_MARKET: str = "pre_market"
 SESSION_REGULAR: str = "regular"
@@ -71,11 +77,9 @@ KNOWN_LIMITATIONS: tuple[str, ...] = (
     "the IDX_MARKET_HOLIDAYS env var read by "
     "'load_idx_market_calendar()'), only Saturday/Sunday are treated "
     "as non-trading days.",
-    "Only a single (Monday-Thursday-style) session schedule is "
-    "modeled. IDX's historically shorter Friday Session I/II and any "
-    "Ramadan-adjusted hours are NOT represented -- every trading day "
-    "uses the same SESSION_1_OPEN/CLOSE and SESSION_2_OPEN/CLOSE "
-    "boundaries regardless of weekday or calendar date.",
+    "Two session schedules are modeled: Monday-Thursday and Friday "
+    "(Session I to 11:30, Session II from 14:00). Ramadan-adjusted or "
+    "other temporary exchange hours are NOT represented.",
     "This is a computed approximation, not a feed from IDX/KSEI/a "
     "broker. One-off exchange-declared closures or early closes are "
     "not represented unless the operator adds that date to "
@@ -229,13 +233,16 @@ class IDXMarketCalendar:
         if not self.is_trading_day(local.date()):
             return SESSION_CLOSED
         local_time = local.time()
+        is_friday = local.weekday() == 4
+        session_1_close = FRIDAY_SESSION_1_CLOSE if is_friday else SESSION_1_CLOSE
+        session_2_open = FRIDAY_SESSION_2_OPEN if is_friday else SESSION_2_OPEN
         if PRE_MARKET_OPEN <= local_time < SESSION_1_OPEN:
             return SESSION_PRE_MARKET
-        if SESSION_1_OPEN <= local_time < SESSION_1_CLOSE:
+        if SESSION_1_OPEN <= local_time < session_1_close:
             return SESSION_REGULAR
-        if SESSION_1_CLOSE <= local_time < SESSION_2_OPEN:
+        if session_1_close <= local_time < session_2_open:
             return SESSION_LUNCH_BREAK
-        if SESSION_2_OPEN <= local_time < SESSION_2_CLOSE:
+        if session_2_open <= local_time < SESSION_2_CLOSE:
             return SESSION_REGULAR
         if SESSION_2_CLOSE <= local_time < POST_CLOSE_END:
             return SESSION_AFTER_HOURS

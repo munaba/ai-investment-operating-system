@@ -6,6 +6,8 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from threading import Lock
 from typing import ClassVar, Dict, Optional
+
+from Core.redaction import redact_secrets
  
 _LOG_DIR: Path = Path("logs")
 _LOG_FILE: Path = _LOG_DIR / "app.log"
@@ -37,6 +39,19 @@ class WinError32SafeRotatingFileHandler(RotatingFileHandler):
                     "Log rollover skipped (WinError 32), still writing to %s",
                     self.baseFilename,
                 )
+
+
+class RedactingFormatter(logging.Formatter):
+    """Formatter that strips credentials from the final log line.
+
+    Applied to every handler, so a message, its %-args and any traceback
+    (``exc_info=True``) are all redacted, whichever module logged them:
+    ``requests`` errors quote full URLs (Telegram bot token, Discord
+    webhook token) and provider SDKs may echo keys.
+    """
+
+    def format(self, record: logging.LogRecord) -> str:
+        return redact_secrets(super().format(record))
 
 
 class LoggerFactory:
@@ -94,7 +109,7 @@ class LoggerFactory:
             logger.propagate = False
  
             if not logger.handlers:
-                formatter = logging.Formatter(fmt=_LOG_FORMAT, datefmt=_DATE_FORMAT)
+                formatter = RedactingFormatter(fmt=_LOG_FORMAT, datefmt=_DATE_FORMAT)
  
                 console_handler = logging.StreamHandler(stream=sys.stdout)
                 console_handler.setLevel(level)

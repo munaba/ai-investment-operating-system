@@ -103,6 +103,16 @@ def _expected_migration_versions() -> list[int]:
     return [m.version for m, _domain in all_migrations()]
 
 
+def _market_holidays() -> list[str]:
+    """IDX non-trading weekdays known to the scheduler's calendar, so the
+    dashboard's staleness count skips them (it does not import AIOS code)."""
+    try:
+        from Business.idx_market_calendar import load_idx_market_calendar
+    except Exception:  # noqa: BLE001 -- export still works without it
+        return []
+    return sorted(d.isoformat() for d in load_idx_market_calendar().holiday_dates)
+
+
 def _signal_evaluation(db_path: Path) -> dict:
     """Pre-registered signal evaluation (needs Yahoo prices); never fails the export."""
     try:
@@ -135,6 +145,7 @@ def export(db_path: Path, out_path: Path, with_evaluation: bool = True) -> dict:
     snapshot = {
         "exported_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "migrations": {"applied": applied, "expected": _expected_migration_versions()},
+        "market_holidays": _market_holidays(),
         "tables": tables,
     }
     if with_evaluation:

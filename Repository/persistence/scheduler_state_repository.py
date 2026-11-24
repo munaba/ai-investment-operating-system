@@ -20,6 +20,7 @@ from __future__ import annotations
 
 from typing import List, Optional
 
+from Core.redaction import redact_secrets
 from Database.models import SchedulerJobRun
 from Repository.persistence.base_persistence_repository import BasePersistenceRepository
 
@@ -175,6 +176,7 @@ class SchedulerStateRepository(BasePersistenceRepository):
         """
         if self.get(job_type, trading_date) is None:
             return None
+        detail = redact_secrets(detail) if detail is not None else None  # error text is published
         self._execute(
             """
             UPDATE scheduler_job_runs

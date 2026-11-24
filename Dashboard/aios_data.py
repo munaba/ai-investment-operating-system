@@ -50,6 +50,7 @@ class Snapshot:
     expected_migrations: list[int]
     tables: dict[str, pd.DataFrame]
     signal_evaluation: dict
+    market_holidays: list[str]
 
     def table(self, name: str) -> pd.DataFrame:
         return self.tables.get(name, pd.DataFrame())
@@ -62,7 +63,10 @@ def _to_wib(series: pd.Series) -> pd.Series:
 def _read_local(path: Path) -> dict | None:
     if not path.is_file():
         return None
-    return json.loads(path.read_text(encoding="utf-8"))
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None  # unreadable or corrupt local file: fall back to the remote copy
 
 
 def _read_remote(url: str) -> dict | None:
@@ -88,8 +92,10 @@ def _load_raw(path: str, url: str) -> dict | None:
     return _newest(_read_local(Path(path)), _read_remote(url))
 
 
-def load_snapshot(path: str = str(SNAPSHOT_PATH), url: str = SNAPSHOT_URL) -> Snapshot | None:
-    raw = _load_raw(path, url)
+def load_snapshot(path: str | None = None, url: str | None = None) -> Snapshot | None:
+    # Resolved at call time (not as default arguments) so tests and callers
+    # can point the module at another file or URL.
+    raw = _load_raw(path or str(SNAPSHOT_PATH), SNAPSHOT_URL if url is None else url)
     if raw is None:
         return None
 
@@ -111,6 +117,7 @@ def load_snapshot(path: str = str(SNAPSHOT_PATH), url: str = SNAPSHOT_URL) -> Sn
         expected_migrations=list(migrations.get("expected", [])),
         tables=tables,
         signal_evaluation=raw.get("signal_evaluation", {"status": "UNAVAILABLE", "error": "not exported yet"}),
+        market_holidays=list(raw.get("market_holidays", [])),
     )
 
 

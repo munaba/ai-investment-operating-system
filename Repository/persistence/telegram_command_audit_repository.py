@@ -14,6 +14,7 @@ from __future__ import annotations
 
 from typing import List, Optional
 
+from Core.redaction import redact_secrets
 from Database.models import TelegramCommandAudit
 from Repository.persistence.base_persistence_repository import BasePersistenceRepository
 
@@ -75,6 +76,7 @@ class TelegramCommandAuditRepository(BasePersistenceRepository):
         Raises:
             RepositoryError: If the underlying statement fails.
         """
+        detail = redact_secrets(detail) if detail is not None else None  # handler errors may quote URLs
         result = self._execute(
             """
             INSERT INTO telegram_command_audit

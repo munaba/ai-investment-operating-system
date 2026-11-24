@@ -15,6 +15,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
+from Core.redaction import redact_secrets
 from Database.models import AuditEvent
 from Repository.persistence.base_persistence_repository import BasePersistenceRepository
 
@@ -55,7 +56,9 @@ class AuditEventRepository(BasePersistenceRepository):
         Raises:
             RepositoryError: If the underlying statement fails.
         """
-        payload_text = json.dumps(payload) if payload is not None else None
+        # Payloads can carry error text from credentialed calls; redact at
+        # the write so no caller can forget.
+        payload_text = redact_secrets(json.dumps(payload)) if payload is not None else None
         result = self._execute(
             "INSERT INTO audit_events (event_type, payload, created_at) VALUES (?, ?, ?)",
             (event_type, payload_text, created_at),

@@ -23,12 +23,14 @@ current = latest_scan(snapshot)
 last_scan_time = current["scan_time"].iloc[0] if not current.empty else None
 
 # Age is measured against *now*, not the export time: if publishing stops,
-# the page must still show that the data is getting old. Weekends are not
-# counted (IDX holidays are not modelled here).
+# the page must still show that the data is getting old. Weekends and the
+# IDX holidays exported with the snapshot are not counted.
 age_days = (
     None
     if last_scan_time is None
-    else int(np.busday_count(last_scan_time.date(), pd.Timestamp.now(tz=WIB).date()))
+    else int(np.busday_count(
+        last_scan_time.date(), pd.Timestamp.now(tz=WIB).date(), holidays=snapshot.market_holidays
+    ))
 )
 counts = with_rec(current)["recommendation"].value_counts() if not current.empty else pd.Series(dtype=int)
 
@@ -49,17 +51,17 @@ else:
 
 if age_days is not None and age_days > 1:
     st.warning(
-        f"The newest scan is {age_days} weekdays old (exported {format_time(snapshot.exported_at)}), "
+        f"The newest scan is {age_days} trading days old (exported {format_time(snapshot.exported_at)}), "
         "so AIOS treats this data as stale and will not produce new trade plans from it.",
         title="Data is stale",
     )
 
 with st.container(horizontal=True):
     st.metric(
-        "Weekdays since last scan",
+        "Trading days since last scan",
         "—" if age_days is None else age_days,
         border=True,
-        help="Counted up to now, skipping weekends. More than one means the data is stale.",
+        help="Counted up to now, skipping weekends and IDX holidays. More than one means the data is stale.",
     )
     st.metric("Trading days scanned", scans["scan_time"].dt.date.nunique() if not scans.empty else 0, border=True)
     st.metric("Decision briefs", len(briefs), border=True)

@@ -51,13 +51,17 @@ left, right = st.columns(2)
 with left:
     with st.container(border=True):
         st.markdown("**Evidence summary**")
-        st.text(row["evidence_summary"] or "No evidence recorded for this symbol.")
+        summary = row["evidence_summary"]  # NULL arrives as NaN, not None
+        st.text(summary if isinstance(summary, str) and summary else "No evidence recorded for this symbol.")
 with right:
     with st.container(border=True):
         st.markdown("**Score breakdown**")
+        raw_breakdown = row["score_breakdown_json"]
         try:
-            breakdown = json.loads(row["score_breakdown_json"] or "{}")
-        except (TypeError, ValueError):
+            breakdown = json.loads(raw_breakdown) if isinstance(raw_breakdown, str) else {}
+        except ValueError:
+            breakdown = {}
+        if not isinstance(breakdown, dict):
             breakdown = {}
         contributions = {k: v for k, v in breakdown.items() if k.endswith("_contribution")}
         if contributions:

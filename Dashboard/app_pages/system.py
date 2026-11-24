@@ -40,11 +40,16 @@ with st.container(border=True):
     if jobs.empty:
         st.info("The scheduler has not run yet.")
     else:
-        def _summary(detail: str | None) -> str:
+        def _summary(detail: object) -> str:
+            # NULL detail arrives as NaN (a float) from pandas, not None.
+            if not isinstance(detail, str) or not detail:
+                return ""
             try:
-                data = json.loads(detail or "{}")
+                data = json.loads(detail)
             except ValueError:
-                return detail or ""
+                return detail
+            if not isinstance(data, dict):
+                return detail
             keys = ("status", "total_symbols", "title", "snapshot_count")
             return ", ".join(f"{k}={data[k]}" for k in keys if k in data)
 

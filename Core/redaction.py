@@ -18,8 +18,12 @@ _PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"(discord(?:app)?\.com/api/webhooks/)\d+/[A-Za-z0-9_-]+"), r"\1<redacted>"),
     # Google API keys (Gemini).
     (re.compile(r"AIza[0-9A-Za-z_-]{30,}"), "<redacted-google-key>"),
-    # key=/token= style query parameters.
-    (re.compile(r"((?:api[_-]?key|token|access_token|key)=)[^&\s'\"]+", re.IGNORECASE), r"\1<redacted>"),
+    # key=/token= style query parameters (word boundary, so "monkey=" or a
+    # "turnkey=" field in ordinary text is left alone).
+    (
+        re.compile(r"(\b(?:api[_-]?key|access[_-]?token|token|key)=)[^&\s'\"]+", re.IGNORECASE),
+        r"\1<redacted>",
+    ),
 )
 
 
