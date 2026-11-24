@@ -51,16 +51,17 @@ class V2RunResult:
 
 
 class V2RankingService:
-    def __init__(self, repository: V2RankingRepository, fetch: PanelFetcher = yahoo_panel,
+    def __init__(self, repository: V2RankingRepository, fetch: PanelFetcher | None = None,
                  hold: int = HOLD, top_k: int = TOP_K) -> None:
         self._repo = repository
-        self._fetch = fetch
+        self._fetch = fetch  # None: Yahoo, resolved at call time
         self._hold = hold
         self._top_k = top_k
 
     def run(self, market: Market, as_of: date, now: datetime) -> V2RunResult:
         start, end = history_window(as_of)
-        close, volume = self._fetch(market, start, end)
+        fetch = self._fetch or yahoo_panel
+        close, volume = fetch(market, start, end)
         if close.empty:
             raise RuntimeError(f"no prices returned for market {market.name}")
         keep = close.index.date < as_of

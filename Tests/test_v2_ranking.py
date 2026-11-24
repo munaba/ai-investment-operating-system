@@ -123,3 +123,41 @@ def test_too_little_history_is_refused(repo) -> None:
 def test_migration_is_registered_with_a_new_version() -> None:
     versions = [v for v, _, _ in expected_migrations()]
     assert 35 in versions and len(versions) == len(set(versions))
+
+
+class _FakeNotifier:
+    def __init__(self) -> None:
+        self.sent = []
+
+    def notify(self, event) -> None:
+        self.sent.append(event)
+
+
+def test_cli_ranks_stores_and_notifies_once(repo, monkeypatch, capsys) -> None:
+    import main
+    from Business import v2_ranking_service as svc_module
+
+    close, volume = _prices()
+    monkeypatch.setattr(svc_module, "yahoo_panel", lambda market, start, end: (close, volume))
+    notifier = _FakeNotifier()
+    app = type("App", (), {"database_manager": repo._database_manager, "notification_manager": notifier})()
+
+    assert main._run_v2_command(app, ["rank", "--market", "us", "--as-of", "2027-01-01"]) == 0
+    out = capsys.readouterr().out
+    assert "rebalance=True" in out and "picks" in out
+    assert len(notifier.sent) == 1 and "AIOS v2 picks US" in notifier.sent[0].title
+    assert "\n1. " in notifier.sent[0].message
+
+    # Same signal date again: nothing new, no second notification.
+    assert main._run_v2_command(app, ["rank", "--market", "us", "--as-of", "2027-01-01"]) == 0
+    assert len(notifier.sent) == 1
+
+
+def test_cli_rejects_bad_arguments(capsys) -> None:
+    import main
+
+    app = object()
+    assert main._run_v2_command(app, []) == 2
+    assert main._run_v2_command(app, ["rank", "--market", "jp"]) == 2
+    assert main._run_v2_command(app, ["rank", "--market", "idx", "--as-of", "yesterday"]) == 2
+    assert "Usage" in capsys.readouterr().out
