@@ -51,6 +51,7 @@ class Snapshot:
     tables: dict[str, pd.DataFrame]
     signal_evaluation: dict
     market_holidays: list[str]
+    v2_evaluation: dict
 
     def table(self, name: str) -> pd.DataFrame:
         return self.tables.get(name, pd.DataFrame())
@@ -118,6 +119,7 @@ def load_snapshot(path: str | None = None, url: str | None = None) -> Snapshot |
         tables=tables,
         signal_evaluation=raw.get("signal_evaluation", {"status": "UNAVAILABLE", "error": "not exported yet"}),
         market_holidays=list(raw.get("market_holidays", [])),
+        v2_evaluation=raw.get("v2_evaluation", {"status": "UNAVAILABLE", "error": "not exported yet"}),
     )
 
 

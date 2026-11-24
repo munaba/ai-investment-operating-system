@@ -34,6 +34,13 @@ page = st.navigation(
             help="One stock across every scan: signal history, evaluated outcomes, evidence and briefs.",
         ),
         st.Page(
+            "app_pages/v2.py",
+            title="v2 / v3 picks",
+            icon=":material/trending_up:",
+            url_path="v2",
+            help="Trend signal for IDX and US: current picks, latest ranking and track record.",
+        ),
+        st.Page(
             "app_pages/signals.py",
             title="Signal track record",
             icon=":material/fact_check:",

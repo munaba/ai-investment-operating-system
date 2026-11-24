@@ -18,6 +18,7 @@ PAGES = [
     "app_pages/overview.py",
     "app_pages/scans.py",
     "app_pages/stock.py",
+    "app_pages/v2.py",
     "app_pages/signals.py",
     "app_pages/briefs.py",
     "app_pages/paper.py",
@@ -78,6 +79,7 @@ def test_page_survives_null_columns(page: str, monkeypatch, tmp_path: Path) -> N
             "decision_briefs": [], "watchlist": [], "accounts": [], "positions": [], "orders": [],
             "trades": [], "portfolio_snapshots": [], "daily_performance": [], "journal_entries": [],
             "risk_limits": [], "operator_observation_windows": [], "final_review_records": [],
+            "v2_rankings": [],
         },
     }
     path = tmp_path / "snapshot.json"

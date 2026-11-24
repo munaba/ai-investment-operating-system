@@ -17,7 +17,7 @@ import json
 import sqlite3
 import sys
 from contextlib import closing
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -85,7 +85,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 
-from Core.redaction import redact_secrets  # noqa: E402 -- needs REPO_ROOT on sys.path
+from Core.redaction import redact_secrets
 
 
 def _scrub(row: dict) -> dict:
@@ -123,6 +123,37 @@ def _signal_evaluation(db_path: Path) -> dict:
         return {"status": "UNAVAILABLE", "error": redact_secrets(f"{type(exc).__name__}: {exc}")}
 
 
+_V2_COLUMNS = ("market", "signal_date", "symbol", "rank", "score", "is_rebalance", "picked", "model_version")
+
+
+def _v2_rankings(conn: sqlite3.Connection, existing: set[str]) -> list[dict]:
+    """Every rebalance ranking plus the latest daily ranking per market.
+    Daily rankings add about 160 rows a day, so older non-rebalance days
+    are left out of the public file."""
+    if "v2_rankings" not in existing:
+        return []
+    columns = ", ".join(f'"{c}"' for c in _V2_COLUMNS)
+    rows = conn.execute(
+        f"""
+        SELECT {columns} FROM v2_rankings r
+        WHERE is_rebalance = 1
+           OR signal_date = (SELECT MAX(signal_date) FROM v2_rankings x WHERE x.market = r.market)
+        ORDER BY market, signal_date, rank
+        """
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def _v2_evaluation(db_path: Path) -> dict:
+    """Registered v2/v3 evaluation (needs Yahoo prices); never fails the export."""
+    try:
+        from Evaluation.v2_evaluation import evaluate, load_rebalances
+
+        return {"status": "OK", **evaluate(load_rebalances(db_path))}
+    except Exception as exc:  # noqa: BLE001 -- offline, Yahoo down, missing deps
+        return {"status": "UNAVAILABLE", "error": redact_secrets(f"{type(exc).__name__}: {exc}")}
+
+
 def export(db_path: Path, out_path: Path, with_evaluation: bool = True) -> dict:
     if not db_path.is_file():
         raise SystemExit(f"Database not found: {db_path}")
@@ -140,16 +171,18 @@ def export(db_path: Path, out_path: Path, with_evaluation: bool = True) -> dict:
             columns = ", ".join(f'"{c}"' for c in wanted if c in present)
             rows = conn.execute(f'SELECT {columns} FROM "{table}" ORDER BY {order_by}').fetchall()
             tables[table] = [_scrub(dict(row)) for row in rows]
+        tables["v2_rankings"] = _v2_rankings(conn, existing)
         applied = [r[0] for r in conn.execute("SELECT version FROM schema_migrations ORDER BY version")]
 
     snapshot = {
-        "exported_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "exported_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "migrations": {"applied": applied, "expected": _expected_migration_versions()},
         "market_holidays": _market_holidays(),
         "tables": tables,
     }
     if with_evaluation:
         snapshot["signal_evaluation"] = _signal_evaluation(db_path)
+        snapshot["v2_evaluation"] = _v2_evaluation(db_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(snapshot, indent=1, ensure_ascii=False), encoding="utf-8")
     return snapshot
