@@ -87,3 +87,25 @@ Deployment rule: v2 changes which signals exist, so it cannot be mixed into
 the v1 sample. Either v1 runs to its verdict first, or v1 is closed with
 zero completed official signals and the test is re-registered for v2 with a
 new date in a new section. Both choices are recorded here when made.
+
+### Backtest of candidate price rules (2026-11-24, exploratory)
+
+`Evaluation/backtest_rules.py` (tests: `Tests/test_backtest_rules.py`) scores
+simple price rules on five years of Yahoo daily closes with the outcome
+definition above (entry next close, excess vs. the equal-weight universe).
+The first 70% of the history is used to compare rules; the last 30%
+(2025-05-29 to 2026-11-23) is a holdout. Valuation and news cannot be
+backtested this way: Yahoo only gives today's PE.
+
+| Universe, holding period | Result |
+|---|---|
+| Watchlist (11, six of them banks), 5 days | No rule has an edge. The v1 price input ("price above the previous close") is -0.05% / -0.04% mean excess; every rule has non-overlapping \|t\| < 1. |
+| 40 liquid IDX stocks, 5 days | Still nothing significant. Top-3 by 60-day momentum is positive in both periods (+0.34% / +0.21%, t 0.8 / 0.5). Buying the 5-day losers is clearly worse in the holdout (-0.91%, t -3.1). |
+| 40 liquid IDX stocks, 20 days | Top-3 by 60-day momentum: +1.64% selection / +1.63% holdout mean excess per 20 days, t 1.0 / 1.2, hit rate about 50% (gains come from a few large winners). The only rule consistent across both periods. |
+
+Reading: the v1 price input carries no information, and at a five-day
+horizon no simple price rule does better. Medium-term momentum over a
+monthly holding period is the one direction worth a longer look. It is not
+proven: t is about 1, six rules were tried, and the 40-stock list is today's
+liquid names (survivorship bias in its favour). A v2 built on it would need
+its own pre-registration, probably with a 20-day horizon.
