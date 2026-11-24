@@ -187,3 +187,43 @@ Known limitations: survivorship-biased universes, a small sample (30 picks
 are a minimum, not proof), picks within one rebalance move together, and
 Yahoo daily data. A `PASS` means "worth trading on paper", not a proven
 edge.
+
+## v3 test plan (written 2026-11-24, before any v3 result was computed)
+
+Diagnosis of v2 (same day): mean net excess is positive (IDX +1.72%, US
++0.80% per 20 days, all schedules pooled), but only about half the picks
+beat the universe, removing each period's single best pick turns the
+result negative (IDX -2.00%, US -1.61%), and drawdowns are deeper than the
+universe's (IDX -33% vs -29%, US -29% vs -18%). v3 candidates target that
+fragility. They are fixed here before testing:
+
+| Id | Candidate |
+|---|---|
+| A | v2 as registered (top 5 by close / SMA200 - 1), the baseline |
+| B | Top 10 by close / SMA200 - 1 |
+| C | B, but on dates when the equal-weight universe index is below its own 200-day average, hold the universe instead (excess 0, no cost) |
+| D | B, after removing the third of stocks with the highest 60-day volatility |
+| E | Top 10 by (close / SMA200 - 1) divided by 60-day volatility |
+| F | C and D combined |
+
+All: rebalance every 20 sessions, hold 20, round-trip cost on changed
+names (IDX 0.4%, US 0.1%), every one of the 20 schedules.
+
+Data: the current universes (IDX 59, US 100) are the development set.
+Validation uses universes never used before: about 60 further liquid IDX
+stocks and about 150 US mid caps (`Evaluation/v3_research.py`), same seven
+years.
+
+Decision rule:
+
+1. On the development set, a candidate qualifies if its mean net excess is
+   positive on at least 85% of schedules in both markets (full period) and
+   it improves on v2 in at least two of: excess without each period's best
+   pick, share of picks beating the universe, worst drawdown.
+2. On the validation universes, a qualifying candidate passes if it is
+   positive on at least 85% of schedules in both markets and still
+   improves on v2 in at least two of the same three measures there.
+3. If several pass, the one with the higher validation "excess without
+   the best pick" wins. If none passes, v2 stays and that is recorded.
+   A winner is registered as v3 in a new dated section and runs alongside
+   v2; it does not replace v2's registration.
