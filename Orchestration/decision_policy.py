@@ -53,7 +53,9 @@ class DecisionPolicy:
     only as a standalone component, for a future stage to wire up.
     """
 
-    _POLICIES = {
+    # Read-only lookup table (never mutated). Not annotated ClassVar because
+    # this module deliberately imports nothing (checked by its sprint tests).
+    _POLICIES = {  # noqa: RUF012
         "BUY": {
             "allow_entry": True,
             "allow_exit": False,

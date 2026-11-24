@@ -243,7 +243,7 @@ class StrategyPerformanceService:
                     },
                 )
 
-            for episode, position in zip(closed_episodes, closed_positions):
+            for episode, position in zip(closed_episodes, closed_positions, strict=True):
                 strategy = self._resolve_episode_strategy(episode, order_cache)
                 outcomes.append(
                     EpisodeStrategyOutcome(

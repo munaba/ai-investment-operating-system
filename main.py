@@ -959,7 +959,7 @@ def _print_evidence_report(
     print(f"Activation 7 Evidence Report -- account_id={account_id}")
     print()
 
-    print(f"Execution rate (order-level, platform-wide, all accounts):")
+    print("Execution rate (order-level, platform-wide, all accounts):")
     print(f"  resolved_total           : {execution_rate.resolved_total}")
     print(f"  filled_orders            : {execution_rate.filled_orders}")
     print(f"  partially_filled_orders  : {execution_rate.partially_filled_orders}")

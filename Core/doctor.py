@@ -41,13 +41,12 @@ import sqlite3
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable, List, Optional, Sequence
+from typing import Callable, List, Sequence
 
 from Core.config import config
 from Core.product_mode import resolve_product_mode
 from Core.startup_validation import _REQUIRED_ENV_VARS_BY_PROVIDER_KIND, _DEFAULT_PROVIDER_KIND
 from Database.database_config import DatabaseConfig
-from Database.migration_registry import MIGRATION_MODULES as _MIGRATION_MODULES
 from Database.migration_registry import expected_migrations as _expected_migrations
 
 READY = "READY"
@@ -213,8 +212,8 @@ def _check_dependencies() -> Section:
                 label=label,
                 status=READY if present else BLOCKED,
                 detail="importable" if present else (
-                    f"not installed -- required by core startup "
-                    f"(Docs/ACTIVATION 1/requirements.txt)"
+                    "not installed -- required by core startup "
+                    "(Docs/ACTIVATION 1/requirements.txt)"
                 ),
             )
         )

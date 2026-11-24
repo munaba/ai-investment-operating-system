@@ -5,7 +5,7 @@ import sys
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from threading import Lock
-from typing import Dict, Optional
+from typing import ClassVar, Dict, Optional
  
 _LOG_DIR: Path = Path("logs")
 _LOG_FILE: Path = _LOG_DIR / "app.log"
@@ -49,7 +49,7 @@ class LoggerFactory:
  
     _instance: Optional["LoggerFactory"] = None
     _lock: Lock = Lock()
-    _loggers: Dict[str, logging.Logger] = {}
+    _loggers: ClassVar[Dict[str, logging.Logger]] = {}  # shared by design (singleton cache)
  
     def __new__(cls) -> "LoggerFactory":
         """Create or return the existing singleton instance.

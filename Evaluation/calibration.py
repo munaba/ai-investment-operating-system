@@ -24,7 +24,7 @@ def brier_score(probabilities: List[float], outcomes: List[int]) -> float:
     if not probabilities:
         return 0.0
 
-    return sum((p - o) ** 2 for p, o in zip(probabilities, outcomes)) / len(probabilities)
+    return sum((p - o) ** 2 for p, o in zip(probabilities, outcomes, strict=True)) / len(probabilities)
 
 
 def ece(
@@ -51,7 +51,7 @@ def ece(
         return 0.0
 
     bins: List[List[Tuple[float, int]]] = [[] for _ in range(n_bins)]
-    for p, o in zip(probabilities, outcomes):
+    for p, o in zip(probabilities, outcomes, strict=True):
         bin_idx = min(int(p * n_bins), n_bins - 1)
         bins[bin_idx].append((p, o))
 
@@ -87,7 +87,7 @@ def reliability_bins(
         raise ValueError("probabilities and outcomes must have same length")
 
     bins: List[List[Tuple[float, int]]] = [[] for _ in range(n_bins)]
-    for p, o in zip(probabilities, outcomes):
+    for p, o in zip(probabilities, outcomes, strict=True):
         bin_idx = min(int(p * n_bins), n_bins - 1)
         bins[bin_idx].append((p, o))
 

@@ -197,7 +197,7 @@ class MarketRegimeAttributionService:
                     },
                 )
 
-            for episode, position in zip(closed_episodes, closed_positions):
+            for episode, position in zip(closed_episodes, closed_positions, strict=True):
                 regime = self._resolve_episode_regime(episode)
                 outcomes.append(
                     EpisodeRegimeOutcome(regime=regime, realized_pnl=position.realized_pnl)

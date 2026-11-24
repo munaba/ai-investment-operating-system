@@ -24,7 +24,7 @@ def main() -> int:
         scheduler = app.idx_daily_scheduler
         now = datetime.now(timezone.utc)
         
-        print(f"=== AIOS L5 Tick Runner ===")
+        print("=== AIOS L5 Tick Runner ===")
         print(f"Now (UTC): {now.isoformat()}")
         print(f"Dry-run: {dry_run}")
         
@@ -35,14 +35,14 @@ def main() -> int:
         
         tick_result = scheduler.tick(now)
         
-        print(f"\nTick result:")
+        print("\nTick result:")
         print(f"  Trading date: {tick_result.trading_date}")
         print(f"  Session: {tick_result.session}")
         print(f"  Jobs scheduled: {len(tick_result.jobs)}")
         for job in tick_result.jobs:
             print(f"    - {job}")
         # reason_no_jobs no longer exists on TickResult
-        print(f"  Reason (if none): N/A")
+        print("  Reason (if none): N/A")
         
         return 0
 

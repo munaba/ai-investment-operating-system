@@ -285,7 +285,7 @@ class ObservationRecorder:
         step_observations: List[StepObservation] = []
         aggregated_outputs: Dict[str, Any] = {}
 
-        for index, (step, result) in enumerate(zip(plan.steps, results)):
+        for index, (step, result) in enumerate(zip(plan.steps, results, strict=True)):
             data = dict(result.data) if isinstance(result.data, dict) else result.data
             result_metadata = dict(result.metadata)
             error_message = str(result.error) if result.error is not None else None

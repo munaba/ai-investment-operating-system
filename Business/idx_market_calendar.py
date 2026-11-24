@@ -28,7 +28,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date, datetime, time
-from typing import FrozenSet, Optional
+from typing import FrozenSet
 
 #: IANA timezone name for the IDX trading session. A plain string,
 #: constructed lazily via ``IDXMarketCalendar.timezone()`` -- same
@@ -92,8 +92,8 @@ def _parse_holiday_env(raw: str) -> FrozenSet[date]:
     the weekend check if it happens to also be a weekend).
     """
     dates: set[date] = set()
-    for token in raw.split(","):
-        token = token.strip()
+    for raw_token in raw.split(","):
+        token = raw_token.strip()
         if not token:
             continue
         try:

@@ -596,11 +596,11 @@ class Executor:
             metadata={},
             tool_context_factory=tool_context_factory,
         )
-        setattr(skill, "_tool_names", tool_names)
+        skill._tool_names = tool_names
         if self._tool_resolver is not None:
             def resolve_tool(name):
                 return self._tool_resolver.resolve(name)
-            setattr(skill, "_resolve_tool", resolve_tool)
+            skill._resolve_tool = resolve_tool
         result = skill.execute(context)
         return result
 

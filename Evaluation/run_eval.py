@@ -572,7 +572,8 @@ def eval_l1_data_baseline() -> Tuple[int, int]:
     duplicates = total_rows - distinct
 
     # Gap detection: hanya hari bursa IDX yang dihitung
-    from datetime import date, timedelta
+    from datetime import date, datetime, timedelta
+    from zoneinfo import ZoneInfo
 
     from Business.idx_market_calendar import load_idx_market_calendar
 
@@ -593,7 +594,7 @@ def eval_l1_data_baseline() -> Tuple[int, int]:
 
     if trading_dates:
         first = date.fromisoformat(trading_dates[0])
-        last_eval = date.today()
+        last_eval = datetime.now(ZoneInfo("Asia/Jakarta")).date()
         expected_set = set()
         cursor = first
         while cursor <= last_eval:
@@ -679,7 +680,7 @@ def eval_l4_llm_grounding() -> Tuple[int, int]:
     re_lo, re_hi = clopper_pearson(tp, tp + fn) if (tp + fn) > 0 else (0.0, 1.0)
     fp_lo, fp_hi = clopper_pearson(fp, fp + tn) if (fp + tn) > 0 else (0.0, 1.0)
     
-    print(f"L4 LLM Grounding Metrics:")
+    print("L4 LLM Grounding Metrics:")
     print(f"  TP: {tp}, FN: {fn} (Recall: {recall:.2%} | CI: [{re_lo:.2%}, {re_hi:.2%}])")
     print(f"  FP: {fp}, TN: {tn} (FPR: {fpr:.2%} | CI: [{fp_lo:.2%}, {fp_hi:.2%}])")
     
@@ -731,7 +732,7 @@ def eval_l3_signals_baseline() -> Tuple[int, int]:
 
     conn.close()
 
-    print(f"L3 Signals sample counts:")
+    print("L3 Signals sample counts:")
     print(f"  ranking_snapshots: {n_ranking} rows, {n_scans} scans")
     print(f"  decision_briefs: {n_briefs}")
     print(f"  journal_entries: {n_journals}")
@@ -743,7 +744,7 @@ def eval_l3_signals_baseline() -> Tuple[int, int]:
         print("  Need: walk-forward needs >= 200 journal_entries with outcomes for Brier/ECE.")
         return 0, 0
     else:
-        print(f"  SUFFICIENT_SAMPLES")
+        print("  SUFFICIENT_SAMPLES")
         return 1, 0
 
 

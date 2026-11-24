@@ -214,7 +214,7 @@ class AutonomousHost:
             if (
                 candidate is None
                 or not hasattr(candidate, "run")
-                or not callable(getattr(candidate, "run"))
+                or not callable(candidate.run)
                 or not hasattr(candidate, "status")
             ):
                 raise AutonomousHostError(
@@ -340,7 +340,7 @@ class AutonomousHost:
             if (
                 candidate is None
                 or not hasattr(candidate, "stop")
-                or not callable(getattr(candidate, "stop"))
+                or not callable(candidate.stop)
             ):
                 raise AutonomousHostError(
                     f"AutonomousHost.stop_all() requires every entry in "

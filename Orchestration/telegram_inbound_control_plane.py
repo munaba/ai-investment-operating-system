@@ -97,7 +97,6 @@ from datetime import datetime, timezone
 from typing import Any, Callable, List, Optional
 
 from Business.telegram_allowlist_policy import (
-    AUTHORIZED,
     TelegramAllowlistPolicy,
     load_telegram_allowlist_policy,
 )

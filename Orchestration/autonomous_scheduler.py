@@ -181,7 +181,7 @@ class AutonomousScheduler:
                 ``None``; or if ``iterations`` is not an ``int`` >= 1.
         """
         if host is None or not hasattr(host, "start_all") or not callable(
-            getattr(host, "start_all")
+            host.start_all
         ):
             raise AutonomousSchedulerError(
                 "AutonomousScheduler.schedule() requires a non-None "
@@ -212,7 +212,7 @@ class AutonomousScheduler:
             if (
                 candidate is None
                 or not hasattr(candidate, "run")
-                or not callable(getattr(candidate, "run"))
+                or not callable(candidate.run)
                 or not hasattr(candidate, "status")
             ):
                 raise AutonomousSchedulerError(

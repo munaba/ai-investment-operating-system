@@ -23,7 +23,7 @@ from Agents.executor import Executor
 from Agents.requirement_inference import (
     RequirementInference,
     KeywordRequirementInference,
-    infer_requirement,
+    infer_requirement,  # noqa: F401 -- re-exported; Tests/test_stage_l8_requirement_inference.py uses it
 )
 
 logger = get_logger(__name__)

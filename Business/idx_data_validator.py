@@ -12,7 +12,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime, date, timedelta
-from typing import Any, Dict, List, Optional, FrozenSet
+from zoneinfo import ZoneInfo
+from typing import Any, Dict, List, Optional
 
 
 @dataclass(frozen=True)
@@ -390,7 +391,8 @@ class IDXDataValidator:
             return rejections
         
         # Check age
-        today = date.today()
+        # IDX trading dates are WIB dates; the host clock's zone must not matter.
+        today = datetime.now(ZoneInfo("Asia/Jakarta")).date()
         age_days = (today - latest_date).days
         
         if age_days > max_age_days:

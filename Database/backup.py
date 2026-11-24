@@ -253,7 +253,7 @@ def prune_backups(db_path: Path, keep: int, backup_dir: Optional[Path] = None) -
     for candidate in target_dir.glob(f"{db_path.stem}_*.db"):
         stamp = candidate.stem[len(db_path.stem) + 1:]
         try:
-            datetime.strptime(stamp, _BACKUP_TIMESTAMP_FORMAT)
+            datetime.strptime(stamp, _BACKUP_TIMESTAMP_FORMAT)  # noqa: DTZ007 -- format check only
         except ValueError:
             continue  # not a file create_backup() named
         ours.append(candidate)

@@ -227,7 +227,9 @@ class BaseSkill(ABC):
                 "supplied by the Executor)"
             )
 
-        invocation = ToolInvocation(
+        # Constructed for its validation only: ToolInvocation.__post_init__
+        # raises ToolInvocationError on a bad tool_name/context.
+        ToolInvocation(
             tool_name=tool_name,
             context=context,
             metadata={}

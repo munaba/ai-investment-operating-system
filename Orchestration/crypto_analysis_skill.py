@@ -78,7 +78,6 @@ Skills, not a subclass/superclass pair) or
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from typing import Any
 
 from Business.crypto_signal_engine import evaluate_crypto_signal

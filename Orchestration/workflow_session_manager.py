@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
-from typing import Any, Dict, Mapping, Optional
+from typing import Any, ClassVar, Dict, Mapping, Optional
 
 from Core.exceptions import AgentError
 from Orchestration.execution_context import ExecutionContext
@@ -97,7 +97,7 @@ class WorkflowSessionManager:
     # single WorkflowSessionStatus it produces. Consulted by
     # ``_transition`` only -- this is the one and only place transition
     # legality is decided.
-    _TRANSITIONS: Dict[str, "tuple[frozenset, WorkflowSessionStatus]"] = {
+    _TRANSITIONS: ClassVar[Dict[str, "tuple[frozenset, WorkflowSessionStatus]"]] = {
         "prepare": (
             frozenset({WorkflowSessionStatus.CREATED}),
             WorkflowSessionStatus.PREPARED,

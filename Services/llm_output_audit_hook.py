@@ -19,7 +19,7 @@ from __future__ import annotations
 import hashlib
 import sys
 from datetime import datetime, timezone
-from typing import Any, Optional, Sequence
+from typing import Optional, Sequence
 
 from Providers.message import Message
 from Repository.persistence.llm_output_audit_repository import LlmOutputAuditRepository

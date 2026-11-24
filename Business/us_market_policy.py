@@ -113,7 +113,6 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
-from typing import Optional
 
 from Business.crypto_fee_policy import TAKER, load_crypto_fee_policy
 from Business.execution_policy_config import ExecutionPolicy
