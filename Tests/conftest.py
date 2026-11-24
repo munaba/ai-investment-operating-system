@@ -28,11 +28,9 @@ from pathlib import Path
 
 import pytest
 
-from Database.database_manager import DatabaseManager
-from Database.sqlite_database import close_all_instances, SQLiteDatabase
+from Database.sqlite_database import SQLiteDatabase, close_all_instances
 from Tests.E2e_test import setup_fixtures
 from Tests.integration_test import test_instantiation_and_health_checks
-
 
 # Dotted filenames like test_phase_i_gate3.1_datetime.py are not valid Python
 # module names (the dot truncates the module at "test_phase_i_gate3"), so they
@@ -112,7 +110,7 @@ class ScriptItem(pytest.Item):
             env = {**os.environ, "DB_PATH": str(db), "PYTHONIOENCODING": "utf-8",
                    "PYTHONPATH": str(_REPO_ROOT)}
             try:
-                proc = subprocess.run([sys.executable, str(self.path)], cwd=_REPO_ROOT, env=env,
+                proc = subprocess.run([sys.executable, str(self.path)], cwd=_REPO_ROOT, env=env, check=False,
                                       capture_output=True, text=True, encoding="utf-8", errors="replace",
                                       timeout=_SCRIPT_TIMEOUT_SECONDS)
             except subprocess.TimeoutExpired as exc:
