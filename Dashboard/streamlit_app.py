@@ -7,6 +7,7 @@ Run locally from the repository root:
 import streamlit as st
 
 from aios_data import format_time, load_snapshot
+from ui import REPO_URL
 
 st.set_page_config(page_title="AIOS dashboard", page_icon=":material/monitoring:", layout="wide")
 
@@ -60,6 +61,7 @@ with st.sidebar:
     snapshot = load_snapshot()
     if snapshot is not None:
         st.caption(f"Data exported {format_time(snapshot.exported_at)}")
+    st.link_button("Source code on GitHub", REPO_URL, icon=":material/code:", width="stretch")
 
 st.title(page.title, anchor=False)
 page.run()

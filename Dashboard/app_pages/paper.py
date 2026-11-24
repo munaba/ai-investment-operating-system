@@ -1,6 +1,7 @@
 import streamlit as st
 
 from aios_data import format_time, require_snapshot
+from ui import page_footer
 
 snapshot = require_snapshot()
 accounts = snapshot.table("accounts")
@@ -16,9 +17,9 @@ if accounts.empty:
 
 account = accounts.iloc[0]
 with st.container(horizontal=True):
-    st.metric("Cash (IDR)", f"{account['cash']:,.0f}", border=True)
-    st.metric("Equity (IDR)", f"{account['equity']:,.0f}", border=True)
-    st.metric("Buying power (IDR)", f"{account['buying_power']:,.0f}", border=True)
+    st.metric("Cash", f"Rp {account['cash']:,.0f}", border=True)
+    st.metric("Equity", f"Rp {account['equity']:,.0f}", border=True)
+    st.metric("Buying power", f"Rp {account['buying_power']:,.0f}", border=True)
     open_positions = int((positions["status"] == "OPEN").sum()) if not positions.empty else 0
     st.metric("Open positions", open_positions, border=True)
     st.metric("Trades", len(trades), border=True)
@@ -55,3 +56,5 @@ with right:
                 hide_index=True,
                 alt="Paper trades",
             )
+
+page_footer()

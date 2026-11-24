@@ -31,9 +31,11 @@ linkUnderline = false
 greenColor = "#34D399"  # Positive/gains - bright green
 redColor = "#F87171"    # Negative/losses - bright red
 yellowColor = "#FBBF24" # Warnings/caution
-orangeColor = "#FB923C" # Alerts
-blueColor = "#60A5FA"   # Informational
-violetColor = "#A78BFA" # Accent/highlights
+orangeColor = "#c98500" # WAIT
+# blue / orange / violet double as the BUY / WAIT / SELL colors (Dashboard/ui.py)
+# so markdown badges match the charts and table badges.
+blueColor = "#3987e5"
+violetColor = "#d55181"
 grayColor = "#94A3B8"   # Neutral/secondary text
 
 # Chart colors: dark-mode categorical steps, validated on #0F172A

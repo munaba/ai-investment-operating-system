@@ -3,6 +3,7 @@ import json
 import streamlit as st
 
 from aios_data import format_time, require_snapshot
+from ui import page_footer
 
 snapshot = require_snapshot()
 jobs = snapshot.table("scheduler_job_runs")
@@ -89,3 +90,5 @@ with right:
                 hide_index=True,
                 alt="Final review decisions",
             )
+
+page_footer()

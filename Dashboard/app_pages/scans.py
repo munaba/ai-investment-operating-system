@@ -3,6 +3,7 @@ import json
 import streamlit as st
 
 from aios_data import format_time, require_snapshot
+from ui import as_badges, page_footer, rec_badge_column
 
 snapshot = require_snapshot()
 scans = snapshot.table("ranking_snapshots")
@@ -27,12 +28,12 @@ with st.container(horizontal=True):
     st.metric("Errors", int((scan["status"] != "success").sum()), border=True)
 
 st.dataframe(
-    scan[["rank", "symbol", "recommendation", "confidence", "priority", "score", "status", "error_message"]],
+    as_badges(scan)[["rank", "symbol", "recommendation", "confidence", "priority", "score", "status", "error_message"]],
     hide_index=True,
     column_config={
-        "rank": st.column_config.NumberColumn("Rank", width="small"),
-        "symbol": "Symbol",
-        "recommendation": "Recommendation",
+        "rank": st.column_config.NumberColumn("#", width="small"),
+        "symbol": st.column_config.TextColumn("Symbol", width="small"),
+        "recommendation": rec_badge_column(),
         "confidence": "Confidence",
         "priority": st.column_config.NumberColumn("Priority", width="small"),
         "score": st.column_config.ProgressColumn("Score", min_value=0, max_value=100, format="%d"),
@@ -70,4 +71,8 @@ with right:
 
 st.subheader("Score history", anchor=False)
 history = scans[scans["symbol"] == symbol].sort_values("scan_time")
-st.line_chart(history, x="scan_time", y="score", alt=f"Score of {symbol} across all scans")
+st.line_chart(
+    history, x="scan_time", y="score", x_label="Scan time (WIB)", y_label="Score (0–100)",
+    alt=f"Score of {symbol} across all scans",
+)
+page_footer()

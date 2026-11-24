@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 
 from aios_data import format_time, require_snapshot
+from ui import page_footer
 
 snapshot = require_snapshot()
 briefs = snapshot.table("decision_briefs")
@@ -56,3 +57,5 @@ st.dataframe(
     },
     alt="All decision briefs with their risk plan and policy outcome",
 )
+
+page_footer()

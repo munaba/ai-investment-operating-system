@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 
 from aios_data import require_snapshot
+from ui import REPO_URL, excess_return_chart, page_footer
 
 snapshot = require_snapshot()
 evaluation = snapshot.signal_evaluation
@@ -76,22 +77,20 @@ with st.container(border=True):
     if completed.empty:
         st.info("No completed signals yet. A signal completes six trading days after its scan.")
     else:
-        chart = completed.assign(
+        st.caption("Above the dashed line the stock beat the watchlist average over the next five trading days.")
+        points = completed.assign(
             scan_date=pd.to_datetime(completed["scan_date"]),
             excess_pct=completed["excess_return"] * 100,
+            forward_pct=completed["forward_return"] * 100,
         )
-        st.scatter_chart(
-            chart,
-            x="scan_date",
-            y="excess_pct",
-            color="recommendation",
-            x_label="Scan date",
-            y_label="Excess return vs. watchlist (%)",
+        st.altair_chart(
+            excess_return_chart(points),
             alt="Excess return of each completed signal by scan date, coloured by recommendation",
         )
 
 st.caption(
     "Limitations: hand-picked large-cap watchlist, no fees or slippage, and signals on the same day "
-    "move together. A pass means 'worth a longer look', not a proven edge. Full rules: "
-    "Docs/SIGNAL_EVALUATION.md."
+    f"move together. A pass means 'worth a longer look', not a proven edge. Full rules: "
+    f"[Docs/SIGNAL_EVALUATION.md]({REPO_URL}/blob/master/Docs/SIGNAL_EVALUATION.md)."
 )
+page_footer()
