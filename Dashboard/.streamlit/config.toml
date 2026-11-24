@@ -36,16 +36,18 @@ blueColor = "#60A5FA"   # Informational
 violetColor = "#A78BFA" # Accent/highlights
 grayColor = "#94A3B8"   # Neutral/secondary text
 
-# Chart colors - Distinguishable palette for financial data
+# Chart colors: dark-mode categorical steps, validated on #0F172A
+# (lightness band, chroma floor, CVD >= 8.4, normal-vision >= 19.3, contrast >= 3:1).
+# The previous palette failed the band and chroma checks (#94A3B8 read as gray).
 chartCategoricalColors = [
-    "#60A5FA",
-    "#34D399",
-    "#A78BFA",
-    "#F87171",
-    "#FBBF24",
-    "#38BDF8",
-    "#94A3B8",
-    "#FB923C",
+    "#3987e5",
+    "#d95926",
+    "#199e70",
+    "#c98500",
+    "#d55181",
+    "#0ca30c",
+    "#9085e9",
+    "#e66767",
 ]
 
 # Sequential colors for heatmaps (blue gradient)
