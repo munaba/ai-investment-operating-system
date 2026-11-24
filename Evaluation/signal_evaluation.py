@@ -171,7 +171,7 @@ def evaluate(signals: pd.DataFrame, fetch: PriceFetcher = yahoo_closes, today: O
     fetched = fetch(universe, min(signals["scan_date"]), today)
     # Only fully closed sessions count: today's bar is a live quote until the
     # closing auction ends, and the daily publish runs around 15:50 WIB.
-    closes = {symbol: series[[d < today for d in series.index]] for symbol, series in fetched.items()}
+    closes = {symbol: series[series.index < today] for symbol, series in fetched.items()}
     scored = score_signals(signals, closes, universe)
 
     official = scored[scored["scan_date"] >= REGISTERED_ON]

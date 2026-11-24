@@ -17,9 +17,9 @@ with st.container(horizontal=True):
     st.metric("Migrations applied", len(applied), border=True)
     st.metric("Migrations pending", len(pending), border=True)
     st.metric("Scheduler runs", len(jobs), border=True)
-    failed = int((jobs["status"] == "FAILED").sum()) if not jobs.empty else 0
-    st.metric("Failed runs", failed, border=True)
-    running = int((jobs["status"] == "RUNNING").sum()) if not jobs.empty else 0
+    status_counts = jobs["status"].value_counts() if not jobs.empty else {}
+    st.metric("Failed runs", int(status_counts.get("FAILED", 0)), border=True)
+    running = int(status_counts.get("RUNNING", 0))
     if running:
         st.metric("Running", running, border=True, help="Started but not finished (or interrupted).")
 

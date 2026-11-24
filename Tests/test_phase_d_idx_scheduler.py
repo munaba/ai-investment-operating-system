@@ -239,7 +239,7 @@ def _build_stack(db_path: Path, *, scan_service=None, report_orchestrator=None, 
         retry_max_seconds=retry_max_seconds,
         session_scan_min_interval_seconds=session_scan_min_interval_seconds,
     )
-    health_service =HealthAuditService(state_repo, dedup_repo, audit_repo, calendar)
+    health_service = HealthAuditService(state_repo, dedup_repo, audit_repo, calendar)
     return {
         "manager": manager,
         "db": db,

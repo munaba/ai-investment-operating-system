@@ -23,9 +23,11 @@ _PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
 )
 
 
-def redact_secrets(text: object) -> str:
-    """Return ``str(text)`` with known credential formats replaced."""
+def redact_secrets(text: object, limit: int | None = None) -> str:
+    """Return ``str(text)`` with known credential formats replaced, then
+    cut to ``limit`` characters (redacting first, so a cut can never leave
+    half a token unmatched)."""
     result = str(text)
     for pattern, replacement in _PATTERNS:
         result = pattern.sub(replacement, result)
-    return result
+    return result if limit is None else result[:limit]

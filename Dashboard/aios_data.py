@@ -80,16 +80,16 @@ def _newest(*candidates: dict | None) -> dict | None:
     return max(valid, key=lambda c: pd.Timestamp(c["exported_at"])) if valid else None
 
 
-#: Bump whenever the Snapshot dataclass changes shape, so a running server
-#: never hands a page a cached object from the previous code version.
-SNAPSHOT_SCHEMA = 2
-
-
 @st.cache_data(ttl="10m")
-def load_snapshot(
-    path: str = str(SNAPSHOT_PATH), url: str = SNAPSHOT_URL, schema: int = SNAPSHOT_SCHEMA
-) -> Snapshot | None:
-    raw = _newest(_read_local(Path(path)), _read_remote(url))
+def _load_raw(path: str, url: str) -> dict | None:
+    # Cache only the plain JSON (the network/disk read). Building the
+    # Snapshot outside the cache means a code change to the dataclass can
+    # never be served a stale cached object.
+    return _newest(_read_local(Path(path)), _read_remote(url))
+
+
+def load_snapshot(path: str = str(SNAPSHOT_PATH), url: str = SNAPSHOT_URL) -> Snapshot | None:
+    raw = _load_raw(path, url)
     if raw is None:
         return None
 

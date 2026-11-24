@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import streamlit as st
 
@@ -15,11 +16,10 @@ last_scan_time = current["scan_time"].iloc[0] if not current.empty else None
 # Age is measured against *now*, not the export time: if publishing stops,
 # the page must still show that the data is getting old. Weekends are not
 # counted (IDX holidays are not modelled here).
-now = pd.Timestamp.now(tz=WIB)
 age_days = (
     None
     if last_scan_time is None
-    else len(pd.bdate_range(last_scan_time.date(), now.date())) - 1
+    else int(np.busday_count(last_scan_time.date(), pd.Timestamp.now(tz=WIB).date()))
 )
 
 st.caption(
