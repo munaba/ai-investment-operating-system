@@ -12,14 +12,15 @@ rankings = snapshot.table("v2_rankings")
 evaluation = getattr(snapshot, "v2_evaluation", None) or {
     "status": "UNAVAILABLE", "error": "the app is still reloading; refresh in a minute"}
 
-st.caption(
-    "v2 ranks liquid stocks by how far the close is above its 200-day average and buys the top 5 "
-    "every 20 trading days, holding 20 days. v3 is the same ranking with the top 10. Both rules were "
-    "registered before their first signal and are judged against the average of every ranked stock."
-)
+with st.expander("How v2 / v3 work", icon=":material/info:"):
+    st.caption(
+        "v2 ranks liquid stocks by how far the close is above its 200-day average and buys the top 5 "
+        "every 20 trading days, holding 20 days. v3 is the same ranking with the top 10. Both rules were "
+        "registered before their first signal and are judged against the average of every ranked stock."
+    )
 
 if rankings.empty:
-    st.info("No v2 ranking stored yet. The first rankings run at 08:30 WIB (IDX) and 20:45 WIB (US).")
+    st.info("No ranking yet · IDX 08:30 WIB, US 20:45 WIB")
     page_footer()
     st.stop()
 
@@ -39,7 +40,7 @@ with left:
         else:
             last = rebalances["signal_date"].max()
             current = rebalances[rebalances["signal_date"] == last].sort_values("rank").head(10)
-            st.caption(f"Rebalance from closes up to {last}. Entry at the next close, hold 20 trading days.")
+            st.caption(f"Rebalance {last}")
             st.space("small")  # keeps the table toolbar off the caption on phones
             st.dataframe(
                 current.assign(version=["v2, v3" if r <= 5 else "v3" for r in current["rank"]],
@@ -57,7 +58,7 @@ with right:
         st.subheader("Latest ranking", anchor=False)
         latest_date = rows["signal_date"].max()
         latest = rows[rows["signal_date"] == latest_date].sort_values("rank").head(10)
-        st.caption(f"Closes up to {latest_date}; recorded every trading day, picks change only on rebalance.")
+        st.caption(f"Closes up to {latest_date}")
         chart = (
             alt.Chart(latest.assign(pct=latest["score"] * 100))
             .mark_bar(cornerRadiusEnd=3, color="#3987e5")
@@ -111,8 +112,5 @@ with st.container(border=True):
                     alt=f"Every evaluated v2 and v3 pick for {market.upper()}",
                 )
 
-st.caption(
-    f"Research signal, not financial advice. Rules and backtests: "
-    f"[Docs/SIGNAL_EVALUATION.md]({REPO_URL}/blob/master/Docs/SIGNAL_EVALUATION.md)."
-)
+st.caption(f"Not financial advice · [Rules]({REPO_URL}/blob/master/Docs/SIGNAL_EVALUATION.md)")
 page_footer()

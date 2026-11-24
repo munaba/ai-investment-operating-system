@@ -8,7 +8,7 @@ positions = snapshot.table("positions")
 trades = snapshot.table("trades")
 equity_history = snapshot.table("portfolio_snapshots")
 
-st.caption("Simulated trading only. AIOS has no broker connection and never sends real orders.")
+st.caption("Simulated · no real orders")
 
 if accounts.empty:
     st.info("No paper account has been created yet.")
@@ -19,11 +19,7 @@ if positions.empty and trades.empty and equity_history.empty:
     # One honest line instead of five identical tiles and three empty tables.
     with st.container(border=True):
         st.markdown("**No paper trades yet**")
-        st.markdown(
-            f"The paper account holds its starting balance of **Rp {account['equity']:,.0f}**. "
-            "Trades appear here once a decision brief is approved and executed on paper: positions, "
-            "fills with fees and tax, and equity over time."
-        )
+        st.markdown(f"Starting balance **Rp {account['equity']:,.0f}**")
         st.page_link("app_pages/briefs.py", label="See the decision briefs", icon=":material/arrow_forward:")
     page_footer()
     st.stop()
@@ -39,7 +35,7 @@ with st.container(horizontal=True):
 with st.container(border=True):
     st.subheader("Equity over time", anchor=False)
     if equity_history.empty:
-        st.info("No portfolio snapshots yet. They are recorded once the paper account trades.")
+        st.info("No snapshots yet.")
     else:
         st.line_chart(equity_history, x="timestamp", y="equity", alt="Paper account equity over time")
 

@@ -7,17 +7,17 @@ from ui import REPO_URL, excess_return_chart, page_footer
 snapshot = require_snapshot()
 evaluation = snapshot.signal_evaluation
 
-st.caption(
-    "Do BUY recommendations beat the rest of the watchlist over the next week? The rules were "
-    "registered before the automated scans started and are not changed afterwards: one signal per "
-    "stock per day, entry at the next close, exit five trading days later, compared with the "
-    "equal-weight watchlist average."
-)
+with st.expander("How the test works", icon=":material/info:"):
+    st.caption(
+        "Do BUY recommendations beat the rest of the watchlist over the next week? The rules were "
+        "registered before the automated scans started and are not changed afterwards: one signal per "
+        "stock per day, entry at the next close, exit five trading days later, compared with the "
+        "equal-weight watchlist average."
+    )
 
 if evaluation.get("status") != "OK":
     st.info(
-        f"The evaluation was not included in this export ({evaluation.get('error', 'unknown reason')}). "
-        "It needs Yahoo Finance prices and runs when the snapshot is published.",
+        f"Not in this export ({evaluation.get('error', 'unknown reason')}).",
         title="Evaluation unavailable",
     )
     st.stop()
@@ -75,9 +75,9 @@ completed = signals[signals["status"] == "complete"] if not signals.empty else s
 with st.container(border=True):
     st.subheader("Excess return per completed signal", anchor=False)
     if completed.empty:
-        st.info("No completed signals yet. A signal completes six trading days after its scan.")
+        st.info("No completed signals yet.")
     else:
-        st.caption("Above the dashed line the stock beat the watchlist average over the next five trading days.")
+        st.caption("Above the dashed line = beat the watchlist")
         points = completed.assign(
             scan_date=pd.to_datetime(completed["scan_date"]),
             excess_pct=completed["excess_return"] * 100,
@@ -88,9 +88,10 @@ with st.container(border=True):
             alt="Excess return of each completed signal by scan date, coloured by recommendation",
         )
 
-st.caption(
-    "Limitations: hand-picked large-cap watchlist, no fees or slippage, and signals on the same day "
-    f"move together. A pass means 'worth a longer look', not a proven edge. Full rules: "
-    f"[Docs/SIGNAL_EVALUATION.md]({REPO_URL}/blob/master/Docs/SIGNAL_EVALUATION.md)."
-)
+with st.expander("Limitations", icon=":material/warning:"):
+    st.caption(
+        "Hand-picked large-cap watchlist, no fees or slippage, and signals on the same day move "
+        "together. A pass means 'worth a longer look', not a proven edge. "
+        f"[Full rules]({REPO_URL}/blob/master/Docs/SIGNAL_EVALUATION.md)"
+    )
 page_footer()

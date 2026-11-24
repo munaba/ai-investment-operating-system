@@ -7,11 +7,12 @@ from ui import page_footer
 snapshot = require_snapshot()
 briefs = snapshot.table("decision_briefs")
 
-st.caption(
-    "A decision brief turns an actionable scan result into a conditional plan: entry, stop "
-    "loss, take profit and position size. The risk policy blocks the brief when any of those "
-    "inputs is missing or the data is stale; a human still approves every plan."
-)
+with st.expander("What a decision brief is", icon=":material/info:"):
+    st.caption(
+        "A decision brief turns an actionable scan result into a conditional plan: entry, stop "
+        "loss, take profit and position size. The risk policy blocks the brief when any of those "
+        "inputs is missing or the data is stale; a human still approves every plan."
+    )
 
 if briefs.empty:
     st.info("No decision briefs generated yet.")

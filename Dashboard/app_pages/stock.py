@@ -61,10 +61,7 @@ evaluation = snapshot.signal_evaluation
 signals = pd.DataFrame(evaluation.get("signals", [])) if evaluation.get("status") == "OK" else pd.DataFrame()
 with st.container(border=True):
     st.subheader("Evaluated signals", anchor=False)
-    st.caption(
-        "One signal per scan day, entered at the next close and closed five trading days later. "
-        "Excess is the return above the equal-weight watchlist over the same days."
-    )
+    st.caption("Entry next close · exit after 5 trading days · excess vs watchlist")
     mine = signals[signals["symbol"] == symbol] if not signals.empty else signals
     if mine.empty:
         st.info("No evaluated signals for this stock in this export.")

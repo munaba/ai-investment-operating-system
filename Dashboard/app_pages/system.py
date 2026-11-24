@@ -34,10 +34,7 @@ if pending:
 
 with st.container(border=True):
     st.subheader("Scheduler job runs", anchor=False)
-    st.caption(
-        "The IDX scheduler runs on trading days: a pre-market check, session scans while the "
-        "market is open, a data-health check every tick, and four closing jobs after 15:49 WIB."
-    )
+    st.caption("Trading days only · closing jobs after 15:49 WIB")
     if jobs.empty:
         st.info("The scheduler has not run yet.")
     else:
