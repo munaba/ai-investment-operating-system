@@ -306,10 +306,13 @@ class IDXDataValidator:
             if rec_date is None:
                 continue
             # Handle various date formats
-            if isinstance(rec_date, date):
-                dates.append(rec_date)
-            elif isinstance(rec_date, datetime):
+            # datetime is a subclass of date: test it first, otherwise
+            # timestamps are compared against plain dates below and
+            # holidays silently stop matching the calendar table.
+            if isinstance(rec_date, datetime):
                 dates.append(rec_date.date())
+            elif isinstance(rec_date, date):
+                dates.append(rec_date)
             elif isinstance(rec_date, str):
                 try:
                     # Try ISO format first
@@ -373,10 +376,12 @@ class IDXDataValidator:
                 continue
             
             parsed: Optional[date] = None
-            if isinstance(rec_date, date):
-                parsed = rec_date
-            elif isinstance(rec_date, datetime):
+            # datetime is a subclass of date: normalize timestamps first,
+            # or the age subtraction against a plain WIB date raises.
+            if isinstance(rec_date, datetime):
                 parsed = rec_date.date()
+            elif isinstance(rec_date, date):
+                parsed = rec_date
             elif isinstance(rec_date, str):
                 try:
                     parsed = date.fromisoformat(rec_date[:10])
