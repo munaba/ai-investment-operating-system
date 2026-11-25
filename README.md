@@ -40,7 +40,7 @@ cp .env.example .env          # Windows cmd: copy .env.example .env
 ### Database
 
 ```bash
-python main.py init      # applies every pending migration (all 20 domains, in version order)
+python main.py init      # applies every pending migration (all 21 domains, in version order)
 python main.py doctor    # read-only check: environment, database, migrations, data freshness
 ```
 
