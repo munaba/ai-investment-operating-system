@@ -45,8 +45,8 @@ python main.py doctor    # read-only check: environment, database, migrations, d
 ```
 
 `init` reads the canonical list in `Database/migration_registry.py`; a test fails if a
-`Database/migrations_*.py` module is ever left out of it. The per-domain
-`run_*_migrations.py` scripts still exist for applying a single domain by hand.
+`Database/migrations_*.py` module is ever left out of it. `main.py init` is the only
+migration entry point.
 
 ### Deployment order
 
