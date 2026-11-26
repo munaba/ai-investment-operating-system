@@ -15,6 +15,7 @@ https://raw.githubusercontent.com/<owner>/<repo>/dashboard-data/snapshot.json
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -37,6 +38,28 @@ _GIT_ENV = {
 }
 _GIT_TIMEOUT_SECONDS = 60
 
+#: Git for Windows installs here. A git bundled under WindowsApps cannot be
+#: launched by a regular CreateProcess on this host (WinError 5).
+_SYSTEM_GIT_PATHS = (
+    r"C:\Program Files\Git\cmd\git.exe",
+    r"C:\Program Files\Git\bin\git.exe",
+)
+
+
+def _git_executable() -> str:
+    """Return a git binary that the scheduled job can actually launch.
+
+    The Hermes-bundled git under ``C:\\Program Files\\WindowsApps`` is first on
+    PATH, but spawning it raises ``PermissionError: [WinError 5]`` before git
+    runs at all (PUBLISH ok=False in idx_tick.log). Prefer the system install.
+    """
+    on_path = shutil.which("git")
+    if os.name == "nt" and (not on_path or "windowsapps" in on_path.lower()):
+        for candidate in _SYSTEM_GIT_PATHS:
+            if Path(candidate).is_file():
+                return candidate
+    return on_path or "git"
+
 
 def _step(label: str, started: float) -> None:
     print(f"  {label}: {time.monotonic() - started:.1f}s", file=sys.stderr, flush=True)
@@ -47,7 +70,7 @@ def _git(*args: str, stdin: str | None = None) -> str:
     # which would make mktree record the file name as "snapshot.json\r".
     try:
         result = subprocess.run(
-            ["git", *args],
+            [_git_executable(), *args],
             cwd=REPO_ROOT,
             input=stdin.encode("utf-8") if stdin is not None else None,
             capture_output=True,
