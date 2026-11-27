@@ -108,7 +108,7 @@ The scheduler is **fail-closed** for uncovered years: `is_trading_day()` returns
 
 Signal quality is judged by a pre-registered test ([Docs/SIGNAL_EVALUATION.md](Docs/SIGNAL_EVALUATION.md)): do BUY signals beat the equal-weight watchlist over the next five trading days? Rules were fixed on 2026-11-24, before the automated scans produced any outcome; the verdict stays `DATA_TIDAK_CUKUP` until 30 BUY signals complete. Run `python Evaluation/signal_evaluation.py`; results also appear on the dashboard's *Signal track record* page.
 
-The evaluation harness covers layers L1–L5; see `Evaluation/README.md`. Latest committed baseline (2026-10-04, `Evaluation/baseline.json`): L2 engine 4032/4032 passed (32 golden cases + 4000 property-based).
+The evaluation harness covers layers L1–L5; see `Evaluation/README.md`. Latest committed baseline (2026-10-31, `Evaluation/baseline.json`): L2 engine 4032/4032 passed (32 golden cases + 4000 property-based).
 
 ## Architecture
 
